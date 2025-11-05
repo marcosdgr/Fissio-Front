@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../Css/Navbar.css";
+import "../../Css/Navbar.css";;
+
 
 const Navbar = () => {
   return (
@@ -8,8 +9,8 @@ const Navbar = () => {
       <div className="container">
         <Link className="navbar-brand d-flex align-items-center" to="/">
           {/* Coloca tu logo en public/logo-fissio.png */}
-          <img src="/logo-fissio.png" alt="Fissio" className="fissio-logo me-2" />
-          <span className="brand-text">Fissio</span>
+          <img src="../../../public/logo-negro.png" alt="Fissio" className="fissio-logo me-2" />
+          
         </Link>
         <button
           className="navbar-toggler"
