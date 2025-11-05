@@ -1,0 +1,36 @@
+.site-navbar{
+  background-color: #3AB1CF; /* color solicitado */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.fissio-logo{
+  height: 40px;
+  width: auto;
+}
+.brand-text{
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.navbar .nav-link{
+  color: rgba(0, 0, 0, 0.95);
+}
+.navbar .nav-link:hover{
+  color: #0a2830;
+  background: rgba(255,255,255,0.15);
+  border-radius: 6px;
+}
+
+
+.app-main{
+  padding-top: 72px; 
+}
+
+@media (max-width: 576px){
+  .fissio-logo{
+    height: 32px;
+  }
+  .app-main{
+    padding-top: 64px;
+  }
+}

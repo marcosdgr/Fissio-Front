@@ -1,9 +1,50 @@
-import React from 'react'
+import React from "react";
+import { Link } from "react-router-dom";
+import "../../Css/Navbar.css";
 
 const Navbar = () => {
   return (
-    <div>Navbar</div>
-  )
-}
+    <nav className="navbar navbar-expand-lg navbar-light site-navbar fixed-top">
+      <div className="container">
+        <Link className="navbar-brand d-flex align-items-center" to="/">
+          {/* Coloca tu logo en public/logo-fissio.png */}
+          <img src="/logo-fissio.png" alt="Fissio" className="fissio-logo me-2" />
+          <span className="brand-text">Fissio</span>
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#fissioNavbar"
+          aria-controls="fissioNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon" />
+        </button>
 
-export default Navbar
+        <div className="collapse navbar-collapse" id="fissioNavbar">
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">Inicio</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/servicios">Servicios</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/faq">Preguntas frecuentes</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/turnos">Pedir turno</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/contacto">Contacto</Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
