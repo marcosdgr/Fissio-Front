@@ -7,9 +7,6 @@ const TurnoHome = () => {
       <div className="turno-content">
         <div className="row justify-content-center">
           <div className="col-12 col-lg-8 text-center">
-            <div className="turno-icon mb-3">
-              <FaCalendarAlt />
-            </div>
             <h2 className="turno-title mb-3">
               ¿Listo para comenzar tu tratamiento?
             </h2>
