@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import Pacientes from "../components/Admin/Pacientes/Pacientes";
-import Turnos from "../components/Admin/Turnos/Turnos";
-import Profesionales from "../components/Admin/Profesionales/Profesionales";
-import Tratamientos from "../components/Admin/Tratamientos/Tratamientos";
-import Mensajes from "../components/Admin/Mensajes/Mensajes";
-import Estadisticas from "../components/Admin/Estadisticas/Estadisticas";
-import Configuracion from "../components/Admin/Configuracion/Configuracion";
-import Cobros from "../components/Admin/Cobros/Cobros";
-import Pagos from "../components/Admin/Pagos/Pagos";
-import ObrasSociales from "../components/Admin/ObrasSociales/ObrasSociales";
-import Asistencias from "../components/Admin/Asistencias/Asistencias";
-import FAQs from "../components/Admin/FAQs/FAQs";
+import Pacientes from "../Components/Admin/Pacientes/Pacientes";
+import Turnos from "../Components/Admin/Turnos/Turnos";
+import Profesionales from "../Components/Admin/Profesionales/Profesionales";
+import Tratamientos from "../Components/Admin/Tratamientos/Tratamientos";
+import Mensajes from "../Components/Admin/Mensajes/Mensajes";
+import Estadisticas from "../Components/Admin/Estadisticas/Estadisticas";
+import Configuracion from "../Components/Admin/Configuracion/Configuracion";
+import Cobros from "../Components/Admin/Cobros/Cobros";
+import Pagos from "../Components/Admin/Pagos/Pagos";
+import ObrasSociales from "../Components/Admin/ObrasSociales/ObrasSociales";
+import Asistencias from "../Components/Admin/Asistencias/Asistencias";
+import FAQs from "../Components/Admin/FAQs/FAQs";
+import "../Css/Admin/AdminPage.css";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -40,33 +41,22 @@ const AdminPage = () => {
   ];
 
   return (
-    <div className="d-flex min-vh-100" style={{ backgroundColor: "#6B6B6B" }}>
+    <div className="d-flex admin-container">
       {/* Sidebar */}
-      <div
-        className="text-white"
-        style={{
-          width: sidebarCollapsed ? "70px" : "250px",
-          transition: "width 0.3s ease",
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          overflowY: "auto",
-          backgroundColor: "#0470BB",
-        }}
-      >
+      <div className={`text-white admin-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
         {/* Header */}
-        <div className="p-3 border-bottom" style={{ borderColor: "#3AB1CF" }}>
+        <div className="p-3 sidebar-header">
           <div className="d-flex align-items-center justify-content-between">
             {!sidebarCollapsed && (
-              <h5 className="mb-0 fw-bold">
-                <span className="material-symbols-outlined me-2" style={{ fontSize: "1.8rem" }}>
+              <h5 className="mb-0 fw-bold text-white">
+                <span className="material-symbols-outlined me-2 fs-1">
                   health_and_safety
                 </span>
                 Fissio Admin
               </h5>
             )}
             <button
-              className="btn btn-link text-white p-0"
+              className="sidebar-toggle"
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             >
               <span className="material-symbols-outlined">
@@ -81,42 +71,21 @@ const AdminPage = () => {
           {menuItems.map((item) => (
             <button
               key={item.id}
-              className={`nav-link text-start border-0 rounded mb-2 p-3 text-white d-flex align-items-center
-                ${activeTab === item.id ? "bg-white text-dark fw-bold" : ""}`}
+              className={`nav-link text-start rounded mb-2 p-3 d-flex align-items-center sidebar-nav-item
+                ${activeTab === item.id ? "active" : ""}`}
               onClick={() => setActiveTab(item.id)}
-              style={{
-                backgroundColor: activeTab === item.id ? "#ffffff" : "transparent",
-                color: activeTab === item.id ? "#0470BB" : "white",
-                transition: "all 0.3s",
-                position: "relative",
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== item.id) e.currentTarget.style.backgroundColor = "#3AB1CF";
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== item.id) e.currentTarget.style.backgroundColor = "transparent";
-              }}
             >
               {/* Ícono siempre visible */}
-              <span className="material-symbols-outlined me-3" style={{ fontSize: "1.4rem" }}>
+              <span className="material-symbols-outlined me-3 fs-4">
                 {item.icon}
               </span>
 
               {/* Texto solo si NO está colapsado */}
-              {!sidebarCollapsed && <span className="fw-medium">{item.label}</span>}
+              {!sidebarCollapsed && <span className="fw-medium sidebar-text">{item.label}</span>}
 
               {/* Indicador visual cuando está colapsado y activo */}
               {sidebarCollapsed && activeTab === item.id && (
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "#ffffff",
-                  }}
-                />
+                <div className="sidebar-collapsed-indicator" />
               )}
             </button>
           ))}
@@ -124,14 +93,14 @@ const AdminPage = () => {
 
         {/* Footer */}
         {!sidebarCollapsed && (
-          <div className="mt-auto p-3 border-top" style={{ borderColor: "#3AB1CF" }}>
+          <div className="mt-auto p-3 sidebar-footer">
             <div className="d-flex align-items-center">
-              <div className="bg-white rounded-circle p-2 me-3">
-                <span className="material-symbols-outlined" style={{ color: "#0470BB" }}>person</span>
+              <div className="sidebar-user-avatar rounded-circle p-2 me-3">
+                <span className="material-symbols-outlined">person</span>
               </div>
               <div>
                 <div className="fw-bold text-white">Admin Fissio</div>
-                <small style={{ color: "#A7B1B4" }}>admin@fissio.com.ar</small>
+                <small className="sidebar-user-email">admin@fissio.com.ar</small>
               </div>
             </div>
           </div>
@@ -139,12 +108,12 @@ const AdminPage = () => {
       </div>
 
       {/* Contenido Principal */}
-      <div className="flex-grow-1" style={{ backgroundColor: "#f8f9fa" }}>
-        <div className="bg-white shadow-sm p-4" style={{ borderBottom: "4px solid #0470BB" }}>
-          <h4 className="mb-0 fw-bold" style={{ color: "#0470BB" }}>
+      <div className="flex-grow-1 admin-main-content">
+        <div className="admin-header shadow-sm p-4">
+          <h4 className="mb-0 fw-bold">
             {menuItems.find((m) => m.id === activeTab)?.label || "Dashboard"}
           </h4>
-          <small style={{ color: "#A7B1B4" }}>
+          <small>
             Panel de administración • {new Date().toLocaleDateString("es-AR")}
           </small>
         </div>
@@ -156,34 +125,26 @@ const AdminPage = () => {
               <div className="row mb-4 g-4">
                 {stats.map((stat, i) => (
                   <div key={i} className="col-lg-3 col-md-6">
-                    <div
-                      className="card h-100 border-0 shadow-sm"
-                      style={{
-                        background: "white",
-                        transition: "all 0.3s",
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-5px)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-                    >
+                    <div className="card h-100 shadow-sm stats-card">
                       <div className="card-body">
                         <div className="d-flex justify-content-between align-items-center">
                           <div>
-                            <h6 className="mb-2" style={{ color: "#6B6B6B" }}>{stat.title}</h6>
-                            <h3 className="fw-bold mb-1" style={{ color: "#0470BB" }}>{stat.value}</h3>
-                            <small style={{ color: stat.change.startsWith("+") ? "#3AB1CF" : "#A7B1B4" }}>
+                            <h6 className="mb-2 stats-title">{stat.title}</h6>
+                            <h3 className="fw-bold mb-1 stats-value">{stat.value}</h3>
+                            <small className={stat.change.startsWith("+") ? "stats-change-positive" : "stats-change-negative"}>
                               {stat.change} vs ayer
                             </small>
                           </div>
                           <div
-                            className="p-3 rounded-circle"
+                            className="p-3 stats-icon-container"
                             style={{
                               backgroundColor: stat.color + "20",
-                              border: `2px solid ${stat.color}`,
+                              borderColor: stat.color,
                             }}
                           >
                             <span
-                              className="material-symbols-outlined"
-                              style={{ fontSize: "2.2rem", color: stat.color }}
+                              className="material-symbols-outlined fs-1"
+                              style={{ color: stat.color }}
                             >
                               {stat.icon}
                             </span>
@@ -198,14 +159,11 @@ const AdminPage = () => {
               <div className="row g-4">
                 <div className="col-lg-8">
                   <div className="card shadow-sm border-0">
-                    <div className="card-header bg-white border-0">
-                      <h5 className="mb-0" style={{ color: "#0470BB" }}>Próximos Turnos del Día</h5>
+                    <div className="card-header dashboard-card-header">
+                      <h5 className="mb-0">Próximos Turnos del Día</h5>
                     </div>
                     <div className="card-body text-center py-5">
-                      <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "5rem", color: "#3AB1CF" }}
-                      >
+                      <span className="material-symbols-outlined dashboard-icon-large">
                         calendar_month
                       </span>
                       <p className="text-muted mt-3">Vista completa en la pestaña Turnos</p>
@@ -215,30 +173,27 @@ const AdminPage = () => {
 
                 <div className="col-lg-4">
                   <div className="card shadow-sm border-0">
-                    <div className="card-header bg-white border-0">
-                      <h5 className="mb-0" style={{ color: "#0470BB" }}>Acciones Rápidas</h5>
+                    <div className="card-header dashboard-card-header">
+                      <h5 className="mb-0">Acciones Rápidas</h5>
                     </div>
                     <div className="card-body">
                       <div className="d-grid gap-3">
                         <button
-                          className="btn btn-lg text-white"
-                          style={{ backgroundColor: "#0470BB" }}
+                          className="btn btn-lg btn-fissio-primary"
                           onClick={() => setActiveTab("turnos")}
                         >
                           <span className="material-symbols-outlined me-2">add</span>
                           Nuevo Turno
                         </button>
                         <button
-                          className="btn btn-outline-primary border-2"
-                          style={{ borderColor: "#3AB1CF", color: "#3AB1CF" }}
+                          className="btn btn-fissio-secondary"
                           onClick={() => setActiveTab("pacientes")}
                         >
                           <span className="material-symbols-outlined me-2">person_add</span>
                           Nuevo Paciente
                         </button>
                         <button
-                          className="btn btn-outline-success border-2"
-                          style={{ borderColor: "#0470BB", color: "#0470BB" }}
+                          className="btn btn-fissio-outline"
                           onClick={() => setActiveTab("cobros")}
                         >
                           <span className="material-symbols-outlined me-2">payments</span>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaInstagramSquare, FaFacebook, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
-import "../../Css/Footer.css";
+import "../../Css/Common/Footer.css";
 
 const Footer = () => {
   const mainMapLink = "https://www.google.com/maps?q=26.8167,-65.3167"; // Yerba Buena

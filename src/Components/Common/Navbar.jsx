@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../Css/Navbar.css";;
+import "../../Css/Common/Navbar.css";
 
 
 const Navbar = () => {
@@ -8,8 +8,8 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-light site-navbar fixed-top">
       <div className="container">
         <Link className="navbar-brand d-flex align-items-center" to="/">
-          {/* Coloca tu logo en public/logo-fissio.png */}
-          <img src="../../../public/logo-negro.png" alt="Fissio" className="fissio-logo me-2" />
+          {/* Logo servido desde la carpeta public */}
+          <img src="/logo-negro.png" alt="Fissio" className="fissio-logo me-2" />
           
         </Link>
         <button

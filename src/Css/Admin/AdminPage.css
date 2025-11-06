@@ -1,0 +1,211 @@
+/* AdminPage Styles */
+
+/* Variables de colores para mantener consistencia */
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+  --fissio-bg-light: #f8f9fa;
+}
+
+/* Contenedor principal */
+.admin-container {
+  background-color: var(--fissio-gray);
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 250px;
+  background-color: var(--fissio-primary);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+}
+
+.admin-sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar-header {
+  border-bottom: 1px solid var(--fissio-secondary);
+}
+
+.sidebar-toggle {
+  color: white;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.sidebar-toggle:hover,
+.sidebar-toggle:focus {
+  color: white;
+  box-shadow: none;
+}
+
+/* Menu items */
+.sidebar-nav-item {
+  background-color: transparent;
+  color: white;
+  border: none;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.sidebar-nav-item:hover {
+  background-color: var(--fissio-secondary) !important;
+  color: white;
+}
+
+.sidebar-nav-item.active {
+  background-color: white !important;
+  color: var(--fissio-primary) !important;
+  font-weight: bold;
+}
+
+.sidebar-nav-item.active .material-symbols-outlined {
+  color: var(--fissio-primary) !important;
+}
+
+/* Indicador cuando está colapsado */
+.sidebar-collapsed-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: white;
+}
+
+/* Footer del sidebar */
+.sidebar-footer {
+  border-top: 1px solid var(--fissio-secondary);
+}
+
+.sidebar-user-avatar {
+  background-color: white;
+  color: var(--fissio-primary);
+}
+
+.sidebar-user-email {
+  color: var(--fissio-light-gray);
+}
+
+/* Contenido principal */
+.admin-main-content {
+  background-color: var(--fissio-bg-light);
+}
+
+.admin-header {
+  background-color: white;
+  border-bottom: 4px solid var(--fissio-primary);
+}
+
+.admin-header h4 {
+  color: var(--fissio-primary);
+}
+
+.admin-header small {
+  color: var(--fissio-light-gray);
+}
+
+/* Cards de estadísticas */
+.stats-card {
+  background: white;
+  transition: all 0.3s;
+  border: none;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+}
+
+.stats-title {
+  color: var(--fissio-gray);
+}
+
+.stats-value {
+  color: var(--fissio-primary);
+}
+
+.stats-change-positive {
+  color: var(--fissio-secondary);
+}
+
+.stats-change-negative {
+  color: var(--fissio-light-gray);
+}
+
+.stats-icon-container {
+  border: 2px solid;
+  border-radius: 50%;
+}
+
+/* Botones de acciones rápidas */
+.btn-fissio-primary {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: white;
+}
+
+.btn-fissio-primary:hover {
+  background-color: #035a99;
+  border-color: #035a99;
+  color: white;
+}
+
+.btn-fissio-secondary {
+  border-color: var(--fissio-secondary);
+  color: var(--fissio-secondary);
+  background-color: transparent;
+  border-width: 2px;
+}
+
+.btn-fissio-secondary:hover {
+  background-color: var(--fissio-secondary);
+  border-color: var(--fissio-secondary);
+  color: white;
+}
+
+.btn-fissio-outline {
+  border-color: var(--fissio-primary);
+  color: var(--fissio-primary);
+  background-color: transparent;
+  border-width: 2px;
+}
+
+.btn-fissio-outline:hover {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: white;
+}
+
+/* Cards de dashboard */
+.dashboard-card-header {
+  background-color: white;
+  border-bottom: none;
+}
+
+.dashboard-card-header h5 {
+  color: var(--fissio-primary);
+}
+
+.dashboard-icon-large {
+  font-size: 5rem;
+  color: var(--fissio-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 70px;
+  }
+  
+  .admin-sidebar .sidebar-text {
+    display: none;
+  }
+}
