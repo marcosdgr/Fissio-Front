@@ -24,3 +24,4 @@ export const registerPaciente = async (pacienteData) => {
   const response = await api.post("/api/usuarios/v1/register", pacienteData);
   return response.data;
 };
+
