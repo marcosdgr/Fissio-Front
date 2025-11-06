@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../../Custom/CustomLogin';
 import { useAuthStore } from '../../Store/useAuthStore';
 import { showSuccess, showError } from '../../Utils/sweetAlerts';
+import '../../Css/Login/Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -59,10 +60,9 @@ const Login = () => {
     <div className="container-fluid vh-100">
       <div className="row h-100">
         {/* Lado izquierdo - Formulario */}
-        <div className="col-md-6 d-flex align-items-center justify-content-center">
+        <div className="col-md-6 d-flex align-items-center justify-content-center px-3 px-md-0">
           <div className="w-100" style={{ maxWidth: '400px' }}>
             <div className="text-center mb-4">
-              <img src="/logo-negro.png" alt="Fissio" style={{ height: '60px' }} />
               <h2 className="mt-3 mb-1">Iniciar Sesión</h2>
               <p className="text-muted">Ingresa a tu cuenta de Fissio</p>
             </div>
@@ -122,9 +122,8 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="btn btn-primary w-100 mb-3"
+                className="btn btn-primary w-100 mb-3 login-btn-primary"
                 disabled={isLoading}
-                style={{ backgroundColor: '#0470BB', borderColor: '#0470BB' }}
               >
                 {isLoading ? (
                   <>
@@ -143,7 +142,7 @@ const Login = () => {
             <div className="text-center">
               <p className="text-muted">
                 ¿No tienes cuenta? 
-                <a href="/register" className="text-decoration-none ms-1" style={{ color: '#0470BB' }}>
+                <a href="/register" className="text-decoration-none ms-1 login-link-primary">
                   Regístrate aquí
                 </a>
               </p>
@@ -151,15 +150,12 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Lado derecho - Imagen/Información */}
-        <div className="col-md-6 d-none d-md-flex align-items-center justify-content-center" 
-             style={{ backgroundColor: '#f8f9fa' }}>
-          <div className="text-center">
-            <span className="material-symbols-outlined" style={{ fontSize: '120px', color: '#0470BB' }}>
-              medical_services
-            </span>
-            <h3 className="mt-3" style={{ color: '#0470BB' }}>Bienvenido a Fissio</h3>
-            <p className="text-muted">
+        {/* Lado derecho - Logo y información */}
+        <div className="col-md-6 d-none d-md-flex align-items-center justify-content-center login-info-panel">
+          <div className="text-center p-4">
+            <img src="/logo-color.png" alt="Fissio" className="img-fluid mb-3" style={{ maxHeight: '120px' }} />
+            <h3 className="login-welcome-title mb-3">Bienvenido a Fissio</h3>
+            <p className="text-muted mb-0">
               Gestiona tus citas médicas de forma fácil y segura
             </p>
           </div>
