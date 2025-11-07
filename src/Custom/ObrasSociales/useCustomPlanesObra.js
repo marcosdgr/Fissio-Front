@@ -4,7 +4,7 @@ import { BASE_URL } from "../../Api/api";
 
 // Hook que centraliza la lógica de obtener la lista de planes desde el backend.
 // Todas las funciones (obtener todos, obtener por id, crear) están dentro del hook.
-const useCustomPlanesObra = (idObraSocial) => {
+const useCustomPlanesObra = () => {
   const [planes, setPlanes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -126,7 +126,7 @@ const useCustomPlanesObra = (idObraSocial) => {
   // Ejecuta la carga inicial y cuando cambie idObraSocial
   useEffect(() => {
     obtenerTodosLosPlanes();
-  }, [idObraSocial]);
+  }, []);
 
   return {
     planes,

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import useCustomPlanesObra from '../../../Custom/ObrasSociales/useCustomPlanesObra.js'
+import useCustomObrasSociales from '../../../Custom/ObrasSociales/useCustomObrasSociales'
 import '../../../Css/ObrasSociales/PlanesObra.css'
 
 import PlanesObraTable from './ComponentesPlanes/PlanesObraTable'
@@ -27,6 +28,9 @@ const CrudPlanesObra = () => {
     obtenerPlanesActivos,
     obetenerPlanesInactivos,
   } = useCustomPlanesObra()
+
+  // Hook para obras sociales (lista de obras que usaremos en el select del modal)
+  const { obrasSociales = [], obtenerObrasSocialesActivas } = useCustomObrasSociales()
 
   const [formPlan, setFormPlan] = useState(emptyForm)
   const [idPlanEditar, setIdPlanEditar] = useState(null)
@@ -108,20 +112,26 @@ const CrudPlanesObra = () => {
     if (typeof obetenerPlanesInactivos === 'function') await obetenerPlanesInactivos()
   }
 
-  const handleEditarPlan = (plan) => {
+  const handleEditarPlan = async (plan) => {
     setFormPlan({
       NombraPlan: plan.NombraPlan || plan.NombrePlan || '',
       DescripcionPlan: safeGetDescripcion(plan) || '',
       idObraSocial: plan.idObraSocial || '',
     })
     setIdPlanEditar(plan.idPlanObra)
+    // cargar obras sociales activas antes de abrir el modal
+    if (typeof obtenerObrasSocialesActivas === 'function') await obtenerObrasSocialesActivas()
     setOpenModalNuevo(true)
   }
 
   const handleNuevoPlan = () => {
     setFormPlan(emptyForm)
     setIdPlanEditar(null)
-    setOpenModalNuevo(true)
+    // cargar obras sociales activas antes de abrir el modal
+    ;(async () => {
+      if (typeof obtenerObrasSocialesActivas === 'function') await obtenerObrasSocialesActivas()
+      setOpenModalNuevo(true)
+    })()
   }
 
   const handleVerPlan = (plan) => {
@@ -180,7 +190,7 @@ const CrudPlanesObra = () => {
         </div>
       </div>
 
-      <ModalPlanObra open={openModalNuevo} onClose={closeModalNuevo} onSubmit={handleSubmit} formPlan={formPlan} onChange={handleChange} idPlanEditar={idPlanEditar} />
+      <ModalPlanObra open={openModalNuevo} onClose={closeModalNuevo} onSubmit={handleSubmit} formPlan={formPlan} onChange={handleChange} idPlanEditar={idPlanEditar} obrasSociales={obrasSociales} />
       <VerPlanObraModal open={openModalVer} onClose={closeModalVer} plan={formPlan} />
     </>
   )

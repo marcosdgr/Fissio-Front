@@ -1,15 +1,7 @@
-import React, { useEffect } from 'react'
-import useCustomObrasSociales from '../../../../Custom/ObrasSociales/useCustomObrasSociales'
+import React from 'react'
 
-const ModalPlanObra = ({ open, onClose, onSubmit, formPlan, onChange, idPlanEditar }) => {
-  const { obrasSociales, obtenerObrasSocialesActivas } = useCustomObrasSociales()
-
-  useEffect(() => {
-    if (open) {
-      // cargar solo obras activas para el select cuando se abre el modal
-      obtenerObrasSocialesActivas()
-    }
-  }, [open, obtenerObrasSocialesActivas])
+// Ahora el modal recibe la lista de obras desde el padre para evitar llamar al hook aquí
+const ModalPlanObra = ({ open, onClose, onSubmit, formPlan, onChange, idPlanEditar, obrasSociales = [] }) => {
 
   if (!open) return null
 
