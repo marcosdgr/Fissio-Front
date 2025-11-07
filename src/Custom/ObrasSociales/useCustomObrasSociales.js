@@ -13,7 +13,7 @@ const useCustomObrasSociales = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`${BASE_URL}obras-sociales/v1/`);
+      const response = await axios.get(`${BASE_URL}api/obras-sociales/v1/`);
       setObrasSociales(response.data || []);
     } catch (err) {
       setError(err);
@@ -27,7 +27,7 @@ const useCustomObrasSociales = () => {
   // Obtener una obra social por su id
   const obtenerObraSocialPorId = async (idObraSocial) => {
     try {
-      const response = await axios.get(`${BASE_URL}obras-sociales/v1/${idObraSocial}`);
+      const response = await axios.get(`${BASE_URL}api/obras-sociales/v1/${idObraSocial}`);
       return response.data;
     } catch (err) {
       console.error('error al obtener la obra social por id', err);
@@ -40,7 +40,7 @@ const useCustomObrasSociales = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post(`${BASE_URL}obras-sociales/v1/crearObraSocial`, nuevaObraSocial);
+      const response = await axios.post(`${BASE_URL}api/obras-sociales/v1/crearObraSocial`, nuevaObraSocial);
       // Actualiza la lista después de crear una nueva obra social
       if (response?.data) {
         setObrasSociales((prev) => [...prev, response.data]);
@@ -60,7 +60,7 @@ const useCustomObrasSociales = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.put(`${BASE_URL}obras-sociales/v1/actualizarObraSocial/${idObraSocial}`, datosActualizados);
+      const response = await axios.put(`${BASE_URL}api/obras-sociales/v1/actualizarObraSocial/${idObraSocial}`, datosActualizados);
       if (response?.data) {
         setObrasSociales((prev) => prev.map((obra) => (obra.id === idObraSocial ? response.data : obra)));
         return { success: true, data: response.data };
@@ -75,11 +75,11 @@ const useCustomObrasSociales = () => {
   };
 
   // Cambiar estado (activar/desactivar) una obra social
-  const cambiarEstadoObraSocial = async (idObraSocial) => {
+  const borradoLogicoObraSocial = async (idObraSocial) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.put(`${BASE_URL}obras-sociales/v1/cambiarEstadoObra/${idObraSocial}`);
+      const response = await axios.put(`${BASE_URL}api/obras-sociales/v1/cambiarEstadoObra/${idObraSocial}`);
       if (response?.data) {
         setObrasSociales((prev) => prev.map((obra) => (obra.id === idObraSocial ? response.data : obra)));
         return { success: true, data: response.data };
@@ -98,7 +98,7 @@ const useCustomObrasSociales = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`${BASE_URL}obras-sociales/v1/activos`);
+      const response = await axios.get(`${BASE_URL}api/obras-sociales/v1/activos`);
       setObrasSociales(response.data || []);
     } catch (err) {
       setError(err);
@@ -114,7 +114,7 @@ const useCustomObrasSociales = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`${BASE_URL}obras-sociales/v1/inactivos`);
+      const response = await axios.get(`${BASE_URL}api/obras-sociales/v1/inactivos`);
       setObrasSociales(response.data || []);
     } catch (err) {
       setError(err);
@@ -139,7 +139,7 @@ const useCustomObrasSociales = () => {
     obtenerObraSocialPorId,
     crearObraSocial,
     actualizarObraSocial,
-    cambiarEstadoObraSocial,
+    borradoLogicoObraSocial, //CAMBIAR EL ESTADO DE ACTIVO A INACTIVO O VICEVERSA
     obtenerObrasSocialesActivas,
     obtenerObrasSocialesInactivas,
   };

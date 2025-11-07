@@ -3,7 +3,8 @@ import AdminPage from "./Pages/AdminPage";
 import Footer from "./Components/Common/Footer";
 import Navbar from "./Components/Common/Navbar";
 import HomePage from "./Pages/HomePage";
-import RegisterPage from "./Pages/RegisterPage"
+import RegisterPage from "./Pages/RegisterPage";
+import LoginPage from "./Pages/LoginPage";
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<div>404 - Página no encontrada</div>} />
           </Routes>
         </main>

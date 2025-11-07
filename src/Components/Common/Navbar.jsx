@@ -1,9 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../Store/useAuthStore";
+import { showConfirm, showSuccess } from "../../Utils/sweetAlerts";
 import "../../Css/Common/Navbar.css";
 
-
 const Navbar = () => {
+  const navigate = useNavigate();
+  const { isLoggedIn, logout } = useAuthStore();
+
+  // Función para cerrar sesión
+  const handleLogout = async () => {
+    const result = await showConfirm(
+      '¿Cerrar sesión?',
+      '¿Estás seguro que deseas salir de tu cuenta?',
+      'Sí, cerrar sesión',
+      'Cancelar'
+    );
+
+    if (result.isConfirmed) {
+      logout();
+      showSuccess('¡Hasta pronto!', 'Has cerrado sesión correctamente');
+      navigate('/');
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light site-navbar fixed-top">
       <div className="container">
@@ -41,6 +61,21 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/contacto">Contacto</Link>
             </li>
+            {isLoggedIn ? (
+              <li className="nav-item">
+                <button 
+                  className="nav-link btn btn-link text-decoration-none"
+                  onClick={handleLogout}
+                  style={{ border: 'none', background: 'transparent' }}
+                >
+                  Logout
+                </button>
+              </li>
+            ) : (
+              <li className="nav-item">
+                <Link className="nav-link" to="/Login">Login</Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
