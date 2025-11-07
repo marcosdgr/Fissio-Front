@@ -1,0 +1,45 @@
+/* Styles for Obras Sociales table + responsive cards */
+.obras-table {
+  /* container for desktop table; no extra styles needed by default */
+  width: 100%;
+}
+.obras-cards {
+  display: none;
+}
+
+/* Card styles for mobile */
+.obra-card {
+  border: 1px solid #e9ecef;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  background: #fff;
+}
+.obra-card .meta {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* Responsive breakpoint: show cards on xs (<=575.98px) */
+@media (max-width: 575.98px) {
+  .obras-table { display: none; }
+  .obras-cards { display: block; }
+}
+
+/* On larger screens hide cards */
+@media (min-width: 576px) {
+  .obras-table { display: block; }
+  .obras-cards { display: none; }
+}
+
+/* Truncate long texts inside table cells */
+.table td, .table th {
+  vertical-align: middle;
+}
+
+.text-truncate-obra {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
