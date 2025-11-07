@@ -1,8 +1,15 @@
-﻿const ObrasSociales = () => (
-  <div classObrasSociales="p-5 bg-white rounded shadow">
-    <h2 classObrasSociales="text-2xl font-bold text-gray-800">ObrasSociales</h2>
-    <p classObrasSociales="text-gray-500 mt-3">Componente en desarrollo</p>
-    <p classObrasSociales="text-sm text-gray-400 mt-2">Tablas: ObrasSociales relacionadas</p>
+﻿import CrudObrasSociales from "./CrudObras";
+
+
+
+const ObrasSociales = () => (
+  <div className="p-5 bg-white rounded shadow">
+    <h2 className="text-2xl font-bold text-gray-800">Obras Sociales</h2>
+    <CrudObrasSociales />
+    <br />
+    <br />
+
+
   </div>
 );
 export default ObrasSociales;

@@ -1,0 +1,14 @@
+/* Minimal styles for Planes de Obra component */
+.po-create-main {
+  background: linear-gradient(90deg, #198754, #0d6efd);
+  color: #fff;
+  border: none;
+}
+
+.po-create-main:hover {
+  filter: brightness(0.95);
+}
+
+@media (max-width: 576px) {
+  .po-create-main { width: 100%; }
+}
