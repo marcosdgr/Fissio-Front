@@ -439,3 +439,14 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
 }
+
+/* Modal backdrop personalizado */
+.modal-backdrop-custom {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Icono de error en formularios */
+.error-icon {
+  font-size: 16px;
+  vertical-align: middle;
+}
