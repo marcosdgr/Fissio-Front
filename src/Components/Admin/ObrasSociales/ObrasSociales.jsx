@@ -3,6 +3,7 @@ import TablaObrasSociales from './TablaObrasSociales'
 import BusquedaObrasSociales from './BusquedaObrasSociales'
 import ModalCrearObraSocial from './ModalCrearObraSocial'
 import CardsFiltroObras from './CardsFiltroObras'
+import '../../../Css/Admin/Servicios/Servicios.css'
 
 const ObrasSociales = () => {
   const [query, setQuery] = useState('')
@@ -11,16 +12,51 @@ const ObrasSociales = () => {
   const [statusFilter, setStatusFilter] = useState('Todas');
 
   return (
-    <div className="p-5 bg-white rounded shadow">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="text-2xl font-bold text-gray-800">Gestion de Obras Sociales</h2>
-        <button className="btn btn-primary" onClick={() => setIsCreateOpen(true)}>Agregar obra social</button>
+    <div className="servicios-container">
+      <div className="servicios-header">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 className="servicios-title">
+              <span className="material-symbols-outlined me-2">health_and_safety</span>
+              Gestión de Obras Sociales
+            </h2>
+            <p className="servicios-subtitle">Administra las obras sociales y su estado</p>
+          </div>
+          <button className="btn btn-fissio-primary" onClick={() => setIsCreateOpen(true)}>
+            <span className="material-symbols-outlined me-1">add</span>
+            Agregar Obra
+          </button>
+        </div>
+
+        {/* Cards de estadisticas (reusa el componente ya creado) */}
+        <div className="row mb-4">
+          <div className="col-12">
+            <CardsFiltroObras selected={statusFilter} onSelect={(v) => setStatusFilter(v)} />
+          </div>
+        </div>
       </div>
-      <CardsFiltroObras selected={statusFilter} onSelect={(v) => setStatusFilter(v)} />
-      <div className="mb-3">
-        <BusquedaObrasSociales onSearch={setQuery} />
+
+      {/* Filtros y búsqueda con estilo servicios */}
+      <div className="servicios-filters">
+        <div className="row mb-3">
+          <div className="col-md-8">
+            <BusquedaObrasSociales onSearch={setQuery} />
+          </div>
+          <div className="col-md-4 d-flex align-items-center justify-content-end">
+            {/* opcional: select de filtro que mantiene compatibilidad con CardsFiltroObras */}
+            <select className="form-select w-auto" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+              <option value="Todas">🔍 Todas</option>
+              <option value="Activas">✅ Activas</option>
+              <option value="Inactivas">❌ Inactivas</option>
+            </select>
+          </div>
+        </div>
       </div>
-      <TablaObrasSociales query={query} refreshKey={refreshKey} statusFilter={statusFilter} />
+
+      {/* Tabla */}
+      <div className="servicios-table">
+        <TablaObrasSociales query={query} refreshKey={refreshKey} statusFilter={statusFilter} />
+      </div>
 
       <ModalCrearObraSocial
         isOpen={isCreateOpen}
@@ -30,7 +66,6 @@ const ObrasSociales = () => {
           setRefreshKey((k) => k + 1);
         }}
       />
-
     </div>
   )
 }

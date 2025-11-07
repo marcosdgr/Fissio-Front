@@ -1,16 +1,11 @@
 import React from 'react';
 import useCustomObrasSociales from '../../../Custom/ObrasSociales/useCustomObrasSociales';
 
-const Card = ({ title, count, active, onClick, colorClass }) => (
-  <div className={`card card-filtro ${active ? 'border-primary shadow-sm' : ''}`} onClick={onClick} style={{ cursor: 'pointer' }}>
-    <div className="card-body d-flex align-items-center justify-content-between">
-      <div>
-        <div className="small text-muted">{title}</div>
-        <div className="h5 mb-0">{count}</div>
-      </div>
-      <div>
-        <span className={`badge ${colorClass} badge-filtro`} style={{ padding: '0.6rem 0.9rem', fontSize: '0.9rem' }}>{/* icon placeholder */}</span>
-      </div>
+const Card = ({ title, count, active, onClick }) => (
+  <div className={`stats-card card text-center clickable ${active ? 'active' : ''} stats-card--compact`} onClick={onClick} role="button">
+    <div className="card-body">
+      <div className="small text-muted">{title}</div>
+      <div className="stats-value">{count}</div>
     </div>
   </div>
 );
@@ -32,10 +27,16 @@ const CardsFiltroObras = ({ selected = 'Todas', onSelect }) => {
   }, [obrasSociales]);
 
   return (
-    <div className="d-flex gap-3 mb-3 cards-filtro-wrapper">
-      <Card title="Todas" count={counts.total} active={selected === 'Todas'} onClick={() => onSelect && onSelect('Todas')} colorClass="bg-primary text-white" />
-      <Card title="Activas" count={counts.act} active={selected === 'Activas'} onClick={() => onSelect && onSelect('Activas')} colorClass="bg-success" />
-      <Card title="Inactivas" count={counts.inac} active={selected === 'Inactivas'} onClick={() => onSelect && onSelect('Inactivas')} colorClass="bg-secondary" />
+    <div className="row mb-3 cards-filtro-wrapper g-2">
+      <div className="col-md-4 mb-3 mb-md-0 px-1">
+        <Card title="Todas" count={counts.total} active={selected === 'Todas'} onClick={() => onSelect && onSelect('Todas')} />
+      </div>
+      <div className="col-md-4 mb-3 mb-md-0 px-1">
+        <Card title="Activas" count={counts.act} active={selected === 'Activas'} onClick={() => onSelect && onSelect('Activas')} />
+      </div>
+      <div className="col-md-4 mb-3 mb-md-0 px-1">
+        <Card title="Inactivas" count={counts.inac} active={selected === 'Inactivas'} onClick={() => onSelect && onSelect('Inactivas')} />
+      </div>
     </div>
   );
 };
