@@ -1,0 +1,86 @@
+/* Styles for ObrasSocialesStandalone component */
+.servicios-container {
+  padding: 1rem 1.25rem;
+}
+.servicios-title {
+  margin: 0;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+}
+.servicios-subtitle {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+.btn-fissio-primary {
+  background: #0d6efd;
+  border: none;
+  color: white;
+}
+.cards-filtro-wrapper {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.stats-card {
+  flex: 1 1 220px;
+  background: #fff;
+  border-radius: 0.5rem;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  cursor: default;
+}
+.stats-card.clickable { cursor: pointer; }
+.stats-card .card-body { padding: 1rem; }
+.stats-card .stats-title { color: #6c757d; font-size: 0.9rem; }
+.stats-card .stats-value { font-size: 1.4rem; font-weight: 600; }
+.stats-card.active { border-color: #0d6efd; box-shadow: 0 4px 12px rgba(13,110,253,0.08); }
+
+.servicios-filters .form-control { min-height: 40px; }
+
+.servicios-table .card { border: none; }
+.servicios-table .table thead th { font-weight: 600; }
+
+.obras-cards { display: none; }
+.obra-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.obra-card .meta { color: #6c757d; font-size: 0.9rem; }
+
+/* Modal overrides (simple, CSS-only modals) */
+.modal-obras-overlay { background: rgba(0,0,0,0.45); }
+.modal-obras-dialog { max-width: 900px; }
+.modal-ver-dialog { max-width: 560px; }
+.modal-ver-header { background: #0d6efd; color: #fff; padding: 1rem; display:flex; justify-content:space-between; align-items:center; border-top-left-radius: .25rem; border-top-right-radius: .25rem }
+.modal-ver-header .btn-close { filter: brightness(10); }
+.ver-field { display:flex; flex-direction:column; }
+.ver-field-label { color:#6c757d; font-size:0.85rem }
+.ver-field-value { font-weight:600; font-size:1rem }
+
+/* Responsive: switch to cards on small screens */
+@media (max-width: 768px) {
+  .servicios-table { display: none; }
+  .obras-cards { display: block; }
+  .cards-filtro-wrapper { gap: 0.75rem; }
+  .stats-card { flex: 1 1 30%; }
+}
+
+/* Small helpers */
+.btn-outline-info { border-color: #17a2b8; color: #17a2b8 }
+.btn-outline-primary { border-color: #0d6efd; color: #0d6efd }
+
+/* Mejorar visibilidad de errores de formulario */
+.form-control.is-invalid {
+  border-color: #dc3545;
+  box-shadow: none;
+}
+.invalid-feedback {
+  display: block;
+  color: #dc3545;
+  font-weight: 500;
+}
