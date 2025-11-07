@@ -43,3 +43,43 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Modal editar obra - estilos propios dentro del archivo de ObrasSociales */
+.modal-obras-overlay {
+  z-index: 2000; /* encima de otros modales */
+}
+.modal-obras-dialog {
+  transform: translateY(20px);
+}
+.modal-content.shadow-lg {
+  border-radius: 10px;
+  overflow: hidden;
+}
+.modal-header.bg-primary {
+  background: linear-gradient(90deg,#0d6efd 0%, #0069d9 100%);
+  color: #fff;
+}
+.modal-obras-dialog .modal-body input.form-control,
+.modal-obras-dialog .modal-body select.form-select {
+  border-radius: 6px;
+  border: 1px solid #dfe6ef;
+}
+.modal-obras-dialog .modal-footer {
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+/* Buttons styling tweaks */
+.btn-outline-primary {
+  border-radius: 6px;
+}
+.btn-primary {
+  border-radius: 6px;
+}
+
+
+/* Asegurar que SweetAlert2 se muestre por delante de los modales de bootstrap usados aquí */
+.swal2-container {
+  z-index: 3000 !important;
+}
+

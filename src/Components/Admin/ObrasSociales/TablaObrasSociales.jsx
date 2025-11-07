@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import useCustomObrasSociales from '../../../Custom/ObrasSociales/useCustomObrasSociales'
+import ModalEditarObra from './ModalEditarObra'
 import '../../../Css/ObrasSociales/TablaObrasSociales.css'
-import { useMemo } from 'react'
 
-const Servicios = ({ query = '' }) => {
-  const { obrasSociales = [] } = useCustomObrasSociales();
+const Servicios = ({ query = '', refreshKey }) => {
+  const { obrasSociales = [], obtenerTodasLasObrasSociales } = useCustomObrasSociales();
+  React.useEffect(() => {
+    if (typeof refreshKey !== 'undefined') {
+      obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales();
+    }
+  }, [refreshKey, obtenerTodasLasObrasSociales]);
+  const [selectedObra, setSelectedObra] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const visible = useMemo(() => {
     const q = (query || '').trim().toLowerCase();
@@ -19,7 +26,6 @@ const Servicios = ({ query = '' }) => {
 
   return (
     <div className="p-5 bg-white rounded shadow">
-      <h2 className="mb-4">Gestión de Obras Sociales</h2>
 
       {/* Tabla de obras sociales */}
         <div className="obras-table table-responsive">
@@ -49,13 +55,18 @@ const Servicios = ({ query = '' }) => {
                     <td>{nombre}</td>
                     <td>{telefono}</td>
                     <td>{email}</td>
+                        <td>
+                          {
+                            (() => {
+                              // Preferir el campo EstadoObra de la base. Si no existe, caer a isActive como fallback
+                              const estadoReal = obra.EstadoObra ?? obra.estado ?? (obra.IsActive !== undefined ? (obra.IsActive ? 'Activa' : 'Suspendida') : 'Activa');
+                              const badgeClass = estadoReal === 'Activa' ? 'bg-success' : 'bg-warning text-dark';
+                              return <span className={`badge ${badgeClass}`}>{estadoReal}</span>;
+                            })()
+                          }
+                        </td>
                     <td>
-                      <span className={`badge ${isActive ? 'bg-success' : 'bg-danger'}`}>
-                        {isActive ? 'Activo' : 'Inactivo'}
-                      </span>
-                    </td>
-                    <td>
-                      <button className="btn btn-sm btn-outline-primary me-2">Editar</button>
+                      <button className="btn btn-sm btn-outline-primary me-2" onClick={() => { setSelectedObra(obra); setIsModalOpen(true); }}>Editar</button>
                       <button className={`btn btn-sm ${isActive ? 'btn-outline-danger' : 'btn-outline-success'}`}>
                         {isActive ? 'Desactivar' : 'Activar'}
                       </button>
@@ -79,8 +90,8 @@ const Servicios = ({ query = '' }) => {
           const nombre = obra.NombreObraSocial ?? obra.Nombre ?? obra.nombre ?? '';
           const telefono = obra.TelefonoObra ?? obra.TelefonoObraSocial ?? obra.telefono ?? '';
           const email = obra.EmailObra ?? obra.EmailObraSocial ?? obra.email ?? '';
-          const estado = obra.EstadoObra ?? obra.estado ?? (obra.IsActive !== undefined ? (obra.IsActive ? 'Activa' : 'Baja') : 'Activa');
-          const isActive = obra.IsActive !== undefined ? Boolean(obra.IsActive) : (estado && estado.toLowerCase().includes('act'));
+          const estado = obra.EstadoObra ?? obra.estado ?? (obra.IsActive !== undefined ? (obra.IsActive ? 'Activa' : 'Suspendida') : 'Activa');
+          const badgeClass = estado === 'Activa' ? 'bg-success' : 'bg-warning text-dark';
           return (
             <div className="obra-card" key={id || Math.random()}>
               <div className="d-flex justify-content-between align-items-start">
@@ -90,17 +101,27 @@ const Servicios = ({ query = '' }) => {
                   <div className="meta">{email}</div>
                 </div>
                 <div className="text-end">
-                  <span className={`badge ${isActive ? 'bg-success' : 'bg-danger'}`}>{isActive ? 'Activo' : 'Inactivo'}</span>
+                  <span className={`badge ${badgeClass}`}>{estado}</span>
                 </div>
               </div>
-              <div className="mt-3">
+                <div className="mt-3">
                 <button className="btn btn-sm btn-outline-primary me-2">Ver</button>
-                <button className="btn btn-sm btn-outline-secondary">Editar</button>
+                <button className="btn btn-sm btn-outline-secondary" onClick={() => { setSelectedObra(obra); setIsModalOpen(true); }}>Editar</button>
               </div>
             </div>
           )
         })}
       </div>
+      {/* Modal de edición */}
+      <ModalEditarObra
+        isOpen={isModalOpen}
+        obra={selectedObra}
+        onClose={() => setIsModalOpen(false)}
+        onSaved={() => {
+          // refrescar lista luego de guardar
+          obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales();
+        }}
+      />
   </div>
   )
 }
