@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from 'react'
 import useCustomObrasSociales from '../../../Custom/ObrasSociales/useCustomObrasSociales'
+import { showConfirm, showSuccess, showError } from '../../../Utils/sweetAlerts'
 import ModalEditarObra from './ModalEditarObra'
 import ModalVerObra from './ModalVerObra'
 import '../../../Css/Admin/ObrasSociales/TablaObrasSociales.css'
 
-const TablaObrasSociales = ({ query = '', refreshKey, statusFilter = 'Todas' }) => {
-  const { obrasSociales = [], obtenerTodasLasObrasSociales } = useCustomObrasSociales();
+const TablaObrasSociales = ({ query = '', refreshKey, statusFilter = 'Todas', onSaved }) => {
+  const { obrasSociales = [], obtenerTodasLasObrasSociales, borradoLogicoObraSocial } = useCustomObrasSociales();
   React.useEffect(() => {
     if (typeof refreshKey !== 'undefined') {
       // call the hook function to refresh list when refreshKey changes
@@ -36,6 +37,28 @@ const TablaObrasSociales = ({ query = '', refreshKey, statusFilter = 'Todas' }) 
       return nombre.includes(q) || telefono.includes(q) || email.includes(q);
     });
   }, [obrasSociales, query, statusFilter])
+
+  const handleToggleActive = async (obra) => {
+    const id = obra.idObraSocial ?? obra.id ?? obra.id_obrasocial;
+    const isActive = obra.IsActive !== undefined ? Boolean(obra.IsActive) : ((obra.EstadoObra || '').toLowerCase().includes('act'));
+    const action = isActive ? 'desactivar' : 'activar';
+
+    const confirmed = await showConfirm(`¿Deseas ${action} la obra social?`, obra.NombreObraSocial ?? obra.Nombre ?? obra.nombre ?? '', 'Sí', 'Cancelar');
+    if (!confirmed || !confirmed.isConfirmed) return;
+
+    try {
+      const resp = await borradoLogicoObraSocial(id);
+      if (resp && resp.success) {
+        showSuccess('Listo', `Obra ${action}da correctamente`);
+        obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales();
+        if (typeof onSaved === 'function') onSaved();
+      } else {
+        showError('Error', resp?.error || 'No se pudo cambiar el estado');
+      }
+    } catch (err) {
+      showError('Error', err?.message || 'Error inesperado');
+    }
+  }
 
   return (
     <>
@@ -74,7 +97,7 @@ const TablaObrasSociales = ({ query = '', refreshKey, statusFilter = 'Todas' }) 
                           <div className="d-flex gap-1">
                             <button className="btn btn-sm btn-outline-info" onClick={() => { setViewObra(obra); setIsViewOpen(true); }} title="Ver">Ver</button>
                             <button className="btn btn-sm btn-outline-primary" onClick={() => { setSelectedObra(obra); setIsModalOpen(true); }} title="Editar">Editar</button>
-                            <button className={`btn btn-sm ${isActive ? 'btn-outline-danger' : 'btn-outline-success'}`} title={isActive ? 'Desactivar' : 'Activar'}>{isActive ? 'Desactivar' : 'Activar'}</button>
+                            <button className={`btn btn-sm ${isActive ? 'btn-outline-danger' : 'btn-outline-success'}`} title={isActive ? 'Desactivar' : 'Activar'} onClick={() => handleToggleActive(obra)}>{isActive ? 'Desactivar' : 'Activar'}</button>
                           </div>
                         </td>
                       </tr>
@@ -115,9 +138,10 @@ const TablaObrasSociales = ({ query = '', refreshKey, statusFilter = 'Todas' }) 
                   <span className={`badge ${badgeClass}`}>{estado}</span>
                 </div>
               </div>
-              <div className="mt-3">
+              <div className="mt-3 d-flex">
                 <button className="btn btn-sm btn-outline-info me-2" onClick={() => { setViewObra(obra); setIsViewOpen(true); }}>Ver</button>
-                <button className="btn btn-sm btn-outline-secondary" onClick={() => { setSelectedObra(obra); setIsModalOpen(true); }}>Editar</button>
+                <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => { setSelectedObra(obra); setIsModalOpen(true); }}>Editar</button>
+                <button className={`btn btn-sm ${obra.IsActive ? 'btn-outline-danger' : 'btn-outline-success'}`} onClick={() => handleToggleActive(obra)}>{obra.IsActive ? 'Desactivar' : 'Activar'}</button>
               </div>
             </div>
           )

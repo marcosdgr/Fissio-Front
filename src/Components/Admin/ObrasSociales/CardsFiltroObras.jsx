@@ -10,8 +10,15 @@ const Card = ({ title, count, active, onClick }) => (
   </div>
 );
 
-const CardsFiltroObras = ({ selected = 'Todas', onSelect }) => {
-  const { obrasSociales = [] } = useCustomObrasSociales();
+const CardsFiltroObras = ({ selected = 'Todas', onSelect, refreshKey }) => {
+  const { obrasSociales = [], obtenerTodasLasObrasSociales } = useCustomObrasSociales();
+
+  React.useEffect(() => {
+    if (typeof refreshKey !== 'undefined') {
+      obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshKey]);
 
   const counts = React.useMemo(() => {
     let total = 0, act = 0, inac = 0;

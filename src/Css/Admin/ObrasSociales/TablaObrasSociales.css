@@ -106,13 +106,20 @@
 .modal-ver-dialog .modal-body { background: #fff; padding: 1rem 1.25rem; }
 
 /* Cards filtro (Activas / Inactivas / Eliminadas) */
-.cards-filtro-wrapper { display: flex; gap: 1rem; margin-bottom: 1rem; }
-.card-filtro { width: 160px; border-radius: 10px; border: 1px solid #e9ecef; }
-.card-filtro .card-body { padding: 0.6rem 0.9rem; }
-.card-filtro .small { font-size: 0.75rem; }
-.card-filtro .h5 { font-size: 1.05rem; }
-.card-filtro.border-primary { border-color: #0470BB; }
+.cards-filtro-wrapper { display: flex; gap: 1rem; margin-bottom: 1rem; align-items: stretch; }
+.cards-filtro-wrapper > .card-filtro { flex: 1 1 0; max-width: none; }
+.cards-filtro-wrapper > .col-md-4 { padding-left: 0.25rem; padding-right: 0.25rem; flex: 1 1 0; max-width: none; }
+.card-filtro { border-radius: 12px; border: 1px solid #eef3f7; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.card-filtro .card-body { padding: 0.9rem; }
+.card-filtro .small { font-size: 0.8rem; color: #6b6b6b; }
+.card-filtro .h5 { font-size: 1.25rem; color: var(--fissio-primary); }
+.card-filtro.border-primary { border-color: var(--fissio-primary); }
 .badge-filtro { border-radius: 8px; }
+
+@media (max-width: 575.98px) {
+  .cards-filtro-wrapper { flex-direction: column; }
+  .cards-filtro-wrapper > .card-filtro { width: 100%; }
+}
 
 
 
