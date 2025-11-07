@@ -12,7 +12,7 @@ import Pagos from "../Components/Admin/Pagos/Pagos";
 import Asistencias from "../Components/Admin/Asistencias/Asistencias";
 import FAQs from "../Components/Admin/FAQs/FAQs";
 import "../Css/Admin/AdminPage.css";
-import ObrasSocialesStandalone from "../Components/Admin/ObrasSociales/ObrasSocialesStandalone";
+import ObrasSociales from "../Components/Admin/ObrasSociales/ObrasSociales";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -217,7 +217,7 @@ const AdminPage = () => {
           {activeTab === "tratamientos" && <Tratamientos />}
           {activeTab === "cobros" && <Cobros />}
           {activeTab === "pagos" && <Pagos />}
-          {activeTab === "obrasSociales" && <ObrasSocialesStandalone />}
+          {activeTab === "obrasSociales" && <ObrasSociales />}
           {activeTab === "asistencias" && <Asistencias />}
           {activeTab === "mensajes" && <Mensajes />}
           {activeTab === "faqs" && <FAQs />}
