@@ -114,7 +114,7 @@ const useCustomObrasSociales = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`${BASE_URL}api/obras-sociales/v1/inactivos`);
+      const response = await axios.get(`${BASE_URL}obras-sociales/v1/inactivos`);
       setObrasSociales(response.data || []);
     } catch (err) {
       setError(err);

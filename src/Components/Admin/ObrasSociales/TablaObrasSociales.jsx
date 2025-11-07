@@ -1,28 +1,48 @@
 import React, { useMemo, useState } from 'react'
 import useCustomObrasSociales from '../../../Custom/ObrasSociales/useCustomObrasSociales'
 import ModalEditarObra from './ModalEditarObra'
-import '../../../Css/ObrasSociales/TablaObrasSociales.css'
+import ModalVerObra from './ModalVerObra'
+import '../../../Css/Admin/ObrasSociales/TablaObrasSociales.css'
 
-const Servicios = ({ query = '', refreshKey }) => {
+const Servicios = ({ query = '', refreshKey, statusFilter = 'Todas' }) => {
   const { obrasSociales = [], obtenerTodasLasObrasSociales } = useCustomObrasSociales();
   React.useEffect(() => {
     if (typeof refreshKey !== 'undefined') {
+      // call the hook function to refresh list when refreshKey changes
+      // don't add obtenerTodasLasObrasSociales to dependency array (its identity may change on every render)
       obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales();
     }
-  }, [refreshKey, obtenerTodasLasObrasSociales]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshKey]);
   const [selectedObra, setSelectedObra] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewObra, setViewObra] = useState(null);
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  // show view modal and keep selected object
 
   const visible = useMemo(() => {
     const q = (query || '').trim().toLowerCase();
-    if (!q) return obrasSociales;
-    return (obrasSociales || []).filter(o => {
+    // start from base list filtered by statusFilter
+    const base = (obrasSociales || []).filter(o => {
+      if (statusFilter && statusFilter !== 'Todas') {
+        if (statusFilter === 'Activas') {
+          return o.IsActive === 1 || o.IsActive === true || o.IsActive === '1';
+        }
+        if (statusFilter === 'Inactivas') {
+          return o.IsActive === 0 || o.IsActive === false || o.IsActive === '0';
+        }
+      }
+      return true;
+    });
+
+    if (!q) return base;
+    return base.filter(o => {
       const nombre = (o.NombreObraSocial ?? o.Nombre ?? o.nombre ?? '').toString().toLowerCase();
       const telefono = (o.TelefonoObra ?? o.TelefonoObraSocial ?? o.telefono ?? '').toString().toLowerCase();
       const email = (o.EmailObra ?? o.EmailObraSocial ?? o.email ?? '').toString().toLowerCase();
       return nombre.includes(q) || telefono.includes(q) || email.includes(q);
     });
-  }, [obrasSociales, query])
+  }, [obrasSociales, query, statusFilter])
 
   return (
     <div className="p-5 bg-white rounded shadow">
@@ -66,6 +86,7 @@ const Servicios = ({ query = '', refreshKey }) => {
                           }
                         </td>
                     <td>
+                      <button className="btn btn-sm btn-outline-info me-2" onClick={() => { setViewObra(obra); setIsViewOpen(true); }}>Ver</button>
                       <button className="btn btn-sm btn-outline-primary me-2" onClick={() => { setSelectedObra(obra); setIsModalOpen(true); }}>Editar</button>
                       <button className={`btn btn-sm ${isActive ? 'btn-outline-danger' : 'btn-outline-success'}`}>
                         {isActive ? 'Desactivar' : 'Activar'}
@@ -85,7 +106,7 @@ const Servicios = ({ query = '', refreshKey }) => {
 
   {/* Mobile card view */}
       <div className="obras-cards">
-        {obrasSociales.map(obra => {
+        {visible.map(obra => {
           const id = obra.idObraSocial ?? obra.id ?? obra.id_obrasocial;
           const nombre = obra.NombreObraSocial ?? obra.Nombre ?? obra.nombre ?? '';
           const telefono = obra.TelefonoObra ?? obra.TelefonoObraSocial ?? obra.telefono ?? '';
@@ -105,7 +126,7 @@ const Servicios = ({ query = '', refreshKey }) => {
                 </div>
               </div>
                 <div className="mt-3">
-                <button className="btn btn-sm btn-outline-primary me-2">Ver</button>
+                <button className="btn btn-sm btn-outline-info me-2" onClick={() => { setViewObra(obra); setIsViewOpen(true); }}>Ver</button>
                 <button className="btn btn-sm btn-outline-secondary" onClick={() => { setSelectedObra(obra); setIsModalOpen(true); }}>Editar</button>
               </div>
             </div>
@@ -121,6 +142,12 @@ const Servicios = ({ query = '', refreshKey }) => {
           // refrescar lista luego de guardar
           obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales();
         }}
+      />
+      {/* Modal de ver obra (solo lectura) */}
+      <ModalVerObra
+        isOpen={isViewOpen}
+        obra={viewObra}
+        onClose={() => setIsViewOpen(false)}
       />
   </div>
   )

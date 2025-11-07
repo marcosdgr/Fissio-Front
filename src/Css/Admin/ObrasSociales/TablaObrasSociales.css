@@ -83,3 +83,36 @@
   z-index: 3000 !important;
 }
 
+/* Styles for the "Ver" modal to distinguish it from edit modal */
+.modal-ver-overlay { z-index: 2500; }
+/* Smaller dialog for quick view */
+.modal-ver-dialog { max-width: 520px; margin: 1.75rem auto; }
+.modal-ver-dialog .modal-content { border-radius: 10px; overflow: hidden; }
+.modal-ver-header {
+  /* gradient using the project's palette: blue -> teal */
+  background: linear-gradient(90deg,#0470BB 0%, #3AB1CF 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+}
+.modal-ver-header .modal-title { margin: 0; font-weight: 600; }
+.modal-ver-dialog .ver-field-label { color: #6B6B6B; font-size: 0.85rem; }
+.modal-ver-dialog .ver-field-value { font-size: 1rem; margin-top: 4px; color: #333; }
+.modal-ver-dialog .text-muted { color: #A7B1B4 !important; }
+
+/* subtle background for the body to separate sections */
+.modal-ver-dialog .modal-body { background: #fff; padding: 1rem 1.25rem; }
+
+/* Cards filtro (Activas / Inactivas / Eliminadas) */
+.cards-filtro-wrapper { display: flex; gap: 1rem; margin-bottom: 1rem; }
+.card-filtro { width: 160px; border-radius: 10px; border: 1px solid #e9ecef; }
+.card-filtro .card-body { padding: 0.6rem 0.9rem; }
+.card-filtro .small { font-size: 0.75rem; }
+.card-filtro .h5 { font-size: 1.05rem; }
+.card-filtro.border-primary { border-color: #0470BB; }
+.badge-filtro { border-radius: 8px; }
+
+
+
