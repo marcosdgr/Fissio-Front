@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminPage from "./Pages/AdminPage";
+import PacientePage from "./Pages/PacientePage";
 import Footer from "./Components/Common/Footer";
 import Navbar from "./Components/Common/Navbar";
 import HomePage from "./Pages/HomePage";
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/paciente" element={<PacientePage />} />
             <Route path="*" element={<div>404 - Página no encontrada</div>} />
           </Routes>
         </main>
