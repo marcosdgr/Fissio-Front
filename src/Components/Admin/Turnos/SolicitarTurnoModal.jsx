@@ -12,6 +12,7 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [horariosDisponibles, setHorariosDisponibles] = useState([]);
   const [loadingHorarios, setLoadingHorarios] = useState(false);
+  const [errores, setErrores] = useState({});
 
   // Función para cargar horarios disponibles
   const cargarHorariosDisponibles = async (fecha) => {
@@ -44,16 +45,52 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.fechaRequerida]);
 
+  // Función para validar el formulario
+  const validarFormulario = () => {
+    const nuevosErrores = {};
+
+    if (!formData.dniPaciente.trim()) {
+      nuevosErrores.dniPaciente = 'El DNI del paciente es requerido';
+    } else if (!/^[0-9]{7,8}$/.test(formData.dniPaciente.trim())) {
+      nuevosErrores.dniPaciente = 'El DNI debe tener 7 u 8 dígitos numéricos';
+    }
+
+    if (!formData.fechaRequerida) {
+      nuevosErrores.fechaRequerida = 'La fecha requerida es obligatoria';
+    }
+
+    if (!formData.horarioRequerido) {
+      nuevosErrores.horarioRequerido = 'Debe seleccionar un horario disponible';
+    }
+
+    setErrores(nuevosErrores);
+    return Object.keys(nuevosErrores).length === 0;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+    
+    // Limpiar error del campo cuando el usuario empiece a escribir
+    if (errores[name]) {
+      setErrores(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validar formulario antes de enviar
+    if (!validarFormulario()) {
+      return; // No cerrar modal, solo mostrar errores
+    }
+
     setIsLoading(true);
 
     try {
@@ -61,7 +98,7 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
         DNIPaciente: formData.dniPaciente,
         FechaRequeridaTurno: formData.fechaRequerida,
         HorarioRequeridoTurno: formData.horarioRequerido,
-        InformeTurno: formData.observaciones || null
+        InformeTurno: formData.observaciones 
       };
 
       await solicitarTurno(turnoData);
@@ -76,6 +113,7 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
         observaciones: ''
       });
       setHorariosDisponibles([]);
+      setErrores({});
       
       onSolicitudExitosa();
       onClose();
@@ -96,6 +134,7 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
       observaciones: ''
     });
     setHorariosDisponibles([]);
+    setErrores({});
     onClose();
   };
 
@@ -131,7 +170,7 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${errores.dniPaciente ? 'is-invalid' : ''}`}
                     id="dniPaciente"
                     name="dniPaciente"
                     placeholder="Ingrese el DNI del paciente"
@@ -141,6 +180,11 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
                     maxLength="8"
                     pattern="[0-9]{7,8}"
                   />
+                  {errores.dniPaciente && (
+                    <div className="invalid-feedback">
+                      {errores.dniPaciente}
+                    </div>
+                  )}
                   <div className="form-text">
                     DNI sin puntos ni espacios (7-8 dígitos)
                   </div>
@@ -153,7 +197,7 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
                   </label>
                   <input
                     type="date"
-                    className="form-control"
+                    className={`form-control ${errores.fechaRequerida ? 'is-invalid' : ''}`}
                     id="fechaRequerida"
                     name="fechaRequerida"
                     value={formData.fechaRequerida}
@@ -161,6 +205,11 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
                     min={fechaMinima}
                     required
                   />
+                  {errores.fechaRequerida && (
+                    <div className="invalid-feedback">
+                      {errores.fechaRequerida}
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-12 mb-3">
@@ -169,7 +218,7 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
                     Horario Requerido *
                   </label>
                   <select
-                    className="form-select"
+                    className={`form-select ${errores.horarioRequerido ? 'is-invalid' : ''}`}
                     id="horarioRequerido"
                     name="horarioRequerido"
                     value={formData.horarioRequerido}
@@ -191,6 +240,11 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
                       </option>
                     ))}
                   </select>
+                  {errores.horarioRequerido && (
+                    <div className="invalid-feedback">
+                      {errores.horarioRequerido}
+                    </div>
+                  )}
                   <div className="form-text">
                     {formData.fechaRequerida && horariosDisponibles.length === 0 && !loadingHorarios
                       ? 'No hay horarios disponibles para esta fecha'
