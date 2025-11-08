@@ -29,17 +29,22 @@ export const asignarRecursos = async (idTurno, recursos) => {
 };
 
 /**
- * Obtener kinesiologos activos para asignar
+ * Obtener kinesiologos presentes para una fecha específica
+ * @param {string} fecha - Fecha en formato YYYY-MM-DD
  */
-export const getKinesiologos = async () => {
-  const response = await api.get("/api/turnos/v1/kinesiologos-disponibles");
+export const getKinesiologosDisponibles = async (fecha) => {
+  const response = await api.get("/api/turnos/v1/kinesiologos-disponibles", { 
+    params: { fecha } 
+  });
   return response.data;
 };
 
 /**
- * Obtener salas disponibles
+ * Finalizar un turno que está en curso
+ * @param {number} idTurno - ID del turno
+ * @param {object} finalizacionData - Datos para finalizar el turno
  */
-export const getSalas = async () => {
-  const response = await api.get("/api/turnos/v1/salas-disponibles");
+export const finalizarTurno = async (idTurno, finalizacionData) => {
+  const response = await api.put(`/api/turnos/v1/finalizar/${idTurno}`, finalizacionData);
   return response.data;
 };

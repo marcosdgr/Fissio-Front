@@ -1,57 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { asignarRecursos, getKinesiologos, getSalas } from '../../../Custom/CustomTurnos';
-import { showSuccess, showError } from '../../../Utils/sweetAlerts';
+import React, { useState, useEffect } from "react";
+import {
+  asignarRecursos,
+  getKinesiologosDisponibles,
+} from "../../../Custom/CustomTurnos";
+import { showSuccess, showError } from "../../../Utils/sweetAlerts";
 
 const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
-    HorarioInicioTurno: '',
-    HorarioFinTurno: '',
-    idEmpleado: '',
-    idSala: '',
-    ObservacionesSecretaria: ''
+    HorarioInicioTurno: "",
+    HorarioFinTurno: "",
+    idEmpleado: "",
+    ObservacionesSecretaria: "",
   });
-  
+
   const [kinesiologos, setKinesiologos] = useState([]);
-  const [salas, setSalas] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   // Cargar kinesiologos y salas al abrir el modal
   useEffect(() => {
+    const cargarDatos = async () => {
+      setIsLoadingData(true);
+      try {
+        // Obtener fecha del turno para kinesiologos presentes
+        let fechaTurno = new Date().toISOString().split("T")[0]; // fallback a hoy
+        
+        if (turno?.FechaRequeridaTurno) {
+          // Si es un timestamp, extraer solo la fecha
+          fechaTurno = new Date(turno.FechaRequeridaTurno).toISOString().split("T")[0];
+        }
+
+        const kinesiologosRes = await getKinesiologosDisponibles(fechaTurno);
+        setKinesiologos(kinesiologosRes.kinesiologos || kinesiologosRes);
+      } catch (error) {
+        console.error("Error al cargar kinesiologos:", error);
+        showError(
+          "Error",
+          "No se pudieron cargar los kinesiologos: " +
+            (error.response?.data?.message || error.message)
+        );
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+
     if (isOpen) {
       cargarDatos();
       // Pre-llenar con horario sugerido si existe
       if (turno?.HorarioRequeridoTurno) {
         const horario = turno.HorarioRequeridoTurno;
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           HorarioInicioTurno: horario,
-          HorarioFinTurno: calcularHorarioFin(horario)
+          HorarioFinTurno: calcularHorarioFin(horario),
         }));
       }
     }
-  }, [isOpen, turno]);
-
-  const cargarDatos = async () => {
-    setIsLoadingData(true);
-    try {
-      const [kinesiologosRes, salasRes] = await Promise.all([
-        getKinesiologos(),
-        getSalas()
-      ]);
-      setKinesiologos(kinesiologosRes.kinesiologos || kinesiologosRes);
-      setSalas(salasRes.salas || salasRes);
-    } catch (error) {
-      console.error('Error al cargar datos:', error);
-      showError('Error', 'No se pudieron cargar los kinesiologos y salas');
-    } finally {
-      setIsLoadingData(false);
-    }
-  };
+  }, [
+    isOpen,
+    turno?.idTurno,
+    turno?.HorarioRequeridoTurno,
+    turno?.FechaRequeridaTurno,
+  ]);
 
   const calcularHorarioFin = (inicio) => {
-    if (!inicio) return '';
-    const [horas, minutos] = inicio.split(':');
+    if (!inicio) return "";
+    const [horas, minutos] = inicio.split(":");
     const fechaInicio = new Date();
     fechaInicio.setHours(parseInt(horas), parseInt(minutos), 0);
     fechaInicio.setMinutes(fechaInicio.getMinutes() + 60); // Agregar 1 hora
@@ -60,16 +74,16 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Auto-calcular hora fin cuando cambia hora inicio
-    if (name === 'HorarioInicioTurno') {
-      setFormData(prev => ({
+    if (name === "HorarioInicioTurno") {
+      setFormData((prev) => ({
         ...prev,
-        HorarioFinTurno: calcularHorarioFin(value)
+        HorarioFinTurno: calcularHorarioFin(value),
       }));
     }
   };
@@ -80,12 +94,15 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
 
     try {
       const response = await asignarRecursos(turno.idTurno, formData);
-      showSuccess('¡Recursos asignados!', response.message);
+      showSuccess("¡Kinesiólogo asignado!", response.message);
       onSuccess();
       onClose();
     } catch (error) {
-      console.error('Error al asignar recursos:', error);
-      showError('Error', error.response?.data?.message || 'Error al asignar recursos');
+      console.error("Error al asignar kinesiólogo:", error);
+      showError(
+        "Error",
+        error.response?.data?.message || "Error al asignar kinesiólogo"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -94,15 +111,22 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+    <div
+      className="modal show d-block"
+      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+    >
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">
-              <span className="material-symbols-outlined me-2">assignment</span>
-              Asignar recursos 
+              <span className="material-symbols-outlined me-2">person_add</span>
+              Asignar Kinesiólogo
             </h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
           </div>
 
           <div className="modal-body">
@@ -114,12 +138,22 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
               <div className="card-body">
                 <div className="row">
                   <div className="col-md-6">
-                    <p><strong>Paciente:</strong> {turno?.NombrePaciente} {turno?.ApellidoPaciente}</p>
-                    <p><strong>DNI:</strong> {turno?.DNI}</p>
+                    <p>
+                      <strong>Paciente:</strong> {turno?.NombrePaciente}{" "}
+                      {turno?.ApellidoPaciente}
+                    </p>
+                    <p>
+                      <strong>DNI:</strong> {turno?.DNI}
+                    </p>
                   </div>
                   <div className="col-md-6">
-                    <p><strong>Horario solicitado:</strong> {turno?.HorarioRequeridoTurno}</p>
-                    <p><strong>Teléfono:</strong> {turno?.TelefonoPaciente}</p>
+                    <p>
+                      <strong>Horario solicitado:</strong>{" "}
+                      {turno?.HorarioRequeridoTurno}
+                    </p>
+                    <p>
+                      <strong>Teléfono:</strong> {turno?.TelefonoPaciente}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -136,8 +170,13 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="mb-3">
-                      <label htmlFor="HorarioInicioTurno" className="form-label">
-                        <span className="material-symbols-outlined me-1">schedule</span>
+                      <label
+                        htmlFor="HorarioInicioTurno"
+                        className="form-label"
+                      >
+                        <span className="material-symbols-outlined me-1">
+                          schedule
+                        </span>
                         Hora de inicio *
                       </label>
                       <input
@@ -154,7 +193,9 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
                   <div className="col-md-6">
                     <div className="mb-3">
                       <label htmlFor="HorarioFinTurno" className="form-label">
-                        <span className="material-symbols-outlined me-1">schedule</span>
+                        <span className="material-symbols-outlined me-1">
+                          schedule
+                        </span>
                         Hora de fin *
                       </label>
                       <input
@@ -171,10 +212,12 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
                 </div>
 
                 <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-12">
                     <div className="mb-3">
                       <label htmlFor="idEmpleado" className="form-label">
-                        <span className="material-symbols-outlined me-1">person</span>
+                        <span className="material-symbols-outlined me-1">
+                          person
+                        </span>
                         Kinesiólogo *
                       </label>
                       <select
@@ -185,42 +228,34 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
                         onChange={handleChange}
                         required
                       >
-                        <option value="">Seleccionar kinesiólogo</option>
-                        {kinesiologos.map(kine => (
+                        <option value="">
+                          {kinesiologos.length === 0
+                            ? "No hay kinesiologos presentes para esta fecha"
+                            : "Seleccionar kinesiólogo"}
+                        </option>
+                        {kinesiologos.map((kine) => (
                           <option key={kine.idEmpleado} value={kine.idEmpleado}>
                             {kine.NombreEmpleado} {kine.ApellidoEmpleado}
+                            {kine.HoraEntrada &&
+                              ` (Ingreso: ${kine.HoraEntrada})`}
                           </option>
                         ))}
                       </select>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label htmlFor="idSala" className="form-label">
-                        <span className="material-symbols-outlined me-1">meeting_room</span>
-                        Sala *
-                      </label>
-                      <select
-                        className="form-select"
-                        id="idSala"
-                        name="idSala"
-                        value={formData.idSala}
-                        onChange={handleChange}
-                        required
-                      >
-                        <option value="">Seleccionar sala</option>
-                        {salas.map(sala => (
-                          <option key={sala.idSala} value={sala.idSala}>
-                            {sala.NombreSala}
-                          </option>
-                        ))}
-                      </select>
+                      {kinesiologos.length === 0 && (
+                        <div className="text-muted small mt-1">
+                          💡 Asegúrate de que haya kinesiologos marcados como
+                          presentes para esta fecha
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="ObservacionesSecretaria" className="form-label">
+                  <label
+                    htmlFor="ObservacionesSecretaria"
+                    className="form-label"
+                  >
                     <span className="material-symbols-outlined me-1">note</span>
                     Observaciones de secretaría
                   </label>
@@ -236,28 +271,34 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
                 </div>
 
                 <div className="modal-footer">
-                  <button 
-                    type="button" 
-                    className="btn btn-secondary" 
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
                     onClick={onClose}
                     disabled={isLoading}
                   >
                     Cancelar
                   </button>
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="btn btn-primary"
                     disabled={isLoading}
                   >
                     {isLoading ? (
                       <>
-                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
                         Asignando...
                       </>
                     ) : (
                       <>
-                        <span className="material-symbols-outlined me-2">check</span>
-                        Asignar Recursos
+                        <span className="material-symbols-outlined me-2">
+                          person_add
+                        </span>
+                        Asignar Kinesiólogo
                       </>
                     )}
                   </button>

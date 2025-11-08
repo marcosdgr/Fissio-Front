@@ -2,6 +2,7 @@
 import { getTurnosDelDia } from '../../../Custom/CustomTurnos';
 import { showError } from '../../../Utils/sweetAlerts';
 import AsignarRecursosModal from './AsignarRecursosModal';
+import FinalizarTurnoModal from './FinalizarTurnoModal';
 
 const Turnos = () => {
   const [turnos, setTurnos] = useState({
@@ -18,6 +19,10 @@ const Turnos = () => {
   const [fechaConsulta, setFechaConsulta] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [modalData, setModalData] = useState({
+    isOpen: false,
+    turno: null
+  });
+  const [modalFinalizarData, setModalFinalizarData] = useState({
     isOpen: false,
     turno: null
   });
@@ -67,6 +72,27 @@ const Turnos = () => {
 
   // Callback cuando se asignan recursos exitosamente
   const onAsignacionExitosa = () => {
+    cargarTurnos(fechaConsulta); // Recargar turnos con la misma fecha
+  };
+
+  // Abrir modal para finalizar turno
+  const abrirModalFinalizar = (turno) => {
+    setModalFinalizarData({
+      isOpen: true,
+      turno: turno
+    });
+  };
+
+  // Cerrar modal de finalizar
+  const cerrarModalFinalizar = () => {
+    setModalFinalizarData({
+      isOpen: false,
+      turno: null
+    });
+  };
+
+  // Callback cuando se finaliza un turno exitosamente
+  const onFinalizacionExitosa = () => {
     cargarTurnos(fechaConsulta); // Recargar turnos con la misma fecha
   };
 
@@ -180,7 +206,12 @@ const Turnos = () => {
                   <p className="text-muted p-3 mb-0">No hay turnos en curso</p>
                 ) : (
                   turnos.enCurso.map((turno) => (
-                    <TurnoCard key={turno.idTurno} turno={turno} />
+                    <TurnoCard 
+                      key={turno.idTurno} 
+                      turno={turno} 
+                      onFinalizarTurno={abrirModalFinalizar}
+                      esEnCurso={true}
+                    />
                   ))
                 )}
               </div>
@@ -217,12 +248,20 @@ const Turnos = () => {
         onClose={cerrarModal}
         onSuccess={onAsignacionExitosa}
       />
+
+      {/* Modal para finalizar turno */}
+      <FinalizarTurnoModal
+        turnoData={modalFinalizarData.turno}
+        isOpen={modalFinalizarData.isOpen}
+        onClose={cerrarModalFinalizar}
+        onFinalizarSuccess={onFinalizacionExitosa}
+      />
     </div>
   );
 };
 
 // Componente para mostrar cada turno
-const TurnoCard = ({ turno, onAsignarRecursos, esSolicitado = false }) => {
+const TurnoCard = ({ turno, onAsignarRecursos, onFinalizarTurno, esSolicitado = false, esEnCurso = false }) => {
   return (
     <div className="border-bottom p-3">
       <div className="d-flex justify-content-between align-items-start mb-2">
@@ -268,9 +307,24 @@ const TurnoCard = ({ turno, onAsignarRecursos, esSolicitado = false }) => {
             onClick={() => onAsignarRecursos(turno)}
           >
             <span className="material-symbols-outlined me-1" style={{ fontSize: '16px' }}>
-              assignment
+              person_add
             </span>
-            Asignar Recursos
+            Asignar Kinesiólogo
+          </button>
+        </div>
+      )}
+
+      {/* Botón para finalizar turno solo en turnos en curso */}
+      {esEnCurso && (
+        <div className="mt-2">
+          <button
+            className="btn btn-sm btn-success w-100"
+            onClick={() => onFinalizarTurno(turno)}
+          >
+            <span className="material-symbols-outlined me-1" style={{ fontSize: '16px' }}>
+              check_circle
+            </span>
+            Finalizar Turno
           </button>
         </div>
       )}
