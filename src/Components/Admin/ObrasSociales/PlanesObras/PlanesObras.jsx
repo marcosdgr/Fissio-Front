@@ -105,7 +105,12 @@ const PlanesObras = () => {
 
   const onCreate = async () => {
     const v = validate(form, false)
-    if (Object.keys(v).length > 0) { setErrors(v); return showError('Validación', 'Corrige los campos en rojo') }
+    if (Object.keys(v).length > 0) {
+      setErrors(v)
+      // si el error es por nombre duplicado, mostrar alerta específica
+      if (v.NombraPlan && String(v.NombraPlan).toLowerCase().includes('ya existe')) return showError('Nombre duplicado', v.NombraPlan)
+      return showError('Validación', 'Corrige los campos en rojo')
+    }
     const confirmed = await showConfirm('Crear plan', '¿Deseas crear este plan?', 'Crear', 'Cancelar')
     if (!confirmed || !confirmed.isConfirmed) return
     setLoadingOp(true)
@@ -120,7 +125,12 @@ const PlanesObras = () => {
 
   const onEdit = async () => {
     const v = validate(form, true)
-    if (Object.keys(v).length > 0) { setErrors(v); return showError('Validación', 'Corrige los campos en rojo') }
+    if (Object.keys(v).length > 0) {
+      setErrors(v)
+      // si el error es por nombre duplicado, mostrar alerta específica
+      if (v.NombraPlan && String(v.NombraPlan).toLowerCase().includes('ya existe')) return showError('Nombre duplicado', v.NombraPlan)
+      return showError('Validación', 'Corrige los campos en rojo')
+    }
     const confirmed = await showConfirm('Guardar cambios', '¿Deseas guardar los cambios realizados?', 'Guardar', 'Cancelar')
     if (!confirmed || !confirmed.isConfirmed) return
     setLoadingOp(true)
