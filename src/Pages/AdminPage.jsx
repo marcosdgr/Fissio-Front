@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Pacientes from "../Components/Admin/Pacientes/Pacientes";
 import Turnos from "../Components/Admin/Turnos/Turnos";
-import Profesionales from "../Components/Admin/Profesionales/Profesionales";
+import Profesionales from "../Components/Admin/Empleados/Profesionales";
 import Servicios from "../Components/Admin/Servicios/Servicios";
 import Tratamientos from "../Components/Admin/Tratamientos/Tratamientos";
 import Mensajes from "../Components/Admin/Mensajes/Mensajes";
