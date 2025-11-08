@@ -93,16 +93,27 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
     setIsLoading(true);
 
     try {
-      const response = await asignarRecursos(turno.idTurno, formData);
+      // Usar el ID correcto del turno y asegurarse de que sea un número limpio
+      let idTurno = turno?.IdTurno || turno?.idTurno;
+      
+      // Limpiar el ID para asegurar que solo sea un número
+      if (idTurno) {
+        idTurno = String(idTurno).replace(/[^0-9]/g, '');
+        idTurno = parseInt(idTurno, 10);
+      }
+      
+      if (!idTurno || isNaN(idTurno)) {
+        throw new Error('No se pudo obtener un ID de turno válido');
+      }
+      
+      const response = await asignarRecursos(idTurno, formData);
       showSuccess("¡Kinesiólogo asignado!", response.message);
       onSuccess();
       onClose();
     } catch (error) {
       console.error("Error al asignar kinesiólogo:", error);
-      showError(
-        "Error",
-        error.response?.data?.message || "Error al asignar kinesiólogo"
-      );
+      const errorMessage = error.response?.data?.message || "Error al asignar kinesiólogo";
+      showError("Error", errorMessage);
     } finally {
       setIsLoading(false);
     }

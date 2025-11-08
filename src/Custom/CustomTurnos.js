@@ -64,3 +64,12 @@ export const finalizarTurno = async (idTurno, finalizacionData) => {
   const response = await api.put(`/api/turnos/v1/finalizar/${idTurno}`, finalizacionData);
   return response.data;
 };
+
+/**
+ * Cancelar un turno
+ * @param {number} idTurno - ID del turno a cancelar
+ */
+export const cancelarTurno = async (idTurno) => {
+  const response = await api.put(`/api/turnos/v1/cancelar/${idTurno}`);
+  return response.data;
+};

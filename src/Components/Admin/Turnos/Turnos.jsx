@@ -1,6 +1,6 @@
 ﻿import  { useState, useEffect } from 'react';
-import { getTurnosDelDia } from '../../../Custom/CustomTurnos';
-import { showError } from '../../../Utils/sweetAlerts';
+import { getTurnosDelDia, cancelarTurno } from '../../../Custom/CustomTurnos';
+import { showError, showSuccess, showConfirm } from '../../../Utils/sweetAlerts';
 import AsignarRecursosModal from './AsignarRecursosModal';
 import FinalizarTurnoModal from './FinalizarTurnoModal';
 import SolicitarTurnoModal from './SolicitarTurnoModal';
@@ -9,13 +9,15 @@ const Turnos = () => {
   const [turnos, setTurnos] = useState({
     solicitados: [],
     enCurso: [],
-    finalizados: []
+    finalizados: [],
+    cancelados: []
   });
   const [resumen, setResumen] = useState({
     total: 0,
     solicitados: 0,
     enCurso: 0,
-    finalizados: 0
+    finalizados: 0,
+    cancelados: 0
   });
   const [fechaConsulta, setFechaConsulta] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -36,8 +38,25 @@ const Turnos = () => {
     setIsLoading(true);
     try {
       const response = await getTurnosDelDia(fecha);
-      setTurnos(response.turnos);
-      setResumen(response.resumen);
+      
+      // Asegurar que todos los arrays existan
+      const turnosData = {
+        solicitados: response.turnos?.solicitados || [],
+        enCurso: response.turnos?.enCurso || [],
+        finalizados: response.turnos?.finalizados || [],
+        cancelados: response.turnos?.cancelados || []
+      };
+      
+      const resumenData = {
+        total: response.resumen?.total || 0,
+        solicitados: response.resumen?.solicitados || 0,
+        enCurso: response.resumen?.enCurso || 0,
+        finalizados: response.resumen?.finalizados || 0,
+        cancelados: response.resumen?.cancelados || 0
+      };
+      
+      setTurnos(turnosData);
+      setResumen(resumenData);
       setFechaConsulta(response.fechaConsulta);
     } catch (error) {
       console.error('Error al cargar turnos:', error);
@@ -76,7 +95,7 @@ const Turnos = () => {
 
   // Callback cuando se asignan recursos exitosamente
   const onAsignacionExitosa = () => {
-    cargarTurnos(fechaConsulta); // Recargar turnos con la misma fecha
+    cargarTurnos(fechaConsulta); // ✅ Actualización automática del listado
   };
 
   // Abrir modal para finalizar turno
@@ -97,7 +116,7 @@ const Turnos = () => {
 
   // Callback cuando se finaliza un turno exitosamente
   const onFinalizacionExitosa = () => {
-    cargarTurnos(fechaConsulta); // Recargar turnos con la misma fecha
+    cargarTurnos(fechaConsulta); // ✅ Actualización automática del listado
   };
 
   // Abrir modal para solicitar nuevo turno
@@ -116,7 +135,35 @@ const Turnos = () => {
 
   // Callback cuando se solicita un turno exitosamente
   const onSolicitudExitosa = () => {
-    cargarTurnos(fechaConsulta); // Recargar turnos con la misma fecha
+    cargarTurnos(fechaConsulta); // ✅ Actualización automática del listado
+  };
+
+  // Función para cancelar un turno
+  const handleCancelarTurno = async (turno) => {
+    try {
+      const confirmResult = await showConfirm(
+        '¿Cancelar Turno?',
+        `¿Está seguro que desea cancelar el turno de ${turno.NombrePaciente} ${turno.ApellidoPaciente}?`,
+        'Sí, cancelar',
+        'No cancelar'
+      );
+
+      if (confirmResult.isConfirmed) {
+        const idTurno = turno.IdTurno || turno.idTurno;
+        const resultado = await cancelarTurno(idTurno);
+        
+        // Usar información específica de la respuesta del backend
+        const mensaje = resultado.message || 'Turno cancelado correctamente';
+        showSuccess('Éxito', `${mensaje} - Estado: ${resultado.estadoAnterior} → ${resultado.estadoActual}`);
+        
+        // ✅ Actualización automática del listado después de cancelar
+        cargarTurnos(fechaConsulta);
+      }
+    } catch (error) {
+      console.error('Error al cancelar turno:', error);
+      const errorMessage = error.response?.data?.message || 'Error al cancelar el turno';
+      showError('Error', errorMessage);
+    }
   };
 
   return (
@@ -157,7 +204,7 @@ const Turnos = () => {
 
       {/* Resumen */}
       <div className="row mb-4">
-        <div className="col-md-3">
+        <div className="col-md-2">
           <div className="card text-center border-primary">
             <div className="card-body">
               <h5 className="card-title text-primary">{resumen.total}</h5>
@@ -165,7 +212,7 @@ const Turnos = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <div className="card text-center border-warning">
             <div className="card-body">
               <h5 className="card-title text-warning">{resumen.solicitados}</h5>
@@ -173,7 +220,7 @@ const Turnos = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <div className="card text-center border-info">
             <div className="card-body">
               <h5 className="card-title text-info">{resumen.enCurso}</h5>
@@ -181,11 +228,19 @@ const Turnos = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <div className="card text-center border-success">
             <div className="card-body">
               <h5 className="card-title text-success">{resumen.finalizados}</h5>
               <p className="card-text">Finalizados</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-2">
+          <div className="card text-center border-danger">
+            <div className="card-body">
+              <h5 className="card-title text-danger">{resumen.cancelados || 0}</h5>
+              <p className="card-text">Cancelados</p>
             </div>
           </div>
         </div>
@@ -200,7 +255,7 @@ const Turnos = () => {
       ) : (
         <div className="row">
           {/* Turnos Solicitados */}
-          <div className="col-lg-4 mb-4">
+          <div className="col-lg-3 mb-4">
             <div className="card">
               <div className="card-header bg-warning text-white">
                 <h5 className="mb-0">
@@ -217,6 +272,7 @@ const Turnos = () => {
                       key={turno.idTurno} 
                       turno={turno} 
                       onAsignarRecursos={abrirModalAsignar}
+                      onCancelarTurno={handleCancelarTurno}
                       esSolicitado={true}
                     />
                   ))
@@ -226,7 +282,7 @@ const Turnos = () => {
           </div>
 
           {/* Turnos En Curso */}
-          <div className="col-lg-4 mb-4">
+          <div className="col-lg-3 mb-4">
             <div className="card">
               <div className="card-header bg-info text-white">
                 <h5 className="mb-0">
@@ -243,6 +299,7 @@ const Turnos = () => {
                       key={turno.idTurno} 
                       turno={turno} 
                       onFinalizarTurno={abrirModalFinalizar}
+                      onCancelarTurno={handleCancelarTurno}
                       esEnCurso={true}
                     />
                   ))
@@ -252,7 +309,7 @@ const Turnos = () => {
           </div>
 
           {/* Turnos Finalizados */}
-          <div className="col-lg-4 mb-4">
+          <div className="col-lg-3 mb-4">
             <div className="card">
               <div className="card-header bg-success text-white">
                 <h5 className="mb-0">
@@ -265,6 +322,27 @@ const Turnos = () => {
                   <p className="text-muted p-3 mb-0">No hay turnos finalizados</p>
                 ) : (
                   turnos.finalizados.map((turno) => (
+                    <TurnoCard key={turno.idTurno} turno={turno} />
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Turnos Cancelados */}
+          <div className="col-lg-3 mb-4">
+            <div className="card">
+              <div className="card-header bg-danger text-white">
+                <h5 className="mb-0">
+                  <span className="material-symbols-outlined me-2">cancel</span>
+                  Cancelados ({turnos.cancelados?.length || 0})
+                </h5>
+              </div>
+              <div className="card-body p-0">
+                {(!turnos.cancelados || turnos.cancelados.length === 0) ? (
+                  <p className="text-muted p-3 mb-0">No hay turnos cancelados</p>
+                ) : (
+                  turnos.cancelados.map((turno) => (
                     <TurnoCard key={turno.idTurno} turno={turno} />
                   ))
                 )}
@@ -301,7 +379,7 @@ const Turnos = () => {
 };
 
 // Componente para mostrar cada turno
-const TurnoCard = ({ turno, onAsignarRecursos, onFinalizarTurno, esSolicitado = false, esEnCurso = false }) => {
+const TurnoCard = ({ turno, onAsignarRecursos, onFinalizarTurno, onCancelarTurno, esSolicitado = false, esEnCurso = false }) => {
   return (
     <div className="border-bottom p-3">
       <div className="d-flex justify-content-between align-items-start mb-2">
@@ -342,30 +420,60 @@ const TurnoCard = ({ turno, onAsignarRecursos, onFinalizarTurno, esSolicitado = 
       {/* Botón para asignar recursos solo en turnos solicitados */}
       {esSolicitado && (
         <div className="mt-2">
-          <button
-            className="btn btn-sm btn-primary w-100"
-            onClick={() => onAsignarRecursos(turno)}
-          >
-            <span className="material-symbols-outlined me-1" style={{ fontSize: '16px' }}>
-              person_add
-            </span>
-            Asignar Kinesiólogo
-          </button>
+          <div className="row g-1">
+            <div className="col-6">
+              <button
+                className="btn btn-sm btn-primary w-100"
+                onClick={() => onAsignarRecursos(turno)}
+              >
+                <span className="material-symbols-outlined me-1" style={{ fontSize: '14px' }}>
+                  person_add
+                </span>
+                Asignar
+              </button>
+            </div>
+            <div className="col-6">
+              <button
+                className="btn btn-sm btn-outline-danger w-100"
+                onClick={() => onCancelarTurno(turno)}
+              >
+                <span className="material-symbols-outlined me-1" style={{ fontSize: '14px' }}>
+                  cancel
+                </span>
+                Cancelar
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Botón para finalizar turno solo en turnos en curso */}
+      {/* Botones para turnos en curso */}
       {esEnCurso && (
         <div className="mt-2">
-          <button
-            className="btn btn-sm btn-success w-100"
-            onClick={() => onFinalizarTurno(turno)}
-          >
-            <span className="material-symbols-outlined me-1" style={{ fontSize: '16px' }}>
-              check_circle
-            </span>
-            Finalizar Turno
-          </button>
+          <div className="row g-1">
+            <div className="col-6">
+              <button
+                className="btn btn-sm btn-success w-100"
+                onClick={() => onFinalizarTurno(turno)}
+              >
+                <span className="material-symbols-outlined me-1" style={{ fontSize: '14px' }}>
+                  check_circle
+                </span>
+                Finalizar
+              </button>
+            </div>
+            <div className="col-6">
+              <button
+                className="btn btn-sm btn-outline-danger w-100"
+                onClick={() => onCancelarTurno(turno)}
+              >
+                <span className="material-symbols-outlined me-1" style={{ fontSize: '14px' }}>
+                  cancel
+                </span>
+                Cancelar
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
