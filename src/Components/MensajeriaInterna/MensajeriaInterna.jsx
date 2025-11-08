@@ -11,6 +11,8 @@ const MensajeriaInterna = () => {
   const [mensaje, setMensaje] = useState('');
   const [loading, setLoading] = useState(false);
   const [unreadCounts, setUnreadCounts] = useState({}); // { idEmpleado: count }
+  const [vistaActual, setVistaActual] = useState('inbox'); // 'inbox' o 'chat'
+  const [mensajesNoLeidos, setMensajesNoLeidos] = useState([]); // Array de mensajes no leídos
 
   const authUser = useAuthStore(state => state.user);
   const mensajesApi = useCustomMensajeria;
@@ -24,6 +26,7 @@ const MensajeriaInterna = () => {
     if (!empActual) return;
 
     const counts = {};
+    const allUnreadMessages = [];
     
     for (const emp of empleadosList) {
       if (emp.idEmpleado === empActual.idEmpleado) continue; // No contar mensajes propios
@@ -34,13 +37,25 @@ const MensajeriaInterna = () => {
         if (conv) {
           const unreadMessages = conv.filter(m => !m.Leido && m.idEmpleadoDestinatario === empActual.idEmpleado);
           counts[emp.idEmpleado] = unreadMessages.length;
+          
+          // Agregar info del remitente a cada mensaje no leído
+          unreadMessages.forEach(msg => {
+            allUnreadMessages.push({
+              ...msg,
+              remitenteInfo: emp // Info completa del empleado que envió
+            });
+          });
         }
       } catch (err) {
         console.error(`Error cargando mensajes de empleado ${emp.idEmpleado}`, err);
       }
     }
     
+    // Ordenar por fecha más reciente
+    allUnreadMessages.sort((a, b) => new Date(b.FechaEnvio) - new Date(a.FechaEnvio));
+    
     setUnreadCounts(counts);
+    setMensajesNoLeidos(allUnreadMessages);
   }, [mensajesApi]);
 
   useEffect(() => {
@@ -89,6 +104,7 @@ const MensajeriaInterna = () => {
     }
 
     setSelectedEmpleado(emp);
+    setVistaActual('chat'); // Cambiar a vista de chat
     setLoading(true);
     try {
       console.log('🔄 Obteniendo conversación entre:', empleadoActual.idUsuario, 'y', emp.idUsuario);
@@ -98,20 +114,31 @@ const MensajeriaInterna = () => {
 
       // Marcar como leídos los mensajes recibidos
       const mensajesParaMarcar = (conv || []).filter(
-        m => !m.Leido && m.idEmpleadoDestinatario === empleadoActual.idEmpleado
+        m => {
+          const esNoLeido = !m.Leido || m.Leido === 0 || m.Leido === false;
+          const esMiMensaje = m.idEmpleadoDestinatario === empleadoActual.idEmpleado;
+          console.log(`📧 Mensaje ${m.idNotificacion}: Leido=${m.Leido}, esNoLeido=${esNoLeido}, esMiMensaje=${esMiMensaje}`);
+          return esNoLeido && esMiMensaje;
+        }
       );
+      
+      console.log(`📬 Mensajes para marcar como leídos: ${mensajesParaMarcar.length}`);
       
       for (const m of mensajesParaMarcar) {
         try {
-          await mensajesApi.markAsRead(m.idNotificacion, empleadoActual.idEmpleado);
+          console.log(`✅ Marcando mensaje ${m.idNotificacion} como leído para empleado ${empleadoActual.idEmpleado}`);
+          const response = await mensajesApi.markAsRead(m.idNotificacion, empleadoActual.idEmpleado);
+          console.log(`✅ Respuesta del servidor:`, response);
           m.Leido = 1;
         } catch (err) {
-          console.error('Error marcando como leido', err);
+          console.error(`❌ Error marcando mensaje ${m.idNotificacion} como leido:`, err);
+          console.error('Detalles del error:', err.response?.data);
         }
       }
       
       if (mensajesParaMarcar.length > 0) {
         setConversacion([...(conv || [])]);
+        console.log('🔄 Conversación actualizada con mensajes marcados como leídos');
       }
       
       // Actualizar contador de no leídos para este empleado
@@ -119,10 +146,29 @@ const MensajeriaInterna = () => {
         ...prev,
         [emp.idEmpleado]: 0
       }));
+      
+      // Recargar mensajes no leídos (esto actualizará la bandeja de entrada)
+      console.log('🔄 Recargando lista de mensajes no leídos...');
+      await loadUnreadCounts(empleados, empleadoActual);
+      console.log('✅ Lista de mensajes no leídos actualizada');
     } catch (err) {
       console.error('Error al obtener conversacion', err);
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const handleVolverInbox = () => {
+    setVistaActual('inbox');
+    setSelectedEmpleado(null);
+    setConversacion([]);
+  };
+  
+  const handleClickMensajeNoLeido = async (mensaje) => {
+    // Encontrar el empleado remitente en la lista
+    const empleadoRemitente = empleados.find(e => e.idUsuario === mensaje.idRemitente);
+    if (empleadoRemitente) {
+      await handleSelectEmpleado(empleadoRemitente);
     }
   };
 
@@ -189,6 +235,7 @@ const MensajeriaInterna = () => {
             .map(emp => {
               const isSelected = selectedEmpleado?.idEmpleado === emp.idEmpleado;
               const unreadCount = unreadCounts[emp.idEmpleado] || 0;
+              
               return (
                 <li 
                   key={emp.idEmpleado} 
@@ -207,9 +254,6 @@ const MensajeriaInterna = () => {
                     </div>
                     <div className="empleado-mail">{emp.MailUsuario}</div>
                   </div>
-                  <div className="empleado-status">
-                    <span className="status-dot"></span>
-                  </div>
                 </li>
               );
             })}
@@ -217,27 +261,85 @@ const MensajeriaInterna = () => {
       </aside>
 
       <main className="mensajeria-main">
-        {!selectedEmpleado ? (
-          <div className="placeholder-content">
-            <div className="placeholder-icon">📧</div>
-            <h3 className="placeholder-title">Bandeja de entrada</h3>
-            <p className="placeholder-text">Selecciona un empleado de la lista para ver la conversación</p>
+        {vistaActual === 'inbox' ? (
+          <div className="inbox-view">
+            <div className="inbox-header">
+              <h3 className="inbox-title">
+                <span className="inbox-icon">📬</span>
+                Bandeja de Entrada
+              </h3>
+              <span className="inbox-count">
+                {mensajesNoLeidos.length} mensaje{mensajesNoLeidos.length !== 1 ? 's' : ''} sin leer
+              </span>
+            </div>
+
+            <div className="inbox-content">
+              {mensajesNoLeidos.length === 0 ? (
+                <div className="inbox-empty">
+                  <div className="empty-icon">✉️</div>
+                  <h4>¡Todo al día!</h4>
+                  <p>No tienes mensajes pendientes por leer</p>
+                </div>
+              ) : (
+                <div className="inbox-messages">
+                  {mensajesNoLeidos.map((msg) => (
+                    <div 
+                      key={`${msg.idNotificacion}-${msg.idEmpleadoDestinatario}`}
+                      className="inbox-message-card"
+                      onClick={() => handleClickMensajeNoLeido(msg)}
+                    >
+                      <div className="inbox-card-avatar">
+                        {msg.remitenteInfo?.NombreEmpleado?.[0]}
+                        {msg.remitenteInfo?.ApellidoEmpleado?.[0]}
+                      </div>
+                      <div className="inbox-card-content">
+                        <div className="inbox-card-header">
+                          <span className="inbox-card-name">
+                            {msg.remitenteInfo?.NombreEmpleado} {msg.remitenteInfo?.ApellidoEmpleado}
+                          </span>
+                          <span className="inbox-card-time">
+                            {new Date(msg.FechaEnvio).toLocaleString('es-AR', { 
+                              day: '2-digit', 
+                              month: '2-digit',
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </span>
+                        </div>
+                        <div className="inbox-card-message">
+                          {msg.Mensaje}
+                        </div>
+                        <div className="inbox-card-footer">
+                          <span className="inbox-card-badge">Nuevo</span>
+                          <span className="inbox-card-mail">{msg.remitenteInfo?.MailUsuario}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <div className="conversation">
             <div className="conversation-header">
               <div className="header-left">
+                <button 
+                  className="btn-back-inbox" 
+                  onClick={handleVolverInbox}
+                  title="Volver a Bandeja de Entrada"
+                >
+                  ← Bandeja de Entrada
+                </button>
                 <div className="header-avatar">
-                  {selectedEmpleado.NombreEmpleado?.[0]}{selectedEmpleado.ApellidoEmpleado?.[0]}
+                  {selectedEmpleado?.NombreEmpleado?.[0]}{selectedEmpleado?.ApellidoEmpleado?.[0]}
                 </div>
                 <div className="header-info">
-                  <h6 className="header-name">{selectedEmpleado.NombreEmpleado} {selectedEmpleado.ApellidoEmpleado}</h6>
-                  <span className="header-status">● En línea</span>
+                  <h6 className="header-name">{selectedEmpleado?.NombreEmpleado} {selectedEmpleado?.ApellidoEmpleado}</h6>
                 </div>
               </div>
               <div className="header-actions">
-                <button className="icon-button" title="Actualizar">🔄</button>
-                <button className="icon-button" title="Información">ℹ️</button>
+                <button className="icon-button" title="Actualizar" onClick={() => handleSelectEmpleado(selectedEmpleado)}>🔄</button>
               </div>
             </div>
 
@@ -281,7 +383,6 @@ const MensajeriaInterna = () => {
             </div>
 
             <div className="composer">
-              <button className="composer-icon-btn" title="Adjuntar archivo">📎</button>
               <textarea 
                 value={mensaje} 
                 onChange={(e) => setMensaje(e.target.value)}
