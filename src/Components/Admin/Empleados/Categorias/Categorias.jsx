@@ -3,6 +3,10 @@ import useCustomCatEmpleados from '../../../../Custom/Empleados/CustomCatEmplead
 import Swal from 'sweetalert2'
 import '../../../../Css/Admin/Servicios/Servicios.css'
 import '../../../../Css/Admin/Profesionales/Categorias.css'
+import EstadisticasCategorias from './EstadisticasCategorias'
+import FiltrosCategorias from './FiltrosCategorias'
+import TablaCategorias from './TablaCategorias'
+import ModalCategoria from './ModalCategoria'
 
 const Categorias = () => {
 	const { categorias, loading, obtenerCategorias, crearCategoria, editarCategoria, cambiarEstadoCategoria } = useCustomCatEmpleados()
@@ -19,14 +23,14 @@ const Categorias = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const categoriasFiltradas = (categorias || []).filter(cat => {
-		const nombre = (cat.NombreCat || cat.NombreCategoria || '').toLowerCase()
-		const descripcion = (cat.DescripcionCat || cat.DescripcionCategoria || '').toLowerCase()
-		const q = busqueda.toLowerCase()
-		const matchBusqueda = !q || nombre.includes(q) || descripcion.includes(q)
-		const matchFiltro = filtro === 'todos' || (filtro === 'activos' && cat.IsActive) || (filtro === 'inactivos' && !cat.IsActive)
-		return matchBusqueda && matchFiltro
-	})
+		const categoriasFiltradas = (categorias || []).filter(cat => {
+			const nombre = (cat.NombreCat || cat.NombreCategoria || '').toLowerCase()
+			const descripcion = (cat.DescripcionCat || cat.DescripcionCategoria || '').toLowerCase()
+			const q = busqueda.toLowerCase()
+			const matchBusqueda = !q || nombre.includes(q) || descripcion.includes(q)
+			const matchFiltro = filtro === 'todos' || (filtro === 'activos' && cat.IsActive) || (filtro === 'inactivos' && !cat.IsActive)
+			return matchBusqueda && matchFiltro
+		})
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target
@@ -140,104 +144,18 @@ const Categorias = () => {
 					</button>
 				</div>
 
-				<div className="row mb-4">
-					<div className="col-md-4">
-						<div className={`stats-card card text-center clickable ${filtro === 'todos' ? 'active' : ''}`} onClick={() => setFiltro('todos')} title="Ver todos">
-							<div className="card-body">
-								<h5 className="stats-value">{(categorias || []).length}</h5>
-								<p className="stats-title">Total Categorías</p>
-							</div>
-						</div>
-					</div>
-					<div className="col-md-4">
-						<div className={`stats-card card text-center clickable ${filtro === 'activos' ? 'active' : ''}`} onClick={() => setFiltro('activos')} title="Ver activos">
-							<div className="card-body">
-								<h5 className="stats-value text-success">{(categorias || []).filter(c => c.IsActive).length}</h5>
-								<p className="stats-title">Activos</p>
-							</div>
-						</div>
-					</div>
-					<div className="col-md-4">
-						<div className={`stats-card card text-center clickable ${filtro === 'inactivos' ? 'active' : ''}`} onClick={() => setFiltro('inactivos')} title="Ver inactivos">
-							<div className="card-body">
-								<h5 className="stats-value text-danger">{(categorias || []).filter(c => !c.IsActive).length}</h5>
-								<p className="stats-title">Inactivos</p>
-							</div>
-						</div>
-					</div>
-				</div>
+				  <EstadisticasCategorias
+					total={(categorias || []).length}
+					activos={(categorias || []).filter(c => c.IsActive).length}
+					inactivos={(categorias || []).filter(c => !c.IsActive).length}
+					filtro={filtro}
+					setFiltro={setFiltro}
+				  />
 			</div>
 
-			<div className="servicios-filters">
-				<div className="row mb-3">
-					<div className="col-md-6">
-						<div className="input-group">
-							<span className="input-group-text"><span className="material-symbols-outlined">search</span></span>
-							<input type="text" className="form-control" placeholder="Buscar categorías..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
-						</div>
-					</div>
-					<div className="col-md-3">
-						<select className="form-select" value={filtro} onChange={(e) => setFiltro(e.target.value)}>
-							<option value="todos">🔍 Todas</option>
-							<option value="activos">✅ Solo activos</option>
-							<option value="inactivos">❌ Solo inactivos</option>
-						</select>
-					</div>
-				</div>
-			</div>
+			  <FiltrosCategorias busqueda={busqueda} setBusqueda={setBusqueda} filtro={filtro} setFiltro={setFiltro} />
 
-			<div className="servicios-table">
-				<div className="card">
-					<div className="card-body">
-						{loading ? (
-							<div className="text-center py-4">
-								<div className="spinner-border text-primary" role="status"><span className="visually-hidden">Cargando...</span></div>
-							</div>
-						) : (
-							<div className="table-responsive">
-								<table className="table table-hover">
-									<thead className="table-light">
-										<tr>
-											<th>Nombre</th>
-											<th>Descripción</th>
-											<th>Estado</th>
-											<th>Acciones</th>
-										</tr>
-									</thead>
-									<tbody>
-										{categoriasFiltradas.length > 0 ? (
-											categoriasFiltradas.map(cat => (
-												<tr key={cat.idCatEmpleado ?? cat.id}>
-													<td className="fw-medium">{cat.NombreCat || cat.NombreCategoria}</td>
-													<td>{cat.DescripcionCat || cat.DescripcionCategoria}</td>
-													<td>
-														<span className={`badge ${cat.IsActive ? 'bg-success' : 'bg-danger'}`}>{cat.IsActive ? 'Activo' : 'Inactivo'}</span>
-													</td>
-													<td>
-														<div className="d-flex gap-1">
-															<button className="btn btn-sm btn-outline-primary" onClick={() => handleEdit(cat)} title="Editar categoría"><span className="material-symbols-outlined">edit</span></button>
-															<button className={`btn btn-sm ${cat.IsActive ? 'btn-outline-danger' : 'btn-outline-success'}`} onClick={() => handleToggleStatus(cat)} title={cat.IsActive ? 'Desactivar' : 'Activar'}>
-																{cat.IsActive ? <span className="material-symbols-outlined">block</span> : <span className="material-symbols-outlined">check_circle</span>}
-															</button>
-														</div>
-													</td>
-												</tr>
-											))
-										) : (
-											<tr>
-												<td colSpan="4" className="text-center py-4">
-													<span className="material-symbols-outlined fs-1 text-muted">groups</span>
-													<p className="text-muted mt-2">No hay categorías que coincidan con los filtros</p>
-												</td>
-											</tr>
-										)}
-									</tbody>
-								</table>
-							</div>
-						)}
-					</div>
-				</div>
-			</div>
+			  <TablaCategorias categorias={categoriasFiltradas} loading={loading} onEdit={handleEdit} onToggle={handleToggleStatus} />
 
 			{showModal && (
 				<div className="modal fade show d-block modal-backdrop-custom">
