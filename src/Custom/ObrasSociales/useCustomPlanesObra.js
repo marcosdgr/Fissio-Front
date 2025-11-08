@@ -15,7 +15,7 @@ const useCustomPlanesObra = () => {
       setLoading(true);
       setError(null);
       const response = await axios.get(
-        `${BASE_URL}plan-obra/v1/`
+        `${BASE_URL}api/plan-obra/v1/`
       );
       setPlanes(response.data || []);
     } catch (err) {
@@ -31,7 +31,7 @@ const useCustomPlanesObra = () => {
   const obtenerPlanesPorId = async (idPlanObra) => {
     try {
       const response = await axios.get(
-        `${BASE_URL}plan-obra/v1/obtenerPlanPorId/${idPlanObra}`
+        `${BASE_URL}api/plan-obra/v1/obtenerPlanPorId/${idPlanObra}`
       );
       return response.data;
     } catch (error) {
@@ -46,7 +46,7 @@ const useCustomPlanesObra = () => {
       setLoading(true);
       setError(null);
       const response = await axios.post(
-        `${BASE_URL}plan-obra/v1/crearPlanObra`,
+        `${BASE_URL}api/plan-obra/v1/crearPlanObra`,
         nuevoPlan
       );
       if (response?.data) {
@@ -66,7 +66,7 @@ const useCustomPlanesObra = () => {
   const actualizarPlanObra = async (idPlanObra, datosActualizados) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}plan-obra/v1/actualizarPlanObra/${idPlanObra}`,
+        `${BASE_URL}api/plan-obra/v1/actualizarPlanObra/${idPlanObra}`,
         datosActualizados
       );
       return response.data;
@@ -78,7 +78,7 @@ const useCustomPlanesObra = () => {
 
   const cambiarEstadoPlanObra = async (idPlanObra) => {
     try {
-      await axios.put(`${BASE_URL}plan-obra/v1/cambiarestado/${idPlanObra}`);
+      await axios.put(`${BASE_URL}api/plan-obra/v1/cambiarEstado/${idPlanObra}`);
     } catch (err) {
       console.error("Error al cambiar estado del plan de obra:", err);
     }
@@ -94,7 +94,7 @@ const useCustomPlanesObra = () => {
       setLoading(true);
       setError(null);
       const response = await axios.get(
-        `${BASE_URL}plan-obra/v1/Activos`
+        `${BASE_URL}api/plan-obra/v1/Activos`
       );
       setPlanes(response.data || []);
     } catch (error) {

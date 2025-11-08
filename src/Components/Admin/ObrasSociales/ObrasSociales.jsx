@@ -10,6 +10,7 @@ import MobileCards from './MobileCards'
 import ModalCrearObra from './ModalCrearObra'
 import ModalEditarObra from './ModalEditarObra'
 import ModalVerObra from './ModalVerObra'
+import PlanesObras from './PlanesObras/PlanesObras'
 
 const ObrasSociales = () => {
   const { obrasSociales = [], obtenerTodasLasObrasSociales, crearObraSocial, actualizarObraSocial, borradoLogicoObraSocial } = useCustomObrasSociales()
@@ -295,6 +296,11 @@ const ObrasSociales = () => {
       <SearchBar query={query} setQuery={setQuery} filter={filter} setFilter={setFilter} />
 
       <ObrasTable visible={visible} onView={openView} onEdit={openEdit} onToggle={onToggle} />
+
+      {/* Planes asociados (se muestra debajo de la tabla de obras) */}
+      <div className="mt-4">
+        <PlanesObras />
+      </div>
 
       <MobileCards visible={visible} onView={openView} onEdit={openEdit} onToggle={onToggle} />
 
