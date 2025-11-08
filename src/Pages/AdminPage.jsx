@@ -3,13 +3,13 @@ import Pacientes from "../Components/Admin/Pacientes/Pacientes";
 import Turnos from "../Components/Admin/Turnos/Turnos";
 import Profesionales from "../Components/Admin/Profesionales/Profesionales";
 import Tratamientos from "../Components/Admin/Tratamientos/Tratamientos";
-import Mensajes from "../Components/Admin/Mensajes/Mensajes";
 import Estadisticas from "../Components/Admin/Estadisticas/Estadisticas";
 import Configuracion from "../Components/Admin/Configuracion/Configuracion";
 import Cobros from "../Components/Admin/Cobros/Cobros";
 import Pagos from "../Components/Admin/Pagos/Pagos";
 import ObrasSociales from "../Components/Admin/ObrasSociales/ObrasSociales";
 import Asistencias from "../Components/Admin/Asistencias/Asistencias";
+import HorariosTrabajo from "../Components/Admin/Horarios/HorariosTrabajo";
 import FAQs from "../Components/Admin/FAQs/FAQs";
 import "../Css/Admin/AdminPage.css";
 
@@ -26,6 +26,7 @@ const AdminPage = () => {
 
   const menuItems = [
     { id: "overview", label: "Dashboard", icon: "dashboard" },
+    { id: "horarios", label: "Horarios", icon: "schedule" },
     { id: "turnos", label: "Turnos", icon: "calendar_today" },
     { id: "pacientes", label: "Pacientes", icon: "groups" },
     { id: "profesionales", label: "Profesionales", icon: "local_hospital" },
@@ -34,7 +35,6 @@ const AdminPage = () => {
     { id: "pagos", label: "Gastos", icon: "credit_card" },
     { id: "obrasSociales", label: "Obras Sociales", icon: "health_and_safety" },
     { id: "asistencias", label: "Asistencias", icon: "assignment_turned_in" },
-    { id: "mensajes", label: "Mensajes", icon: "mail" },
     { id: "faqs", label: "FAQs", icon: "help" },
     { id: "estadisticas", label: "Estadísticas", icon: "bar_chart" },
     { id: "config", label: "Configuración", icon: "settings" },
@@ -216,7 +216,7 @@ const AdminPage = () => {
           {activeTab === "pagos" && <Pagos />}
           {activeTab === "obrasSociales" && <ObrasSociales />}
           {activeTab === "asistencias" && <Asistencias />}
-          {activeTab === "mensajes" && <Mensajes />}
+          {activeTab === "horarios" && <HorariosTrabajo />}
           {activeTab === "faqs" && <FAQs />}
           {activeTab === "estadisticas" && <Estadisticas />}
           {activeTab === "config" && <Configuracion />}
