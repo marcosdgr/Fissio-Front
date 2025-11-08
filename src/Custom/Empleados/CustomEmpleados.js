@@ -23,10 +23,13 @@ const useCustomEmpleados = () => {
     const crearEmpleado = async (nuevoEmpleado) => {
       try {
         setLoading(true);
-        const response = await axios.post(`${BASE_URL}api/empleados/v1/crearEmpleado/`, nuevoEmpleado);
-        setEmpleados((prevEmpleados) => [...prevEmpleados, response.data]);
+        const response = await axios.post(`${BASE_URL}api/empleados/v1/crearEmpleado`, nuevoEmpleado);
+        // Recargar la lista completa después de crear
+        await obtenerTodosLosEmpleados();
+        return response.data;
       } catch (error) {
         setError(error);
+        throw error;
       } finally {
         setLoading(false);
       }
@@ -35,26 +38,28 @@ const useCustomEmpleados = () => {
     const editarEmpleado = async (idEmpleado, datosActualizados) => {
       try {
         setLoading(true);
-        const response = await axios.put(`${BASE_URL}api/empleados/v1/actualizarEmpleado/${idEmpleado}/`, datosActualizados);
-        setEmpleados((prevEmpleados) =>
-          prevEmpleados.map((empleado) => (empleado.id === idEmpleado ? response.data : empleado))
-        );
+        const response = await axios.put(`${BASE_URL}api/empleados/v1/actualizarEmpleado/${idEmpleado}`, datosActualizados);
+        // Recargar la lista completa después de editar
+        await obtenerTodosLosEmpleados();
+        return response.data;
       } catch (error) {
         setError(error);
+        throw error;
       } finally {
         setLoading(false);
       }
     };
 
-const cambiarEstadoEmpleado = async (idEmpleado) => {
+const cambiarEstadoEmpleado = async (idEmpleado, nuevoEstado) => {
       try {
         setLoading(true);
-        const response = await axios.put(`${BASE_URL}api/empleados/v1/cambiarEstado/${idEmpleado}/`);
-        setEmpleados((prevEmpleados) =>
-          prevEmpleados.map((empleado) => (empleado.id === idEmpleado ? response.data : empleado))
-        );
+        const response = await axios.put(`${BASE_URL}api/empleados/v1/cambiarestado/${idEmpleado}`, { IsActive: nuevoEstado });
+        // Recargar la lista completa después del cambio
+        await obtenerTodosLosEmpleados();
+        return response.data;
       } catch (error) {
         setError(error);
+        throw error;
       } finally {
         setLoading(false);
       }

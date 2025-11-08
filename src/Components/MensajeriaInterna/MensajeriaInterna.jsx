@@ -5,6 +5,7 @@ import '../../Css/mensajeriainterna/MensajeriaInterna.css';
 
 const MensajeriaInterna = () => {
   const [empleados, setEmpleados] = useState([]);
+  const [empleadoActual, setEmpleadoActual] = useState(null); // El empleado logueado
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
   const [conversacion, setConversacion] = useState([]);
   const [mensaje, setMensaje] = useState('');
@@ -19,20 +20,19 @@ const MensajeriaInterna = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const loadUnreadCounts = useCallback(async (empleadosList) => {
-    const idUsuarioActual = authUser?.usuario?.idUsuario || authUser?.idUsuario;
-    if (!idUsuarioActual) return;
+  const loadUnreadCounts = useCallback(async (empleadosList, empActual) => {
+    if (!empActual) return;
 
     const counts = {};
     
     for (const emp of empleadosList) {
+      if (emp.idEmpleado === empActual.idEmpleado) continue; // No contar mensajes propios
+      
       try {
-        const conv = await mensajesApi.getConversation(idUsuarioActual, emp.idUsuario);
-        const empleadoActual = empleadosList.find(e => e.idUsuario === idUsuarioActual);
-        const idEmpleadoActual = empleadoActual?.idEmpleado;
+        const conv = await mensajesApi.getConversation(empActual.idUsuario, emp.idUsuario);
         
-        if (idEmpleadoActual && conv) {
-          const unreadMessages = conv.filter(m => !m.Leido && m.idEmpleadoDestinatario === idEmpleadoActual);
+        if (conv) {
+          const unreadMessages = conv.filter(m => !m.Leido && m.idEmpleadoDestinatario === empActual.idEmpleado);
           counts[emp.idEmpleado] = unreadMessages.length;
         }
       } catch (err) {
@@ -41,62 +41,84 @@ const MensajeriaInterna = () => {
     }
     
     setUnreadCounts(counts);
-  }, [authUser, mensajesApi]);
+  }, [mensajesApi]);
 
   useEffect(() => {
     const init = async () => {
       try {
+        console.log('🔍 Iniciando carga de empleados...');
+        console.log('authUser:', authUser);
+        
         const data = await mensajesApi.getActiveEmployees();
+        console.log('📋 Empleados obtenidos:', data);
         setEmpleados(data || []);
         
-        // Obtener mensajes no leídos para cada empleado
-        await loadUnreadCounts(data);
+        // Encontrar el empleado actual (el que está logueado)
+        const idUsuarioLogueado = authUser?.usuario?.idUsuario || authUser?.idUsuario;
+        console.log('👤 ID Usuario logueado:', idUsuarioLogueado);
+        
+        const empActual = data.find(e => e.idUsuario === idUsuarioLogueado);
+        console.log('✅ Empleado actual encontrado:', empActual);
+        
+        if (empActual) {
+          setEmpleadoActual(empActual);
+          // Obtener mensajes no leídos para cada empleado
+          await loadUnreadCounts(data, empActual);
+        } else {
+          console.error('❌ No se encontró el empleado actual en la lista de empleados');
+          console.error('Buscando idUsuario:', idUsuarioLogueado, 'en lista:', data.map(e => e.idUsuario));
+        }
       } catch (err) {
         console.error('Error al obtener empleados activos', err);
       }
     };
     init();
-  }, [mensajesApi, loadUnreadCounts]);
+  }, [authUser, mensajesApi, loadUnreadCounts]);
 
   useEffect(() => {
     scrollToBottom();
   }, [conversacion]);
 
   const handleSelectEmpleado = async (emp) => {
+    console.log('📨 Seleccionando empleado:', emp);
+    console.log('👤 Empleado actual:', empleadoActual);
+    
+    if (!empleadoActual) {
+      console.error('❌ No se encontró información del empleado actual');
+      return;
+    }
+
     setSelectedEmpleado(emp);
     setLoading(true);
     try {
-      const idUsuarioActual = authUser?.usuario?.idUsuario || authUser?.idUsuario || authUser?.MailUsuario ? (authUser?.usuario?.idUsuario || authUser?.idUsuario) : null;
-      const idUsuarioDestino = emp.idUsuario;
-      if (!idUsuarioActual) {
-        // intentar obtener idUsuario del objeto user
-        console.warn('No se encontró idUsuario en el store. Revisa login.');
-      }
-      const conv = await mensajesApi.getConversation(idUsuarioActual, idUsuarioDestino);
+      console.log('🔄 Obteniendo conversación entre:', empleadoActual.idUsuario, 'y', emp.idUsuario);
+      const conv = await mensajesApi.getConversation(empleadoActual.idUsuario, emp.idUsuario);
+      console.log('💬 Conversación obtenida:', conv);
       setConversacion(conv || []);
 
-      // marcar como leidos si corresponde: buscar mensajes no leidos donde idEmpleadoDestinatario === idEmpleadoActual
-      const empleadoActual = empleados.find(e => e.idUsuario === idUsuarioActual);
-      const idEmpleadoActual = empleadoActual?.idEmpleado;
-      if (idEmpleadoActual) {
-        const mensajesParaMarcar = (conv || []).filter(m => !m.Leido && m.idEmpleadoDestinatario === idEmpleadoActual);
-        for (const m of mensajesParaMarcar) {
-          try {
-            await mensajesApi.markAsRead(m.idNotificacion, idEmpleadoActual);
-            // actualizar estado local
-            m.Leido = 1;
-          } catch (err) {
-            console.error('Error marcando como leido', err);
-          }
+      // Marcar como leídos los mensajes recibidos
+      const mensajesParaMarcar = (conv || []).filter(
+        m => !m.Leido && m.idEmpleadoDestinatario === empleadoActual.idEmpleado
+      );
+      
+      for (const m of mensajesParaMarcar) {
+        try {
+          await mensajesApi.markAsRead(m.idNotificacion, empleadoActual.idEmpleado);
+          m.Leido = 1;
+        } catch (err) {
+          console.error('Error marcando como leido', err);
         }
-        setConversacion([... (conv || [])]);
-        
-        // Actualizar contador de no leídos para este empleado
-        setUnreadCounts(prev => ({
-          ...prev,
-          [emp.idEmpleado]: 0
-        }));
       }
+      
+      if (mensajesParaMarcar.length > 0) {
+        setConversacion([...(conv || [])]);
+      }
+      
+      // Actualizar contador de no leídos para este empleado
+      setUnreadCounts(prev => ({
+        ...prev,
+        [emp.idEmpleado]: 0
+      }));
     } catch (err) {
       console.error('Error al obtener conversacion', err);
     } finally {
@@ -105,20 +127,43 @@ const MensajeriaInterna = () => {
   };
 
   const handleSend = async () => {
-    if (!mensaje.trim() || !selectedEmpleado) return;
+    console.log('📤 Intentando enviar mensaje...');
+    console.log('Mensaje:', mensaje);
+    console.log('Empleado seleccionado:', selectedEmpleado);
+    console.log('Empleado actual:', empleadoActual);
+    
+    if (!mensaje.trim()) {
+      console.warn('⚠️ Mensaje vacío');
+      return;
+    }
+    if (!selectedEmpleado) {
+      console.warn('⚠️ No hay empleado seleccionado');
+      return;
+    }
+    if (!empleadoActual) {
+      console.warn('⚠️ No hay empleado actual');
+      return;
+    }
+    
     try {
       // destinatarios son idEmpleado (la API espera ids de empleados)
       const destinatarios = [selectedEmpleado.idEmpleado];
-      await mensajesApi.sendMessage(mensaje.trim(), destinatarios);
+      console.log('🎯 Enviando mensaje a destinatarios:', destinatarios);
+      
+      const response = await mensajesApi.sendMessage(mensaje.trim(), destinatarios);
+      console.log('✅ Mensaje enviado correctamente:', response);
+      
       setMensaje('');
 
       // refrescar conversacion
+      console.log('🔄 Refrescando conversación...');
       await handleSelectEmpleado(selectedEmpleado);
       
       // Recargar contadores de no leídos para todos los empleados
-      await loadUnreadCounts(empleados);
+      await loadUnreadCounts(empleados, empleadoActual);
     } catch (err) {
-      console.error('Error enviando mensaje', err);
+      console.error('❌ Error enviando mensaje', err);
+      console.error('Detalles del error:', err.response?.data);
     }
   };
 
@@ -139,33 +184,35 @@ const MensajeriaInterna = () => {
         </div>
 
         <ul className="empleados-list">
-          {empleados.map(emp => {
-            const isSelected = selectedEmpleado?.idEmpleado === emp.idEmpleado;
-            const unreadCount = unreadCounts[emp.idEmpleado] || 0;
-            return (
-              <li 
-                key={emp.idEmpleado} 
-                className={`empleado-item ${isSelected ? 'selected' : ''}`} 
-                onClick={() => handleSelectEmpleado(emp)}
-              >
-                <div className="empleado-avatar">
-                  {emp.NombreEmpleado?.[0]}{emp.ApellidoEmpleado?.[0]}
-                </div>
-                <div className="empleado-info">
-                  <div className="empleado-name">
-                    {emp.NombreEmpleado} {emp.ApellidoEmpleado}
-                    {unreadCount > 0 && (
-                      <span className="unread-badge">{unreadCount}</span>
-                    )}
+          {empleados
+            .filter(emp => emp.idEmpleado !== empleadoActual?.idEmpleado) // No mostrar al usuario actual
+            .map(emp => {
+              const isSelected = selectedEmpleado?.idEmpleado === emp.idEmpleado;
+              const unreadCount = unreadCounts[emp.idEmpleado] || 0;
+              return (
+                <li 
+                  key={emp.idEmpleado} 
+                  className={`empleado-item ${isSelected ? 'selected' : ''}`} 
+                  onClick={() => handleSelectEmpleado(emp)}
+                >
+                  <div className="empleado-avatar">
+                    {emp.NombreEmpleado?.[0]}{emp.ApellidoEmpleado?.[0]}
                   </div>
-                  <div className="empleado-mail">{emp.MailUsuario}</div>
-                </div>
-                <div className="empleado-status">
-                  <span className="status-dot"></span>
-                </div>
-              </li>
-            );
-          })}
+                  <div className="empleado-info">
+                    <div className="empleado-name">
+                      {emp.NombreEmpleado} {emp.ApellidoEmpleado}
+                      {unreadCount > 0 && (
+                        <span className="unread-badge">{unreadCount}</span>
+                      )}
+                    </div>
+                    <div className="empleado-mail">{emp.MailUsuario}</div>
+                  </div>
+                  <div className="empleado-status">
+                    <span className="status-dot"></span>
+                  </div>
+                </li>
+              );
+            })}
         </ul>
       </aside>
 
@@ -208,15 +255,22 @@ const MensajeriaInterna = () => {
                 </div>
               ) : (
                 conversacion.map(m => {
-                  const isOutgoing = m.idRemitente === (authUser?.usuario?.idUsuario || authUser?.idUsuario);
+                  // Un mensaje es saliente si el remitente es el usuario actual
+                  const isOutgoing = empleadoActual && m.idRemitente === empleadoActual.idUsuario;
+                  const leido = m.Leido === 1 || m.Leido === true;
+                  
                   return (
                     <div key={`${m.idNotificacion}-${m.idEmpleadoDestinatario}`} className={`message-wrapper ${isOutgoing ? 'outgoing' : 'incoming'}`}>
                       <div className="message-bubble">
                         <div className="message-body">{m.Mensaje}</div>
                         <div className="message-meta">
                           <span className="message-time">{new Date(m.FechaEnvio).toLocaleString('es-AR', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}</span>
-                          {!m.Leido && !isOutgoing && <span className="badge-new">Nuevo</span>}
-                          {isOutgoing && <span className="message-status">{m.Leido ? '✓✓' : '✓'}</span>}
+                          {!leido && !isOutgoing && <span className="badge-new">Nuevo</span>}
+                          {isOutgoing && (
+                            <span className="message-status" title={leido ? 'Leído' : 'Enviado'}>
+                              {leido ? '✓✓' : '✓'}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>

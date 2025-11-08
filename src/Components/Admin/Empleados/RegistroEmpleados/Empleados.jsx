@@ -12,7 +12,7 @@ import ModalEmpleado from './ModalEmpleado'
 import ModalVerEmpleado from './ModalVerEmpleado'
 
 const Empleados = () => {
-  const { empleados, loading, obtenerEmpleados, obtenerEmpleadoPorId, crearEmpleado, actualizarEmpleado, cambiarEstadoEmpleado } = useCustomEmpleados()
+  const { empleados, loading, obtenerTodosLosEmpleados, crearEmpleado, editarEmpleado, cambiarEstadoEmpleado } = useCustomEmpleados()
   const { categorias, obtenerCategorias } = useCustomCatEmpleados()
 
   const [localidades, setLocalidades] = useState([])
@@ -32,7 +32,7 @@ const Empleados = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        if (typeof obtenerEmpleados === 'function') await obtenerEmpleados()
+        if (typeof obtenerTodosLosEmpleados === 'function') await obtenerTodosLosEmpleados()
         if (typeof obtenerCategorias === 'function') await obtenerCategorias()
         const data = await getLocalidades()
         setLocalidades(Array.isArray(data) ? data : [])
@@ -85,18 +85,12 @@ const Empleados = () => {
 
   const handleView = async (emp) => {
     try {
-      const id = emp.idEmpleado ?? emp.id
-      if (!id) {
-        setViewEmpleado(emp)
-        setShowViewModal(true)
-        return
-      }
-      const full = await obtenerEmpleadoPorId(id)
-      setViewEmpleado(full || emp)
-    } catch (err) {
-      console.error('Error fetching empleado for view', err)
+      // Simplemente mostrar el empleado sin obtener detalles adicionales
       setViewEmpleado(emp)
-    } finally {
+      setShowViewModal(true)
+    } catch (err) {
+      console.error('Error al ver empleado', err)
+      setViewEmpleado(emp)
       setShowViewModal(true)
     }
   }
@@ -149,11 +143,11 @@ const Empleados = () => {
           idCatEmpleado: formData.idCatEmpleado ? parseInt(formData.idCatEmpleado) : null,
           MailUsuario: formData.MailUsuario || undefined
         }
-        await actualizarEmpleado(id, payload)
+        await editarEmpleado(id, payload)
         Swal.fire({ title: 'Empleado actualizado', text: `Empleado ${formData.NombreEmpleado} actualizado correctamente.`, icon: 'success', confirmButtonColor: '#0470BB', timer: 1500, timerProgressBar: true })
       }
       handleCloseModal()
-      obtenerEmpleados()
+      obtenerTodosLosEmpleados()
     } catch (err) {
       console.error('Error al guardar empleado', err)
       let message = 'Error al guardar. Revisa los datos e intenta de nuevo.'
@@ -180,7 +174,7 @@ const Empleados = () => {
       const nuevoEstado = isDeactivating ? 0 : 1
       const id = emp.idEmpleado ?? emp.id
       await cambiarEstadoEmpleado(id, nuevoEstado)
-      obtenerEmpleados()
+      obtenerTodosLosEmpleados()
       Swal.fire({ title: isDeactivating ? 'Desactivado' : 'Activado', text: `El empleado fue ${isDeactivating ? 'desactivado' : 'activado'}.`, icon: 'success', confirmButtonColor: '#0470BB', timer: 1200, timerProgressBar: true })
     } catch (err) {
       console.error('Error al cambiar estado', err)

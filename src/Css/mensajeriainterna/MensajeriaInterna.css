@@ -462,8 +462,20 @@
 }
 
 .message-status {
-  margin-left: auto;
-  color: rgba(255, 255, 255, 0.9);
+  margin-left: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.outgoing .message-status {
+  color: var(--fissio-cyan);
+}
+
+.message-bubble:hover .message-status {
+  color: rgba(255, 255, 255, 1);
 }
 
 /* Composer */
