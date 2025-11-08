@@ -1,0 +1,723 @@
+/* Variables de color Fissio */
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+  --fissio-bg-light: #f8f9fa;
+  --fissio-white: #ffffff;
+  --fissio-success: #198754;
+  --fissio-danger: #dc3545;
+}
+
+/* Contenedor principal */
+.pacientes-container {
+  background-color: var(--fissio-bg-light);
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* Header del componente */
+.pacientes-header {
+  margin-bottom: 2rem;
+}
+
+.pacientes-title {
+  color: var(--fissio-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.pacientes-title .material-symbols-outlined {
+  font-size: 2rem;
+  color: var(--fissio-secondary);
+}
+
+.pacientes-subtitle {
+  color: var(--fissio-gray);
+  margin-bottom: 0;
+  font-size: 1.1rem;
+}
+
+/* Botones con estilo Fissio */
+.btn-fissio-primary {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: var(--fissio-white);
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-fissio-primary:hover {
+  background-color: #035a99;
+  border-color: #035a99;
+  color: var(--fissio-white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.3);
+}
+
+.btn-fissio-outline {
+  border-color: var(--fissio-primary);
+  color: var(--fissio-primary);
+  background-color: transparent;
+  border-width: 2px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+}
+
+.btn-fissio-outline:hover {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: var(--fissio-white);
+  transform: translateY(-1px);
+}
+
+/* Cards de estadísticas */
+.stats-card {
+  background: var(--fissio-white);
+  transition: all 0.3s ease;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.15);
+}
+
+/* Cards clickeables */
+.stats-card.clickable {
+  cursor: pointer;
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.stats-card.clickable:hover {
+  border-color: var(--fissio-secondary);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(4, 112, 187, 0.2);
+}
+
+.stats-card.clickable.active {
+  border-color: var(--fissio-primary);
+  background: linear-gradient(135deg, var(--fissio-white) 0%, rgba(4, 112, 187, 0.05) 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.25);
+}
+
+.stats-card.clickable.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.stats-card .card-body {
+  padding: 1.5rem;
+}
+
+.stats-title {
+  color: var(--fissio-gray);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stats-value {
+  color: var(--fissio-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+/* Sección de filtros */
+.pacientes-filters {
+  background: var(--fissio-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.pacientes-filters .input-group-text {
+  background-color: var(--fissio-bg-light);
+  border-color: var(--fissio-light-gray);
+  color: var(--fissio-gray);
+}
+
+.pacientes-filters .form-control,
+.pacientes-filters .form-select {
+  border-color: var(--fissio-light-gray);
+  transition: all 0.3s ease;
+}
+
+.pacientes-filters .form-control:focus,
+.pacientes-filters .form-select:focus {
+  border-color: var(--fissio-primary);
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
+}
+
+/* Tabla de pacientes */
+.pacientes-table .card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.pacientes-table .card-body {
+  padding: 0;
+}
+
+.pacientes-table .table {
+  margin-bottom: 0;
+}
+
+.pacientes-table .table thead th {
+  background-color: var(--fissio-bg-light);
+  color: var(--fissio-gray);
+  font-weight: 600;
+  border-bottom: 2px solid var(--fissio-primary);
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.pacientes-table .table tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.pacientes-table .table tbody tr:hover {
+  background-color: rgba(4, 112, 187, 0.05);
+  transition: all 0.3s ease;
+}
+
+.pacientes-table .table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Badges de estado */
+.badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.bg-success {
+  background-color: var(--fissio-success) !important;
+}
+
+.badge.bg-danger {
+  background-color: var(--fissio-danger) !important;
+}
+
+/* Botones de acción en tabla */
+.pacientes-table .btn-sm {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  border-width: 1.5px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.pacientes-table .btn-sm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pacientes-table .btn-sm .material-symbols-outlined {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* Contenedor de botones de acción */
+.pacientes-table .d-flex.gap-1 {
+  gap: 0.375rem !important;
+}
+
+/* Colores específicos para botones de acción */
+.pacientes-table .btn-outline-primary {
+  color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+}
+
+.pacientes-table .btn-outline-primary:hover {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: white;
+}
+
+.pacientes-table .btn-outline-success:hover {
+  background-color: var(--fissio-success);
+  border-color: var(--fissio-success);
+  color: white;
+}
+
+.pacientes-table .btn-outline-danger:hover {
+  background-color: var(--fissio-danger);
+  border-color: var(--fissio-danger);
+  color: white;
+}
+
+/* Estado vacío */
+.pacientes-table .text-center .material-symbols-outlined {
+  color: var(--fissio-light-gray);
+  opacity: 0.5;
+}
+
+/* Modal personalizado */
+.modal-content {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  background-color: var(--fissio-primary);
+  color: var(--fissio-white);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding: 1.5rem 2rem;
+}
+
+.modal-header .modal-title {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.modal-header .modal-title .material-symbols-outlined {
+  color: var(--fissio-secondary);
+}
+
+.modal-header .btn-close {
+  filter: invert(1);
+  opacity: 0.8;
+}
+
+.modal-header .btn-close:hover {
+  opacity: 1;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e9ecef;
+  background-color: var(--fissio-bg-light);
+  border-radius: 0 0 12px 12px;
+}
+
+/* Formularios */
+.form-label {
+  color: var(--fissio-gray);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--fissio-primary);
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
+}
+
+/* Spinner de loading */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.spinner-border.text-primary {
+  color: var(--fissio-primary) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pacientes-container {
+    padding: 1rem;
+  }
+  
+  .pacientes-header .d-flex {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pacientes-title {
+    font-size: 1.5rem;
+  }
+  
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+  
+  .pacientes-filters .row > div {
+    margin-bottom: 1rem;
+  }
+  
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  .pacientes-table .table tbody td {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .modal-dialog {
+    margin: 1rem;
+  }
+  
+  .modal-body,
+  .modal-footer {
+    padding: 1.5rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pacientes-container > * {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Efectos de hover mejorados */
+.btn:hover {
+  transform: translateY(-1px);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* Modal backdrop personalizado */
+.modal-backdrop-custom {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Icono de error en formularios */
+.error-icon {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+/* Estilos específicos para pacientes */
+.pacientes-info {
+  background: linear-gradient(135deg, var(--fissio-white) 0%, rgba(58, 177, 207, 0.05) 100%);
+  border-left: 4px solid var(--fissio-secondary);
+}
+
+.patient-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.dni-badge {
+  background-color: rgba(4, 112, 187, 0.1);
+  color: var(--fissio-primary);
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.phone-badge {
+  background-color: rgba(58, 177, 207, 0.1);
+  color: var(--fissio-secondary);
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* Estilos adicionales específicos para información del paciente */
+.patient-info-row {
+  background-color: rgba(4, 112, 187, 0.02);
+  border-left: 3px solid var(--fissio-secondary);
+  margin: 0.25rem 0;
+  padding: 0.5rem;
+  border-radius: 0 6px 6px 0;
+}
+
+.patient-contact-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.patient-full-name {
+  font-weight: 600;
+  color: var(--fissio-primary);
+  font-size: 1.05rem;
+}
+
+.patient-email {
+  color: var(--fissio-gray);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+/* Indicadores de estado para pacientes */
+.patient-status-active {
+  background: linear-gradient(135deg, var(--fissio-success) 0%, #28a745 100%);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.patient-status-inactive {
+  background: linear-gradient(135deg, var(--fissio-danger) 0%, #e63946 100%);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Mejoras para formularios de pacientes */
+.form-group-patient {
+  margin-bottom: 1.25rem;
+}
+
+.patient-form-section {
+  background: var(--fissio-white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.patient-form-section-title {
+  color: var(--fissio-primary);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--fissio-bg-light);
+}
+
+/* Estilos de Paginación */
+.pacientes-pagination {
+  background: var(--fissio-white);
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-top: 1.5rem;
+  border-top: 3px solid var(--fissio-primary);
+}
+
+.pagination-info {
+  color: var(--fissio-gray);
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-info .material-symbols-outlined {
+  color: var(--fissio-secondary);
+  font-size: 1.2rem;
+}
+
+.pagination-controls .pagination {
+  margin-bottom: 0;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.pagination-controls .page-item {
+  margin: 0;
+}
+
+.pagination-controls .page-link {
+  border: 2px solid var(--fissio-light-gray);
+  color: var(--fissio-gray);
+  background-color: var(--fissio-white);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: 45px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.pagination-controls .page-link:hover {
+  border-color: var(--fissio-primary);
+  color: var(--fissio-primary);
+  background-color: rgba(4, 112, 187, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.15);
+}
+
+.pagination-controls .page-item.active .page-link {
+  border-color: var(--fissio-primary);
+  background-color: var(--fissio-primary);
+  color: var(--fissio-white);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.3);
+  transform: translateY(-1px);
+}
+
+.pagination-controls .page-item.disabled .page-link {
+  border-color: #e9ecef;
+  color: var(--fissio-light-gray);
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination-controls .page-item.disabled .page-link:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #e9ecef;
+  color: var(--fissio-light-gray);
+  background-color: #f8f9fa;
+}
+
+/* Navegación de páginas con iconos */
+.pagination-controls .page-link .material-symbols-outlined {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* Responsive para paginación */
+@media (max-width: 768px) {
+  .pacientes-pagination {
+    padding: 1rem;
+  }
+  
+  .pagination-info {
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .pagination-controls .page-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    min-width: 40px;
+  }
+  
+  /* Ocultar números de página en móviles y mostrar solo navegación */
+  .pagination-controls .page-item:not(.page-nav):not(.active) {
+    display: none;
+  }
+  
+  .pagination-controls .page-item.active {
+    display: block;
+  }
+}
+
+@media (max-width: 576px) {
+  .pagination-controls .pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .pagination-controls .page-link {
+    padding: 0.5rem;
+    min-width: 36px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Efectos de hover mejorados para paginación */
+.pagination-controls .page-link:focus {
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.25);
+  z-index: 3;
+}
+
+/* Animación suave para cambios de página */
+.pacientes-table.loading {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.pacientes-table.loaded {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Indicador de página actual en la información */
+.pagination-current-page {
+  background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  color: var(--fissio-white);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin: 0 0.5rem;
+}
+
+/* Separador visual en paginación */
+.pagination-separator {
+  color: var(--fissio-light-gray);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  user-select: none;
+}
