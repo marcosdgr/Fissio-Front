@@ -4,6 +4,8 @@ import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { BASE_URL } from '../../../Api/api';
+import "../../../Css/Faqs/FormFaqs.css";
+
 
 const FormFaqs = ({ faq, categorias, onSuccess }) => {
   const { agregarFaq, editarFaq } = useCustomFaqs();
@@ -43,7 +45,7 @@ const FormFaqs = ({ faq, categorias, onSuccess }) => {
       toast.success('Categoría creada');
       setNuevaCategoria('');
       setMostrarInputCategoria(false);
-      onSuccess(); // Refresca categorías
+      onSuccess();
       setNuevaFaq(prev => ({ ...prev, idCatFAQ: res.data.data.idCatFAQ }));
     } catch (err) {
       toast.error('Error al crear categoría');
@@ -94,7 +96,7 @@ const FormFaqs = ({ faq, categorias, onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form-faqs">
       <div className="mb-3">
         <label className="form-label">Pregunta</label>
         <input
@@ -140,7 +142,6 @@ const FormFaqs = ({ faq, categorias, onSuccess }) => {
           ))}
         </select>
 
-        {/* Botón para crear categoría */}
         {categorias.length === 0 || mostrarInputCategoria ? (
           <div className="mt-2">
             {mostrarInputCategoria ? (
@@ -193,7 +194,7 @@ const FormFaqs = ({ faq, categorias, onSuccess }) => {
       </div>
 
       <div className="d-grid">
-        <button type="submit" className="btn btn-primary" disabled={procesando || categorias.length === 0}>
+        <button type="submit" className="btn btn-primary btn-submit" disabled={procesando || categorias.length === 0}>
           {procesando ? (
             <>
               <span className="spinner-border spinner-border-sm me-2"></span>

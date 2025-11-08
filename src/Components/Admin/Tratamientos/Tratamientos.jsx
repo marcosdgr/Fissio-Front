@@ -2,6 +2,7 @@
 import FormTratamientos from "./FormTratamientos";
 import useCustomTratamientos from "../../../Custom/useCustomTratamientos";
 import Swal from "sweetalert2";
+import "../../../Css/Tratamientos/Tratamientos.css";
 
 const Tratamientos = () => {
   const {
@@ -16,7 +17,6 @@ const Tratamientos = () => {
   const [openFormModal, setOpenFormModal] = useState(false);
   const [tratamientoSeleccionado, setTratamientoSeleccionado] = useState(null);
 
-  // Ordenar por ID descendente
   const resultado = (tratamientos.tratamientos || [])
     .slice()
     .sort((a, b) => b.idTratamiento - a.idTratamiento);
@@ -25,7 +25,6 @@ const Tratamientos = () => {
     await obtenerTratamientos();
   };
 
-  // Handlers
   const verTratamiento = (tratamiento) => {
     setTratamientoSeleccionado(tratamiento);
     setOpenModal(true);
@@ -33,7 +32,7 @@ const Tratamientos = () => {
 
   const abrirModalAgregar = () => {
     setTratamientoSeleccionado(null);
-    setOpenFormModal(true);
+    setOpenFormModal(true); // ESTO ABRE EL MODAL
   };
 
   const abrirModalEditar = (tratamiento) => {
@@ -46,7 +45,6 @@ const Tratamientos = () => {
     setTratamientoSeleccionado(null);
   };
 
-  // CAMBIAR ESTADO
   const handleCambiarEstado = async (tratamiento) => {
     const nuevoEstado = tratamiento.IsActive ? 0 : 1;
     const accion = tratamiento.IsActive ? "desactivar" : "activar";
@@ -77,9 +75,8 @@ const Tratamientos = () => {
     <>
       <div className="row">
         <div className="col-12">
-          {/* Loading */}
           {loading && (
-            <div className="alert alert-info" role="alert">
+            <div className="alert alert-info loading-alert" role="alert">
               <div className="spinner-border spinner-border-sm me-2" role="status">
                 <span className="visually-hidden">Cargando...</span>
               </div>
@@ -87,32 +84,26 @@ const Tratamientos = () => {
             </div>
           )}
 
-          {/* Error */}
           {error && (
-            <>
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h5 className="mb-0">Tratamientos</h5>
-                <button type="button" className="btn btn-primary" onClick={abrirModalAgregar}>
-                  Agregar nuevo Tratamiento
-                </button>
-              </div>
-              <div className="alert alert-danger" role="alert">
-                Ocurrió un error al cargar los tratamientos
-              </div>
-            </>
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
           )}
 
-          {/* Normal */}
           {!loading && !error && (
             <div className="card shadow-sm border-0">
               <div className="card-header bg-white d-flex justify-content-between align-items-center">
                 <h5 className="card-title mb-0">Tratamientos</h5>
-                <button type="button" className="btn btn-primary" onClick={abrirModalAgregar}>
+                {/* BOTÓN CORREGIDO */}
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={abrirModalAgregar}
+                >
                   Agregar nuevo Tratamiento
                 </button>
               </div>
 
-              {/* Tabla */}
               {(!tratamientos || tratamientos.tratamientos?.length === 0) ? (
                 <div className="card-body">
                   <div className="alert alert-info" role="alert">
@@ -120,12 +111,12 @@ const Tratamientos = () => {
                   </div>
                 </div>
               ) : (
-                <div className="card-body">
+                <div className="card-body p-0">
                   <div className="table-responsive">
-                    <table className="table table-hover align-middle">
+                    <table className="table table-hover align-middle mb-0">
                       <thead className="table-light">
                         <tr>
-                          <th>ID</th>
+                          <th className="table-id">ID</th>
                           <th>Nombre</th>
                           <th>Descripción</th>
                           <th>Duración (min)</th>
@@ -136,39 +127,26 @@ const Tratamientos = () => {
                       <tbody>
                         {resultado.map((trat) => (
                           <tr key={trat.idTratamiento}>
-                            <td>{trat.idTratamiento}</td>
+                            <td className="table-id">{trat.idTratamiento}</td>
                             <td className="fw-bold">{trat.NombreTratamiento}</td>
                             <td>{trat.DescripcionTratamiento?.substring(0, 60)}...</td>
                             <td>{trat.DuracionTratamiento}</td>
                             <td>
-                              <span
-                                className={`badge ${
-                                  trat.IsActive ? "bg-success" : "bg-danger"
-                                } rounded-pill`}
-                              >
+                              <span className={`badge ${trat.IsActive ? "bg-success" : "bg-danger"} rounded-pill px-2`}>
                                 {trat.IsActive ? "ACTIVO" : "INACTIVO"}
                               </span>
                             </td>
-
-                            {/* BOTONES 100% IGUALES QUE EN FAQs */}
                             <td className="text-center">
-                              <div className="btn-group" role="group">
-                                <button
-                                  className="btn btn-outline-info btn-sm"
-                                  onClick={() => verTratamiento(trat)}
-                                >
+                              <div className="action-buttons">
+                                <button className="btn btn-info btn-sm btn-action" title="Ver" onClick={() => verTratamiento(trat)}>
                                   Ver
                                 </button>
-                                <button
-                                  className="btn btn-outline-primary btn-sm"
-                                  onClick={() => abrirModalEditar(trat)}
-                                >
+                                <button className="btn btn-primary btn-sm btn-action" title="Editar" onClick={() => abrirModalEditar(trat)}>
                                   Editar
                                 </button>
                                 <button
-                                  className={`btn ${
-                                    trat.IsActive ? "btn-outline-danger" : "btn-outline-success"
-                                  } btn-sm`}
+                                  className={`btn ${trat.IsActive ? "btn-warning" : "btn-success"} btn-sm btn-action`}
+                                  title={trat.IsActive ? "Desactivar" : "Activar"}
                                   onClick={() => handleCambiarEstado(trat)}
                                 >
                                   {trat.IsActive ? "Desactivar" : "Activar"}
@@ -187,19 +165,21 @@ const Tratamientos = () => {
         </div>
       </div>
 
-      {/* Modal Form */}
+      {/* MODAL DE FORMULARIO */}
       {openFormModal && (
-        <div
-          className="modal fade show"
-          style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
-        >
+        <div className="custom-modal">
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
               <div className="modal-header">
-                <h1 className="modal-title fs-5 text-dark">
+                <h1 className="modal-title fs-5">
                   {tratamientoSeleccionado ? "Editar Tratamiento" : "Agregar Nuevo Tratamiento"}
                 </h1>
-                <button type="button" className="btn-close" onClick={cerrarModalForm}></button>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={cerrarModalForm}
+                  aria-label="Close"
+                ></button>
               </div>
               <div className="modal-body">
                 <FormTratamientos
@@ -215,44 +195,33 @@ const Tratamientos = () => {
         </div>
       )}
 
-      {/* Modal Ver */}
+      {/* MODAL DE VISTA */}
       {openModal && (
-        <div
-          className="modal fade show"
-          style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
-        >
+        <div className="custom-modal">
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title text-dark">
-                  {tratamientoSeleccionado?.NombreTratamiento}
-                </h5>
+                <h5 className="modal-title">{tratamientoSeleccionado?.NombreTratamiento}</h5>
                 <button
                   type="button"
                   className="btn-close"
                   onClick={() => setOpenModal(false)}
+                  aria-label="Close"
                 ></button>
               </div>
               <div className="modal-body">
-                <p>
-                  <strong>Descripción:</strong> {tratamientoSeleccionado?.DescripcionTratamiento}
-                </p>
-                <p>
-                  <strong>Duración:</strong> {tratamientoSeleccionado?.DuracionTratamiento} minutos
-                </p>
-                <p>
-                  <strong>Informe:</strong>{" "}
-                  {tratamientoSeleccionado?.InformeTratamiento || "Sin informe"}
-                </p>
-                <p>
-                  <strong>Estado:</strong>{" "}
-                  {tratamientoSeleccionado?.IsActive ? "ACTIVO" : "INACTIVO"}
-                </p>
+                <p><strong>Descripción:</strong> {tratamientoSeleccionado?.DescripcionTratamiento}</p>
+                <p><strong>Duración:</strong> {tratamientoSeleccionado?.DuracionTratamiento} minutos</p>
+                <p><strong>Informe:</strong> {tratamientoSeleccionado?.InformeTratamiento || "Sin informe"}</p>
+                <p><strong>Estado:</strong> {tratamientoSeleccionado?.IsActive ? "ACTIVO" : "INACTIVO"}</p>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* BACKDROP */}
+      {(openFormModal || openModal) && <div className="modal-backdrop-custom"></div>}
     </>
   );
 };

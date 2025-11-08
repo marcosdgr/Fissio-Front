@@ -1,11 +1,11 @@
-﻿
-import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 import FormFaqs from "./FormFaqs";
 import useCustomFaqs from "../../../Custom/useCustomFaqs";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import axios from "axios";
 import { BASE_URL } from "../../../Api/api";
+import "../../../Css/Faqs/FAQs.css";
 
 const FAQs = () => {
   const {
@@ -15,7 +15,7 @@ const FAQs = () => {
     obtenerFaqs,
     eliminarFaq,
     editarCategoria,
-    desactivarCategoria
+    desactivarCategoria,
   } = useCustomFaqs();
 
   const [openModal, setOpenModal] = useState(false);
@@ -24,16 +24,26 @@ const FAQs = () => {
   const [nuevaCategoria, setNuevaCategoria] = useState("");
   const [editandoCat, setEditandoCat] = useState(null);
   const [nombreEditado, setNombreEditado] = useState("");
+  const [listaFaqs, setListaFaqs] = useState([]);
+  const [listaCategorias, setListaCategorias] = useState([]);
 
-  const resultado = (faqs.faqs || [])
-    .slice()
-    .sort((a, b) => new Date(b.FechaCreacion) - new Date(a.FechaCreacion));
+  // Sincronizar datos del hook
+  useEffect(() => {
+    if (faqs?.faqs) {
+      const ordenadas = [...faqs.faqs].sort(
+        (a, b) => new Date(b.FechaCreacion) - new Date(a.FechaCreacion)
+      );
+      setListaFaqs(ordenadas);
+    }
+    if (faqs?.categorias) {
+      setListaCategorias(faqs.categorias);
+    }
+  }, [faqs]);
 
   const refrescarLista = async () => {
     await obtenerFaqs();
   };
 
-  // === FAQs ===
   const verFaq = (faq) => {
     setFaqSeleccionada(faq);
     setOpenModal(true);
@@ -54,28 +64,71 @@ const FAQs = () => {
     setFaqSeleccionada(null);
   };
 
-  const confirmarEliminar = async (faq) => {
+  // TOGGLE FAQ (sin eliminar)
+  const handleCambiarEstadoFaq = async (idFAQ) => {
+    const faq = listaFaqs.find(f => f.idFAQ === idFAQ);
+    const nuevoEstado = faq.IsActive ? 0 : 1;
+    const accion = faq.IsActive ? "desactivar" : "activar";
+
     const result = await Swal.fire({
-      title: "¿Desactivar FAQ?",
-      text: `"${faq.Pregunta.substring(0, 50)}..." ya no estará visible`,
-      icon: "warning",
+      title: `¿${accion.charAt(0).toUpperCase() + accion.slice(1)} FAQ?`,
+      text: `"${faq.Pregunta.substring(0, 50)}..." será ${nuevoEstado ? "activada" : "desactivada"}.`,
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: "Sí, desactivar",
-      cancelButtonText: "Cancelar"
+      confirmButtonColor: nuevoEstado ? "#28a745" : "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: `Sí, ${accion}`,
+      cancelButtonText: "Cancelar",
     });
 
     if (result.isConfirmed) {
-      const res = await eliminarFaq(faq.idFAQ);
+      const res = await eliminarFaq(idFAQ);
       if (res.success) {
-        toast.success("FAQ desactivada");
-        refrescarLista();
+        setListaFaqs(prev =>
+          prev.map(f =>
+            f.idFAQ === idFAQ ? { ...f, IsActive: nuevoEstado } : f
+          )
+        );
+        toast.success(`FAQ ${nuevoEstado ? "activada" : "desactivada"}`);
       } else {
-        toast.error(res.error);
+        toast.error("Error al cambiar estado");
       }
     }
   };
 
-  // === CATEGORÍAS ===
+  // TOGGLE CATEGORÍA (sin recargar ni desaparecer)
+  const handleCambiarEstadoCat = async (cat) => {
+    const nuevoEstado = cat.IsActive ? 0 : 1;
+    const accion = cat.IsActive ? "desactivar" : "activar";
+
+    const result = await Swal.fire({
+      title: `¿${accion.charAt(0).toUpperCase() + accion.slice(1)} categoría?`,
+      text: `"${cat.NombreCategoria}" será ${nuevoEstado ? "activada" : "desactivada"}.`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: nuevoEstado ? "#28a745" : "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: `Sí, ${accion}`,
+      cancelButtonText: "Cancelar",
+    });
+
+    if (result.isConfirmed) {
+      const res = await desactivarCategoria(cat.idCatFAQ);
+      if (res.success) {
+        setListaCategorias(prev =>
+          prev.map(c =>
+            c.idCatFAQ === cat.idCatFAQ
+              ? { ...c, IsActive: nuevoEstado }
+              : c
+          )
+        );
+        toast.success(`Categoría ${nuevoEstado ? "activada" : "desactivada"}`);
+      } else {
+        toast.error("Error al cambiar estado");
+      }
+    }
+  };
+
   const crearCategoria = async () => {
     if (!nuevaCategoria.trim()) return;
     try {
@@ -105,35 +158,12 @@ const FAQs = () => {
     }
   };
 
-  const confirmarDesactivarCat = async (cat) => {
-    const result = await Swal.fire({
-      title: "¿Desactivar categoría?",
-      text: `"${cat.NombreCategoria}" ya no estará disponible`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, desactivar",
-      cancelButtonText: "Cancelar"
-    });
-
-    if (result.isConfirmed) {
-      const res = await desactivarCategoria(cat.idCatFAQ);
-      if (res.success) {
-        toast.success("Categoría desactivada");
-        refrescarLista();
-      } else {
-        toast.error(res.error);
-      }
-    }
-  };
-
   return (
     <>
       <div className="row">
         <div className="col-12">
-
-          {/* === LOADING & ERROR === */}
           {loading && (
-            <div className="alert alert-info" role="alert">
+            <div className="alert alert-info loading-alert" role="alert">
               <div className="spinner-border spinner-border-sm me-2" role="status">
                 <span className="visually-hidden">Cargando...</span>
               </div>
@@ -147,67 +177,70 @@ const FAQs = () => {
             </div>
           )}
 
-          {/* === FAQs + CATEGORÍAS === */}
           {!loading && !error && (
             <>
-              {/* FAQs */}
+              {/* TABLA FAQs */}
               <div className="card shadow-sm border-0 mb-4">
                 <div className="card-header bg-white d-flex justify-content-between align-items-center">
                   <h5 className="card-title mb-0">Preguntas Frecuentes</h5>
-                  <button type="button" className="btn btn-primary" onClick={abrirModalAgregar}>
+                  <button className="btn btn-primary btn-agregar" onClick={abrirModalAgregar}>
                     Agregar nueva FAQ
                   </button>
                 </div>
 
-                {faqs.faqs?.length === 0 ? (
-                  <div className="card-body">
-                    <div className="alert alert-info" role="alert">
+                {listaFaqs.length === 0 ? (
+                  <div className="card-body text-center py-5">
+                    <div className="alert alert-info">
                       No hay FAQs disponibles. ¡Agrega tu primera pregunta!
                     </div>
                   </div>
                 ) : (
-                  <div className="card-body">
+                  <div className="card-body p-0">
                     <div className="table-responsive">
-                      <table className="table table-hover">
-                        <thead>
+                      <table className="table table-hover align-middle mb-0">
+                        <thead className="table-light">
                           <tr>
-                            <th>ID</th>
+                            <th className="table-id">ID</th>
                             <th>Pregunta</th>
                             <th>Categoría</th>
                             <th>Fecha</th>
                             <th>Estado</th>
-                            <th>Acciones</th>
+                            <th className="text-center">Acciones</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {resultado.map((faq) => (
-                            <tr key={faq.idFAQ}>
-                              <td>{faq.idFAQ}</td>
+                          {listaFaqs.map((faq) => (
+                            <tr
+                              key={faq.idFAQ}
+                              className={!faq.IsActive ? "faq-inactiva" : ""}
+                            >
+                              <td className="table-id">{faq.idFAQ}</td>
                               <td className="fw-bold">{faq.Pregunta.substring(0, 50)}...</td>
                               <td>
                                 <span className="badge bg-secondary">
-                                  {faq.NombreCategoria || 'Sin categoría'}
+                                  {faq.NombreCategoria || "Sin categoría"}
                                 </span>
                               </td>
-                              <td>{new Date(faq.FechaCreacion).toLocaleDateString('es-AR')}</td>
+                              <td>{new Date(faq.FechaCreacion).toLocaleDateString("es-AR")}</td>
                               <td>
-                                <span className={`badge ${faq.IsActive ? 'bg-success' : 'bg-danger'}`}>
-                                  {faq.IsActive ? 'ACTIVA' : 'INACTIVA'}
+                                <span className={`badge ${faq.IsActive ? "badge-activa" : "badge-inactiva"}`}>
+                                  {faq.IsActive ? "ACTIVA" : "INACTIVA"}
                                 </span>
                               </td>
-                              <td>
-                                <div className="btn-group" role="group">
-                                  <button className="btn btn-outline-primary btn-sm" onClick={() => abrirModalEditar(faq)}>
-                                    Editar
-                                  </button>
-                                  <button className="btn btn-outline-info btn-sm" onClick={() => verFaq(faq)}>
+                              <td className="text-center">
+                                <div className="action-buttons">
+                                  <button className="btn btn-ver" onClick={() => verFaq(faq)}>
                                     Ver
                                   </button>
-                                  {faq.IsActive && (
-                                    <button className="btn btn-outline-danger btn-sm" onClick={() => confirmarEliminar(faq)}>
-                                      Desactivar
-                                    </button>
-                                  )}
+                                  <button className="btn btn-editar" onClick={() => abrirModalEditar(faq)}>
+                                    Editar
+                                  </button>
+                                  <button
+                                    className={`btn ${faq.IsActive ? "btn-desactivar" : "btn-activar"}`}
+                                    onClick={() => handleCambiarEstadoFaq(faq.idFAQ)}
+                                  >
+                                    {faq.IsActive ? "Desactivar" : "Activar"}
+                                  </button>
                                 </div>
                               </td>
                             </tr>
@@ -225,15 +258,14 @@ const FAQs = () => {
                   <h5 className="card-title mb-0">Categorías de FAQs</h5>
                 </div>
                 <div className="card-body">
-
-                  <div className="input-group mb-3">
+                  <div className="input-group mb-4">
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Nombre de la nueva categoría"
+                      placeholder="Nueva categoría..."
                       value={nuevaCategoria}
                       onChange={(e) => setNuevaCategoria(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && crearCategoria()}
+                      onKeyDown={(e) => e.key === "Enter" && crearCategoria()}
                     />
                     <button className="btn btn-primary" onClick={crearCategoria}>
                       Agregar
@@ -251,8 +283,11 @@ const FAQs = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {faqs.categorias?.map((cat) => (
-                          <tr key={cat.idCatFAQ}>
+                        {listaCategorias.map((cat) => (
+                          <tr
+                            key={cat.idCatFAQ}
+                            className={!cat.IsActive ? "cat-inactiva" : ""}
+                          >
                             <td>{cat.idCatFAQ}</td>
                             <td>
                               {editandoCat === cat.idCatFAQ ? (
@@ -262,7 +297,7 @@ const FAQs = () => {
                                   value={nombreEditado}
                                   onChange={(e) => setNombreEditado(e.target.value)}
                                   onBlur={() => guardarEdicion(cat.idCatFAQ)}
-                                  onKeyDown={(e) => e.key === 'Enter' && guardarEdicion(cat.idCatFAQ)}
+                                  onKeyDown={(e) => e.key === "Enter" && guardarEdicion(cat.idCatFAQ)}
                                   autoFocus
                                 />
                               ) : (
@@ -270,29 +305,25 @@ const FAQs = () => {
                               )}
                             </td>
                             <td>
-                              <span className={`badge ${cat.IsActive ? 'bg-success' : 'bg-danger'}`}>
-                                {cat.IsActive ? 'ACTIVA' : 'INACTIVA'}
+                              <span className={`badge ${cat.IsActive ? "badge-activa" : "badge-inactiva"}`}>
+                                {cat.IsActive ? "ACTIVA" : "INACTIVA"}
                               </span>
                             </td>
                             <td>
-                              <div className="btn-group" role="group">
+                              <div className="action-buttons">
                                 {cat.IsActive ? (
                                   <>
-                                    <button
-                                      className="btn btn-outline-primary btn-sm"
-                                      onClick={() => iniciarEdicion(cat)}
-                                    >
+                                    <button className="btn btn-editar btn-sm" onClick={() => iniciarEdicion(cat)}>
                                       Editar
                                     </button>
-                                    <button
-                                      className="btn btn-outline-danger btn-sm"
-                                      onClick={() => confirmarDesactivarCat(cat)}
-                                    >
+                                    <button className="btn btn-desactivar btn-sm" onClick={() => handleCambiarEstadoCat(cat)}>
                                       Desactivar
                                     </button>
                                   </>
                                 ) : (
-                                  <span className="text-muted">Desactivada</span>
+                                  <button className="btn btn-activar btn-sm" onClick={() => handleCambiarEstadoCat(cat)}>
+                                    Activar
+                                  </button>
                                 )}
                               </div>
                             </td>
@@ -308,21 +339,44 @@ const FAQs = () => {
         </div>
       </div>
 
-      {/* MODAL FAQ */}
-      {openFormModal && (
-        <div className="modal fade show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}>
+      {/* MODAL VER */}
+      {openModal && faqSeleccionada && (
+        <div className="custom-modal">
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
               <div className="modal-header">
-                <h1 className="modal-title fs-5 text-dark">
-                  {faqSeleccionada ? 'Editar FAQ' : 'Agregar Nueva FAQ'}
+                <h5 className="modal-title">{faqSeleccionada.Pregunta}</h5>
+                <button type="button" className="btn-close" onClick={() => setOpenModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <p><strong>Respuesta:</strong></p>
+                <div className="bg-light p-4 rounded mb-3 border">{faqSeleccionada.Respuesta}</div>
+                <p><strong>Categoría:</strong> {faqSeleccionada.NombreCategoria || "Sin categoría"}</p>
+                <p><strong>Fecha:</strong> {new Date(faqSeleccionada.FechaCreacion).toLocaleDateString("es-AR")}</p>
+                <p><strong>Estado:</strong> <span className={`badge ${faqSeleccionada.IsActive ? "bg-success" : "bg-danger"}`}>
+                  {faqSeleccionada.IsActive ? "ACTIVA" : "INACTIVA"}
+                </span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL FORM */}
+      {openFormModal && (
+        <div className="custom-modal">
+          <div className="modal-dialog modal-xl">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h1 className="modal-title fs-5">
+                  {faqSeleccionada ? "Editar FAQ" : "Agregar Nueva FAQ"}
                 </h1>
                 <button type="button" className="btn-close" onClick={cerrarModalForm}></button>
               </div>
               <div className="modal-body">
                 <FormFaqs
                   faq={faqSeleccionada}
-                  categorias={faqs.categorias?.filter(c => c.IsActive) || []}
+                  categorias={listaCategorias.filter(c => c.IsActive)}
                   onSuccess={() => {
                     refrescarLista();
                     cerrarModalForm();
@@ -334,28 +388,8 @@ const FAQs = () => {
         </div>
       )}
 
-      {/* MODAL VER */}
-      {openModal && (
-        <div className="modal fade show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}>
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title text-dark">{faqSeleccionada?.Pregunta}</h5>
-                <button type="button" className="btn-close" onClick={() => setOpenModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <p><strong>Respuesta:</strong></p>
-                <div className="bg-light p-3 rounded mb-3">{faqSeleccionada?.Respuesta}</div>
-                <p><strong>Categoría:</strong> {faqSeleccionada?.NombreCategoria || 'Sin categoría'}</p>
-                <p><strong>Fecha:</strong> {new Date(faqSeleccionada?.FechaCreacion).toLocaleDateString('es-AR')}</p>
-                <p><strong>Estado:</strong> <span className={`badge ${faqSeleccionada?.IsActive ? 'bg-success' : 'bg-danger'}`}>
-                  {faqSeleccionada?.IsActive ? 'ACTIVA' : 'INACTIVA'}
-                </span></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* BACKDROP */}
+      {(openFormModal || openModal) && <div className="modal-backdrop-custom"></div>}
     </>
   );
 };

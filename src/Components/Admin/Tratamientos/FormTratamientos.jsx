@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useCustomTratamientos from '../../../Custom/useCustomTratamientos';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
+import "../../../Css/Tratamientos/FormTratamientos.css";
 
 const FormTratamientos = ({ tratamiento, onSuccess }) => {
   const { agregarTratamiento, editarTratamiento } = useCustomTratamientos();
@@ -38,14 +39,18 @@ const FormTratamientos = ({ tratamiento, onSuccess }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
+    if (procesando) return;
+
     setProcesando(true);
 
     try {
+      let res;
       if (tratamiento) {
+        // EDITAR
         const result = await Swal.fire({
           title: "¿Editar tratamiento?",
-          text: "Se actualizarán los datos del tratamiento",
+          text: "Se actualizarán los datos",
           icon: "question",
           showCancelButton: true,
           confirmButtonText: "Sí, actualizar",
@@ -57,31 +62,28 @@ const FormTratamientos = ({ tratamiento, onSuccess }) => {
           return;
         }
 
-        const res = await editarTratamiento(tratamiento.idTratamiento, nuevoTratamiento);
-        if (res.success) {
-          toast.success('Tratamiento editado correctamente');
-          onSuccess();
-        } else {
-          toast.error(res.error || 'Error al editar');
-        }
+        res = await editarTratamiento(tratamiento.idTratamiento, nuevoTratamiento);
       } else {
-        const res = await agregarTratamiento(nuevoTratamiento);
-        if (res.success) {
-          toast.success('Tratamiento agregado correctamente');
-          onSuccess();
-        } else {
-          toast.error(res.error || 'Error al agregar');
-        }
+        // AGREGAR
+        res = await agregarTratamiento(nuevoTratamiento);
+      }
+
+      if (res.success) {
+        toast.success(tratamiento ? 'Tratamiento editado' : 'Tratamiento agregado');
+        onSuccess(); 
+      } else {
+        toast.error(res.error || 'Error al guardar');
       }
     } catch (err) {
       toast.error('Error inesperado');
+      console.error(err);
     } finally {
       setProcesando(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form-tratamientos">
       <div className="mb-3">
         <label className="form-label">Nombre del Tratamiento</label>
         <input
@@ -134,7 +136,11 @@ const FormTratamientos = ({ tratamiento, onSuccess }) => {
       </div>
 
       <div className="d-grid">
-        <button type="submit" className="btn btn-primary" disabled={procesando}>
+        <button
+          type="submit" 
+          className="btn btn-primary btn-submit"
+          disabled={procesando}
+        >
           {procesando ? (
             <>
               <span className="spinner-border spinner-border-sm me-2"></span>

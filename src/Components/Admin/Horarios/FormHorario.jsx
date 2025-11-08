@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import useCustomHorarios from '../../../Custom/useCustomHorarios';
 import { toast } from 'sonner';
-import Swal from 'sweetalert2';
+import "../../../Css/Horarios/FormHorario.css";
+
+
 
 const FormHorario = ({ horario, onSuccess }) => {
   const { crearHorario, editarHorario } = useCustomHorarios();
@@ -56,7 +58,7 @@ const FormHorario = ({ horario, onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form-horario">
       <div className="mb-3">
         <label className="form-label">Día de la semana</label>
         <select name="DiaSemana" value={form.DiaSemana} onChange={handleChange} className="form-select" required disabled={procesando}>
@@ -83,7 +85,7 @@ const FormHorario = ({ horario, onSuccess }) => {
       </div>
 
       <div className="d-grid">
-        <button type="submit" className="btn btn-primary" disabled={procesando}>
+        <button type="submit" className="btn btn-primary btn-submit" disabled={procesando}>
           {procesando ? 'Procesando...' : (horario ? 'Guardar Cambios' : 'Crear Horario')}
         </button>
       </div>
