@@ -3,16 +3,15 @@ import useCustomObrasSociales from '../../../Custom/ObrasSociales/useCustomObras
 import { showConfirm, showSuccess, showError } from '../../../Utils/sweetAlerts'
 import '../../../Css/Admin/ObrasSociales/ObrasSociales.css'
 
-const StatsCard = ({ title, count, active, onClick }) => (
-  <div className={`stats-card clickable ${active ? 'active' : ''}`} onClick={onClick} role="button">
-    <div className="card-body">
-      <div className="stats-title">{title}</div>
-      <div className="stats-value">{count}</div>
-    </div>
-  </div>
-)
+import FilterCards from './FilterCards'
+import SearchBar from './SearchBar'
+import ObrasTable from './ObrasTable'
+import MobileCards from './MobileCards'
+import ModalCrearObra from './ModalCrearObra'
+import ModalEditarObra from './ModalEditarObra'
+import ModalVerObra from './ModalVerObra'
 
-const ObrasSocialesStandalone = () => {
+const ObrasSociales = () => {
   const { obrasSociales = [], obtenerTodasLasObrasSociales, crearObraSocial, actualizarObraSocial, borradoLogicoObraSocial } = useCustomObrasSociales()
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState('Todas')
@@ -289,259 +288,24 @@ const ObrasSocialesStandalone = () => {
         </div>
 
         <div className="row mb-4">
-          <div className="col-12 d-flex gap-3 cards-filtro-wrapper">
-            <StatsCard title="Todas" count={counts.total} active={filter === 'Todas'} onClick={() => setFilter('Todas')} />
-            <StatsCard title="Activas" count={counts.act} active={filter === 'Activas'} onClick={() => setFilter('Activas')} />
-            <StatsCard title="Inactivas" count={counts.inac} active={filter === 'Inactivas'} onClick={() => setFilter('Inactivas')} />
-          </div>
+          <FilterCards counts={counts} filter={filter} setFilter={setFilter} />
         </div>
       </div>
 
-      <div className="servicios-filters mb-3">
-        <div className="row align-items-center">
-          <div className="col-md-8">
-            <div className="input-group">
-              <input className="form-control" placeholder="Buscar por nombre, teléfono o email" value={query} onChange={e => setQuery(e.target.value)} />
-            </div>
-          </div>
-          <div className="col-md-4 d-flex justify-content-end">
-            <select className="form-select w-auto" value={filter} onChange={e => setFilter(e.target.value)}>
-              <option value="Todas">🔍 Todas</option>
-              <option value="Activas">✅ Activas</option>
-              <option value="Inactivas">❌ Inactivas</option>
-            </select>
-          </div>
-        </div>
-      </div>
+      <SearchBar query={query} setQuery={setQuery} filter={filter} setFilter={setFilter} />
 
-      <div className="servicios-table">
-        <div className="card">
-          <div className="card-body">
-            <div className="table-responsive">
-              <table className="table table-hover">
-                <thead className="table-light">
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Teléfono</th>
-                    <th>Email</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {visible.length > 0 ? visible.map(obra => {
-                    const id = obra.idObraSocial ?? obra.id ?? obra.id_obrasocial
-                    const nombre = obra.NombreObraSocial ?? obra.Nombre ?? obra.nombre ?? ''
-                    const telefono = obra.TelefonoObra ?? obra.telefono ?? ''
-                    const email = obra.EmailObra ?? obra.email ?? ''
-                    const estadoReal = obra.EstadoObra ?? obra.estado ?? (obra.IsActive ? 'Activa' : 'Suspendida')
-                    const badgeClass = estadoReal === 'Activa' ? 'bg-success' : 'bg-warning text-dark'
-                    const isActive = obra.IsActive !== undefined ? Boolean(obra.IsActive) : (estadoReal && estadoReal.toLowerCase().includes('act'))
-                    return (
-                      <tr key={id || Math.random()}>
-                        <td className="fw-medium">{nombre}</td>
-                        <td>{telefono}</td>
-                        <td>{email}</td>
-                        <td><span className={`badge ${badgeClass}`}>{estadoReal}</span></td>
-                        <td>
-                          <div className="d-flex gap-1">
-                            <button className="btn btn-sm btn-outline-info" onClick={() => openView(obra)}>Ver</button>
-                            <button className="btn btn-sm btn-outline-primary" onClick={() => openEdit(obra)}>Editar</button>
-                            <button className={`btn btn-sm ${isActive ? 'btn-outline-danger' : 'btn-outline-success'}`} onClick={() => onToggle(obra)}>{isActive ? 'Desactivar' : 'Activar'}</button>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  }) : (
-                    <tr><td colSpan={5} className="text-center py-4"><span className="material-symbols-outlined fs-1 text-muted">account_balance</span><p className="text-muted mt-2">No hay obras sociales que coincidan con los filtros</p></td></tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ObrasTable visible={visible} onView={openView} onEdit={openEdit} onToggle={onToggle} />
 
-      {/* Mobile cards */}
-      <div className="obras-cards">
-        {visible.map(obra => (
-          <div className="obra-card" key={(obra.idObraSocial ?? obra.id) || Math.random()}>
-            <div className="d-flex justify-content-between">
-              <div>
-                <strong>{obra.NombreObraSocial ?? obra.Nombre ?? obra.nombre}</strong>
-                <div className="meta">{obra.TelefonoObra ?? obra.telefono}</div>
-                <div className="meta">{obra.EmailObra ?? obra.email}</div>
-              </div>
-              <div className="text-end">
-                <span className={`badge ${obra.IsActive ? 'bg-success' : 'bg-warning text-dark'}`}>{obra.IsActive ? 'Activa' : 'Suspendida'}</span>
-              </div>
-            </div>
-            <div className="mt-3 d-flex">
-              <button className="btn btn-sm btn-outline-info me-2" onClick={() => openView(obra)}>Ver</button>
-              <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => openEdit(obra)}>Editar</button>
-              <button className={`btn btn-sm ${obra.IsActive ? 'btn-outline-danger' : 'btn-outline-success'}`} onClick={() => onToggle(obra)}>{obra.IsActive ? 'Desactivar' : 'Activar'}</button>
-            </div>
-          </div>
-        ))}
-      </div>
+      <MobileCards visible={visible} onView={openView} onEdit={openEdit} onToggle={onToggle} />
 
-      {/* Create modal */}
-      {isCreateOpen && (
-        <div className="modal show d-block modal-obras-overlay">
-          <div className="modal-dialog modal-lg modal-obras-dialog">
-            <div className="modal-content shadow-lg">
-              <div className="modal-header bg-primary text-white">
-                <h5 className="modal-title">Crear Obra Social</h5>
-                <button type="button" className="btn-close btn-close-white" onClick={() => setIsCreateOpen(false)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-8">
-                    <div className="mb-3">
-                      <label className="form-label">Nombre</label>
-                      <input name="NombreObraSocial" className={`form-control ${errors.NombreObraSocial ? 'is-invalid' : ''}`} value={form.NombreObraSocial} onChange={e => handleChange('NombreObraSocial', e.target.value)} />
-                      {errors.NombreObraSocial && <div className="invalid-feedback">{errors.NombreObraSocial}</div>}
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="mb-3">
-                      <label className="form-label">Estado</label>
-                      <select className={`form-select ${errors.EstadoObra ? 'is-invalid' : ''}`} value={form.EstadoObra} onChange={e => handleChange('EstadoObra', e.target.value)}>
-                        <option value="Activa">Activa</option>
-                        <option value="Suspendida">Suspendida</option>
-                      </select>
-                      {errors.EstadoObra && <div className="invalid-feedback">{errors.EstadoObra}</div>}
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">Teléfono</label>
-                      <input name="TelefonoObra" className={`form-control ${errors.TelefonoObra ? 'is-invalid' : ''}`} value={form.TelefonoObra} onChange={e => handleChange('TelefonoObra', e.target.value)} />
-                      {errors.TelefonoObra && <div className="invalid-feedback">{errors.TelefonoObra}</div>}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">Email</label>
-                      <input type="email" name="EmailObra" className={`form-control ${errors.EmailObra ? 'is-invalid' : ''}`} value={form.EmailObra} onChange={e => handleChange('EmailObra', e.target.value)} />
-                      {errors.EmailObra && <div className="invalid-feedback">{errors.EmailObra}</div>}
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Página web</label>
-                  <input name="PaginaWebObra" className={`form-control ${errors.PaginaWebObra ? 'is-invalid' : ''}`} value={form.PaginaWebObra} onChange={e => handleChange('PaginaWebObra', e.target.value)} />
-                  {errors.PaginaWebObra && <div className="invalid-feedback">{errors.PaginaWebObra}</div>}
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setIsCreateOpen(false)}>Cancelar</button>
-                <button className="btn btn-primary" onClick={onCreate} disabled={loadingOp}>{loadingOp ? 'Creando...' : 'Crear obra'}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ModalCrearObra open={isCreateOpen} onClose={() => setIsCreateOpen(false)} form={form} errors={errors} onChange={handleChange} onSubmit={onCreate} loading={loadingOp} />
 
-      {/* Edit modal */}
-      {isEditOpen && (
-        <div className="modal show d-block modal-obras-overlay">
-          <div className="modal-dialog modal-lg modal-obras-dialog">
-            <div className="modal-content shadow-lg">
-              <div className="modal-header bg-primary text-white">
-                <h5 className="modal-title">Editar Obra Social</h5>
-                <button type="button" className="btn-close btn-close-white" onClick={() => setIsEditOpen(false)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-8">
-                    <div className="mb-3">
-                      <label className="form-label">Nombre</label>
-                      <input name="NombreObraSocial" className={`form-control ${errors.NombreObraSocial ? 'is-invalid' : ''}`} value={form.NombreObraSocial} onChange={e => handleChange('NombreObraSocial', e.target.value)} />
-                      {errors.NombreObraSocial && <div className="invalid-feedback">{errors.NombreObraSocial}</div>}
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="mb-3">
-                      <label className="form-label">Estado</label>
-                      <select className={`form-select ${errors.EstadoObra ? 'is-invalid' : ''}`} value={form.EstadoObra} onChange={e => handleChange('EstadoObra', e.target.value)}>
-                        <option value="Activa">Activa</option>
-                        <option value="Suspendida">Suspendida</option>
-                      </select>
-                      {errors.EstadoObra && <div className="invalid-feedback">{errors.EstadoObra}</div>}
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">Teléfono</label>
-                      <input name="TelefonoObra" className={`form-control ${errors.TelefonoObra ? 'is-invalid' : ''}`} value={form.TelefonoObra} onChange={e => handleChange('TelefonoObra', e.target.value)} />
-                      {errors.TelefonoObra && <div className="invalid-feedback">{errors.TelefonoObra}</div>}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">Email</label>
-                      <input type="email" name="EmailObra" className={`form-control ${errors.EmailObra ? 'is-invalid' : ''}`} value={form.EmailObra} onChange={e => handleChange('EmailObra', e.target.value)} />
-                      {errors.EmailObra && <div className="invalid-feedback">{errors.EmailObra}</div>}
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Página web</label>
-                  <input name="PaginaWebObra" className={`form-control ${errors.PaginaWebObra ? 'is-invalid' : ''}`} value={form.PaginaWebObra} onChange={e => handleChange('PaginaWebObra', e.target.value)} />
-                  {errors.PaginaWebObra && <div className="invalid-feedback">{errors.PaginaWebObra}</div>}
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setIsEditOpen(false)}>Cancelar</button>
-                <button className="btn btn-primary" onClick={onEdit} disabled={loadingOp}>{loadingOp ? 'Guardando...' : 'Guardar cambios'}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ModalEditarObra open={isEditOpen} onClose={() => setIsEditOpen(false)} form={form} errors={errors} onChange={handleChange} onSubmit={onEdit} loading={loadingOp} />
 
-      {/* View modal */}
-      {isViewOpen && selected && (
-        <div className="modal show d-block modal-obras-overlay">
-          <div className="modal-dialog modal-ver-dialog">
-            <div className="modal-content shadow-lg">
-              <div className="modal-ver-header">
-                <h5 className="modal-title">{selected.NombreObraSocial ?? selected.Nombre ?? selected.nombre}</h5>
-                <button type="button" className="btn-close btn-close-white" onClick={() => setIsViewOpen(false)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="ver-field">
-                  <div className="ver-field-label">Teléfono</div>
-                  <div className="ver-field-value">{selected.TelefonoObra ?? selected.telefono}</div>
-                </div>
-                <div className="ver-field mt-3">
-                  <div className="ver-field-label">Email</div>
-                  <div className="ver-field-value">{selected.EmailObra ?? selected.email}</div>
-                </div>
-                <div className="ver-field mt-3">
-                  <div className="ver-field-label">Página web</div>
-                  <div className="ver-field-value">{selected.PaginaWebObra ?? selected.PaginaWeb ?? ''}</div>
-                </div>
-                <div className="ver-field mt-3">
-                  <div className="ver-field-label">Estado</div>
-                  <div className="ver-field-value">{selected.EstadoObra ?? (selected.IsActive ? 'Activa' : 'Suspendida')}</div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setIsViewOpen(false)}>Cerrar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ModalVerObra open={isViewOpen} onClose={() => setIsViewOpen(false)} obra={selected} />
 
     </div>
   )
 }
 
-export default ObrasSocialesStandalone
+export default ObrasSociales
