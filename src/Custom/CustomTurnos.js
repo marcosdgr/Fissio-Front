@@ -8,6 +8,22 @@ const api = axios.create({
   },
 });
 
+
+// solicitar turno 
+export const solicitarTurno = async (turnoData) => {
+  const response = await api.post("/api/turnos/v1/solicitar-secretaria", turnoData);
+  return response.data;
+};
+
+/**
+ * Obtener disponibilidad de horarios para una fecha específica
+ * @param {string} fecha - Fecha en formato YYYY-MM-DD
+ */
+export const getDisponibilidadHorarios = async (fecha) => {
+  const response = await api.get(`/api/turnos/v1/disponibilidad-horarios/${fecha}`);
+  return response.data;
+};
+
 /**
  * Obtener turnos del día
  * @param {string} fecha - Fecha en formato YYYY-MM-DD (opcional, por defecto hoy)

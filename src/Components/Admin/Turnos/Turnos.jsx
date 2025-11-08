@@ -3,6 +3,7 @@ import { getTurnosDelDia } from '../../../Custom/CustomTurnos';
 import { showError } from '../../../Utils/sweetAlerts';
 import AsignarRecursosModal from './AsignarRecursosModal';
 import FinalizarTurnoModal from './FinalizarTurnoModal';
+import SolicitarTurnoModal from './SolicitarTurnoModal';
 
 const Turnos = () => {
   const [turnos, setTurnos] = useState({
@@ -25,6 +26,9 @@ const Turnos = () => {
   const [modalFinalizarData, setModalFinalizarData] = useState({
     isOpen: false,
     turno: null
+  });
+  const [modalSolicitarData, setModalSolicitarData] = useState({
+    isOpen: false
   });
 
   // Cargar turnos del día
@@ -96,6 +100,25 @@ const Turnos = () => {
     cargarTurnos(fechaConsulta); // Recargar turnos con la misma fecha
   };
 
+  // Abrir modal para solicitar nuevo turno
+  const abrirModalSolicitar = () => {
+    setModalSolicitarData({
+      isOpen: true
+    });
+  };
+
+  // Cerrar modal de solicitar turno
+  const cerrarModalSolicitar = () => {
+    setModalSolicitarData({
+      isOpen: false
+    });
+  };
+
+  // Callback cuando se solicita un turno exitosamente
+  const onSolicitudExitosa = () => {
+    cargarTurnos(fechaConsulta); // Recargar turnos con la misma fecha
+  };
+
   return (
     <div className="container-fluid p-4">
       <div className="row mb-4">
@@ -105,18 +128,28 @@ const Turnos = () => {
               <span className="material-symbols-outlined me-2">event</span>
               Turnos del Día
             </h2>
-            <div className="d-flex align-items-center">
-              <label htmlFor="fechaConsulta" className="form-label me-2 mb-0">
-                Fecha:
-              </label>
-              <input
-                type="date"
-                id="fechaConsulta"
-                className="form-control"
-                value={fechaConsulta}
-                onChange={handleFechaChange}
-                style={{ width: '150px' }}
-              />
+            <div className="d-flex align-items-center gap-3">
+              <button
+                className="btn text-white"
+                style={{ backgroundColor: '#3AB1CF' }}
+                onClick={abrirModalSolicitar}
+              >
+                <span className="material-symbols-outlined me-1">add_circle</span>
+                Solicitar Nuevo Turno
+              </button>
+              <div className="d-flex align-items-center">
+                <label htmlFor="fechaConsulta" className="form-label me-2 mb-0">
+                  Fecha:
+                </label>
+                <input
+                  type="date"
+                  id="fechaConsulta"
+                  className="form-control"
+                  value={fechaConsulta}
+                  onChange={handleFechaChange}
+                  style={{ width: '150px' }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -255,6 +288,13 @@ const Turnos = () => {
         isOpen={modalFinalizarData.isOpen}
         onClose={cerrarModalFinalizar}
         onFinalizarSuccess={onFinalizacionExitosa}
+      />
+
+      {/* Modal para solicitar nuevo turno */}
+      <SolicitarTurnoModal
+        isOpen={modalSolicitarData.isOpen}
+        onClose={cerrarModalSolicitar}
+        onSolicitudExitosa={onSolicitudExitosa}
       />
     </div>
   );
