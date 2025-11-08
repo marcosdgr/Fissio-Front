@@ -5,6 +5,11 @@ import { getLocalidades } from '../../../../Custom/CustomRegister'
 import Swal from 'sweetalert2'
 import '../../../../Css/Admin/Servicios/Servicios.css'
 import '../../../../Css/Admin/Profesionales/Empleados.css'
+import EstadisticasEmpleados from './EstadisticasEmpleados'
+import FiltrosEmpleados from './FiltrosEmpleados'
+import TablaEmpleados from './TablaEmpleados'
+import ModalEmpleado from './ModalEmpleado'
+import ModalVerEmpleado from './ModalVerEmpleado'
 
 const Empleados = () => {
   const { empleados, loading, obtenerEmpleados, obtenerEmpleadoPorId, crearEmpleado, actualizarEmpleado, cambiarEstadoEmpleado } = useCustomEmpleados()
@@ -27,14 +32,8 @@ const Empleados = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        if (typeof obtenerEmpleados === 'function') {
-          await obtenerEmpleados()
-        } else {
-          console.warn('obtenerEmpleados no es una función:', obtenerEmpleados)
-        }
-        if (typeof obtenerCategorias === 'function') {
-          await obtenerCategorias()
-        }
+        if (typeof obtenerEmpleados === 'function') await obtenerEmpleados()
+        if (typeof obtenerCategorias === 'function') await obtenerCategorias()
         const data = await getLocalidades()
         setLocalidades(Array.isArray(data) ? data : [])
       } catch (err) {
@@ -110,7 +109,6 @@ const Empleados = () => {
 
   const handleSave = async (e) => {
     e.preventDefault()
-    // validations
     if (!formData.DNI.trim() || !formData.NombreEmpleado.trim() || !formData.ApellidoEmpleado.trim() || !formData.FechaNacEmpleado || !formData.SalarioEmpleado || !formData.idCatEmpleado) {
       Swal.fire({ title: 'Campos requeridos', text: 'Completa los campos obligatorios (DNI, Nombre, Apellido, Fecha Nac., Salario, Categoría).', icon: 'warning', confirmButtonColor: '#0470BB' })
       return
@@ -201,93 +199,16 @@ const Empleados = () => {
           <button className="btn btn-fissio-primary" onClick={handleCreate}><span className="material-symbols-outlined me-1">add</span>Nuevo Empleado</button>
         </div>
 
-        <div className="row mb-4">
-          <div className="col-md-4">
-            <div className={`stats-card card text-center clickable ${filtro === 'todos' ? 'active' : ''}`} onClick={() => setFiltro('todos')} title="Ver todos">
-              <div className="card-body"><h5 className="stats-value">{(empleados || []).length}</h5><p className="stats-title">Total Empleados</p></div>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className={`stats-card card text-center clickable ${filtro === 'activos' ? 'active' : ''}`} onClick={() => setFiltro('activos')} title="Activos">
-              <div className="card-body"><h5 className="stats-value text-success">{(empleados || []).filter(e => e.IsActive).length}</h5><p className="stats-title">Activos</p></div>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className={`stats-card card text-center clickable ${filtro === 'inactivos' ? 'active' : ''}`} onClick={() => setFiltro('inactivos')} title="Inactivos">
-              <div className="card-body"><h5 className="stats-value text-danger">{(empleados || []).filter(e => !e.IsActive).length}</h5><p className="stats-title">Inactivos</p></div>
-            </div>
-          </div>
-        </div>
+        <EstadisticasEmpleados total={(empleados || []).length} activos={(empleados || []).filter(e => e.IsActive).length} inactivos={(empleados || []).filter(e => !e.IsActive).length} filtro={filtro} setFiltro={setFiltro} />
       </div>
 
-      <div className="servicios-filters">
-        <div className="row mb-3">
-          <div className="col-md-6"><div className="input-group"><span className="input-group-text"><span className="material-symbols-outlined">search</span></span><input type="text" className="form-control" placeholder="Buscar por DNI, nombre o apellido..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} /></div></div>
-          <div className="col-md-3"><select className="form-select" value={filtro} onChange={(e) => setFiltro(e.target.value)}><option value="todos">🔍 Todos</option><option value="activos">✅ Solo activos</option><option value="inactivos">❌ Solo inactivos</option></select></div>
-        </div>
-      </div>
+      <FiltrosEmpleados busqueda={busqueda} setBusqueda={setBusqueda} filtro={filtro} setFiltro={setFiltro} />
 
-      <div className="servicios-table">
-        <div className="card"><div className="card-body">
-          {loading ? (<div className="text-center py-4"><div className="spinner-border text-primary" role="status"><span className="visually-hidden">Cargando...</span></div></div>) : (
-            <div className="table-responsive"><table className="table table-hover"><thead className="table-light"><tr><th>DNI</th><th>Nombre</th><th>Apellido</th><th>Localidad</th><th>Categoría</th><th>Salario</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>
-              {empleadosFiltrados.length > 0 ? empleadosFiltrados.map(emp => (
-                <tr key={emp.idEmpleado ?? emp.id}><td className="fw-medium">{emp.DNI}</td><td>{emp.NombreEmpleado}</td><td>{emp.ApellidoEmpleado}</td><td>{emp.NombreLocalidad || '-'}</td><td>{emp.NombreCat || '-'}</td><td>{emp.SalarioEmpleado}</td><td><span className={`badge ${emp.IsActive ? 'bg-success' : 'bg-danger'}`}>{emp.IsActive ? 'Activo' : 'Inactivo'}</span></td><td><div className="d-flex gap-1"><button className="btn btn-sm btn-outline-secondary" onClick={() => handleView(emp)} title="Ver"><span className="material-symbols-outlined">visibility</span></button><button className="btn btn-sm btn-outline-primary" onClick={() => handleEdit(emp)} title="Editar"><span className="material-symbols-outlined">edit</span></button><button className={`btn btn-sm ${emp.IsActive ? 'btn-outline-danger' : 'btn-outline-success'}`} onClick={() => handleToggleStatus(emp)} title={emp.IsActive ? 'Desactivar' : 'Activar'}>{emp.IsActive ? <span className="material-symbols-outlined">block</span> : <span className="material-symbols-outlined">check_circle</span>}</button></div></td></tr>
-              )) : (<tr><td colSpan="8" className="text-center py-4"><span className="material-symbols-outlined fs-1 text-muted">badge</span><p className="text-muted mt-2">No hay empleados que coincidan con los filtros</p></td></tr>)}
-            </tbody></table></div>
-          )}
-        </div></div>
-      </div>
+      <TablaEmpleados empleados={empleadosFiltrados} loading={loading} onView={handleView} onEdit={handleEdit} onToggle={handleToggleStatus} />
 
-      {showModal && (
-        <div className="modal fade show d-block modal-backdrop-custom">
-          <div className="modal-dialog modal-lg"><div className="modal-content"><div className="modal-header"><h5 className="modal-title"><span className="material-symbols-outlined me-2">badge</span>{modalMode === 'create' ? 'Nuevo Empleado' : 'Editar Empleado'}</h5><button type="button" className="btn-close" onClick={handleCloseModal}></button></div>
-            <form onSubmit={handleSave}><div className="modal-body"><div className="row">
-              <div className="col-md-4 mb-3"><label className="form-label">DNI *</label><input name="DNI" className={`form-control ${formData.DNI && dniYaExiste(formData.DNI) ? 'is-invalid' : ''}`} value={formData.DNI} onChange={handleInputChange} required /></div>
-              <div className="col-md-4 mb-3"><label className="form-label">Nombre *</label><input name="NombreEmpleado" className="form-control" value={formData.NombreEmpleado} onChange={handleInputChange} required /></div>
-              <div className="col-md-4 mb-3"><label className="form-label">Apellido *</label><input name="ApellidoEmpleado" className="form-control" value={formData.ApellidoEmpleado} onChange={handleInputChange} required /></div>
-              <div className="col-md-4 mb-3"><label className="form-label">Fecha Nac. *</label><input type="date" name="FechaNacEmpleado" className="form-control" value={formData.FechaNacEmpleado} onChange={handleInputChange} required /></div>
-              <div className="col-md-4 mb-3"><label className="form-label">Teléfono</label><input name="TelefonoEmpleado" className="form-control" value={formData.TelefonoEmpleado} onChange={handleInputChange} /></div>
-              <div className="col-md-4 mb-3"><label className="form-label">Dirección</label><input name="DireccionEmpleado" className="form-control" value={formData.DireccionEmpleado} onChange={handleInputChange} /></div>
-              <div className="col-md-4 mb-3"><label className="form-label">Localidad</label><select name="idLocalidad" className="form-select" value={formData.idLocalidad} onChange={handleInputChange}><option value="">Seleccionar</option>{localidades.map(loc => <option key={loc.idLocalidad ?? loc.id} value={loc.idLocalidad ?? loc.id}>{loc.NombreLocalidad ?? loc.nombre}</option>)}</select></div>
-              <div className="col-md-4 mb-3"><label className="form-label">Categoría *</label><select name="idCatEmpleado" className="form-select" value={formData.idCatEmpleado} onChange={handleInputChange} required><option value="">Seleccionar</option>{(categorias||[]).map(cat => <option key={cat.idCatEmpleado ?? cat.id} value={cat.idCatEmpleado ?? cat.id}>{cat.NombreCat || cat.NombreCategoria}</option>)}</select></div>
-              <div className="col-md-4 mb-3"><label className="form-label">Salario *</label><input type="number" step="0.01" name="SalarioEmpleado" className="form-control" value={formData.SalarioEmpleado} onChange={handleInputChange} required /></div>
-              <div className="col-md-4 mb-3"><label className="form-label">Mail (opcional)</label><input name="MailUsuario" className="form-control" value={formData.MailUsuario} onChange={handleInputChange} /></div>
-              {modalMode === 'create' && (<div className="col-md-4 mb-3"><label className="form-label">Password (si crea usuario)</label><input type="password" name="PasswordUsuario" className="form-control" value={formData.PasswordUsuario} onChange={handleInputChange} /></div>)}
-            </div></div>
-              <div className="modal-footer"><button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Cancelar</button><button type="submit" className="btn btn-fissio-primary" disabled={!formData.DNI.trim() || !formData.NombreEmpleado.trim() || !formData.ApellidoEmpleado.trim() || !formData.SalarioEmpleado || !formData.idCatEmpleado || (formData.DNI && dniYaExiste(formData.DNI))}><span className="material-symbols-outlined me-1">save</span>{modalMode === 'create' ? 'Crear Empleado' : 'Guardar cambios'}</button></div></form>
-          </div></div></div>
-      )}
-      {showViewModal && (
-        <div className="modal fade show d-block modal-backdrop-custom">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title"><span className="material-symbols-outlined me-2">badge</span>Detalle del Empleado</h5>
-                <button type="button" className="btn-close" onClick={() => { setShowViewModal(false); setViewEmpleado(null); }}></button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-4 mb-2"><strong>DNI</strong><div>{viewEmpleado?.DNI ?? '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Nombre</strong><div>{viewEmpleado?.NombreEmpleado ?? '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Apellido</strong><div>{viewEmpleado?.ApellidoEmpleado ?? '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Fecha Nac.</strong><div>{viewEmpleado?.FechaNacEmpleado ? String(viewEmpleado.FechaNacEmpleado).split('T')?.[0] ?? viewEmpleado.FechaNacEmpleado : '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Teléfono</strong><div>{viewEmpleado?.TelefonoEmpleado ?? '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Dirección</strong><div>{viewEmpleado?.DireccionEmpleado ?? '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Localidad</strong><div>{viewEmpleado?.NombreLocalidad ?? '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Categoría</strong><div>{viewEmpleado?.NombreCat ?? '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Salario</strong><div>{viewEmpleado?.SalarioEmpleado ?? '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Mail</strong><div>{viewEmpleado?.MailUsuario ?? '-'}</div></div>
-                  <div className="col-md-4 mb-2"><strong>Estado</strong><div><span className={`badge ${viewEmpleado?.IsActive ? 'bg-success' : 'bg-danger'}`}>{viewEmpleado?.IsActive ? 'Activo' : 'Inactivo'}</span></div></div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => { setShowViewModal(false); setViewEmpleado(null); }}>Cerrar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ModalEmpleado showModal={showModal} modalMode={modalMode} formData={formData} handleInputChange={handleInputChange} handleSave={handleSave} handleCloseModal={handleCloseModal} dniYaExiste={dniYaExiste} localidades={localidades} categorias={categorias} />
+
+      <ModalVerEmpleado showViewModal={showViewModal} viewEmpleado={viewEmpleado} onClose={() => { setShowViewModal(false); setViewEmpleado(null) }} />
     </div>
   )
 }
