@@ -1,0 +1,94 @@
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+}
+
+.action-buttons .btn {
+  min-width: 100px;
+  font-size: 0.85rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.action-buttons .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.action-buttons .btn-sm {
+  min-width: 90px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+/* COLORES PERSONALIZADOS */
+.btn-ver        { background-color: #17a2b8; border-color: #17a2b8; color: white; }
+.btn-editar     { background-color: #007bff; border-color: #007bff; color: white; }
+.btn-desactivar { background-color: #dc3545; border-color: #dc3545; color: white; }
+.btn-activar    { background-color: #28a745; border-color: #28a745; color: white; }
+
+/* FILAS INACTIVAS */
+.faq-inactiva, .cat-inactiva {
+  opacity: 0.6;
+  background-color: #f8f9fa !important;
+  position: relative;
+}
+
+.faq-inactiva::after, .cat-inactiva::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50%;
+  height: 2px;
+  background: #dc3545;
+  opacity: 0.5;
+  transform: translateY(-50%);
+}
+
+/* BADGES */
+.badge-activa   { background-color: #28a745 !important; color: white; }
+.badge-inactiva { background-color: #dc3545 !important; color: white; }
+
+/* BOTÓN AGREGAR */
+.btn-agregar {
+  border-radius: 12px;
+  padding: 0.6rem 1.4rem;
+  font-weight: 500;
+}
+
+/* MODAL MÁS CUADRADO */
+.custom-modal .modal-content {
+  max-width: 560px;
+  width: 90%;
+  min-width: 400px;
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.modal-backdrop-custom {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(5px);
+}
+
+.loading-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-id {
+  width: 60px;
+  font-family: 'Courier New', monospace;
+  padding-left: 1rem;
+}
