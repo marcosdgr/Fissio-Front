@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCustomAsistencias } from '../../Custom/Asistencias/useCustomAsitencias';
 import { useAuthStore } from '../../Store/useAuthStore';
+import { BASE_URL } from '../../Api/api';
 import '../../Css/Asistencias/AsistenciaEmpleado.css';
 
 const AsistenciaEmpleado = () => {
-    const { user } = useAuthStore();
-    const idEmpleado = user?.idEmpleado;
+    const { user, login } = useAuthStore();
+    // El usuario puede estar en user.usuario o directamente en user
+    const userData = user?.usuario || user;
+    const [idEmpleadoLocal, setIdEmpleadoLocal] = useState(userData?.idEmpleado || null);
+    const [buscandoEmpleado, setBuscandoEmpleado] = useState(false);
 
     const {
         asistencias,
@@ -20,23 +24,88 @@ const AsistenciaEmpleado = () => {
         obtenerAsistenciasPorRango,
         filtrarPorMes,
         calcularEstadisticas
-    } = useCustomAsistencias(idEmpleado);
+    } = useCustomAsistencias(idEmpleadoLocal);
 
     const [vistaActual, setVistaActual] = useState('horarios'); // 'horarios', 'historial'
     const [observaciones, setObservaciones] = useState('');
     const [mostrarObservaciones, setMostrarObservaciones] = useState(false);
 
-    // Validar que el usuario tenga idEmpleado
-    if (!user || !idEmpleado) {
+    // Si no tiene idEmpleado, buscarlo por idUsuario
+    useEffect(() => {
+        const buscarIdEmpleado = async () => {
+            const userData = user?.usuario || user;
+            if (userData && userData.NombreRol === 'Empleado' && !idEmpleadoLocal && !buscandoEmpleado) {
+                setBuscandoEmpleado(true);
+                try {
+                    const response = await fetch(`${BASE_URL}api/empleados/v1/activos`);
+                    const empleados = await response.json();
+                    
+                    if (response.ok) {
+                        const empleado = empleados.find(emp => emp.idUsuario === userData.idUsuario);
+                        if (empleado) {
+                            setIdEmpleadoLocal(empleado.idEmpleado);
+                            // Actualizar el store con el idEmpleado
+                            login({
+                                ...user,
+                                idEmpleado: empleado.idEmpleado,
+                                NombreEmpleado: empleado.NombreEmpleado,
+                                ApellidoEmpleado: empleado.ApellidoEmpleado
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error al buscar empleado:', error);
+                } finally {
+                    setBuscandoEmpleado(false);
+                }
+            }
+        };
+
+        buscarIdEmpleado();
+    }, [user, idEmpleadoLocal, buscandoEmpleado, login]);
+
+    // Validar que el usuario esté logueado
+    if (!user) {
         return (
             <div className="asistencia-empleado-container">
                 <div className="alert alert-warning" style={{padding: '2rem', margin: '2rem', borderRadius: '10px', backgroundColor: '#fff3cd', border: '1px solid #ffc107'}}>
                     <h3>⚠️ Acceso restringido</h3>
-                    <p>No se pudo identificar al empleado. Por favor, inicia sesión nuevamente.</p>
-                    <details>
-                        <summary>Información de depuración</summary>
-                        <pre>{JSON.stringify(user, null, 2)}</pre>
-                    </details>
+                    <p>Por favor, inicia sesión para acceder a esta sección.</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Validar que sea empleado
+    if (userData.NombreRol !== 'Empleado') {
+        return (
+            <div className="asistencia-empleado-container">
+                <div className="alert alert-warning" style={{padding: '2rem', margin: '2rem', borderRadius: '10px', backgroundColor: '#fff3cd', border: '1px solid #ffc107'}}>
+                    <h3>⚠️ Acceso restringido</h3>
+                    <p>Esta sección es solo para empleados.</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (buscandoEmpleado) {
+        return (
+            <div className="asistencia-empleado-container">
+                <div className="loading" style={{padding: '3rem', textAlign: 'center'}}>
+                    <i className="fas fa-spinner fa-spin" style={{fontSize: '3rem', color: '#0470BB'}}></i>
+                    <p style={{marginTop: '1rem', fontSize: '1.2rem'}}>Cargando datos del empleado...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!idEmpleadoLocal) {
+        return (
+            <div className="asistencia-empleado-container">
+                <div className="alert alert-warning" style={{padding: '2rem', margin: '2rem', borderRadius: '10px', backgroundColor: '#fff3cd', border: '1px solid #ffc107'}}>
+                    <h3>⚠️ Error</h3>
+                    <p>No se pudo encontrar el registro de empleado asociado a este usuario.</p>
+                    <p>Por favor, contacta al administrador.</p>
                 </div>
             </div>
         );
