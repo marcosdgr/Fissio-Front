@@ -23,7 +23,7 @@ const Empleados = () => {
   const [showViewModal, setShowViewModal] = useState(false)
   const [viewEmpleado, setViewEmpleado] = useState(null)
   const [formData, setFormData] = useState({
-    DNI: '', NombreEmpleado: '', ApellidoEmpleado: '', FechaNacEmpleado: '', TelefonoEmpleado: '', DireccionEmpleado: '', idLocalidad: '', SalarioEmpleado: '', MailUsuario: '', PasswordUsuario: '', idCatEmpleado: ''
+    DNI: '', NombreEmpleado: '', ApellidoEmpleado: '', FechaNacEmpleado: '', TelefonoEmpleado: '', DireccionEmpleado: '', idLocalidad: '', SalarioEmpleado: '', MailUsuario: '', PasswordUsuario: '', idCatEmpleado: '', PermisosEmpleado: ''
   })
 
   const [filtro, setFiltro] = useState('todos')
@@ -69,7 +69,7 @@ const Empleados = () => {
 
   const handleCreate = () => {
     setModalMode('create')
-    setFormData({ DNI: '', NombreEmpleado: '', ApellidoEmpleado: '', FechaNacEmpleado: '', TelefonoEmpleado: '', DireccionEmpleado: '', idLocalidad: '', SalarioEmpleado: '', MailUsuario: '', PasswordUsuario: '', idCatEmpleado: '' })
+    setFormData({ DNI: '', NombreEmpleado: '', ApellidoEmpleado: '', FechaNacEmpleado: '', TelefonoEmpleado: '', DireccionEmpleado: '', idLocalidad: '', SalarioEmpleado: '', MailUsuario: '', PasswordUsuario: '', idCatEmpleado: '', PermisosEmpleado: '' })
     setSelectedEmpleado(null)
     setShowModal(true)
   }
@@ -78,7 +78,7 @@ const Empleados = () => {
     setModalMode('edit')
     setSelectedEmpleado(emp)
     setFormData({
-      DNI: emp.DNI || '', NombreEmpleado: emp.NombreEmpleado || '', ApellidoEmpleado: emp.ApellidoEmpleado || '', FechaNacEmpleado: emp.FechaNacEmpleado ? emp.FechaNacEmpleado.split('T')?.[0] ?? emp.FechaNacEmpleado : '', TelefonoEmpleado: emp.TelefonoEmpleado || '', DireccionEmpleado: emp.DireccionEmpleado || '', idLocalidad: emp.idLocalidad ?? '', SalarioEmpleado: emp.SalarioEmpleado ?? '', MailUsuario: emp.MailUsuario || '', PasswordUsuario: '', idCatEmpleado: emp.idCatEmpleado ?? ''
+      DNI: emp.DNI || '', NombreEmpleado: emp.NombreEmpleado || '', ApellidoEmpleado: emp.ApellidoEmpleado || '', FechaNacEmpleado: emp.FechaNacEmpleado ? emp.FechaNacEmpleado.split('T')?.[0] ?? emp.FechaNacEmpleado : '', TelefonoEmpleado: emp.TelefonoEmpleado || '', DireccionEmpleado: emp.DireccionEmpleado || '', idLocalidad: emp.idLocalidad ?? '', SalarioEmpleado: emp.SalarioEmpleado ?? '', MailUsuario: emp.MailUsuario || '', PasswordUsuario: '', idCatEmpleado: emp.idCatEmpleado ?? '', PermisosEmpleado: emp.PermisosEmpleado ?? ''
     })
     setShowModal(true)
   }
@@ -125,7 +125,8 @@ const Empleados = () => {
           DireccionEmpleado: formData.DireccionEmpleado || null,
           SalarioEmpleado: parseFloat(formData.SalarioEmpleado) || 0,
           idLocalidad: formData.idLocalidad ? parseInt(formData.idLocalidad) : null,
-          idCatEmpleado: formData.idCatEmpleado ? parseInt(formData.idCatEmpleado) : null
+            idCatEmpleado: formData.idCatEmpleado ? parseInt(formData.idCatEmpleado) : null,
+            PermisosEmpleado: formData.PermisosEmpleado || null
         }
         await crearEmpleado(payload)
         Swal.fire({ title: 'Empleado creado', text: `Empleado ${formData.NombreEmpleado} creado correctamente.`, icon: 'success', confirmButtonColor: '#0470BB', timer: 1500, timerProgressBar: true })
@@ -141,6 +142,7 @@ const Empleados = () => {
           SalarioEmpleado: parseFloat(formData.SalarioEmpleado) || 0,
           idLocalidad: formData.idLocalidad ? parseInt(formData.idLocalidad) : null,
           idCatEmpleado: formData.idCatEmpleado ? parseInt(formData.idCatEmpleado) : null,
+          PermisosEmpleado: formData.PermisosEmpleado || null,
           MailUsuario: formData.MailUsuario || undefined
         }
         await editarEmpleado(id, payload)

@@ -25,6 +25,14 @@ const ModalEmpleado = ({ showModal, modalMode, formData, handleInputChange, hand
                 <div className="col-md-4 mb-3"><label className="form-label">Categoría *</label>
                   <select name="idCatEmpleado" className="form-select" value={formData.idCatEmpleado} onChange={handleInputChange} required><option value="">Seleccionar</option>{(categorias||[]).map(cat => <option key={cat.idCatEmpleado ?? cat.id} value={cat.idCatEmpleado ?? cat.id}>{cat.NombreCat || cat.NombreCategoria}</option>)}</select>
                 </div>
+                <div className="col-md-4 mb-3"><label className="form-label">Rol del Empleado</label>
+                  <select name="PermisosEmpleado" className="form-select" value={formData.PermisosEmpleado} onChange={handleInputChange}>
+                    <option value="">Seleccionar</option>
+                    <option value="Administracion">Administración</option>
+                    <option value="Kinesiologia">Kinesiología</option>
+                    <option value="Otros">Otros</option>
+                  </select>
+                </div>
                 <div className="col-md-4 mb-3"><label className="form-label">Salario *</label><input type="number" step="0.01" name="SalarioEmpleado" className="form-control" value={formData.SalarioEmpleado} onChange={handleInputChange} required /></div>
                 <div className="col-md-4 mb-3"><label className="form-label">Mail (opcional)</label><input name="MailUsuario" className="form-control" value={formData.MailUsuario} onChange={handleInputChange} /></div>
                 {modalMode === 'create' && (<div className="col-md-4 mb-3"><label className="form-label">Password (si crea usuario)</label><input type="password" name="PasswordUsuario" className="form-control" value={formData.PasswordUsuario} onChange={handleInputChange} /></div>)}

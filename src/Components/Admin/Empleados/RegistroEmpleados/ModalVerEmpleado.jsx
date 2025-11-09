@@ -21,6 +21,7 @@ const ModalVerEmpleado = ({ showViewModal, viewEmpleado, onClose }) => {
               <div className="col-md-4 mb-2"><strong>Localidad</strong><div>{viewEmpleado?.NombreLocalidad ?? '-'}</div></div>
               <div className="col-md-4 mb-2"><strong>Categoría</strong><div>{viewEmpleado?.NombreCat ?? '-'}</div></div>
               <div className="col-md-4 mb-2"><strong>Salario</strong><div>{viewEmpleado?.SalarioEmpleado ?? '-'}</div></div>
+              <div className="col-md-4 mb-2"><strong>Rol del Empleado</strong><div>{viewEmpleado?.PermisosEmpleado ?? '-'}</div></div>
               <div className="col-md-4 mb-2"><strong>Mail</strong><div>{viewEmpleado?.MailUsuario ?? '-'}</div></div>
               <div className="col-md-4 mb-2"><strong>Estado</strong><div><span className={`badge ${viewEmpleado?.IsActive ? 'bg-success' : 'bg-danger'}`}>{viewEmpleado?.IsActive ? 'Activo' : 'Inactivo'}</span></div></div>
             </div>

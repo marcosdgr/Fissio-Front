@@ -17,6 +17,7 @@ const TablaEmpleados = ({ empleados, loading, onView, onEdit, onToggle }) => {
                     <th>Apellido</th>
                     <th>Localidad</th>
                     <th>Categoría</th>
+                    <th>Rol</th>
                     <th>Salario</th>
                     <th>Estado</th>
                     <th>Acciones</th>
@@ -30,6 +31,7 @@ const TablaEmpleados = ({ empleados, loading, onView, onEdit, onToggle }) => {
                       <td>{emp.ApellidoEmpleado}</td>
                       <td>{emp.NombreLocalidad || '-'}</td>
                       <td>{emp.NombreCat || '-'}</td>
+                      <td>{emp.PermisosEmpleado || '-'}</td>
                       <td>{emp.SalarioEmpleado}</td>
                       <td><span className={`badge ${emp.IsActive ? 'bg-success' : 'bg-danger'}`}>{emp.IsActive ? 'Activo' : 'Inactivo'}</span></td>
                       <td>
@@ -43,7 +45,7 @@ const TablaEmpleados = ({ empleados, loading, onView, onEdit, onToggle }) => {
                       </td>
                     </tr>
                   )) : (
-                    <tr><td colSpan="8" className="text-center py-4"><span className="material-symbols-outlined fs-1 text-muted">badge</span><p className="text-muted mt-2">No hay empleados que coincidan con los filtros</p></td></tr>
+                    <tr><td colSpan="9" className="text-center py-4"><span className="material-symbols-outlined fs-1 text-muted">badge</span><p className="text-muted mt-2">No hay empleados que coincidan con los filtros</p></td></tr>
                   )}
                 </tbody>
               </table>
