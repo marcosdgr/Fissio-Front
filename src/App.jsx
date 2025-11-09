@@ -8,6 +8,7 @@ import HomePage from "./Pages/HomePage";
 import RegisterPage from "./Pages/RegisterPage"
 import FAQsPublicPage from "./Pages/FAQsPublicPage";
 import LoginPage from "./Pages/LoginPage";
+import AsistenciaEmpleado from "./Components/Asistencia/AsistenciaEmpleado.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ function App() {
             <Route path="/faqs" element={<FAQsPublicPage />} />
             <Route path="/mensajes" element={<MensajeriaInterna />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/asistencia" element={<AsistenciaEmpleado />} />
             <Route path="*" element={<div>404 - Página no encontrada</div>} />
           </Routes>
         </main>

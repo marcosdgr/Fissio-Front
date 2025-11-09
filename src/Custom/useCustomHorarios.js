@@ -11,19 +11,17 @@ const useCustomHorarios = () => {
     try {
       setLoading(true);
       setError(null);
-      const [horariosRes, asignacionesRes] = await Promise.all([
+      const [horariosRes, asignacionesRes, empleadosRes] = await Promise.all([
         axios.get(`${BASE_URL}api/horariosTrabajo/v1/activos`),
-        axios.get(`${BASE_URL}api/empleadosHorarios/v1`)
+        axios.get(`${BASE_URL}api/empleadosHorarios/v1`),
+        axios.get(`${BASE_URL}api/empleados/v1/activos`)
       ]);
 
-      // Extraer empleados únicos
-      const empleadosUnicos = [...new Set(asignacionesRes.data.map(a => a.idEmpleado))];
-      const empleadosLista = asignacionesRes.data
-        .filter((a, i, arr) => arr.findIndex(t => t.idEmpleado === a.idEmpleado) === i)
-        .map(a => ({
-          idEmpleado: a.idEmpleado,
-          NombreCompleto: `${a.NombreEmpleado} ${a.ApellidoEmpleado}`
-        }));
+      // Mapear todos los empleados activos
+      const empleadosLista = empleadosRes.data.map(e => ({
+        idEmpleado: e.idEmpleado,
+        NombreCompleto: `${e.NombreEmpleado} ${e.ApellidoEmpleado}`
+      }));
 
       setData({
         horarios: horariosRes.data,
