@@ -1,0 +1,25 @@
+/* Styles for PlanesObras component - responsive and no inline styles */
+.planes-container { padding: 1rem; }
+.planes-header .planes-title { margin: 0; font-size: 1.25rem; }
+.planes-subtitle { margin: 0; color: #6c757d; }
+.planes-cards, .obras-cards { display: none; }
+
+@media (max-width: 768px) {
+  .servicios-table, .card { display: none; }
+  .planes-cards { display: block; }
+  .plan-card { background: #fff; border: 1px solid #e9ecef; padding: .75rem; border-radius: .5rem; margin-bottom: .75rem; }
+  .plan-card .meta { color: #6c757d; font-size: .9rem; }
+}
+
+@media (min-width: 769px) {
+  .planes-cards { display: none; }
+}
+
+.modal-obras-overlay { background: rgba(0,0,0,0.45); }
+.modal-obras-dialog { max-width: 900px; }
+.modal-ver-dialog { max-width: 600px; }
+.ver-field-label { font-weight: 600; color: #495057; }
+.ver-field-value { color: #212529; }
+
+/* small helpers */
+.cards-filtro-wrapper { gap: 1rem; }

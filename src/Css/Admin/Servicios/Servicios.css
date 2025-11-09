@@ -1,0 +1,455 @@
+/* Variables de color Fissio */
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+  --fissio-bg-light: #f8f9fa;
+  --fissio-white: #ffffff;
+  --fissio-success: #198754;
+  --fissio-danger: #dc3545;
+}
+
+/* Contenedor principal */
+.servicios-container {
+  background-color: var(--fissio-bg-light);
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* Header del componente */
+.servicios-header {
+  margin-bottom: 2rem;
+}
+
+.servicios-title {
+  color: var(--fissio-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.servicios-title .material-symbols-outlined {
+  font-size: 2rem;
+  color: var(--fissio-secondary);
+}
+
+.servicios-subtitle {
+  color: var(--fissio-gray);
+  margin-bottom: 0;
+  font-size: 1.1rem;
+}
+
+/* Botones con estilo Fissio */
+.btn-fissio-primary {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: var(--fissio-white);
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-fissio-primary:hover {
+  background-color: #035a99;
+  border-color: #035a99;
+  color: var(--fissio-white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.3);
+}
+
+.btn-fissio-outline {
+  border-color: var(--fissio-primary);
+  color: var(--fissio-primary);
+  background-color: transparent;
+  border-width: 2px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+}
+
+.btn-fissio-outline:hover {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: var(--fissio-white);
+  transform: translateY(-1px);
+}
+
+/* Cards de estadísticas */
+.stats-card {
+  background: var(--fissio-white);
+  transition: all 0.3s ease;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.15);
+}
+
+/* Cards clickeables */
+.stats-card.clickable {
+  cursor: pointer;
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.stats-card.clickable:hover {
+  border-color: var(--fissio-secondary);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(4, 112, 187, 0.2);
+}
+
+.stats-card.clickable.active {
+  border-color: var(--fissio-primary);
+  background: linear-gradient(135deg, var(--fissio-white) 0%, rgba(4, 112, 187, 0.05) 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.25);
+}
+
+.stats-card.clickable.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.stats-card .card-body {
+  padding: 1.5rem;
+}
+
+/* Variante compacta para cards de filtro (menos padding y menor tamaño de número) */
+.stats-card.stats-card--compact .card-body {
+  padding: 0.6rem 0.9rem;
+}
+.stats-card.stats-card--compact .stats-value {
+  font-size: 1.6rem;
+}
+.stats-card.stats-card--compact .small {
+  font-size: 0.75rem;
+}
+.stats-card.stats-card--compact {
+  min-height: 64px;
+}
+
+.stats-title {
+  color: var(--fissio-gray);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stats-value {
+  color: var(--fissio-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+/* Sección de filtros */
+.servicios-filters {
+  background: var(--fissio-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.servicios-filters .input-group-text {
+  background-color: var(--fissio-bg-light);
+  border-color: var(--fissio-light-gray);
+  color: var(--fissio-gray);
+}
+
+.servicios-filters .form-control,
+.servicios-filters .form-select {
+  border-color: var(--fissio-light-gray);
+  transition: all 0.3s ease;
+}
+
+.servicios-filters .form-control:focus,
+.servicios-filters .form-select:focus {
+  border-color: var(--fissio-primary);
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
+}
+
+/* Tabla de servicios */
+.servicios-table .card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.servicios-table .card-body {
+  padding: 0;
+}
+
+.servicios-table .table {
+  margin-bottom: 0;
+}
+
+.servicios-table .table thead th {
+  background-color: var(--fissio-bg-light);
+  color: var(--fissio-gray);
+  font-weight: 600;
+  border-bottom: 2px solid var(--fissio-primary);
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.servicios-table .table tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.servicios-table .table tbody tr:hover {
+  background-color: rgba(4, 112, 187, 0.05);
+  transition: all 0.3s ease;
+}
+
+.servicios-table .table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Badges de estado */
+.badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.bg-success {
+  background-color: var(--fissio-success) !important;
+}
+
+.badge.bg-danger {
+  background-color: var(--fissio-danger) !important;
+}
+
+/* Botones de acción en tabla */
+.servicios-table .btn-sm {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  border-width: 1.5px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.servicios-table .btn-sm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.servicios-table .btn-sm .material-symbols-outlined {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* Contenedor de botones de acción */
+.servicios-table .d-flex.gap-1 {
+  gap: 0.375rem !important;
+}
+
+/* Colores específicos para botones de acción */
+.servicios-table .btn-outline-primary {
+  color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+}
+
+.servicios-table .btn-outline-primary:hover {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: white;
+}
+
+.servicios-table .btn-outline-success:hover {
+  background-color: var(--fissio-success);
+  border-color: var(--fissio-success);
+  color: white;
+}
+
+.servicios-table .btn-outline-danger:hover {
+  background-color: var(--fissio-danger);
+  border-color: var(--fissio-danger);
+  color: white;
+}
+
+/* Estado vacío */
+.servicios-table .text-center .material-symbols-outlined {
+  color: var(--fissio-light-gray);
+  opacity: 0.5;
+}
+
+/* Modal personalizado */
+.modal-content {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  background-color: var(--fissio-primary);
+  color: var(--fissio-white);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding: 1.5rem 2rem;
+}
+
+.modal-header .modal-title {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.modal-header .modal-title .material-symbols-outlined {
+  color: var(--fissio-secondary);
+}
+
+.modal-header .btn-close {
+  filter: invert(1);
+  opacity: 0.8;
+}
+
+.modal-header .btn-close:hover {
+  opacity: 1;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e9ecef;
+  background-color: var(--fissio-bg-light);
+  border-radius: 0 0 12px 12px;
+}
+
+/* Formularios */
+.form-label {
+  color: var(--fissio-gray);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--fissio-primary);
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
+}
+
+/* Spinner de loading */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.spinner-border.text-primary {
+  color: var(--fissio-primary) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .servicios-container {
+    padding: 1rem;
+  }
+  
+  .servicios-header .d-flex {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .servicios-title {
+    font-size: 1.5rem;
+  }
+  
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+  
+  .servicios-filters .row > div {
+    margin-bottom: 1rem;
+  }
+  
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  .servicios-table .table tbody td {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .modal-dialog {
+    margin: 1rem;
+  }
+  
+  .modal-body,
+  .modal-footer {
+    padding: 1.5rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.servicios-container > * {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Efectos de hover mejorados */
+.btn:hover {
+  transform: translateY(-1px);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}

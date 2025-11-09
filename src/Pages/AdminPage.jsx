@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import Pacientes from "../Components/Admin/Pacientes/Pacientes";
 import Turnos from "../Components/Admin/Turnos/Turnos";
-import Profesionales from "../Components/Admin/Profesionales/Profesionales";
+import Profesionales from "../Components/Admin/Empleados/Profesionales";
+import Servicios from "../Components/Admin/Servicios/Servicios";
 import Tratamientos from "../Components/Admin/Tratamientos/Tratamientos";
 import Mensajes from "../Components/Admin/Mensajes/Mensajes";
 import Estadisticas from "../Components/Admin/Estadisticas/Estadisticas";
 import Configuracion from "../Components/Admin/Configuracion/Configuracion";
 import Cobros from "../Components/Admin/Cobros/Cobros";
 import Pagos from "../Components/Admin/Pagos/Pagos";
-import ObrasSociales from "../Components/Admin/ObrasSociales/ObrasSociales";
 import Asistencias from "../Components/Admin/Asistencias/Asistencias";
 import FAQs from "../Components/Admin/FAQs/FAQs";
 import "../Css/Admin/AdminPage.css";
+import ObrasSociales from "../Components/Admin/ObrasSociales/ObrasSociales";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -29,6 +30,7 @@ const AdminPage = () => {
     { id: "turnos", label: "Turnos", icon: "calendar_today" },
     { id: "pacientes", label: "Pacientes", icon: "groups" },
     { id: "profesionales", label: "Profesionales", icon: "local_hospital" },
+    { id: "servicios", label: "Servicios", icon: "medical_services" },
     { id: "tratamientos", label: "Tratamientos", icon: "healing" },
     { id: "cobros", label: "Cobros", icon: "receipt_long" },
     { id: "pagos", label: "Gastos", icon: "credit_card" },
@@ -211,6 +213,7 @@ const AdminPage = () => {
           {activeTab === "turnos" && <Turnos />}
           {activeTab === "pacientes" && <Pacientes />}
           {activeTab === "profesionales" && <Profesionales />}
+          {activeTab === "servicios" && <Servicios />}
           {activeTab === "tratamientos" && <Tratamientos />}
           {activeTab === "cobros" && <Cobros />}
           {activeTab === "pagos" && <Pagos />}

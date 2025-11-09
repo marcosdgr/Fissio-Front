@@ -1,5 +1,5 @@
 .site-navbar{
-  background-color: #3AB1CF; /* color solicitado */
+  background-color:#6B6B6B; /* color solicitado */
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
@@ -13,7 +13,10 @@
 }
 
 .navbar .nav-link{
-  color: rgba(0, 0, 0, 0.95);
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500; 
+  margin-right: 12px;
+
 }
 .navbar .nav-link:hover{
   color: #0a2830;

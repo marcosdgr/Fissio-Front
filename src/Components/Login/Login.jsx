@@ -37,9 +37,9 @@ const Login = () => {
         PasswordUsuario: formData.password
       });
 
-      console.log('Login exitoso:', response);
+      console.log('Login exitoso - Respuesta completa:', response);
       
-      // Usar Zustand para guardar el estado global
+      // Guardar en Zustand
       login(response.user || response);
       
       // Mostrar mensaje de éxito
