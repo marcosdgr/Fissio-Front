@@ -1,0 +1,269 @@
+/* PacientePage Styles - Basado en AdminPage.css */
+
+/* Variables de colores para mantener consistencia */
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+  --fissio-bg-light: #f8f9fa;
+}
+
+/* Contenedor principal */
+.paciente-container {
+  background-color: var(--fissio-gray);
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.paciente-sidebar {
+  width: 250px;
+  background-color: var(--fissio-primary);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+}
+
+.paciente-sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar-header {
+  border-bottom: 1px solid var(--fissio-secondary);
+}
+
+.sidebar-toggle {
+  color: white;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.sidebar-toggle:hover,
+.sidebar-toggle:focus {
+  color: white;
+  box-shadow: none;
+}
+
+/* Menu items */
+.sidebar-nav-item {
+  background-color: transparent;
+  color: white;
+  border: none;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.sidebar-nav-item:hover {
+  background-color: var(--fissio-secondary) !important;
+  color: white;
+}
+
+.sidebar-nav-item.active {
+  background-color: white !important;
+  color: var(--fissio-primary) !important;
+  font-weight: bold;
+}
+
+.sidebar-nav-item.active .material-symbols-outlined {
+  color: var(--fissio-primary) !important;
+}
+
+/* Indicador cuando está colapsado */
+.sidebar-collapsed-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: white;
+}
+
+/* Footer del sidebar */
+.sidebar-footer {
+  border-top: 1px solid var(--fissio-secondary);
+}
+
+.paciente-avatar {
+  background-color: white;
+  color: var(--fissio-primary);
+}
+
+.sidebar-user-email {
+  color: var(--fissio-light-gray);
+}
+
+/* Contenido principal */
+.paciente-main-content {
+  background-color: var(--fissio-bg-light);
+}
+
+.paciente-header {
+  background-color: white;
+  border-bottom: 4px solid var(--fissio-primary);
+}
+
+.paciente-header h4 {
+  color: var(--fissio-primary);
+}
+
+.paciente-header small {
+  color: var(--fissio-light-gray);
+}
+
+/* Botones personalizados */
+.btn-fissio-primary {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: white;
+}
+
+.btn-fissio-primary:hover {
+  background-color: #035a99;
+  border-color: #035a99;
+  color: white;
+}
+
+.btn-fissio-secondary {
+  border-color: var(--fissio-secondary);
+  color: var(--fissio-secondary);
+  background-color: transparent;
+  border-width: 2px;
+}
+
+.btn-fissio-secondary:hover {
+  background-color: var(--fissio-secondary);
+  border-color: var(--fissio-secondary);
+  color: white;
+}
+
+.btn-fissio-outline {
+  border-color: var(--fissio-primary);
+  color: var(--fissio-primary);
+  background-color: transparent;
+  border-width: 2px;
+}
+
+.btn-fissio-outline:hover {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: white;
+}
+
+/* Cards generales */
+.card {
+  background: white;
+  transition: all 0.3s;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Headers de cards */
+.card-header h5 {
+  color: var(--fissio-primary);
+}
+
+/* Iconos grandes */
+.dashboard-icon-large {
+  font-size: 5rem;
+  color: var(--fissio-secondary);
+}
+
+/* Texto con gradiente */
+.gradient-text {
+  background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Formularios */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--fissio-primary);
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
+}
+
+.form-label {
+  color: var(--fissio-gray);
+  font-weight: 500;
+}
+
+/* Estados de badges */
+.badge.bg-primary {
+  background-color: var(--fissio-primary) !important;
+}
+
+.badge.bg-secondary {
+  background-color: var(--fissio-secondary) !important;
+}
+
+/* Tablas */
+.table th {
+  background-color: var(--fissio-bg-light);
+  color: var(--fissio-gray);
+  font-weight: 600;
+  border-bottom: 2px solid var(--fissio-primary);
+}
+
+.table tbody tr:hover {
+  background-color: rgba(4, 112, 187, 0.05);
+}
+
+/* Loading spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(4, 112, 187, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--fissio-primary);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main > * {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .paciente-sidebar {
+    width: 70px;
+  }
+  
+  .paciente-sidebar .sidebar-text {
+    display: none;
+  }
+  
+  .paciente-header {
+    padding: 1rem !important;
+  }
+  
+  .p-4 {
+    padding: 1rem !important;
+  }
+}

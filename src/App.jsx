@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminPage from "./Pages/AdminPage";
+import PacientePage from "./Pages/PacientePage";
 import MensajeriaInterna from "./Components/MensajeriaInterna/MensajeriaInterna.jsx";
 import Footer from "./Components/Common/Footer";
 import Navbar from "./Components/Common/Navbar";
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/paciente" element={<PacientePage />} />
             <Route path="/faqs" element={<FAQsPublicPage />} />
             <Route path="/mensajes" element={<MensajeriaInterna />} />
             <Route path="/login" element={<LoginPage />} />
