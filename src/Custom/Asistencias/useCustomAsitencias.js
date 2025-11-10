@@ -67,11 +67,14 @@ export const useCustomAsistencias = (idEmpleado) => {
             
             if (response.ok && data.length > 0) {
                 const asistenciaHoy = data.find(a => a.Fecha.split('T')[0] === hoy);
-                if (asistenciaHoy && !asistenciaHoy.HoraSalida) {
+                // Siempre guardar la asistencia de hoy (completa o incompleta)
+                if (asistenciaHoy) {
                     setAsistenciaActual(asistenciaHoy);
                 } else {
                     setAsistenciaActual(null);
                 }
+            } else {
+                setAsistenciaActual(null);
             }
         } catch (error) {
             console.error('Error al verificar asistencia hoy:', error);

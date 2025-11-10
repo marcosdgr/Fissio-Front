@@ -170,6 +170,93 @@
     font-weight: 500;
 }
 
+/* Jornada completada */
+.jornada-completada {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 2px solid var(--fissio-success);
+}
+
+.completada-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.completada-info i {
+    font-size: 3.5rem;
+    color: var(--fissio-success);
+}
+
+.completada-info h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--fissio-success);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.completada-info p {
+    margin: 0;
+    color: var(--fissio-dark);
+    font-size: 1rem;
+}
+
+.resumen-jornada {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: var(--fissio-white);
+    border-radius: 8px;
+}
+
+.resumen-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--fissio-light);
+    border-radius: 8px;
+}
+
+.resumen-label {
+    font-size: 0.9rem;
+    color: var(--fissio-gray);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.resumen-valor {
+    font-size: 1.3rem;
+    color: var(--fissio-dark);
+    font-weight: bold;
+}
+
+.observaciones-completada {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--fissio-white);
+    border-radius: 8px;
+    border-left: 4px solid var(--fissio-primary);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.observaciones-completada i {
+    color: var(--fissio-primary);
+    font-size: 1.2rem;
+}
+
+.observaciones-completada span {
+    color: var(--fissio-dark);
+    font-style: italic;
+}
+
 /* Botones de registro */
 .btn-registrar {
     padding: 1.2rem 2rem;

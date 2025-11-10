@@ -285,7 +285,41 @@ const AsistenciaEmpleado = () => {
                                 </div>
                             )}
                         </div>
+                    ) : asistenciaActual.HoraSalida ? (
+                        // Jornada completada
+                        <div className="jornada-completada">
+                            <div className="completada-info">
+                                <i className="fas fa-check-circle"></i>
+                                <div>
+                                    <h3>Jornada Completada</h3>
+                                    <p>Ya has registrado tu entrada y salida de hoy</p>
+                                </div>
+                            </div>
+                            <div className="resumen-jornada">
+                                <div className="resumen-item">
+                                    <span className="resumen-label">Entrada:</span>
+                                    <span className="resumen-valor">{formatearHora(asistenciaActual.HoraEntrada)}</span>
+                                </div>
+                                <div className="resumen-item">
+                                    <span className="resumen-label">Salida:</span>
+                                    <span className="resumen-valor">{formatearHora(asistenciaActual.HoraSalida)}</span>
+                                </div>
+                                <div className="resumen-item">
+                                    <span className="resumen-label">Tiempo trabajado:</span>
+                                    <span className="resumen-valor">
+                                        {calcularHorasTrabajadas(asistenciaActual.HoraEntrada, asistenciaActual.HoraSalida)}
+                                    </span>
+                                </div>
+                            </div>
+                            {asistenciaActual.Observaciones && (
+                                <div className="observaciones-completada">
+                                    <i className="fas fa-comment"></i>
+                                    <span>{asistenciaActual.Observaciones}</span>
+                                </div>
+                            )}
+                        </div>
                     ) : (
+                        // Jornada activa (con entrada pero sin salida)
                         <div className="registro-salida">
                             <div className="jornada-activa">
                                 <div className="jornada-info">
