@@ -25,7 +25,6 @@ const HorariosTrabajo = () => {
   const [listaEmpleados, setListaEmpleados] = useState([]);
   const [listaAsignaciones, setListaAsignaciones] = useState([]);
 
-  // Sincronizar datos del hook
   useEffect(() => {
     if (data?.horarios) setListaHorarios(data.horarios);
     if (data?.empleados) setListaEmpleados(data.empleados);
@@ -39,7 +38,11 @@ const HorariosTrabajo = () => {
     setOpenModal(true);
   };
 
-  // TOGGLE ESTADO HORARIO (sin desaparecer)
+  const cerrarModal = () => {
+    setOpenModal(false);
+    setHorarioSeleccionado(null);
+  };
+
   const handleCambiarEstado = async (idHorario) => {
     const horario = listaHorarios.find(h => h.idHorario === idHorario);
     const nuevoEstado = horario.IsActive ? 0 : 1;
@@ -275,28 +278,33 @@ const HorariosTrabajo = () => {
         </div>
       </div>
 
-      {/* MODAL FORM */}
+      {/* MODAL FORM - CON BOTÓN X PREMIUM */}
       {openModal && (
-        <div className="custom-modal">
-          <div className="modal-dialog modal-lg">
+        <div className="custom-modal fade-in">
+          <div className="modal-dialog modal-lg modal-dialog-scrollable">
             <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">
+              <div className="modal-header bg-primary text-white position-relative">
+                <h5 className="modal-title fw-bold">
                   {horarioSeleccionado ? "Editar Horario" : "Nuevo Horario"}
                 </h5>
                 <button
                   type="button"
-                  className="btn-close"
-                  onClick={() => setOpenModal(false)}
-                ></button>
+                  className="btn-close-modal-x"
+                  onClick={cerrarModal}
+                  aria-label="Cerrar"
+                  title="Cerrar sin guardar"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
               </div>
-              <div className="modal-body">
+              <div className="modal-body p-4">
                 <FormHorario
                   horario={horarioSeleccionado}
                   onSuccess={() => {
-                    setOpenModal(false);
+                    cerrarModal();
                     refrescar();
                   }}
+                  onClose={cerrarModal}
                 />
               </div>
             </div>
@@ -304,7 +312,7 @@ const HorariosTrabajo = () => {
         </div>
       )}
 
-      {openModal && <div className="modal-backdrop-custom"></div>}
+      {openModal && <div className="modal-backdrop-custom fade-in"></div>}
     </>
   );
 };
