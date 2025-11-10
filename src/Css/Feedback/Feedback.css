@@ -138,10 +138,17 @@
   border: none;
   cursor: pointer;
   font-size: 3rem;
-  color: var(--fissio-star-empty);
+  color: #cccccc;
   transition: all 0.3s ease;
   padding: 0;
   outline: none;
+  line-height: 1;
+}
+
+.estrella:focus {
+  outline: 2px solid var(--fissio-primary);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .estrella:hover {

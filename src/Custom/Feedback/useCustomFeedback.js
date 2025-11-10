@@ -85,6 +85,7 @@ const useCustomFeedback = () => {
   // Cargar comentarios al montar el componente
   useEffect(() => {
     obtenerComentariosActivos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

@@ -1,53 +1,31 @@
 import { useState, useEffect } from "react";
 import { useAuthStore } from "../../Store/useAuthStore";
-import useCustomFeedback from "../../Custom/Feedback/useCustomFeedback";
+import axios from "axios";
 import { BASE_URL } from "../../Api/api";
 import "../../Css/Feedback/Feedback.css";
 
 const Feedback = () => {
   const { user } = useAuthStore();
   const userData = user?.usuario || user;
-  const { crearComentario, loading } = useCustomFeedback();
 
   const [calificacion, setCalificacion] = useState(0);
   const [calificacionHover, setCalificacionHover] = useState(0);
   const [comentario, setComentario] = useState("");
-  const [idPaciente, setIdPaciente] = useState(null);
-  const [buscandoPaciente, setBuscandoPaciente] = useState(false);
+  const [idPaciente, setIdPaciente] = useState(null); // Ahora guardará idUsuario
+  const [buscandoPaciente, setBuscandoPaciente] = useState(true);
   const [enviado, setEnviado] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Obtener idPaciente del usuario logueado
+  // Ya no necesitamos buscar idPaciente, usaremos idUsuario directamente
   useEffect(() => {
-    const obtenerIdPaciente = async () => {
-      if (
-        userData &&
-        userData.NombreRol === "Paciente" &&
-        !idPaciente &&
-        !buscandoPaciente
-      ) {
-        setBuscandoPaciente(true);
-        try {
-          const response = await fetch(`${BASE_URL}api/pacientes/v1`);
-          const pacientes = await response.json();
-
-          if (response.ok) {
-            const paciente = pacientes.find(
-              (p) => p.idUsuario === userData.idUsuario
-            );
-            if (paciente) {
-              setIdPaciente(paciente.idPaciente);
-            }
-          }
-        } catch (error) {
-          console.error("Error al buscar paciente:", error);
-        } finally {
-          setBuscandoPaciente(false);
-        }
-      }
-    };
-
-    obtenerIdPaciente();
-  }, [userData, idPaciente, buscandoPaciente]);
+    // Simplemente verificamos que el usuario esté cargado
+    if (userData && userData.idUsuario) {
+      console.log("Usuario cargado - idUsuario:", userData.idUsuario);
+      setIdPaciente(userData.idUsuario); // Ahora guardamos el idUsuario aquí
+      setBuscandoPaciente(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Validar que el usuario esté logueado y sea paciente
   if (!user) {
@@ -79,7 +57,29 @@ const Feedback = () => {
       <div className="feedback-container">
         <div className="feedback-card loading-card">
           <i className="fas fa-spinner fa-spin"></i>
-          <p>Cargando...</p>
+          <p>Cargando datos del paciente...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!idPaciente && userData && userData.NombreRol === "Paciente") {
+    return (
+      <div className="feedback-container">
+        <div className="feedback-card error-card">
+          <i className="fas fa-exclamation-triangle"></i>
+          <h3>Error al cargar datos</h3>
+          <p>No se pudo obtener la información del paciente.</p>
+          <p style={{fontSize: '0.9rem', marginTop: '1rem'}}>
+            Usuario ID: {userData.idUsuario}<br/>
+            Rol: {userData.NombreRol}
+          </p>
+          <button 
+            onClick={() => window.location.reload()} 
+            style={{marginTop: '1rem', padding: '0.5rem 1rem', cursor: 'pointer'}}
+          >
+            Recargar página
+          </button>
         </div>
       </div>
     );
@@ -98,19 +98,41 @@ const Feedback = () => {
       return alert("Por favor, escribe tu comentario");
     }
 
+    if (!idPaciente) {
+      return alert("No se pudo identificar al paciente. Por favor, recarga la página.");
+    }
+
     // Enviar comentario
     try {
-      await crearComentario({
+      setLoading(true);
+      const payload = {
         CalificacionComentario: calificacion,
         Comentario: comentario.trim(),
-        idPaciente: idPaciente,
-      });
+        idUsuario: idPaciente, // Enviamos idUsuario, el backend buscará el idPaciente
+      };
+      
+      console.log("Enviando comentario:", payload);
+      
+      const response = await axios.post(`${BASE_URL}api/comentarios/v1/`, payload);
+      
+      console.log("Respuesta exitosa:", response.data);
+      
       setEnviado(true);
       setCalificacion(0);
       setComentario("");
     } catch (error) {
-      console.error("Error al crear comentario:", error);
-      alert(error.response?.data?.message || "Error al enviar el comentario");
+      console.error("Error completo:", error);
+      console.error("Respuesta del servidor:", error.response?.data);
+      console.error("Status:", error.response?.status);
+      
+      const errorMsg = error.response?.data?.message 
+        || error.response?.data?.error 
+        || error.message 
+        || "Error al enviar el comentario";
+      
+      alert(errorMsg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,7 +183,7 @@ const Feedback = () => {
                     onMouseEnter={() => setCalificacionHover(star)}
                     onMouseLeave={() => setCalificacionHover(0)}
                   >
-                    <i className={`fas fa-star`}></i>
+                    <i className={star <= (calificacionHover || calificacion) ? "fas fa-star" : "far fa-star"}></i>
                   </button>
                 ))}
               </div>
