@@ -32,7 +32,7 @@ const Feedback = () => {
     return (
       <div className="feedback-container">
         <div className="feedback-card error-card">
-          <i className="fas fa-exclamation-circle"></i>
+          <div className="icon-emoji">⚠️</div>
           <h3>Acceso restringido</h3>
           <p>Por favor, inicia sesión para dejar tu comentario.</p>
         </div>
@@ -44,7 +44,7 @@ const Feedback = () => {
     return (
       <div className="feedback-container">
         <div className="feedback-card error-card">
-          <i className="fas fa-exclamation-circle"></i>
+          <div className="icon-emoji">⚠️</div>
           <h3>Acceso restringido</h3>
           <p>Solo los pacientes pueden dejar comentarios.</p>
         </div>
@@ -56,7 +56,7 @@ const Feedback = () => {
     return (
       <div className="feedback-container">
         <div className="feedback-card loading-card">
-          <i className="fas fa-spinner fa-spin"></i>
+          <div className="icon-emoji">⏳</div>
           <p>Cargando datos del paciente...</p>
         </div>
       </div>
@@ -67,7 +67,7 @@ const Feedback = () => {
     return (
       <div className="feedback-container">
         <div className="feedback-card error-card">
-          <i className="fas fa-exclamation-triangle"></i>
+          <div className="icon-emoji">⚠️</div>
           <h3>Error al cargar datos</h3>
           <p>No se pudo obtener la información del paciente.</p>
           <p style={{fontSize: '0.9rem', marginTop: '1rem'}}>
@@ -157,7 +157,7 @@ const Feedback = () => {
       {!enviado ? (
         <div className="feedback-card">
           <div className="feedback-header">
-            <i className="fas fa-comments"></i>
+            <div className="icon-emoji">💬</div>
             <h1>¿Cómo fue tu experiencia?</h1>
             <p>Tu opinión es muy importante para nosotros</p>
           </div>
@@ -183,7 +183,7 @@ const Feedback = () => {
                     onMouseEnter={() => setCalificacionHover(star)}
                     onMouseLeave={() => setCalificacionHover(0)}
                   >
-                    <i className={star <= (calificacionHover || calificacion) ? "fas fa-star" : "far fa-star"}></i>
+                    {star <= (calificacionHover || calificacion) ? "★" : "☆"}
                   </button>
                 ))}
               </div>
@@ -225,20 +225,18 @@ const Feedback = () => {
             >
               {loading ? (
                 <>
-                  <i className="fas fa-spinner fa-spin"></i>
-                  Enviando...
+                  ⏳ Enviando...
                 </>
               ) : (
                 <>
-                  <i className="fas fa-paper-plane"></i>
-                  Enviar Comentario
+                  📤 Enviar Comentario
                 </>
               )}
             </button>
           </form>
 
           <div className="feedback-footer">
-            <i className="fas fa-shield-alt"></i>
+            <div className="icon-emoji">🔒</div>
             <p>
               Tu privacidad es importante. Tu comentario será moderado antes de
               publicarse.
@@ -249,7 +247,7 @@ const Feedback = () => {
         // Mensaje de éxito después de enviar
         <div className="feedback-card success-card">
           <div className="success-icon">
-            <i className="fas fa-check-circle"></i>
+            <div className="icon-emoji">✅</div>
           </div>
           <h2>¡Gracias por tu comentario!</h2>
           <p>Tu opinión nos ayuda a mejorar cada día.</p>
@@ -263,8 +261,7 @@ const Feedback = () => {
               className="btn-nuevo-comentario"
               onClick={resetearFormulario}
             >
-              <i className="fas fa-plus-circle"></i>
-              Dejar otro comentario
+              ➕ Dejar otro comentario
             </button>
           </div>
         </div>
