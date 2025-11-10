@@ -86,3 +86,12 @@ export const solicitarTurnoWeb = async (formData) => {
   });
   return response.data;
 };
+
+/**
+ * Obtener detalles completos de un turno
+ * @param {number} idTurno - ID del turno
+ */
+export const obtenerDetallesTurno = async (idTurno) => {
+  const response = await api.get(`/api/turnos/v1/detalles/${idTurno}`);
+  return response.data;
+};
