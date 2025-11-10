@@ -53,7 +53,7 @@ const Login = () => {
       showSuccess('¡Login exitoso!', `Bienvenido ${response.usuario?.NombrePaciente || response.usuario?.MailUsuario || 'a Fissio'}`);
       
       // Navegar a home
-      navigate('/');
+      navigate('/paciente');
       
     } catch (error) {
       console.error('Error en login:', error);
