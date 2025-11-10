@@ -31,6 +31,13 @@ const Login = () => {
     setIsLoading(true);
     setError('');
 
+    // Validaciones del frontend
+    if (!formData.email || !formData.password) {
+      showError('Campos requeridos', 'Por favor ingrese email y contraseña');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await loginUser({
         MailUsuario: formData.email,
@@ -39,18 +46,52 @@ const Login = () => {
 
       console.log('Login exitoso - Respuesta completa:', response);
       
-      // Guardar en Zustand
-      login(response.user || response);
+      // Guardar en Zustand (usar la estructura correcta del backend)
+      login(response);
       
       // Mostrar mensaje de éxito
-      showSuccess('¡Login exitoso!', 'Bienvenido a Fissio');
+      showSuccess('¡Login exitoso!', `Bienvenido ${response.usuario?.NombrePaciente || response.usuario?.MailUsuario || 'a Fissio'}`);
       
       // Navegar a home
       navigate('/');
       
     } catch (error) {
       console.error('Error en login:', error);
-      showError('Error al iniciar sesión', error.response?.data?.message || 'Credenciales incorrectas');
+      
+      // Manejo específico de errores según código de estado
+      const status = error.response?.status;
+      const message = error.response?.data?.message;
+      
+      switch (status) {
+        case 400:
+          // Mail y contraseña son requeridos
+          showError('Campos requeridos', message || 'Mail y contraseña son requeridos');
+          break;
+          
+        case 401:
+          // Credenciales inválidas
+          showError('Credenciales incorrectas', 'Email o contraseña incorrectos. Verifique sus datos e intente nuevamente.');
+          break;
+          
+        case 403:
+          // Usuario inactivo
+          showError('Usuario inactivo', 'Su cuenta ha sido desactivada. Contacte al administrador para más información.');
+          break;
+          
+        case 500:
+          // Error del servidor
+          showError('Error del servidor', 'Ocurrió un problema en el servidor. Intente nuevamente más tarde.');
+          break;
+          
+        default:
+          // Error genérico o sin conexión
+          if (error.code === 'ERR_NETWORK') {
+            showError('Error de conexión', 'No se pudo conectar al servidor. Verifique su conexión a internet.');
+          } else {
+            showError('Error inesperado', message || 'Ocurrió un error inesperado. Intente nuevamente.');
+          }
+          break;
+      }
     } finally {
       setIsLoading(false);
     }
@@ -78,35 +119,35 @@ const Login = () => {
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">
                   <span className="material-symbols-outlined me-2">email</span>
-                  Correo Electrónico
+                  Correo Electrónico *
                 </label>
                 <input
                   type="email"
-                  className="form-control"
+                  className={`form-control ${!formData.email && error ? 'is-invalid' : formData.email ? 'is-valid' : ''}`}
                   id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  placeholder="ejemplo@correo.com"
                   required
-                  placeholder="tu@email.com"
                 />
               </div>
 
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
                   <span className="material-symbols-outlined me-2">lock</span>
-                  Contraseña
+                  Contraseña *
                 </label>
                 <div className="input-group">
                   <input
                     type={showPassword ? "text" : "password"}
-                    className="form-control"
+                    className={`form-control ${!formData.password && error ? 'is-invalid' : formData.password ? 'is-valid' : ''}`}
                     id="password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    placeholder="Ingrese su contraseña"
                     required
-                    placeholder="Tu contraseña"
                   />
                   <button
                     type="button"
