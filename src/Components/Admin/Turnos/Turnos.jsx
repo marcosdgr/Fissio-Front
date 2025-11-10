@@ -4,6 +4,7 @@ import { showError, showSuccess, showConfirm } from '../../../Utils/sweetAlerts'
 import AsignarRecursosModal from './AsignarRecursosModal';
 import FinalizarTurnoModal from './FinalizarTurnoModal';
 import SolicitarTurnoModal from './SolicitarTurnoModal';
+import DetallesTurnoModal from './DetallesTurnoModal';
 
 const Turnos = () => {
   const [turnos, setTurnos] = useState({
@@ -31,6 +32,10 @@ const Turnos = () => {
   });
   const [modalSolicitarData, setModalSolicitarData] = useState({
     isOpen: false
+  });
+  const [modalDetallesData, setModalDetallesData] = useState({
+    isOpen: false,
+    turno: null
   });
 
   // Cargar turnos del día
@@ -130,6 +135,22 @@ const Turnos = () => {
   const cerrarModalSolicitar = () => {
     setModalSolicitarData({
       isOpen: false
+    });
+  };
+
+  // Abrir modal para ver detalles del turno
+  const abrirModalDetalles = (turno) => {
+    setModalDetallesData({
+      isOpen: true,
+      turno: turno
+    });
+  };
+
+  // Cerrar modal de detalles
+  const cerrarModalDetalles = () => {
+    setModalDetallesData({
+      isOpen: false,
+      turno: null
     });
   };
 
@@ -273,6 +294,7 @@ const Turnos = () => {
                       turno={turno} 
                       onAsignarRecursos={abrirModalAsignar}
                       onCancelarTurno={handleCancelarTurno}
+                      onVerDetalles={abrirModalDetalles}
                       esSolicitado={true}
                     />
                   ))
@@ -300,6 +322,7 @@ const Turnos = () => {
                       turno={turno} 
                       onFinalizarTurno={abrirModalFinalizar}
                       onCancelarTurno={handleCancelarTurno}
+                      onVerDetalles={abrirModalDetalles}
                       esEnCurso={true}
                     />
                   ))
@@ -322,7 +345,11 @@ const Turnos = () => {
                   <p className="text-muted p-3 mb-0">No hay turnos finalizados</p>
                 ) : (
                   turnos.finalizados.map((turno) => (
-                    <TurnoCard key={turno.idTurno} turno={turno} />
+                    <TurnoCard 
+                      key={turno.idTurno} 
+                      turno={turno} 
+                      onVerDetalles={abrirModalDetalles}
+                    />
                   ))
                 )}
               </div>
@@ -343,7 +370,11 @@ const Turnos = () => {
                   <p className="text-muted p-3 mb-0">No hay turnos cancelados</p>
                 ) : (
                   turnos.cancelados.map((turno) => (
-                    <TurnoCard key={turno.idTurno} turno={turno} />
+                    <TurnoCard 
+                      key={turno.idTurno} 
+                      turno={turno} 
+                      onVerDetalles={abrirModalDetalles}
+                    />
                   ))
                 )}
               </div>
@@ -374,12 +405,19 @@ const Turnos = () => {
         onClose={cerrarModalSolicitar}
         onSolicitudExitosa={onSolicitudExitosa}
       />
+
+      {/* Modal para ver detalles del turno */}
+      <DetallesTurnoModal
+        isOpen={modalDetallesData.isOpen}
+        onClose={cerrarModalDetalles}
+        turno={modalDetallesData.turno}
+      />
     </div>
   );
 };
 
 // Componente para mostrar cada turno
-const TurnoCard = ({ turno, onAsignarRecursos, onFinalizarTurno, onCancelarTurno, esSolicitado = false, esEnCurso = false }) => {
+const TurnoCard = ({ turno, onAsignarRecursos, onFinalizarTurno, onCancelarTurno, onVerDetalles, esSolicitado = false, esEnCurso = false }) => {
   return (
     <div className="border-bottom p-3">
       <div className="d-flex justify-content-between align-items-start mb-2">
@@ -476,6 +514,19 @@ const TurnoCard = ({ turno, onAsignarRecursos, onFinalizarTurno, onCancelarTurno
           </div>
         </div>
       )}
+
+      {/* Botón Ver Detalles - disponible para todos los turnos */}
+      <div className="mt-2">
+        <button
+          className="btn btn-sm btn-outline-primary w-100"
+          onClick={() => onVerDetalles(turno)}
+        >
+          <span className="material-symbols-outlined me-1" style={{ fontSize: '14px' }}>
+            visibility
+          </span>
+          Ver Detalles
+        </button>
+      </div>
     </div>
   );
 };
