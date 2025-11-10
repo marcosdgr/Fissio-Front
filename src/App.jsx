@@ -9,6 +9,7 @@ import RegisterPage from "./Pages/RegisterPage"
 import FAQsPublicPage from "./Pages/FAQsPublicPage";
 import LoginPage from "./Pages/LoginPage";
 import AsistenciaEmpleado from "./Components/Asistencia/AsistenciaEmpleado.jsx";
+import Feedback from "./Components/FeedBack/Feedback.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +25,7 @@ function App() {
             <Route path="/mensajes" element={<MensajeriaInterna />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/asistencia" element={<AsistenciaEmpleado />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route path="*" element={<div>404 - Página no encontrada</div>} />
           </Routes>
         </main>
