@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL } from "../Api/api.js";
+import { BASE_URL } from "../../Api/api.js";
 
 // Configuración de la instancia de axios
 const api = axios.create({
@@ -81,6 +81,23 @@ export const actualizarPaciente = async (id, pacienteData) => {
         throw error;
     }
 }
-//Obtener turnos por paciente 
-
+//Obtener turnos por paciente a travez de su id
+export const obtenerTurnosPorPaciente = async (id) => {
+    try {
+        const response = await api.get(`/api/pacientes/v1/${id}/turnos`);
+        return response.data;
+    } catch (error) {   
+        console.error(`Error al obtener turnos para paciente con ID ${id}:`, error);
+        throw error;
+    }
+}
 //Agendar nuevo turno 
+export const agendarNuevoTurno = async (turnoData) => {
+    try {
+        const response = await api.post(`/api/turnos/v1/solicitar`, turnoData);
+        return response.data;
+    } catch (error) {   
+        console.error(`Error al agendar nuevo turno:`, error);
+        throw error;
+    } 
+}
