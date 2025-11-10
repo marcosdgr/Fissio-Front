@@ -13,8 +13,8 @@ const Tratamientos = () => {
     obtenerTratamientos,
   } = useCustomTratamientos();
 
-  const [openModal, setOpenModal] = useState(false);
-  const [openFormModal, setOpenFormModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);        // Modal VER
+  const [openFormModal, setOpenFormModal] = useState(false); // Modal FORM
   const [tratamientoSeleccionado, setTratamientoSeleccionado] = useState(null);
 
   const resultado = (tratamientos.tratamientos || [])
@@ -32,7 +32,7 @@ const Tratamientos = () => {
 
   const abrirModalAgregar = () => {
     setTratamientoSeleccionado(null);
-    setOpenFormModal(true); // ESTO ABRE EL MODAL
+    setOpenFormModal(true);
   };
 
   const abrirModalEditar = (tratamiento) => {
@@ -42,6 +42,11 @@ const Tratamientos = () => {
 
   const cerrarModalForm = () => {
     setOpenFormModal(false);
+    setTratamientoSeleccionado(null);
+  };
+
+  const cerrarModalVer = () => {
+    setOpenModal(false);
     setTratamientoSeleccionado(null);
   };
 
@@ -94,10 +99,9 @@ const Tratamientos = () => {
             <div className="card shadow-sm border-0">
               <div className="card-header bg-white d-flex justify-content-between align-items-center">
                 <h5 className="card-title mb-0">Tratamientos</h5>
-                {/* BOTÓN CORREGIDO */}
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-agregar"
                   onClick={abrirModalAgregar}
                 >
                   Agregar nuevo Tratamiento
@@ -165,29 +169,64 @@ const Tratamientos = () => {
         </div>
       </div>
 
-      {/* MODAL DE FORMULARIO */}
-      {openFormModal && (
-        <div className="custom-modal">
-          <div className="modal-dialog modal-lg">
+      {/* MODAL VER TRATAMIENTO */}
+      {openModal && tratamientoSeleccionado && (
+        <div className="custom-modal fade-in">
+          <div className="modal-dialog modal-lg modal-dialog-scrollable">
             <div className="modal-content">
-              <div className="modal-header">
-                <h1 className="modal-title fs-5">
+              <div className="modal-header bg-primary text-white position-relative">
+                <h5 className="modal-title fw-bold">{tratamientoSeleccionado.NombreTratamiento}</h5>
+                <button
+                  type="button"
+                  className="btn-close-modal-x"
+                  onClick={cerrarModalVer}
+                  aria-label="Cerrar"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <p><strong>Descripción:</strong> {tratamientoSeleccionado.DescripcionTratamiento}</p>
+                <p><strong>Duración:</strong> {tratamientoSeleccionado.DuracionTratamiento} minutos</p>
+                <p><strong>Informe:</strong> {tratamientoSeleccionado.InformeTratamiento || "Sin informe"}</p>
+                <p><strong>Estado:</strong> 
+                  <span className={`badge ${tratamientoSeleccionado.IsActive ? "bg-success" : "bg-danger"}`}>
+                    {tratamientoSeleccionado.IsActive ? "ACTIVO" : "INACTIVO"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL FORMULARIO */}
+      {openFormModal && (
+        <div className="custom-modal fade-in">
+          <div className="modal-dialog modal-xl modal-dialog-scrollable">
+            <div className="modal-content">
+              <div className="modal-header bg-primary text-white position-relative">
+                <h1 className="modal-title fs-5 fw-bold">
                   {tratamientoSeleccionado ? "Editar Tratamiento" : "Agregar Nuevo Tratamiento"}
                 </h1>
                 <button
                   type="button"
-                  className="btn-close"
+                  className="btn-close-modal-x"
                   onClick={cerrarModalForm}
-                  aria-label="Close"
-                ></button>
+                  aria-label="Cerrar formulario"
+                  title="Cerrar sin guardar"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
               </div>
-              <div className="modal-body">
+              <div className="modal-body p-4">
                 <FormTratamientos
                   tratamiento={tratamientoSeleccionado}
                   onSuccess={() => {
                     refrescarLista();
                     cerrarModalForm();
                   }}
+                  onClose={cerrarModalForm}
                 />
               </div>
             </div>
@@ -195,33 +234,8 @@ const Tratamientos = () => {
         </div>
       )}
 
-      {/* MODAL DE VISTA */}
-      {openModal && (
-        <div className="custom-modal">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">{tratamientoSeleccionado?.NombreTratamiento}</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setOpenModal(false)}
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p><strong>Descripción:</strong> {tratamientoSeleccionado?.DescripcionTratamiento}</p>
-                <p><strong>Duración:</strong> {tratamientoSeleccionado?.DuracionTratamiento} minutos</p>
-                <p><strong>Informe:</strong> {tratamientoSeleccionado?.InformeTratamiento || "Sin informe"}</p>
-                <p><strong>Estado:</strong> {tratamientoSeleccionado?.IsActive ? "ACTIVO" : "INACTIVO"}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* BACKDROP */}
-      {(openFormModal || openModal) && <div className="modal-backdrop-custom"></div>}
+      {(openFormModal || openModal) && <div className="modal-backdrop-custom fade-in"></div>}
     </>
   );
 };
