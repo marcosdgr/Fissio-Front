@@ -1,0 +1,409 @@
+/* Variables de color Fissio */
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+  --fissio-bg-light: #f8f9fa;
+  --fissio-white: #ffffff;
+  --fissio-success: #198754;
+  --fissio-danger: #dc3545;
+  --fissio-warning: #ffc107;
+}
+
+/* Contenedor principal del perfil */
+.perfil-paciente-container {
+  background-color: var(--fissio-bg-light);
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/* Mensaje de bienvenida */
+.welcome-section {
+  background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  border-radius: 15px;
+  color: white;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.welcome-avatar {
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-name {
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+.welcome-date {
+  opacity: 0.8;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+/* Cards de navegación */
+.perfil-nav-cards {
+  gap: 1.5rem;
+}
+
+.perfil-nav-card {
+  background: var(--fissio-white);
+  border: none;
+  border-radius: 15px;
+  padding: 2rem 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.perfil-nav-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(4, 112, 187, 0.05), transparent);
+  transition: left 0.6s ease;
+}
+
+.perfil-nav-card:hover::before {
+  left: 100%;
+}
+
+.perfil-nav-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(4, 112, 187, 0.15);
+  border-left: 4px solid var(--fissio-primary);
+}
+
+.card-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 20px rgba(4, 112, 187, 0.3);
+  transition: all 0.3s ease;
+}
+
+.perfil-nav-card:hover .card-icon {
+  transform: scale(1.1) rotateY(180deg);
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.4);
+}
+
+.card-icon .material-symbols-outlined {
+  color: white;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--fissio-primary);
+  margin-bottom: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.perfil-nav-card:hover .card-title {
+  color: var(--fissio-secondary);
+}
+
+.card-description {
+  color: var(--fissio-gray);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.card-stats {
+  background: var(--fissio-bg-light);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stats-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--fissio-primary);
+}
+
+.stats-label {
+  font-size: 0.8rem;
+  color: var(--fissio-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Estados de carga */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--fissio-gray);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--fissio-bg-light);
+  border-top: 4px solid var(--fissio-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Estados de error */
+.error-container {
+  background: var(--fissio-white);
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.error-icon {
+  font-size: 4rem;
+  color: var(--fissio-danger);
+  margin-bottom: 1rem;
+}
+
+.error-title {
+  color: var(--fissio-danger);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.error-message {
+  color: var(--fissio-gray);
+  margin-bottom: 1.5rem;
+}
+
+.btn-retry {
+  background-color: var(--fissio-primary);
+  border-color: var(--fissio-primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-retry:hover {
+  background-color: #035a99;
+  border-color: #035a99;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .perfil-nav-cards {
+    gap: 1rem;
+  }
+  
+  .perfil-nav-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .card-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .card-icon .material-symbols-outlined {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .welcome-section {
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .welcome-name {
+    font-size: 1.8rem;
+  }
+  
+  .welcome-subtitle {
+    font-size: 1rem;
+  }
+  
+  .welcome-avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .perfil-paciente-container {
+    padding: 0.5rem;
+  }
+  
+  .welcome-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .welcome-name {
+    font-size: 1.5rem;
+  }
+  
+  .welcome-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .perfil-nav-cards {
+    gap: 0.75rem;
+  }
+  
+  .perfil-nav-card {
+    padding: 1.5rem 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .card-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+  }
+  
+  .card-icon .material-symbols-outlined {
+    font-size: 1.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+  
+  .card-description {
+    font-size: 0.9rem;
+  }
+  
+  .stats-number {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .welcome-section {
+    padding: 0.75rem;
+  }
+  
+  .welcome-name {
+    font-size: 1.3rem;
+  }
+  
+  .welcome-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .perfil-nav-card {
+    padding: 1rem;
+  }
+  
+  .card-stats {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+}
+
+/* Animaciones adicionales */
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.8s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efectos de pulso para elementos interactivos */
+.pulse-effect {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}

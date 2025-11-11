@@ -73,3 +73,25 @@ export const cancelarTurno = async (idTurno) => {
   const response = await api.put(`/api/turnos/v1/cancelar/${idTurno}`);
   return response.data;
 };
+
+/**
+ * Solicitar turno desde web (con archivo)
+ * @param {FormData} formData - Datos del turno incluyendo archivo opcional
+ */
+export const solicitarTurnoWeb = async (formData) => {
+  const response = await api.post("/api/turnos/v1/solicitar", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
+/**
+ * Obtener detalles completos de un turno
+ * @param {number} idTurno - ID del turno
+ */
+export const obtenerDetallesTurno = async (idTurno) => {
+  const response = await api.get(`/api/turnos/v1/detalles/${idTurno}`);
+  return response.data;
+};
