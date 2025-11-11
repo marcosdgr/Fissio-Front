@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import {
   asignarRecursos,
   getKinesiologosDisponibles,
+  obtenerServicios,
+  crearTurnoServicio
 } from "../../../Custom/CustomTurnos";
 import { showSuccess, showError } from "../../../Utils/sweetAlerts";
 
@@ -10,10 +12,12 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
     HorarioInicioTurno: "",
     HorarioFinTurno: "",
     idEmpleado: "",
+    idServicio: "",
     ObservacionesSecretaria: "",
   });
 
   const [kinesiologos, setKinesiologos] = useState([]);
+  const [servicios, setServicios] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
@@ -30,13 +34,19 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
           fechaTurno = new Date(turno.FechaRequeridaTurno).toISOString().split("T")[0];
         }
 
-        const kinesiologosRes = await getKinesiologosDisponibles(fechaTurno);
+        // Cargar kinesiologos y servicios en paralelo
+        const [kinesiologosRes, serviciosRes] = await Promise.all([
+          getKinesiologosDisponibles(fechaTurno),
+          obtenerServicios()
+        ]);
+        
         setKinesiologos(kinesiologosRes.kinesiologos || kinesiologosRes);
+        setServicios(serviciosRes.servicios || serviciosRes);
       } catch (error) {
-        console.error("Error al cargar kinesiologos:", error);
+        console.error("Error al cargar datos:", error);
         showError(
           "Error",
-          "No se pudieron cargar los kinesiologos: " +
+          "No se pudieron cargar los datos: " +
             (error.response?.data?.message || error.message)
         );
       } finally {
@@ -105,14 +115,28 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
       if (!idTurno || isNaN(idTurno)) {
         throw new Error('No se pudo obtener un ID de turno válido');
       }
+
+      // Validar que se haya seleccionado un servicio
+      if (!formData.idServicio) {
+        throw new Error('Debe seleccionar un servicio');
+      }
       
-      const response = await asignarRecursos(idTurno, formData);
-      showSuccess("¡Kinesiólogo asignado!", response.message);
+      // 1. Asignar recursos (kinesiólogo)
+      await asignarRecursos(idTurno, formData);
+      
+      // 2. Crear turno-servicio
+      await crearTurnoServicio({
+        idTurno: idTurno,
+        idServicio: parseInt(formData.idServicio),
+        Cantidad: 1
+      });
+
+      showSuccess("¡Recursos asignados!", "Kinesiólogo y servicio asignados correctamente");
       onSuccess();
       onClose();
     } catch (error) {
-      console.error("Error al asignar kinesiólogo:", error);
-      const errorMessage = error.response?.data?.message || "Error al asignar kinesiólogo";
+      console.error("Error al asignar recursos:", error);
+      const errorMessage = error.response?.data?.message || error.message || "Error al asignar recursos";
       showError("Error", errorMessage);
     } finally {
       setIsLoading(false);
@@ -131,7 +155,7 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
           <div className="modal-header">
             <h5 className="modal-title">
               <span className="material-symbols-outlined me-2">person_add</span>
-              Asignar Kinesiólogo
+              Asignar Recursos y Servicio
             </h5>
             <button
               type="button"
@@ -259,6 +283,36 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
                         </div>
                       )}
                     </div>
+
+                    {/* Dropdown de Servicios */}
+                    <div className="mb-3">
+                      <label htmlFor="idServicio" className="form-label">
+                        <span className="material-symbols-outlined me-1">
+                          medical_services
+                        </span>
+                        Servicio *
+                      </label>
+                      <select
+                        className="form-select"
+                        id="idServicio"
+                        name="idServicio"
+                        value={formData.idServicio}
+                        onChange={handleChange}
+                        required
+                      >
+                        <option value="">
+                          {servicios.length === 0
+                            ? "No hay servicios disponibles"
+                            : "Seleccionar servicio"}
+                        </option>
+                        {servicios.map((servicio) => (
+                          <option key={servicio.idServicio} value={servicio.idServicio}>
+                            {servicio.NombreServicio}
+                            {servicio.DescripcionServicio && ` - ${servicio.DescripcionServicio}`}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
 
@@ -309,7 +363,7 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
                         <span className="material-symbols-outlined me-2">
                           person_add
                         </span>
-                        Asignar Kinesiólogo
+                        Asignar Recursos
                       </>
                     )}
                   </button>

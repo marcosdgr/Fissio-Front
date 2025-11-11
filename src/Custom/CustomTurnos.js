@@ -95,3 +95,23 @@ export const obtenerDetallesTurno = async (idTurno) => {
   const response = await api.get(`/api/turnos/v1/detalles/${idTurno}`);
   return response.data;
 };
+
+/**
+ * Obtener todos los servicios activos
+ */
+export const obtenerServicios = async () => {
+  const response = await api.get("/api/servicios/v1/servicios");
+  return response.data;
+};
+
+/**
+ * Crear relación turno-servicio
+ * @param {Object} turnoServicioData - Datos del turno-servicio
+ * @param {number} turnoServicioData.idTurno - ID del turno
+ * @param {number} turnoServicioData.idServicio - ID del servicio
+ * @param {number} turnoServicioData.Cantidad - Cantidad del servicio (opcional, default: 1)
+ */
+export const crearTurnoServicio = async (turnoServicioData) => {
+  const response = await api.post("/api/turnos-servicios/v1/crear", turnoServicioData);
+  return response.data;
+};
