@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { obtenerDetallesTurno } from '../../../Custom/CustomTurnos';
 import Swal from 'sweetalert2';
 
@@ -6,40 +6,42 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
   const [detalles, setDetalles] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const cargarDetalles = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      // Manejar diferentes formatos de ID del turno
-      const idTurno = turno.IdTurno || turno.idTurno;
-      console.log('Cargando detalles para turno ID:', idTurno);
-      
-      const response = await obtenerDetallesTurno(idTurno);
-      console.log('Respuesta del servidor:', response);
-      setDetalles(response.turno);
-    } catch (error) {
-      console.error('Error al cargar detalles:', error);
-      const errorMessage = error.response?.data?.message || 
-                          error.response?.data?.error || 
-                          error.message || 
-                          'No se pudieron cargar los detalles del turno';
-      
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al cargar detalles',
-        text: errorMessage,
-        confirmButtonColor: '#0470BB',
-        footer: error.response?.status ? `Código de error: ${error.response.status}` : null
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [turno]);
-
   useEffect(() => {
-    if (isOpen && (turno?.idTurno || turno?.IdTurno)) {
-      cargarDetalles();
+    if (!isOpen || !turno || (!turno.idTurno && !turno.IdTurno)) {
+      return;
     }
-  }, [isOpen, cargarDetalles, turno?.idTurno, turno?.IdTurno]);
+
+    const cargarDetalles = async () => {
+      setIsLoading(true);
+      try {
+        // Manejar diferentes formatos de ID del turno
+        const idTurno = turno.IdTurno || turno.idTurno;
+        console.log('Cargando detalles para turno ID:', idTurno);
+        
+        const response = await obtenerDetallesTurno(idTurno);
+        console.log('Respuesta del servidor:', response);
+        setDetalles(response.turno);
+      } catch (error) {
+        console.error('Error al cargar detalles:', error);
+        const errorMessage = error.response?.data?.message || 
+                            error.response?.data?.error || 
+                            error.message || 
+                            'No se pudieron cargar los detalles del turno';
+        
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al cargar detalles',
+          text: errorMessage,
+          confirmButtonColor: '#0470BB',
+          footer: error.response?.status ? `Código de error: ${error.response.status}` : null
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    cargarDetalles();
+  }, [isOpen, turno]);
 
   const formatearFecha = (fecha) => {
     if (!fecha) return 'No especificada';
