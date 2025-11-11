@@ -61,8 +61,13 @@ export const getKinesiologosDisponibles = async (fecha) => {
  * @param {object} finalizacionData - Datos para finalizar el turno
  */
 export const finalizarTurno = async (idTurno, finalizacionData) => {
-  const response = await api.put(`/api/turnos/v1/finalizar/${idTurno}`, finalizacionData);
-  return response.data;
+  try {
+    const response = await api.put(`/api/turnos/v1/finalizar/${idTurno}`, finalizacionData);
+    return response.data;
+  } catch (error) {
+    console.error('Error en finalizarTurno:', error.response?.data || error.message);
+    throw error;
+  }
 };
 
 /**
@@ -113,5 +118,25 @@ export const obtenerServicios = async () => {
  */
 export const crearTurnoServicio = async (turnoServicioData) => {
   const response = await api.post("/api/turnos-servicios/v1/crear", turnoServicioData);
+  return response.data;
+};
+
+/**
+ * Obtener todos los tratamientos activos
+ */
+export const obtenerTratamientos = async () => {
+  const response = await api.get("/api/tratamientos/v1");
+  return response.data;
+};
+
+/**
+ * Asignar tratamiento a un turno
+ * @param {Object} turnoTratamientoData - Datos del turno-tratamiento
+ * @param {number} turnoTratamientoData.idTurno - ID del turno
+ * @param {number} turnoTratamientoData.idTratamiento - ID del tratamiento
+ * @param {string} turnoTratamientoData.observaciones - Observaciones del tratamiento (opcional)
+ */
+export const asignarTratamientoATurno = async (turnoTratamientoData) => {
+  const response = await api.post("/api/turno-tratamientos/v1/asignar", turnoTratamientoData);
   return response.data;
 };

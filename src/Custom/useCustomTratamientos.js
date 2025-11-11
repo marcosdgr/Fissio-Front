@@ -15,7 +15,8 @@ const useCustomTratamientos = () => {
       setError(null);
       const res = await axios.get(`${BASE_URL}api/tratamientos/v1`);
       setTratamientos({ tratamientos: res.data || [] }); // Ajustado por si es array directo
-    } catch (err) {
+    } catch (error) {
+      console.error("Error al cargar tratamientos:", error);
       setError("No se pudieron cargar los tratamientos");
       setTratamientos({ tratamientos: [] });
       toast.error("Error al cargar tratamientos");
