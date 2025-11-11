@@ -6,8 +6,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../../Api/api';
 import "../../../Css/Faqs/FormFaqs.css";
 
-
-const FormFaqs = ({ faq, categorias, onSuccess }) => {
+const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
   const { agregarFaq, editarFaq } = useCustomFaqs();
 
   const [nuevaFaq, setNuevaFaq] = useState({
@@ -96,74 +95,82 @@ const FormFaqs = ({ faq, categorias, onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-faqs">
-      <div className="mb-3">
-        <label className="form-label">Pregunta</label>
-        <input
-          name="Pregunta"
-          value={nuevaFaq.Pregunta}
-          onChange={handleChange}
-          className="form-control"
-          required
-          disabled={procesando}
-        />
-      </div>
+    <div className="form-faqs-container">
+      {/* TÍTULO */}
+      <h4 className="form-title mb-4 text-center">
+        {faq ? 'Editar FAQ' : 'Nueva FAQ'}
+      </h4>
 
-      <div className="mb-3">
-        <label className="form-label">Respuesta</label>
-        <textarea
-          name="Respuesta"
-          value={nuevaFaq.Respuesta}
-          onChange={handleChange}
-          className="form-control"
-          rows="5"
-          required
-          disabled={procesando}
-        />
-      </div>
+      <form onSubmit={handleSubmit} className="form-faqs">
+        <div className="mb-3">
+          <label className="form-label fw-bold">Pregunta</label>
+          <input
+            name="Pregunta"
+            value={nuevaFaq.Pregunta}
+            onChange={handleChange}
+            className="form-control"
+            placeholder="Ej: ¿Cuánto dura una sesión?"
+            required
+            disabled={procesando}
+          />
+        </div>
 
-      <div className="mb-3">
-        <label className="form-label">Categoría</label>
-        <select
-          name="idCatFAQ"
-          value={nuevaFaq.idCatFAQ}
-          onChange={handleChange}
-          className="form-select"
-          required
-          disabled={procesando || categorias.length === 0}
-        >
-          <option value="">
-            {categorias.length === 0 ? 'No hay categorías' : 'Seleccione una categoría'}
-          </option>
-          {categorias.map(cat => (
-            <option key={cat.idCatFAQ} value={cat.idCatFAQ}>
-              {cat.NombreCategoria}
+        <div className="mb-3">
+          <label className="form-label fw-bold">Respuesta</label>
+          <textarea
+            name="Respuesta"
+            value={nuevaFaq.Respuesta}
+            onChange={handleChange}
+            className="form-control"
+            rows="6"
+            placeholder="Escribe una respuesta clara y completa..."
+            required
+            disabled={procesando}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label fw-bold">Categoría</label>
+          <select
+            name="idCatFAQ"
+            value={nuevaFaq.idCatFAQ}
+            onChange={handleChange}
+            className="form-select"
+            required
+            disabled={procesando || categorias.length === 0}
+          >
+            <option value="">
+              {categorias.length === 0 ? 'No hay categorías' : 'Seleccione una categoría'}
             </option>
-          ))}
-        </select>
+            {categorias.map(cat => (
+              <option key={cat.idCatFAQ} value={cat.idCatFAQ}>
+                {cat.NombreCategoria}
+              </option>
+            ))}
+          </select>
 
-        {categorias.length === 0 || mostrarInputCategoria ? (
           <div className="mt-2">
             {mostrarInputCategoria ? (
               <div className="input-group input-group-sm">
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Nombre de la categoría"
+                  placeholder="Nombre de nueva categoría"
                   value={nuevaCategoria}
                   onChange={(e) => setNuevaCategoria(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && crearCategoriaDesdeModal()}
+                  autoFocus
                 />
                 <button
                   type="button"
-                  className="btn btn-outline-success btn-sm"
+                  className="btn btn-success btn-sm"
                   onClick={crearCategoriaDesdeModal}
                 >
                   Crear
                 </button>
                 <button
                   type="button"
-                  className="btn btn-outline-secondary btn-sm"
+                  className="btn btn-secondary btn-sm"
                   onClick={() => {
                     setMostrarInputCategoria(false);
                     setNuevaCategoria('');
@@ -175,37 +182,33 @@ const FormFaqs = ({ faq, categorias, onSuccess }) => {
             ) : (
               <button
                 type="button"
-                className="btn btn-link p-0 mt-1"
+                className="btn btn-link p-0 text-primary"
                 onClick={() => setMostrarInputCategoria(true)}
               >
                 + Crear nueva categoría
               </button>
             )}
           </div>
-        ) : (
-          <button
-            type="button"
-            className="btn btn-link p-0 mt-1"
-            onClick={() => setMostrarInputCategoria(true)}
-          >
-            + Crear nueva categoría
-          </button>
-        )}
-      </div>
+        </div>
 
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary btn-submit" disabled={procesando || categorias.length === 0}>
-          {procesando ? (
-            <>
-              <span className="spinner-border spinner-border-sm me-2"></span>
-              Procesando...
-            </>
-          ) : (
-            faq ? 'Guardar Cambios' : 'Agregar FAQ'
-          )}
-        </button>
-      </div>
-    </form>
+        <div className="d-grid mt-4">
+          <button
+            type="submit"
+            className="btn btn-primary btn-lg btn-submit"
+            disabled={procesando || categorias.length === 0}
+          >
+            {procesando ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2"></span>
+                Guardando...
+              </>
+            ) : (
+              faq ? 'Guardar Cambios' : 'Agregar FAQ'
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

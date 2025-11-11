@@ -8,6 +8,8 @@ import HomePage from "./Pages/HomePage";
 import RegisterPage from "./Pages/RegisterPage"
 import FAQsPublicPage from "./Pages/FAQsPublicPage";
 import LoginPage from "./Pages/LoginPage";
+import AsistenciaEmpleado from "./Components/Asistencia/AsistenciaEmpleado.jsx";
+import Feedback from "./Components/FeedBack/Feedback.jsx";
 import TurnosWebPage from "./Pages/TurnosWebPage.jsx";
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/faqs" element={<FAQsPublicPage />} />
             <Route path="/mensajes" element={<MensajeriaInterna />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/asistencia" element={<AsistenciaEmpleado />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route path="/turnos" element={<TurnosWebPage />} />
             <Route path="*" element={<div>404 - Página no encontrada</div>} />
 

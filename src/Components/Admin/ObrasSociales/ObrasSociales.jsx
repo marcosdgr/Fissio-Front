@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useCustomObrasSociales from '../../../Custom/ObrasSociales/useCustomObrasSociales'
 import { showConfirm, showSuccess, showError } from '../../../Utils/sweetAlerts'
 import '../../../Css/Admin/ObrasSociales/ObrasSociales.css'
@@ -23,13 +23,19 @@ const ObrasSociales = () => {
   const [form, setForm] = useState({ NombreObraSocial: '', TelefonoObra: '', EmailObra: '', PaginaWebObra: '', EstadoObra: 'Activa' })
   const [errors, setErrors] = useState({})
   const [loadingOp, setLoadingOp] = useState(false)
+  
+  // Estados para reemplazar useMemo
+  const [counts, setCounts] = useState({ total: 0, act: 0, inac: 0 })
+  const [visible, setVisible] = useState([])
 
+  // Cargar obras sociales al montar el componente
   useEffect(() => {
     obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const counts = useMemo(() => {
+  // Calcular contadores cuando cambia obrasSociales
+  useEffect(() => {
     let total = 0, act = 0, inac = 0
     const list = obrasSociales || []
     list.forEach(o => {
@@ -37,10 +43,11 @@ const ObrasSociales = () => {
       if (o.IsActive === 0 || o.IsActive === false) inac += 1
       else act += 1
     })
-    return { total, act, inac }
+    setCounts({ total, act, inac })
   }, [obrasSociales])
 
-  const visible = useMemo(() => {
+  // Calcular obras visibles cuando cambia obrasSociales, query o filter
+  useEffect(() => {
     const q = (query || '').trim().toLowerCase()
     const list = obrasSociales || []
     const base = list.filter(o => {
@@ -50,13 +57,17 @@ const ObrasSociales = () => {
       }
       return true
     })
-    if (!q) return base
-    return base.filter(o => {
+    if (!q) {
+      setVisible(base)
+      return
+    }
+    const filtered = base.filter(o => {
       const nombre = (o.NombreObraSocial ?? o.Nombre ?? o.nombre ?? '').toString().toLowerCase()
       const telefono = (o.TelefonoObra ?? o.telefono ?? '').toString().toLowerCase()
       const email = (o.EmailObra ?? o.email ?? '').toString().toLowerCase()
       return nombre.includes(q) || telefono.includes(q) || email.includes(q)
     })
+    setVisible(filtered)
   }, [obrasSociales, query, filter])
 
   const resetForm = () => {

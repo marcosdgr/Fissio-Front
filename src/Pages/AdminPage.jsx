@@ -43,29 +43,32 @@ const AdminPage = () => {
   ];
 
   return (
-    <div className="d-flex admin-container">
-      {/* Sidebar */}
-      <div className={`text-white admin-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+    <div className="admin-container">
+
+      <div className={`text-white admin-sidebar ${sidebarCollapsed ? 'collapsed' : ''} position-fixed`}>
         {/* Header */}
-        <div className="p-3 sidebar-header">
-          <div className="d-flex align-items-center justify-content-between">
+        <div className="p-3 sidebar-header d-flex align-items-center justify-content-between">
+          <div className="d-flex align-items-center">
             {!sidebarCollapsed && (
-              <h5 className="mb-0 fw-bold text-white">
+              <h5 className="mb-0 fw-bold text-white d-flex align-items-center">
                 <span className="material-symbols-outlined me-2 fs-1">
                   health_and_safety
                 </span>
                 Fissio Admin
               </h5>
             )}
-            <button
-              className="sidebar-toggle"
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            >
-              <span className="material-symbols-outlined">
-                {sidebarCollapsed ? "chevron_right" : "chevron_left"}
-              </span>
-            </button>
           </div>
+
+          <button
+            className="sidebar-toggle btn btn-link text-white p-0 d-flex align-items-center justify-content-center rounded-circle shadow-sm"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            title={sidebarCollapsed ? "Mostrar menú completo" : "Ocultar menú"}
+            aria-label={sidebarCollapsed ? "Expandir sidebar" : "Colapsar sidebar"}
+          >
+            <span className="material-symbols-outlined fs-3 transition-all">
+              {sidebarCollapsed ? "chevron_right" : "chevron_left"}
+            </span>
+          </button>
         </div>
 
         {/* Menú */}
@@ -77,15 +80,12 @@ const AdminPage = () => {
                 ${activeTab === item.id ? "active" : ""}`}
               onClick={() => setActiveTab(item.id)}
             >
-              {/* Ícono siempre visible */}
               <span className="material-symbols-outlined me-3 fs-4">
                 {item.icon}
               </span>
 
-              {/* Texto solo si NO está colapsado */}
               {!sidebarCollapsed && <span className="fw-medium sidebar-text">{item.label}</span>}
 
-              {/* Indicador visual cuando está colapsado y activo */}
               {sidebarCollapsed && activeTab === item.id && (
                 <div className="sidebar-collapsed-indicator" />
               )}

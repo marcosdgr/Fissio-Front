@@ -64,7 +64,12 @@ const FAQs = () => {
     setFaqSeleccionada(null);
   };
 
-  // TOGGLE FAQ (sin eliminar)
+  const cerrarModalVer = () => {
+    setOpenModal(false);
+    setFaqSeleccionada(null);
+  };
+
+  // TOGGLE FAQ
   const handleCambiarEstadoFaq = async (idFAQ) => {
     const faq = listaFaqs.find(f => f.idFAQ === idFAQ);
     const nuevoEstado = faq.IsActive ? 0 : 1;
@@ -96,7 +101,7 @@ const FAQs = () => {
     }
   };
 
-  // TOGGLE CATEGORÍA (sin recargar ni desaparecer)
+  // TOGGLE CATEGORÍA
   const handleCambiarEstadoCat = async (cat) => {
     const nuevoEstado = cat.IsActive ? 0 : 1;
     const accion = cat.IsActive ? "desactivar" : "activar";
@@ -339,41 +344,58 @@ const FAQs = () => {
         </div>
       </div>
 
-      {/* MODAL VER */}
+      {/* MODAL VER FAQ - SOLO UN BOTÓN X LINDO */}
       {openModal && faqSeleccionada && (
-        <div className="custom-modal">
-          <div className="modal-dialog modal-lg">
+        <div className="custom-modal fade-in">
+          <div className="modal-dialog modal-lg modal-dialog-scrollable">
             <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">{faqSeleccionada.Pregunta}</h5>
-                <button type="button" className="btn-close" onClick={() => setOpenModal(false)}></button>
+              <div className="modal-header bg-primary text-white position-relative">
+                <h5 className="modal-title fw-bold">{faqSeleccionada.Pregunta}</h5>
+                <button
+                  type="button"
+                  className="btn-close-modal-x"
+                  onClick={cerrarModalVer}
+                  aria-label="Cerrar"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
               </div>
               <div className="modal-body">
                 <p><strong>Respuesta:</strong></p>
                 <div className="bg-light p-4 rounded mb-3 border">{faqSeleccionada.Respuesta}</div>
                 <p><strong>Categoría:</strong> {faqSeleccionada.NombreCategoria || "Sin categoría"}</p>
                 <p><strong>Fecha:</strong> {new Date(faqSeleccionada.FechaCreacion).toLocaleDateString("es-AR")}</p>
-                <p><strong>Estado:</strong> <span className={`badge ${faqSeleccionada.IsActive ? "bg-success" : "bg-danger"}`}>
-                  {faqSeleccionada.IsActive ? "ACTIVA" : "INACTIVA"}
-                </span></p>
+                <p><strong>Estado:</strong> 
+                  <span className={`badge ${faqSeleccionada.IsActive ? "bg-success" : "bg-danger"}`}>
+                    {faqSeleccionada.IsActive ? "ACTIVA" : "INACTIVA"}
+                  </span>
+                </p>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* MODAL FORM */}
+      {/* MODAL FORMULARIO - SOLO UN BOTÓN X PREMIUM */}
       {openFormModal && (
-        <div className="custom-modal">
-          <div className="modal-dialog modal-xl">
+        <div className="custom-modal fade-in">
+          <div className="modal-dialog modal-xl modal-dialog-scrollable">
             <div className="modal-content">
-              <div className="modal-header">
-                <h1 className="modal-title fs-5">
+              <div className="modal-header bg-primary text-white position-relative">
+                <h1 className="modal-title fs-5 fw-bold">
                   {faqSeleccionada ? "Editar FAQ" : "Agregar Nueva FAQ"}
                 </h1>
-                <button type="button" className="btn-close" onClick={cerrarModalForm}></button>
+                <button
+                  type="button"
+                  className="btn-close-modal-x"
+                  onClick={cerrarModalForm}
+                  aria-label="Cerrar formulario"
+                  title="Cerrar sin guardar"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
               </div>
-              <div className="modal-body">
+              <div className="modal-body p-4">
                 <FormFaqs
                   faq={faqSeleccionada}
                   categorias={listaCategorias.filter(c => c.IsActive)}
@@ -381,6 +403,7 @@ const FAQs = () => {
                     refrescarLista();
                     cerrarModalForm();
                   }}
+                  onClose={cerrarModalForm}
                 />
               </div>
             </div>
@@ -389,7 +412,7 @@ const FAQs = () => {
       )}
 
       {/* BACKDROP */}
-      {(openFormModal || openModal) && <div className="modal-backdrop-custom"></div>}
+      {(openFormModal || openModal) && <div className="modal-backdrop-custom fade-in"></div>}
     </>
   );
 };

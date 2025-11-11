@@ -1,3 +1,52 @@
+.form-faqs-container {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 15px 40px rgba(4, 112, 187, 0.12);
+}
+
+.form-faqs .form-control,
+.form-faqs .form-select {
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.form-faqs .form-control:focus,
+.form-faqs .form-select:focus {
+  border-color: #0470BB;
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.25);
+}
+
 .form-faqs .btn-submit {
-  min-height: 44px;
+  background: linear-gradient(135deg, #0470BB, #3AB1CF);
+  border: none;
+  border-radius: 12px;
+  padding: 0.9rem 2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  min-height: 52px;
+  transition: all 0.3s ease;
+}
+
+.form-faqs .btn-submit:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(4, 112, 187, 0.4);
+}
+
+.form-faqs .btn-submit:disabled {
+  background: #6c757d;
+  transform: none;
+}
+
+/* Botón + Crear categoría */
+.form-faqs .btn-link {
+  color: #0470BB;
+  font-weight: 500;
+}
+
+.form-faqs .input-group .btn {
+  border-radius: 8px;
 }
