@@ -1,0 +1,920 @@
+/* Colores Fissio */
+:root {
+    --fissio-primary: #0470BB;
+    --fissio-secondary: #03A9F4;
+    --fissio-success: #4CAF50;
+    --fissio-warning: #FF9800;
+    --fissio-danger: #F44336;
+    --fissio-dark: #2C3E50;
+    --fissio-light: #ECF0F1;
+    --fissio-white: #FFFFFF;
+    --fissio-gray: #95A5A6;
+}
+
+/* Container principal */
+.asistencia-empleado-container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+/* Header */
+.asistencia-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--fissio-white);
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.asistencia-header h1 {
+    color: var(--fissio-primary);
+    font-size: 2rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hora-actual {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--fissio-dark);
+    background: var(--fissio-light);
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+}
+
+.hora-actual i {
+    color: var(--fissio-primary);
+}
+
+/* Card de registro de asistencia */
+.registro-asistencia-card {
+    background: var(--fissio-white);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.registro-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--fissio-light);
+}
+
+.registro-header h2 {
+    color: var(--fissio-dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.registro-header i {
+    color: var(--fissio-primary);
+}
+
+.fecha-hoy {
+    color: var(--fissio-gray);
+    font-size: 1rem;
+    text-transform: capitalize;
+}
+
+.registro-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.registro-entrada,
+.registro-salida {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.registro-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-radius: 10px;
+}
+
+.registro-info i {
+    font-size: 3rem;
+    color: var(--fissio-primary);
+}
+
+.registro-info h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--fissio-dark);
+    font-size: 1.3rem;
+}
+
+.registro-info p {
+    margin: 0;
+    color: var(--fissio-gray);
+}
+
+.jornada-activa {
+    background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+    padding: 1.5rem;
+    border-radius: 10px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+    }
+}
+
+.jornada-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.jornada-info i {
+    font-size: 3rem;
+    color: var(--fissio-success);
+}
+
+.jornada-info h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--fissio-dark);
+    font-size: 1.3rem;
+}
+
+.jornada-info p {
+    margin: 0;
+    color: var(--fissio-dark);
+    font-weight: 500;
+}
+
+/* Jornada completada */
+.jornada-completada {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 2px solid var(--fissio-success);
+}
+
+.completada-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.completada-info i {
+    font-size: 3.5rem;
+    color: var(--fissio-success);
+}
+
+.completada-info h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--fissio-success);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.completada-info p {
+    margin: 0;
+    color: var(--fissio-dark);
+    font-size: 1rem;
+}
+
+.resumen-jornada {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: var(--fissio-white);
+    border-radius: 8px;
+}
+
+.resumen-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--fissio-light);
+    border-radius: 8px;
+}
+
+.resumen-label {
+    font-size: 0.9rem;
+    color: var(--fissio-gray);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.resumen-valor {
+    font-size: 1.3rem;
+    color: var(--fissio-dark);
+    font-weight: bold;
+}
+
+.observaciones-completada {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--fissio-white);
+    border-radius: 8px;
+    border-left: 4px solid var(--fissio-primary);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.observaciones-completada i {
+    color: var(--fissio-primary);
+    font-size: 1.2rem;
+}
+
+.observaciones-completada span {
+    color: var(--fissio-dark);
+    font-style: italic;
+}
+
+/* Botones de registro */
+.btn-registrar {
+    padding: 1.2rem 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-entrada {
+    background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+    color: var(--fissio-white);
+}
+
+.btn-entrada:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(4, 112, 187, 0.3);
+}
+
+.btn-salida {
+    background: linear-gradient(135deg, var(--fissio-danger) 0%, #e53935 100%);
+    color: var(--fissio-white);
+}
+
+.btn-salida:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(244, 67, 54, 0.3);
+}
+
+/* Sección de observaciones */
+.observaciones-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--fissio-light);
+    border-radius: 10px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.observaciones-section textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--fissio-gray);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.observaciones-section textarea:focus {
+    outline: none;
+    border-color: var(--fissio-primary);
+}
+
+.observaciones-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-confirmar,
+.btn-cancelar {
+    flex: 1;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-confirmar {
+    background: var(--fissio-success);
+    color: var(--fissio-white);
+}
+
+.btn-confirmar:hover {
+    background: #45a049;
+    transform: scale(1.02);
+}
+
+.btn-cancelar {
+    background: var(--fissio-gray);
+    color: var(--fissio-white);
+}
+
+.btn-cancelar:hover {
+    background: #7f8c8d;
+    transform: scale(1.02);
+}
+
+/* Tabs de navegación */
+.tabs-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 1rem 2rem;
+    background: var(--fissio-white);
+    border: 2px solid var(--fissio-light);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    color: var(--fissio-gray);
+}
+
+.tab-btn:hover {
+    border-color: var(--fissio-primary);
+    color: var(--fissio-primary);
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+    color: var(--fissio-white);
+    border-color: var(--fissio-primary);
+    box-shadow: 0 4px 8px rgba(4, 112, 187, 0.3);
+}
+
+/* Horarios semanales */
+.horarios-semanales-card {
+    background: var(--fissio-white);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.horarios-semanales-card h2 {
+    color: var(--fissio-dark);
+    margin: 0 0 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.horarios-semanales-card h2 i {
+    color: var(--fissio-primary);
+}
+
+.horarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.horario-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e3e7ed 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.horario-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.horario-card.dia-actual {
+    background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+    color: var(--fissio-white);
+    border-color: var(--fissio-primary);
+    box-shadow: 0 8px 16px rgba(4, 112, 187, 0.3);
+}
+
+.horario-card.sin-horario {
+    opacity: 0.6;
+}
+
+.horario-dia {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.badge-hoy {
+    background: var(--fissio-warning);
+    color: var(--fissio-white);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.horario-horas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.hora-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.horario-card.dia-actual .hora-item i {
+    color: var(--fissio-white);
+}
+
+.separador {
+    color: var(--fissio-gray);
+}
+
+.horario-card.dia-actual .separador {
+    color: var(--fissio-white);
+}
+
+.sin-horario-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--fissio-gray);
+    font-style: italic;
+}
+
+.horario-descripcion {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    font-size: 0.9rem;
+    color: var(--fissio-gray);
+}
+
+.horario-card.dia-actual .horario-descripcion {
+    border-top-color: rgba(255,255,255,0.3);
+    color: var(--fissio-white);
+}
+
+/* Historial de asistencias */
+.historial-card {
+    background: var(--fissio-white);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.historial-card h2 {
+    color: var(--fissio-dark);
+    margin: 0 0 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.historial-card h2 i {
+    color: var(--fissio-primary);
+}
+
+/* Filtros */
+.filtros-container {
+    background: var(--fissio-light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.filtros-group h3 {
+    color: var(--fissio-dark);
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filtros-group h3 i {
+    color: var(--fissio-primary);
+}
+
+.filtro-row {
+    margin-bottom: 1.5rem;
+}
+
+.filtro-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--fissio-dark);
+    font-weight: 600;
+}
+
+.fecha-inputs,
+.mes-inputs {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.fecha-inputs input,
+.mes-inputs input,
+.mes-inputs select {
+    padding: 0.8rem;
+    border: 2px solid var(--fissio-gray);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.fecha-inputs input:focus,
+.mes-inputs input:focus,
+.mes-inputs select:focus {
+    outline: none;
+    border-color: var(--fissio-primary);
+}
+
+.mes-inputs select {
+    flex: 1;
+    min-width: 150px;
+}
+
+.mes-inputs input[type="number"] {
+    width: 100px;
+}
+
+.fecha-inputs span {
+    color: var(--fissio-gray);
+    font-weight: 500;
+}
+
+.btn-buscar {
+    padding: 0.8rem 1.5rem;
+    background: var(--fissio-primary);
+    color: var(--fissio-white);
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-buscar:hover:not(:disabled) {
+    background: var(--fissio-secondary);
+    transform: scale(1.05);
+}
+
+.btn-buscar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-limpiar {
+    padding: 0.8rem 1.5rem;
+    background: var(--fissio-gray);
+    color: var(--fissio-white);
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-limpiar:hover {
+    background: #7f8c8d;
+    transform: scale(1.05);
+}
+
+/* Estadísticas */
+.estadisticas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.estadistica-card {
+    background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+    color: var(--fissio-white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.estadistica-card:hover {
+    transform: translateY(-5px);
+}
+
+.estadistica-card.success {
+    background: linear-gradient(135deg, var(--fissio-success) 0%, #45a049 100%);
+}
+
+.estadistica-card.warning {
+    background: linear-gradient(135deg, var(--fissio-warning) 0%, #fb8c00 100%);
+}
+
+.estadistica-card i {
+    font-size: 2.5rem;
+}
+
+.estadistica-valor {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.estadistica-label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Tabla de asistencias */
+.tabla-container {
+    overflow-x: auto;
+}
+
+.tabla-asistencias {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-asistencias thead {
+    background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+    color: var(--fissio-white);
+}
+
+.tabla-asistencias th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.tabla-asistencias td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--fissio-light);
+}
+
+.tabla-asistencias tbody tr {
+    transition: background 0.3s ease;
+}
+
+.tabla-asistencias tbody tr:hover {
+    background: var(--fissio-light);
+}
+
+.hora-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.hora-badge.entrada {
+    background: var(--fissio-success);
+    color: var(--fissio-white);
+}
+
+.hora-badge.salida {
+    background: var(--fissio-primary);
+    color: var(--fissio-white);
+}
+
+.hora-badge.pendiente {
+    background: var(--fissio-warning);
+    color: var(--fissio-white);
+}
+
+.observaciones-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.8rem;
+    background: var(--fissio-light);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--fissio-dark);
+}
+
+.observaciones-badge i {
+    color: var(--fissio-primary);
+}
+
+.sin-observaciones {
+    color: var(--fissio-gray);
+    font-style: italic;
+}
+
+.estado-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.estado-badge.completado {
+    background: var(--fissio-success);
+    color: var(--fissio-white);
+}
+
+.estado-badge.activo {
+    background: var(--fissio-warning);
+    color: var(--fissio-white);
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Loading y sin datos */
+.loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--fissio-gray);
+    font-size: 1.2rem;
+}
+
+.loading i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--fissio-primary);
+}
+
+.sin-datos {
+    text-align: center;
+    padding: 3rem;
+    color: var(--fissio-gray);
+}
+
+.sin-datos i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.sin-datos p {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .asistencia-empleado-container {
+        padding: 1rem;
+    }
+
+    .asistencia-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .asistencia-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .hora-actual {
+        font-size: 1.2rem;
+    }
+
+    .horarios-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+    }
+
+    .estadisticas-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .fecha-inputs,
+    .mes-inputs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .fecha-inputs input,
+    .mes-inputs input,
+    .mes-inputs select {
+        width: 100%;
+    }
+
+    .tabla-container {
+        font-size: 0.85rem;
+    }
+
+    .tabla-asistencias th,
+    .tabla-asistencias td {
+        padding: 0.7rem 0.5rem;
+    }
+
+    .tabs-container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .registro-info,
+    .jornada-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .estadisticas-container {
+        grid-template-columns: 1fr;
+    }
+
+    .observaciones-actions {
+        flex-direction: column;
+    }
+}
