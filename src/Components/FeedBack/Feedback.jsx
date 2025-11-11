@@ -3,6 +3,9 @@ import { useAuthStore } from "../../Store/useAuthStore";
 import axios from "axios";
 import { BASE_URL } from "../../Api/api";
 import "../../Css/Feedback/Feedback.css";
+import FeedbackMensaje from "./FeedbackMensaje";
+import FeedbackFormulario from "./FeedbackFormulario";
+import FeedbackExito from "./FeedbackExito";
 
 const Feedback = () => {
   const { user } = useAuthStore();
@@ -11,260 +14,158 @@ const Feedback = () => {
   const [calificacion, setCalificacion] = useState(0);
   const [calificacionHover, setCalificacionHover] = useState(0);
   const [comentario, setComentario] = useState("");
-  const [idPaciente, setIdPaciente] = useState(null); // Ahora guardará idUsuario
-  const [buscandoPaciente, setBuscandoPaciente] = useState(true);
+  const [idUsuario, setIdUsuario] = useState(null);
+  const [cargando, setCargando] = useState(true);
   const [enviado, setEnviado] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [enviando, setEnviando] = useState(false);
 
-  // Ya no necesitamos buscar idPaciente, usaremos idUsuario directamente
+  // Cargar el ID del usuario al iniciar
   useEffect(() => {
-    // Simplemente verificamos que el usuario esté cargado
     if (userData && userData.idUsuario) {
-      console.log("Usuario cargado - idUsuario:", userData.idUsuario);
-      setIdPaciente(userData.idUsuario); // Ahora guardamos el idUsuario aquí
-      setBuscandoPaciente(false);
+      setIdUsuario(userData.idUsuario);
+      setCargando(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Validar que el usuario esté logueado y sea paciente
+  // Verificar si el usuario no está logueado
   if (!user) {
     return (
-      <div className="feedback-container">
-        <div className="feedback-card error-card">
-          <div className="icon-emoji">⚠️</div>
-          <h3>Acceso restringido</h3>
-          <p>Por favor, inicia sesión para dejar tu comentario.</p>
-        </div>
-      </div>
+      <FeedbackMensaje
+        tipo="error"
+        titulo="Acceso restringido"
+        mensaje="Por favor, inicia sesión para dejar tu comentario."
+      />
     );
   }
 
+  // Verificar si el usuario no es paciente
   if (userData.NombreRol !== "Paciente") {
     return (
-      <div className="feedback-container">
-        <div className="feedback-card error-card">
-          <div className="icon-emoji">⚠️</div>
-          <h3>Acceso restringido</h3>
-          <p>Solo los pacientes pueden dejar comentarios.</p>
-        </div>
-      </div>
+      <FeedbackMensaje
+        tipo="error"
+        titulo="Acceso restringido"
+        mensaje="Solo los pacientes pueden dejar comentarios."
+      />
     );
   }
 
-  if (buscandoPaciente) {
+  // Mostrar pantalla de carga
+  if (cargando) {
     return (
-      <div className="feedback-container">
-        <div className="feedback-card loading-card">
-          <div className="icon-emoji">⏳</div>
-          <p>Cargando datos del paciente...</p>
-        </div>
-      </div>
+      <FeedbackMensaje
+        tipo="cargando"
+        mensaje="Cargando datos del paciente..."
+      />
     );
   }
 
-  if (!idPaciente && userData && userData.NombreRol === "Paciente") {
+  // Verificar si no se pudo cargar el ID del usuario
+  if (!idUsuario && userData && userData.NombreRol === "Paciente") {
+    const mensajeError = (
+      <>
+        <p>No se pudo obtener la información del paciente.</p>
+        <p style={{fontSize: '0.9rem', marginTop: '1rem'}}>
+          Usuario ID: {userData.idUsuario}<br/>
+          Rol: {userData.NombreRol}
+        </p>
+      </>
+    );
+
     return (
-      <div className="feedback-container">
-        <div className="feedback-card error-card">
-          <div className="icon-emoji">⚠️</div>
-          <h3>Error al cargar datos</h3>
-          <p>No se pudo obtener la información del paciente.</p>
-          <p style={{fontSize: '0.9rem', marginTop: '1rem'}}>
-            Usuario ID: {userData.idUsuario}<br/>
-            Rol: {userData.NombreRol}
-          </p>
-          <button 
-            onClick={() => window.location.reload()} 
-            style={{marginTop: '1rem', padding: '0.5rem 1rem', cursor: 'pointer'}}
-          >
-            Recargar página
-          </button>
-        </div>
-      </div>
+      <FeedbackMensaje
+        tipo="error"
+        titulo="Error al cargar datos"
+        mensaje={mensajeError}
+        botonTexto="Recargar página"
+        onBotonClick={() => window.location.reload()}
+      />
     );
   }
 
-  // Manejar el envío del comentario
-  const handleSubmit = async (e) => {
+  // Función para enviar el comentario
+  const enviarComentario = async (e) => {
     e.preventDefault();
 
-    // Validaciones
+    // Validar calificación
     if (calificacion === 0) {
-      return alert("Por favor, selecciona una calificación");
+      alert("Por favor, selecciona una calificación");
+      return;
     }
 
+    // Validar comentario
     if (!comentario.trim()) {
-      return alert("Por favor, escribe tu comentario");
+      alert("Por favor, escribe tu comentario");
+      return;
     }
 
-    if (!idPaciente) {
-      return alert("No se pudo identificar al paciente. Por favor, recarga la página.");
+    // Validar ID de usuario
+    if (!idUsuario) {
+      alert("No se pudo identificar al paciente. Por favor, recarga la página.");
+      return;
     }
 
-    // Enviar comentario
+    // Intentar enviar el comentario
     try {
-      setLoading(true);
-      const payload = {
+      setEnviando(true);
+      
+      const datosComentario = {
         CalificacionComentario: calificacion,
         Comentario: comentario.trim(),
-        idUsuario: idPaciente, // Enviamos idUsuario, el backend buscará el idPaciente
+        idUsuario: idUsuario,
       };
       
-      console.log("Enviando comentario:", payload);
+      const respuesta = await axios.post(
+        `${BASE_URL}api/comentarios/v1/crear`, 
+        datosComentario
+      );
       
-      const response = await axios.post(`${BASE_URL}api/comentarios/v1/`, payload);
+      console.log("Comentario enviado:", respuesta.data);
       
-      console.log("Respuesta exitosa:", response.data);
-      
+      // Limpiar formulario y mostrar éxito
       setEnviado(true);
       setCalificacion(0);
       setComentario("");
-    } catch (error) {
-      console.error("Error completo:", error);
-      console.error("Respuesta del servidor:", error.response?.data);
-      console.error("Status:", error.response?.status);
       
-      const errorMsg = error.response?.data?.message 
+    } catch (error) {
+      console.error("Error al enviar:", error);
+      
+      const mensajeError = error.response?.data?.message 
         || error.response?.data?.error 
-        || error.message 
         || "Error al enviar el comentario";
       
-      alert(errorMsg);
+      alert(mensajeError);
+      
     } finally {
-      setLoading(false);
+      setEnviando(false);
     }
   };
 
-  // Resetear el formulario
-  const resetearFormulario = () => {
+  // Función para resetear el formulario
+  const nuevoComentario = () => {
     setEnviado(false);
     setCalificacion(0);
     setComentario("");
   };
 
-  // Mensajes según la calificación
-  const mensajesCalificacion = {
-    1: "😞 Muy insatisfecho",
-    2: "😕 Insatisfecho",
-    3: "😐 Regular",
-    4: "😊 Satisfecho",
-    5: "😍 Muy satisfecho",
-  };
-
   return (
     <div className="feedback-container">
       {!enviado ? (
-        <div className="feedback-card">
-          <div className="feedback-header">
-            <div className="icon-emoji">💬</div>
-            <h1>¿Cómo fue tu experiencia?</h1>
-            <p>Tu opinión es muy importante para nosotros</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="feedback-form">
-            {/* Sección de calificación con estrellas */}
-            <div className="calificacion-section">
-              <label className="calificacion-label">
-                Califica nuestro servicio:
-              </label>
-
-              <div className="estrellas-container">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    className={`estrella ${
-                      star <= (calificacionHover || calificacion)
-                        ? "activa"
-                        : ""
-                    }`}
-                    onClick={() => setCalificacion(star)}
-                    onMouseEnter={() => setCalificacionHover(star)}
-                    onMouseLeave={() => setCalificacionHover(0)}
-                  >
-                    {star <= (calificacionHover || calificacion) ? "★" : "☆"}
-                  </button>
-                ))}
-              </div>
-
-              {calificacion > 0 && (
-                <div className="calificacion-mensaje">
-                  <span className="mensaje-emoji">
-                    {mensajesCalificacion[calificacion]}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Sección de comentario */}
-            <div className="comentario-section">
-              <label className="comentario-label">
-                Cuéntanos tu experiencia:
-              </label>
-
-              <textarea
-                className="comentario-textarea"
-                placeholder="Comparte tus comentarios sobre nuestro servicio..."
-                value={comentario}
-                onChange={(e) => setComentario(e.target.value)}
-                rows={6}
-                required
-              />
-
-              <div className="contador-caracteres">
-                {comentario.length} caracteres
-              </div>
-            </div>
-
-            {/* Botón de envío */}
-            <button
-              type="submit"
-              className="btn-enviar"
-              disabled={loading || calificacion === 0 || !comentario.trim()}
-            >
-              {loading ? (
-                <>
-                  ⏳ Enviando...
-                </>
-              ) : (
-                <>
-                  📤 Enviar Comentario
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="feedback-footer">
-            <div className="icon-emoji">🔒</div>
-            <p>
-              Tu privacidad es importante. Tu comentario será moderado antes de
-              publicarse.
-            </p>
-          </div>
-        </div>
+        <FeedbackFormulario
+          calificacion={calificacion}
+          calificacionHover={calificacionHover}
+          comentario={comentario}
+          loading={enviando}
+          onCalificacionChange={setCalificacion}
+          onHoverChange={setCalificacionHover}
+          onComentarioChange={setComentario}
+          onSubmit={enviarComentario}
+        />
       ) : (
-        // Mensaje de éxito después de enviar
-        <div className="feedback-card success-card">
-          <div className="success-icon">
-            <div className="icon-emoji">✅</div>
-          </div>
-          <h2>¡Gracias por tu comentario!</h2>
-          <p>Tu opinión nos ayuda a mejorar cada día.</p>
-          <p className="success-message">
-            Hemos recibido tu calificación de{" "}
-            <strong>{calificacion} estrellas</strong> y tu reseña.
-          </p>
-
-          <div className="success-actions">
-            <button
-              className="btn-nuevo-comentario"
-              onClick={resetearFormulario}
-            >
-              ➕ Dejar otro comentario
-            </button>
-          </div>
-        </div>
+        <FeedbackExito
+          calificacion={calificacion}
+          onNuevoComentario={nuevoComentario}
+        />
       )}
     </div>
   );

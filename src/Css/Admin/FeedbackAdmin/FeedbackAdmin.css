@@ -1,0 +1,118 @@
+/* FeedbackAdmin.css */
+
+.feedback-admin-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.feedback-header-admin h2 {
+  color: #0470BB;
+  font-weight: 600;
+}
+
+/* Filtros */
+.feedback-filtros .card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-filtros .form-label {
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.feedback-filtros .form-control,
+.feedback-filtros .form-select {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+
+.feedback-filtros .form-control:focus,
+.feedback-filtros .form-select:focus {
+  border-color: #0470BB;
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
+}
+
+/* Tabla */
+.feedback-table .card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-table table {
+  margin-bottom: 0;
+}
+
+.feedback-table thead th {
+  background-color: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+  padding: 1rem;
+}
+
+.feedback-table tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.feedback-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.comentario-text {
+  max-width: 400px;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.5;
+}
+
+/* Botones */
+.feedback-table .btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Badge */
+.badge.bg-primary {
+  background-color: #0470BB !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .feedback-admin-container {
+    padding: 1rem;
+  }
+
+  .feedback-header-admin .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .feedback-header-admin .text-end {
+    margin-top: 1rem;
+    text-align: left !important;
+  }
+
+  .comentario-text {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .feedback-table table {
+    font-size: 0.85rem;
+  }
+
+  .feedback-table thead th,
+  .feedback-table tbody td {
+    padding: 0.5rem;
+  }
+
+  .comentario-text {
+    max-width: 150px;
+    font-size: 0.8rem;
+  }
+}

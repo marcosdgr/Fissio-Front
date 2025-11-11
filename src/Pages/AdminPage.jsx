@@ -13,6 +13,7 @@ import HorariosTrabajo from "../Components/Admin/Horarios/HorariosTrabajo";
 import FAQs from "../Components/Admin/FAQs/FAQs";
 import "../Css/Admin/AdminPage.css";
 import ObrasSociales from "../Components/Admin/ObrasSociales/ObrasSociales";
+import FeedbakAdmin from "../Components/Admin/Feedback/FeedbakAdmin";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -38,6 +39,7 @@ const AdminPage = () => {
     { id: "obrasSociales", label: "Obras Sociales", icon: "health_and_safety" },
     { id: "asistencias", label: "Asistencias", icon: "assignment_turned_in" },
     { id: "faqs", label: "FAQs", icon: "help" },
+    { id: "feedback", label: "Feedback", icon: "feedback" },
     { id: "estadisticas", label: "Estadísticas", icon: "bar_chart" },
     { id: "config", label: "Configuración", icon: "settings" },
   ];
@@ -221,6 +223,7 @@ const AdminPage = () => {
           {activeTab === "asistencias" && <Asistencias />}
           {activeTab === "horarios" && <HorariosTrabajo />}
           {activeTab === "faqs" && <FAQs />}
+          {activeTab === "feedback" && <FeedbakAdmin />}
           {activeTab === "estadisticas" && <Estadisticas />}
           {activeTab === "config" && <Configuracion />}
         </div>
