@@ -30,25 +30,33 @@
   width: 280px;
   background: var(--sidebar-bg);
   position: fixed;
-  top: 60px; /* Después del navbar */
+  top: 0; /* start at top of viewport so background continues to footer area */
   left: 0;
-  height: calc(100vh - 180px); /* 60px navbar + 120px footer = 180px */
+  bottom: 0; /* stretch to bottom of viewport */
+  height: 100vh; /* ensure full viewport height */
   overflow-y: auto;
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
   z-index: 999;
+  padding-top: 60px; /* leave space for the navbar/header */
 }
 
 /* Remover estado collapsed ya que será fijo */
 .paciente-sidebar.collapsed {
   width: 280px; /* Mantener ancho fijo */
-  height: calc(100vh - 180px);
+  bottom: 0;
+  height: 100vh;
 }
 
 /* Ajustar contenido principal para sidebar fijo */
 .paciente-main-content {
   margin-left: 280px;
-  min-height: calc(100vh - 180px); /* Ajustar para navbar y footer */
+  /* ocupar la altura disponible menos la barra superior y hacer el contenido interno scrollable
+     de modo que el sidebar permanezca fijo mientras el contenido se desplaza */
+  height: calc(100vh - 60px);
+  padding-top: 60px; /* espacio para la navbar fija */
   padding-bottom: 2rem;
+  overflow-y: auto;
+  position: relative;
 }
 
 /* Remover transición de margen ya que el sidebar es fijo */
@@ -161,7 +169,6 @@
   opacity: 0.9;
 }
 
-/* Footer del sidebar mejorado */
 .sidebar-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.05);
@@ -169,6 +176,11 @@
   border-radius: 12px;
   padding: 1rem !important;
   backdrop-filter: blur(10px);
+  /* colocar el footer pegado al borde inferior de la sidebar */
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 24px; /* espacio pequeño sobre el footer de la página */
 }
 
 .paciente-avatar {
