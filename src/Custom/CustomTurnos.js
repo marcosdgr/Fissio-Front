@@ -18,6 +18,13 @@ export const solicitarTurno = async (turnoData) => {
 /**
  * Obtener disponibilidad de horarios para una fecha específica
  * @param {string} fecha - Fecha en formato YYYY-MM-DD
+ * @returns {Promise<Object>} Objeto con:
+ *   - message: Mensaje de respuesta
+ *   - fecha: Fecha consultada
+ *   - diaSemana: Día de la semana (1-7)
+ *   - horarios: Array de todos los horarios con su disponibilidad
+ *   - horariosDisponibles: Array de horarios disponibles para select [{value, label, horario, cupoMaximo, disponibles}]
+ *   - resumen: {totalHorarios, horariosDisponibles, horariosCompletos}
  */
 export const getDisponibilidadHorarios = async (fecha) => {
   const response = await api.get(`/api/turnos/v1/disponibilidad-horarios/${fecha}`);

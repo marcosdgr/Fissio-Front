@@ -92,9 +92,8 @@ const TurnosWeb = () => {
     setIsLoadingHorarios(true);
     try {
       const response = await getDisponibilidadHorarios(fecha);
-      console.log('Respuesta horarios:', response);
       
-      // El backend devuelve horariosDisponibles como array de objetos {value, label, horario}
+      // El backend devuelve horariosDisponibles como array de objetos {value, label, horario, cupoMaximo, disponibles}
       let horarios = [];
       if (response.horariosDisponibles && Array.isArray(response.horariosDisponibles)) {
         horarios = response.horariosDisponibles.filter(h => h.value && h.label);
