@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useAuthStore } from "../../Store/useAuthStore";
 import axios from "axios";
+import { useAuthStore } from "../../Store/useAuthStore";
 import { BASE_URL } from "../../Api/api";
 import "../../Css/Feedback/Feedback.css";
 import FeedbackMensaje from "./FeedbackMensaje";
@@ -20,16 +20,16 @@ const Feedback = () => {
   const [enviado, setEnviado] = useState(false);
   const [enviando, setEnviando] = useState(false);
 
-  // Cargar el ID del usuario al iniciar
+ 
   useEffect(() => {
     if (userData && userData.idUsuario) {
       setIdUsuario(userData.idUsuario);
       setCargando(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  // Verificar si el usuario no está logueado
+  }, [userData]);
+
+
   if (!user) {
     return (
       <FeedbackMensaje
