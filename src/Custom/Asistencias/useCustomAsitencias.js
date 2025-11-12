@@ -66,12 +66,19 @@ export const useCustomAsistencias = (idEmpleado) => {
             const data = await response.json();
             
             if (response.ok && data.length > 0) {
-                const asistenciaHoy = data.find(a => a.Fecha.split('T')[0] === hoy);
-                // Siempre guardar la asistencia de hoy (completa o incompleta)
-                if (asistenciaHoy) {
-                    setAsistenciaActual(asistenciaHoy);
-                } else {
+                // filtrar asistencias de hoy
+                const asistenciasHoy = data.filter(a => a.Fecha.split('T')[0] === hoy);
+                if (asistenciasHoy.length === 0) {
                     setAsistenciaActual(null);
+                } else {
+                    // buscar la última asistencia abierta (sin HoraSalida)
+                    const abierta = [...asistenciasHoy].reverse().find(a => !a.HoraSalida || a.HoraSalida === null || a.HoraSalida === '');
+                    if (abierta) {
+                        setAsistenciaActual(abierta);
+                    } else {
+                        // ninguna abierta -> no asistencia actual
+                        setAsistenciaActual(null);
+                    }
                 }
             } else {
                 setAsistenciaActual(null);
@@ -91,6 +98,25 @@ export const useCustomAsistencias = (idEmpleado) => {
         try {
             showLoading('Registrando entrada...');
             
+            // Comprobar en el servidor si ya existe una entrada abierta hoy (evita condiciones de carrera con el estado)
+            try {
+                const hoy = new Date().toISOString().split('T')[0];
+                const checkRes = await fetch(`${BASE_URL}api/asistencias/v1/empleado/${idEmpleado}`);
+                const checkData = await checkRes.json();
+                if (checkRes.ok && Array.isArray(checkData)) {
+                    const abiertasHoy = checkData.filter(a => a.Fecha && a.Fecha.split('T')[0] === hoy).reverse();
+                    const abierta = abiertasHoy.find(a => !a.HoraSalida || a.HoraSalida === null || a.HoraSalida === '');
+                    if (abierta) {
+                        closeSwal();
+                        showError('Error', 'Ya existe una entrada sin salida. Por favor registra la salida antes de iniciar otra entrada.');
+                        return false;
+                    }
+                }
+            } catch (errCheck) {
+                // si falla la comprobación, permitimos continuar y que el backend valide
+                console.error('No se pudo verificar asistencias abiertas antes de crear entrada:', errCheck);
+            }
+
             const ahora = new Date();
             const fecha = ahora.toISOString().split('T')[0];
             const hora = ahora.toTimeString().split(' ')[0];
@@ -118,6 +144,7 @@ export const useCustomAsistencias = (idEmpleado) => {
             if (response.ok) {
                 showSuccess('¡Entrada registrada!', `Hora: ${hora}`);
                 await obtenerAsistenciasEmpleado();
+                // after creating, set the asistenciaActual to the newly created open record
                 await verificarAsistenciaHoy();
                 return true;
             } else {
@@ -134,7 +161,23 @@ export const useCustomAsistencias = (idEmpleado) => {
 
     // Registrar salida (fin de jornada)
     const registrarSalida = async (observaciones = '') => {
-        if (!asistenciaActual) {
+        // Si no hay asistenciaActual en el estado, intentar obtener la última abierta desde el servidor
+        let asistenciaParaCerrar = asistenciaActual;
+        if (!asistenciaParaCerrar) {
+            try {
+                const hoy = new Date().toISOString().split('T')[0];
+                const checkRes = await fetch(`${BASE_URL}api/asistencias/v1/empleado/${idEmpleado}`);
+                const checkData = await checkRes.json();
+                if (checkRes.ok && Array.isArray(checkData)) {
+                    const abiertasHoy = checkData.filter(a => a.Fecha && a.Fecha.split('T')[0] === hoy).reverse();
+                    asistenciaParaCerrar = abiertasHoy.find(a => !a.HoraSalida || a.HoraSalida === null || a.HoraSalida === '');
+                }
+            } catch (err) {
+                console.error('Error buscando asistencia abierta antes de salida:', err);
+            }
+        }
+
+        if (!asistenciaParaCerrar) {
             showError('Error', 'No hay una entrada registrada para hoy');
             return false;
         }
@@ -154,7 +197,7 @@ export const useCustomAsistencias = (idEmpleado) => {
             const ahora = new Date();
             const hora = ahora.toTimeString().split(' ')[0];
 
-            const response = await fetch(`${BASE_URL}api/asistencias/v1/registrarSalida/${asistenciaActual.idAsistencia}`, {
+            const response = await fetch(`${BASE_URL}api/asistencias/v1/registrarSalida/${asistenciaParaCerrar.idAsistencia}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

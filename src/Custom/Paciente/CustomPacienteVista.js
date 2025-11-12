@@ -91,13 +91,37 @@ export const obtenerTurnosPorPaciente = async (id) => {
         throw error;
     }
 }
-//Agendar nuevo turno 
-export const agendarNuevoTurno = async (turnoData) => {
+//Solicitar nuevo turno (con archivo de orden médica)
+export const solicitarTurno = async (turnoData) => {
     try {
-        const response = await api.post(`/api/turnos/v1/solicitar`, turnoData);
+        // Crear FormData para enviar archivo
+        const formData = new FormData();
+        
+        // Agregar campos de texto
+        formData.append('FechaRequeridaTurno', turnoData.FechaRequeridaTurno);
+        formData.append('HorarioRequeridoTurno', turnoData.HorarioRequeridoTurno);
+        formData.append('idPaciente', turnoData.idPaciente);
+        
+        // Agregar observaciones si existen
+        if (turnoData.InformeTurno && turnoData.InformeTurno.trim() !== '') {
+            formData.append('InformeTurno', turnoData.InformeTurno);
+        }
+        
+        // Agregar archivo de orden médica si existe
+        if (turnoData.ordenMedicaFile) {
+            formData.append('ordenMedica', turnoData.ordenMedicaFile);
+        }
+
+        // Configurar headers para multipart/form-data
+        const response = await api.post(`/api/turnos/v1/solicitar`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        
         return response.data;
     } catch (error) {   
-        console.error(`Error al agendar nuevo turno:`, error);
+        console.error(`Error al solicitar nuevo turno:`, error);
         throw error;
     } 
 }
