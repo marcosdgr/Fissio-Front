@@ -22,8 +22,7 @@ const AsistenciaEmpleado = () => {
         registrarSalida,
         obtenerAsistenciasEmpleado,
         obtenerAsistenciasPorRango,
-        filtrarPorMes,
-        calcularEstadisticas
+        filtrarPorMes
     } = useCustomAsistencias(idEmpleadoLocal);
 
     const [vistaActual, setVistaActual] = useState('horarios'); // 'horarios', 'historial'
@@ -114,21 +113,6 @@ const AsistenciaEmpleado = () => {
     // Días de la semana
     const diasSemana = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
 
-    // Meses del año
-    const meses = [
-        { valor: 1, nombre: 'Enero' },
-        { valor: 2, nombre: 'Febrero' },
-        { valor: 3, nombre: 'Marzo' },
-        { valor: 4, nombre: 'Abril' },
-        { valor: 5, nombre: 'Mayo' },
-        { valor: 6, nombre: 'Junio' },
-        { valor: 7, nombre: 'Julio' },
-        { valor: 8, nombre: 'Agosto' },
-        { valor: 9, nombre: 'Septiembre' },
-        { valor: 10, nombre: 'Octubre' },
-        { valor: 11, nombre: 'Noviembre' },
-        { valor: 12, nombre: 'Diciembre' }
-    ];
 
     // Obtener el día actual
     const diaActual = diasSemana[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
@@ -177,21 +161,42 @@ const AsistenciaEmpleado = () => {
         return `${Math.floor(diff)}h ${Math.round((diff % 1) * 60)}min`;
     };
 
-    // Buscar por rango de fechas
+    
+
+    // Obtener estadísticas (se usa si quieres mantenerlas en otro lado)
+    // const estadisticas = calcularEstadisticas();
+
+    // Buscar por rango de fechas (mantener la funcionalidad de búsqueda)
     const buscarPorRango = () => {
         if (filtros.fechaInicio && filtros.fechaFin) {
             obtenerAsistenciasPorRango(filtros.fechaInicio, filtros.fechaFin);
         }
     };
 
-    // Buscar por mes
+    // Meses del año (para filtro por mes)
+    const meses = [
+        { valor: 1, nombre: 'Enero' },
+        { valor: 2, nombre: 'Febrero' },
+        { valor: 3, nombre: 'Marzo' },
+        { valor: 4, nombre: 'Abril' },
+        { valor: 5, nombre: 'Mayo' },
+        { valor: 6, nombre: 'Junio' },
+        { valor: 7, nombre: 'Julio' },
+        { valor: 8, nombre: 'Agosto' },
+        { valor: 9, nombre: 'Septiembre' },
+        { valor: 10, nombre: 'Octubre' },
+        { valor: 11, nombre: 'Noviembre' },
+        { valor: 12, nombre: 'Diciembre' }
+    ];
+
+    // Buscar por mes y año
     const buscarPorMes = () => {
         if (filtros.mes && filtros.anio) {
             filtrarPorMes(parseInt(filtros.mes), parseInt(filtros.anio));
         }
     };
 
-    // Limpiar filtros
+    // Limpiar filtros y recargar todas las asistencias
     const limpiarFiltros = () => {
         setFiltros({
             fechaInicio: '',
@@ -201,9 +206,6 @@ const AsistenciaEmpleado = () => {
         });
         obtenerAsistenciasEmpleado();
     };
-
-    // Obtener estadísticas
-    const estadisticas = calcularEstadisticas();
 
     // Obtener hora actual
     const horaActual = new Date().toLocaleTimeString('es-AR', { 
@@ -461,14 +463,13 @@ const AsistenciaEmpleado = () => {
                         Historial de Asistencias
                     </h2>
 
-                    {/* Filtros */}
+                    {/* Filtro de búsqueda por rango de fechas */}
                     <div className="filtros-container">
                         <div className="filtros-group">
                             <h3>
                                 <i className="fas fa-filter"></i>
-                                Filtrar por:
+                                Filtrar por rango de fechas
                             </h3>
-                            
                             <div className="filtro-row">
                                 <div className="filtro-item">
                                     <label>Rango de Fechas:</label>
@@ -496,13 +497,14 @@ const AsistenciaEmpleado = () => {
                                 </div>
                             </div>
 
-                            <div className="filtro-row">
+                            <div className="filtro-row mt-3">
                                 <div className="filtro-item">
                                     <label>Por Mes:</label>
-                                    <div className="mes-inputs">
+                                    <div className="mes-inputs d-flex align-items-center gap-2">
                                         <select
                                             value={filtros.mes}
                                             onChange={(e) => setFiltros({...filtros, mes: e.target.value})}
+                                            className="form-select"
                                         >
                                             <option value="">Seleccionar mes</option>
                                             {meses.map(mes => (
@@ -517,6 +519,8 @@ const AsistenciaEmpleado = () => {
                                             max="2030"
                                             value={filtros.anio}
                                             onChange={(e) => setFiltros({...filtros, anio: e.target.value})}
+                                            className="form-control"
+                                            style={{width: '120px'}}
                                         />
                                         <button 
                                             className="btn-buscar"
@@ -526,48 +530,17 @@ const AsistenciaEmpleado = () => {
                                             <i className="fas fa-search"></i>
                                             Buscar
                                         </button>
+                                        <button className="btn-limpiar ms-2" onClick={limpiarFiltros}>
+                                            <i className="fas fa-times"></i>
+                                            Limpiar
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-
-                            <button className="btn-limpiar" onClick={limpiarFiltros}>
-                                <i className="fas fa-times"></i>
-                                Limpiar Filtros
-                            </button>
                         </div>
                     </div>
 
-                    {/* Estadísticas */}
-                    <div className="estadisticas-container">
-                        <div className="estadistica-card">
-                            <i className="fas fa-calendar-day"></i>
-                            <div>
-                                <span className="estadistica-valor">{estadisticas.totalDias}</span>
-                                <span className="estadistica-label">Total Días</span>
-                            </div>
-                        </div>
-                        <div className="estadistica-card">
-                            <i className="fas fa-clock"></i>
-                            <div>
-                                <span className="estadistica-valor">{estadisticas.horasTrabajadas}h</span>
-                                <span className="estadistica-label">Horas Trabajadas</span>
-                            </div>
-                        </div>
-                        <div className="estadistica-card success">
-                            <i className="fas fa-check-circle"></i>
-                            <div>
-                                <span className="estadistica-valor">{estadisticas.diasCompletos}</span>
-                                <span className="estadistica-label">Días Completos</span>
-                            </div>
-                        </div>
-                        <div className="estadistica-card warning">
-                            <i className="fas fa-exclamation-triangle"></i>
-                            <div>
-                                <span className="estadistica-valor">{estadisticas.diasIncompletos}</span>
-                                <span className="estadistica-label">Días Incompletos</span>
-                            </div>
-                        </div>
-                    </div>
+                    {/* Estadísticas removidas por petición del usuario */}
 
                     {/* Tabla de asistencias */}
                     <div className="tabla-container">

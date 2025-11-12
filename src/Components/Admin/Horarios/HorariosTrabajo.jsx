@@ -125,64 +125,77 @@ const HorariosTrabajo = () => {
 
           {!loading && !error && (
             <>
-              {/* HORARIOS */}
-              <div className="card shadow-sm mb-4">
-                <div className="card-header bg-white d-flex justify-content-between align-items-center">
-                  <h5 className="mb-0">Horarios de Trabajo</h5>
-                  <button className="btn btn-primary btn-agregar" onClick={() => abrirModal()}>
-                    + Nuevo Horario
-                  </button>
-                </div>
-                <div className="card-body p-0">
-                  <div className="table-responsive">
-                    <table className="table table-hover align-middle mb-0">
-                      <thead className="table-light">
-                        <tr>
-                          <th className="table-id">ID</th>
-                          <th>Día</th>
-                          <th>Entrada</th>
-                          <th>Salida</th>
-                          <th>Descripción</th>
-                          <th>Estado</th>
-                          <th className="text-center">Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {listaHorarios.map(h => (
-                          <tr
-                            key={h.idHorario}
-                            className={!h.IsActive ? "horario-inactivo" : ""}
-                          >
-                            <td className="table-id">{h.idHorario}</td>
-                            <td className="fw-bold">{h.DiaSemana}</td>
-                            <td>{h.HoraEntradaEsperada}</td>
-                            <td>{h.HoraSalidaEsperada}</td>
-                            <td>{h.DescripcionHorario || "-"}</td>
-                            <td>
-                              <span className={`badge ${h.IsActive ? "badge-activo" : "badge-inactivo"}`}>
-                                {h.IsActive ? "ACTIVO" : "INACTIVO"}
-                              </span>
-                            </td>
-                            <td className="text-center">
-                              <div className="action-buttons">
-                                <button
-                                  className="btn btn-editar"
-                                  onClick={() => abrirModal(h)}
-                                >
-                                  Editar
-                                </button>
-                                <button
-                                  className={`btn ${h.IsActive ? "btn-desactivar" : "btn-activar"}`}
-                                  onClick={() => handleCambiarEstado(h.idHorario)}
-                                >
-                                  {h.IsActive ? "Desactivar" : "Reactivar"}
-                                </button>
-                              </div>
-                            </td>
+              {/* HORARIOS - estilo Servicios */}
+              <div className="servicios-table mb-4">
+                <div className="card">
+                  <div className="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 className="mb-0">Horarios de Trabajo</h5>
+                    <button className="btn-fissio-primary" onClick={() => abrirModal()}>
+                      + Nuevo Horario
+                    </button>
+                  </div>
+                  <div className="card-body p-0">
+                    <div className="table-responsive">
+                      <table className="table table-hover">
+                        <thead className="table-light">
+                          <tr>
+                            <th>Día</th>
+                            <th>Entrada</th>
+                            <th>Salida</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {listaHorarios.map(h => (
+                            <tr key={h.idHorario} className={!h.IsActive ? "horario-inactivo" : ""}>
+                              <td className="fw-medium">
+                                {/* mostrar día de la semana y fecha */}
+                                {h.Fecha ? (
+                                  <>
+                                    <div>{new Date(h.Fecha).toLocaleDateString(undefined, { weekday: 'long' })}</div>
+                                    <div className="text-muted small">{new Date(h.Fecha).toLocaleDateString()}</div>
+                                  </>
+                                ) : (
+                                  <>{h.DiaSemana}<div className="text-muted small">-</div></>
+                                )}
+                              </td>
+                              <td>{h.HoraEntradaEsperada}</td>
+                              <td>{h.HoraSalidaEsperada}</td>
+                              <td>{h.DescripcionHorario || "-"}</td>
+                              <td>
+                                <span className={`badge ${h.IsActive ? 'bg-success' : 'bg-danger'}`}>
+                                  {h.IsActive ? 'ACTIVO' : 'INACTIVO'}
+                                </span>
+                              </td>
+                              <td>
+                                <div className="d-flex gap-1">
+                                  <button
+                                    className="btn btn-sm btn-outline-primary"
+                                    onClick={() => abrirModal(h)}
+                                    title="Editar horario"
+                                  >
+                                    <span className="material-symbols-outlined">edit</span>
+                                  </button>
+                                  <button
+                                    className={`btn btn-sm ${h.IsActive ? 'btn-outline-danger' : 'btn-outline-success'}`}
+                                    onClick={() => handleCambiarEstado(h.idHorario)}
+                                    title={h.IsActive ? 'Desactivar' : 'Reactivar'}
+                                  >
+                                    {h.IsActive ? (
+                                      <span className="material-symbols-outlined">block</span>
+                                    ) : (
+                                      <span className="material-symbols-outlined">check_circle</span>
+                                    )}
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -219,11 +232,16 @@ const HorariosTrabajo = () => {
                         <option value="">Seleccione horario</option>
                         {listaHorarios
                           .filter(h => h.IsActive)
-                          .map(h => (
-                            <option key={h.idHorario} value={h.idHorario}>
-                              {h.DiaSemana} ({h.HoraEntradaEsperada} - {h.HoraSalidaEsperada})
-                            </option>
-                          ))}
+                          .map(h => {
+                            const diaLabel = h.Fecha
+                              ? `${new Date(h.Fecha).toLocaleDateString(undefined, { weekday: 'short' })} ${new Date(h.Fecha).toLocaleDateString()}`
+                              : h.DiaSemana;
+                            return (
+                              <option key={h.idHorario} value={h.idHorario}>
+                                {diaLabel} ({h.HoraEntradaEsperada} - {h.HoraSalidaEsperada})
+                              </option>
+                            );
+                          })}
                       </select>
                     </div>
                     <div className="col-md-2">
@@ -254,7 +272,16 @@ const HorariosTrabajo = () => {
                           {listaAsignaciones.map(a => (
                             <tr key={a.idEmpHor}>
                               <td className="fw-medium">{a.NombreEmpleado} {a.ApellidoEmpleado}</td>
-                              <td>{a.DiaSemana}</td>
+                              <td>
+                                {a.Fecha ? (
+                                  <>
+                                    <div>{new Date(a.Fecha).toLocaleDateString(undefined, { weekday: 'long' })}</div>
+                                    <div className="text-muted small">{new Date(a.Fecha).toLocaleDateString()}</div>
+                                  </>
+                                ) : (
+                                  <>{a.DiaSemana}<div className="text-muted small">-</div></>
+                                )}
+                              </td>
                               <td>{a.HoraEntradaEsperada}</td>
                               <td>{a.HoraSalidaEsperada}</td>
                               <td>

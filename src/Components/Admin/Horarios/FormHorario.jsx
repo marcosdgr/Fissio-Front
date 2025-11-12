@@ -9,7 +9,7 @@ const FormHorario = ({ horario, onSuccess }) => {
   const { crearHorario, editarHorario } = useCustomHorarios();
 
   const [form, setForm] = useState({
-    DiaSemana: '',
+    Fecha: '', // YYYY-MM-DD matches DB DATE column
     HoraEntradaEsperada: '',
     HoraSalidaEsperada: '',
     DescripcionHorario: ''
@@ -20,13 +20,13 @@ const FormHorario = ({ horario, onSuccess }) => {
   useEffect(() => {
     if (horario) {
       setForm({
-        DiaSemana: horario.DiaSemana || '',
+        Fecha: horario.Fecha ? (horario.Fecha.split ? horario.Fecha.split('T')[0] : horario.Fecha) : '',
         HoraEntradaEsperada: horario.HoraEntradaEsperada || '',
         HoraSalidaEsperada: horario.HoraSalidaEsperada || '',
         DescripcionHorario: horario.DescripcionHorario || ''
       });
     } else {
-      setForm({ DiaSemana: '', HoraEntradaEsperada: '', HoraSalidaEsperada: '', DescripcionHorario: '' });
+      setForm({ Fecha: '', HoraEntradaEsperada: '', HoraSalidaEsperada: '', DescripcionHorario: '' });
     }
   }, [horario]);
 
@@ -35,10 +35,17 @@ const FormHorario = ({ horario, onSuccess }) => {
     setForm({ ...form, [name]: value });
   };
 
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setProcesando(true);
-
+    // Validación: Fecha obligatorio (solo calendario)
+    if (!form.Fecha) {
+      toast.error('Selecciona una fecha para el horario');
+      setProcesando(false);
+      return;
+    }
     try {
       const res = horario
         ? await editarHorario(horario.idHorario, form)
@@ -51,7 +58,7 @@ const FormHorario = ({ horario, onSuccess }) => {
         toast.error(res.error);
       }
     } catch (err) {
-      toast.error('Error inesperado');
+      toast.error(err?.response?.data?.error || err?.message || 'Error inesperado');
     } finally {
       setProcesando(false);
     }
@@ -60,13 +67,8 @@ const FormHorario = ({ horario, onSuccess }) => {
   return (
     <form onSubmit={handleSubmit} className="form-horario">
       <div className="mb-3">
-        <label className="form-label">Día de la semana</label>
-        <select name="DiaSemana" value={form.DiaSemana} onChange={handleChange} className="form-select" required disabled={procesando}>
-          <option value="">Seleccione un día</option>
-          {['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'].map(dia => (
-            <option key={dia} value={dia}>{dia}</option>
-          ))}
-        </select>
+        <label className="form-label">Fecha</label>
+        <input type="date" name="Fecha" value={form.Fecha} onChange={handleChange} className="form-control" required disabled={procesando} />
       </div>
 
       <div className="mb-3">
@@ -85,7 +87,7 @@ const FormHorario = ({ horario, onSuccess }) => {
       </div>
 
       <div className="d-grid">
-        <button type="submit" className="btn btn-primary btn-submit" disabled={procesando}>
+        <button type="submit" className="btn-fissio-primary" disabled={procesando}>
           {procesando ? 'Procesando...' : (horario ? 'Guardar Cambios' : 'Crear Horario')}
         </button>
       </div>
