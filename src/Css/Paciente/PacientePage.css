@@ -8,8 +8,8 @@
   --fissio-light-gray: #A7B1B4;
   --fissio-bg-light: #f8f9fa;
   
-  /* Nuevos colores para mejor contraste */
-  --sidebar-bg: linear-gradient(180deg, #034a7a 0%, #0470BB 100%);
+  /* Nuevos colores para mejor contraste - Usando mismo gradiente que config-welcome-section */
+  --sidebar-bg: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
   --sidebar-hover: rgba(255, 255, 255, 0.1);
   --sidebar-active: rgba(255, 255, 255, 0.95);
   --sidebar-text: rgba(255, 255, 255, 0.9);
@@ -34,10 +34,59 @@
   left: 0;
   bottom: 0; /* stretch to bottom of viewport */
   height: 100vh; /* ensure full viewport height */
-  overflow-y: auto;
+  overflow: hidden; /* hide bubbles outside, but allow inner scroll */
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
   z-index: 999;
   padding-top: 60px; /* leave space for the navbar/header */
+}
+
+/* Efecto de burbujas en el sidebar (igual que config-welcome-section) */
+.paciente-sidebar::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  animation: floatSlow 25s ease-in-out infinite;
+}
+
+.paciente-sidebar::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  animation: floatSlow 30s ease-in-out infinite reverse;
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(20px, -20px);
+  }
+}
+
+/* Permitir scroll interno del sidebar */
+.paciente-sidebar > * {
+  position: relative;
+  z-index: 1;
+}
+
+.paciente-sidebar .nav {
+  overflow-y: auto;
+  max-height: calc(100vh - 60px - 120px - 140px); /* viewport - navbar - header - footer aprox */
 }
 
 /* Remover estado collapsed ya que será fijo */

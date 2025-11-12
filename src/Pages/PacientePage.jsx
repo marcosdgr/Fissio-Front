@@ -9,7 +9,6 @@ import '../Css/Paciente/PacientePage.css'
 
 const PacientePage = () => {
   const [activeTab, setActiveTab] = useState("perfil");
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const menuItems = [
@@ -29,27 +28,15 @@ const PacientePage = () => {
       ></div>
 
       {/* Sidebar */}
-      <div className={`text-white paciente-sidebar ${sidebarCollapsed ? 'collapsed' : ''} ${mobileMenuOpen ? 'show' : ''}`}>
+      <div className={`text-white paciente-sidebar ${mobileMenuOpen ? 'show' : ''}`}>
         {/* Header */}
         <div className="p-3 sidebar-header">
-          <div className="d-flex align-items-center justify-content-between">
-            {!sidebarCollapsed && (
-              <h5 className="mb-0 fw-bold text-white">
-                <span className="material-symbols-outlined me-2 fs-1">
-                  favorite
-                </span>
-                Fissio Paciente
-              </h5>
-            )}
-            <button
-              className="sidebar-toggle"
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            >
-              <span className="material-symbols-outlined">
-                {sidebarCollapsed ? "chevron_right" : "chevron_left"}
-              </span>
-            </button>
-          </div>
+          <h5 className="mb-0 fw-bold text-white">
+            <span className="material-symbols-outlined me-2 fs-1">
+              favorite
+            </span>
+            Fissio Paciente
+          </h5>
         </div>
 
         {/* Menú */}
@@ -69,31 +56,24 @@ const PacientePage = () => {
                 {item.icon}
               </span>
 
-              {/* Texto solo si NO está colapsado */}
-              {!sidebarCollapsed && <span className="fw-medium sidebar-text">{item.label}</span>}
-
-              {/* Indicador visual cuando está colapsado y activo */}
-              {sidebarCollapsed && activeTab === item.id && (
-                <div className="sidebar-collapsed-indicator" />
-              )}
+              {/* Texto siempre visible */}
+              <span className="fw-medium sidebar-text">{item.label}</span>
             </button>
           ))}
         </nav>
 
         {/* Footer */}
-        {!sidebarCollapsed && (
-          <div className="mt-auto p-3 sidebar-footer">
-            <div className="d-flex align-items-center">
-              <div className="paciente-avatar rounded-circle p-2 me-3">
-                <span className="material-symbols-outlined">person</span>
-              </div>
-              <div>
-                <div className="fw-bold text-white">Matías Bazán</div>
-                <small className="sidebar-user-email">Paciente</small>
-              </div>
+        <div className="mt-auto p-3 sidebar-footer">
+          <div className="d-flex align-items-center">
+            <div className="paciente-avatar rounded-circle p-2 me-3">
+              <span className="material-symbols-outlined">person</span>
+            </div>
+            <div>
+              <div className="fw-bold text-white">Matías Bazán</div>
+              <small className="sidebar-user-email">Paciente</small>
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Contenido Principal */}
