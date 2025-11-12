@@ -14,6 +14,7 @@ const Feedback = () => {
   const [calificacion, setCalificacion] = useState(0);
   const [calificacionHover, setCalificacionHover] = useState(0);
   const [comentario, setComentario] = useState("");
+  const [ultimaCalificacion, setUltimaCalificacion] = useState(null);
   const [idUsuario, setIdUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [enviado, setEnviado] = useState(false);
@@ -122,10 +123,11 @@ const Feedback = () => {
       
       console.log("Comentario enviado:", respuesta.data);
       
-      // Limpiar formulario y mostrar éxito
-      setEnviado(true);
-      setCalificacion(0);
-      setComentario("");
+  // Guardar la calificación enviada, limpiar formulario y mostrar éxito
+  setUltimaCalificacion(calificacion);
+  setCalificacion(0);
+  setComentario("");
+  setEnviado(true);
       
     } catch (error) {
       console.error("Error al enviar:", error);
@@ -146,6 +148,7 @@ const Feedback = () => {
     setEnviado(false);
     setCalificacion(0);
     setComentario("");
+    setUltimaCalificacion(null);
   };
 
   return (
@@ -163,7 +166,7 @@ const Feedback = () => {
         />
       ) : (
         <FeedbackExito
-          calificacion={calificacion}
+          calificacion={ultimaCalificacion ?? 0}
           onNuevoComentario={nuevoComentario}
         />
       )}
