@@ -13,9 +13,11 @@
 
 /* Contenedor principal del perfil */
 .perfil-paciente-container {
-  background-color: var(--fissio-bg-light);
-  min-height: 100vh;
+  background: linear-gradient(135deg, 
+    rgba(58, 177, 207, 0.08) 0%, 
+    rgba(58, 177, 207, 0.03) 100%);
   padding: 1rem;
+  padding-bottom: 2rem;
 }
 
 /* Mensaje de bienvenida */
@@ -76,20 +78,28 @@
 
 /* Cards de navegación */
 .perfil-nav-cards {
-  gap: 1.5rem;
+  margin: 0 -0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.perfil-nav-cards > div {
+  padding: 0 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .perfil-nav-card {
-  background: var(--fissio-white);
+  background: linear-gradient(145deg, var(--fissio-white) 0%, var(--fissio-bg-light) 50%, #f1f3f4 100%);
   border: none;
   border-radius: 15px;
   padding: 2rem 1.5rem;
   transition: all 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 20px rgba(58, 177, 207, 0.15);
   position: relative;
   overflow: hidden;
   height: 100%;
+  border: 1px solid rgba(58, 177, 207, 0.1);
 }
 
 .perfil-nav-card::before {
@@ -99,7 +109,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(4, 112, 187, 0.05), transparent);
+  background: linear-gradient(90deg, transparent, rgba(58, 177, 207, 0.08), transparent);
   transition: left 0.6s ease;
 }
 
@@ -109,8 +119,10 @@
 
 .perfil-nav-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(4, 112, 187, 0.15);
+  background: linear-gradient(145deg, var(--fissio-white) 0%, var(--fissio-white) 100%);
+  box-shadow: 0 12px 35px rgba(58, 177, 207, 0.25);
   border-left: 4px solid var(--fissio-primary);
+  border-color: rgba(58, 177, 207, 0.2);
 }
 
 .card-icon {
@@ -122,13 +134,13 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  box-shadow: 0 6px 20px rgba(4, 112, 187, 0.3);
+  box-shadow: 0 6px 20px rgba(58, 177, 207, 0.3);
   transition: all 0.3s ease;
 }
 
 .perfil-nav-card:hover .card-icon {
   transform: scale(1.1) rotateY(180deg);
-  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.4);
+  box-shadow: 0 8px 25px rgba(58, 177, 207, 0.4);
 }
 
 .card-icon .material-symbols-outlined {
@@ -157,13 +169,15 @@
 }
 
 .card-stats {
-  background: var(--fissio-bg-light);
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
   border-radius: 8px;
   padding: 0.8rem 1rem;
   margin-top: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border: 1px solid rgba(173, 181, 189, 0.2);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .stats-number {
@@ -267,7 +281,22 @@
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1199px) {
+  /* En pantallas XL y menores, mantener cards en línea */
+  .perfil-nav-cards > div {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+}
+
+@media (max-width: 991px) {
+  /* En pantallas LG y menores, cards ocupan todo el ancho */
+  .perfil-nav-cards > div {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+  
   .welcome-section {
     padding: 1.5rem;
     text-align: center;
@@ -308,12 +337,16 @@
   }
   
   .perfil-nav-cards {
-    gap: 0.75rem;
+    margin: 0;
+  }
+  
+  .perfil-nav-cards > div {
+    padding: 0;
+    margin-bottom: 1rem;
   }
   
   .perfil-nav-card {
     padding: 1.5rem 1rem;
-    margin-bottom: 0.75rem;
   }
   
   .card-icon {
@@ -361,6 +394,23 @@
     text-align: center;
     gap: 0.5rem;
   }
+  
+  .perfil-paciente-container {
+    padding: 0.5rem;
+    padding-bottom: 1rem;
+    background: linear-gradient(135deg, 
+      rgba(58, 177, 207, 0.08) 0%, 
+      rgba(58, 177, 207, 0.03) 100%);
+  }
+}
+
+/* Reducir espaciado adicional */
+.perfil-paciente-container .container-fluid:last-child {
+  margin-bottom: 0;
+}
+
+.perfil-paciente-container .row:last-child {
+  margin-bottom: 0;
 }
 
 /* Animaciones adicionales */
@@ -406,4 +456,38 @@
   50% {
     transform: scale(1.05);
   }
+}
+
+/* Mejoras adicionales para el degradado de cards */
+.perfil-nav-card:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(4, 112, 187, 0.25);
+}
+
+.perfil-nav-card:active {
+  transform: translateY(-2px);
+  background: linear-gradient(145deg, #e9ecef 0%, #dee2e6 50%, #ced4da 100%);
+}
+
+/* Efectos de texto en hover */
+.perfil-nav-card:hover .card-title {
+  text-shadow: 0 1px 3px rgba(4, 112, 187, 0.1);
+}
+
+.perfil-nav-card:hover .stats-number {
+  text-shadow: 0 1px 2px rgba(4, 112, 187, 0.2);
+}
+
+/* Sombra interna sutil para profundidad */
+.perfil-nav-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 15px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 
+              inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  pointer-events: none;
 }
