@@ -11,7 +11,7 @@ import LoginPage from "./Pages/LoginPage";
 import AsistenciaEmpleado from "./Components/Asistencia/AsistenciaEmpleado.jsx";
 import Feedback from "./Components/FeedBack/Feedback.jsx";
 import TurnosWebPage from "./Pages/TurnosWebPage.jsx";
-import Chatbot from "./Components/BOT/Chatbot.jsx";
+
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
         <Footer />
         
         {/* Chatbot flotante - visible en todas las páginas */}
-        <Chatbot />
+      
       </div>
     </BrowserRouter>
   );

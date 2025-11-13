@@ -3,6 +3,7 @@ import CarruselHome from "../Components/Home/CarruselHome";
 import CardServiciosHome from "../Components/Home/CardServiciosHome";
 import CardComentariosHome from "../Components/Home/CardComentariosHome";
 import TurnoHome from "../Components/Home/TurnoHome";
+import Chatbot from "../Components/BOT/Chatbot.jsx";
 import "../Css/Home/Home.css";
 
 const HomePage = () => {
@@ -42,6 +43,7 @@ const HomePage = () => {
       <section className="turno-section">
         <TurnoHome />
       </section>
+      <Chatbot/>
     </div>
   );
 };
