@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '../../../Store/useAuthStore'
-import { obtenerPacientePorId, actualizarPaciente } from '../../../Custom/Paciente/CustomPacienteVista'
+import { obtenerPacientePorId, actualizarPaciente, obtenerEmailPacientePorId} from '../../../Custom/Paciente/CustomPacienteVista'
 import { getLocalidades } from '../../../Custom/CustomRegister'
 import '../../../Css/Paciente/Perfil/ConfigPaciente.css'
 
@@ -24,6 +24,7 @@ const Configuracion = () => {
   const [success, setSuccess] = useState(false)
   const [localidades, setLocalidades] = useState([])
   const [pacienteOriginal, setPacienteOriginal] = useState(null)
+  const [emailPaciente, setEmailPaciente] = useState(null)
 
   // Obtener datos del paciente desde Zustand
   const { user } = useAuthStore()
@@ -43,14 +44,16 @@ const Configuracion = () => {
         setLoading(true)
         setError(null)
 
-        // Cargar datos del paciente y localidades en paralelo
-        const [datosPaciente, localidadesData] = await Promise.all([
+        // Cargar datos del paciente, email y localidades en paralelo
+        const [datosPaciente, emailData, localidadesData] = await Promise.all([
           obtenerPacientePorId(idPaciente),
+          obtenerEmailPacientePorId(idPaciente),
           getLocalidades()
         ])
 
         // Guardar datos originales
         setPacienteOriginal(datosPaciente)
+        setEmailPaciente(emailData.MailUsuario)
 
         // Llenar formulario con datos actuales
         setFormData({
@@ -459,7 +462,7 @@ const Configuracion = () => {
                         <div className="col-md-4">
                           <div className="config-readonly-item">
                             <div className="config-readonly-label">Email:</div>
-                            <div className="config-readonly-value">{user?.MailUsuario || 'No disponible'}</div>
+                            <div className="config-readonly-value">{emailPaciente || 'No disponible'}</div>
                           </div>
                         </div>
                         <div className="col-md-4">

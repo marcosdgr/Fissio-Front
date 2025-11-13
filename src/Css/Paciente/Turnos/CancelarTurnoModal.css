@@ -1,0 +1,303 @@
+/* CancelarTurnoModal.css - Estilos con colores Fissio */
+
+/* Variables de colores Fissio */
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+}
+
+/* Overlay del modal */
+.modal-cancelar-overlay {
+  background-color: rgba(107, 107, 107, 0.7) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* Modal content */
+.modal-cancelar .modal-content {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 10px 40px rgba(4, 112, 187, 0.2);
+  overflow: hidden;
+}
+
+/* Header con colores Fissio */
+.modal-cancelar .modal-header {
+  background: linear-gradient(135deg, var(--fissio-gray) 0%, var(--fissio-light-gray) 100%);
+  border-bottom: 3px solid var(--fissio-primary);
+  padding: 1.25rem 1.5rem;
+  position: relative;
+}
+
+.modal-cancelar .modal-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+}
+
+.modal-cancelar .modal-title {
+  font-weight: 600;
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  color: var(--bs-white);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modal-cancelar .modal-title .material-symbols-outlined {
+  font-size: clamp(1.5rem, 4vw, 1.75rem);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.modal-cancelar .btn-close-white {
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.modal-cancelar .btn-close-white:hover {
+  opacity: 1;
+}
+
+/* Body del modal */
+.modal-cancelar .modal-body {
+  background: linear-gradient(to bottom, var(--bs-white) 0%, var(--bs-light) 100%);
+}
+
+/* Alerta de error personalizada */
+.modal-cancelar .alert-danger {
+  background: linear-gradient(135deg, rgba(107, 107, 107, 0.1) 0%, rgba(107, 107, 107, 0.05) 100%);
+  border-left: 4px solid var(--fissio-gray);
+  border-radius: 0.5rem;
+  color: var(--fissio-gray);
+}
+
+.modal-cancelar .alert-danger .material-symbols-outlined {
+  color: var(--fissio-gray);
+}
+
+/* Alerta de éxito */
+.modal-cancelar .alert-success {
+  background: linear-gradient(135deg, rgba(4, 112, 187, 0.1) 0%, rgba(58, 177, 207, 0.1) 100%);
+  border-left: 4px solid var(--fissio-primary);
+  border-radius: 0.5rem;
+  color: var(--fissio-primary);
+}
+
+/* Icono de advertencia */
+.modal-cancelar .warning-icon-container {
+  background: linear-gradient(135deg, rgba(167, 177, 180, 0.15) 0%, rgba(167, 177, 180, 0.05) 100%);
+  border-radius: 50%;
+  width: clamp(80px, 20vw, 100px);
+  height: clamp(80px, 20vw, 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(107, 107, 107, 0.2);
+}
+
+.modal-cancelar .warning-icon {
+  color: var(--fissio-light-gray);
+  font-size: clamp(3rem, 10vw, 4rem);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.modal-cancelar .warning-title {
+  color: var(--fissio-gray);
+  font-weight: 600;
+  font-size: clamp(1rem, 3vw, 1.125rem);
+  margin-top: 1rem;
+}
+
+.modal-cancelar .warning-subtitle {
+  color: var(--fissio-light-gray);
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+}
+
+/* Card de información del turno */
+.modal-cancelar .turno-info-card {
+  background: var(--bs-white);
+  border: 2px solid rgba(4, 112, 187, 0.1);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.08);
+  overflow: hidden;
+}
+
+.modal-cancelar .turno-info-header {
+  background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  color: var(--bs-white);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-cancelar .turno-info-header .material-symbols-outlined {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.modal-cancelar .info-item {
+  transition: background-color 0.3s ease;
+}
+
+.modal-cancelar .info-item:hover {
+  background-color: rgba(4, 112, 187, 0.03);
+}
+
+.modal-cancelar .info-item .material-symbols-outlined {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+}
+
+.modal-cancelar .info-label {
+  color: var(--fissio-light-gray);
+  font-size: clamp(0.7rem, 2vw, 0.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.modal-cancelar .info-value {
+  color: var(--fissio-gray);
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+  font-weight: 600;
+}
+
+/* Alerta de advertencia importante */
+.modal-cancelar .alert-warning {
+  background: linear-gradient(135deg, rgba(167, 177, 180, 0.15) 0%, rgba(167, 177, 180, 0.05) 100%);
+  border-left: 4px solid var(--fissio-secondary);
+  border-radius: 0.5rem;
+  color: var(--fissio-gray);
+}
+
+.modal-cancelar .alert-warning .material-symbols-outlined {
+  color: var(--fissio-secondary);
+}
+
+/* Footer del modal */
+.modal-cancelar .modal-footer {
+  background: linear-gradient(to top, var(--bs-light) 0%, var(--bs-white) 100%);
+  border-top: 1px solid rgba(4, 112, 187, 0.1);
+  padding: 1rem 1.5rem;
+}
+
+/* Botones personalizados */
+.modal-cancelar .btn-mantener {
+  background: var(--bs-white);
+  border: 2px solid var(--fissio-light-gray);
+  color: var(--fissio-gray);
+  font-weight: 600;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.modal-cancelar .btn-mantener:hover:not(:disabled) {
+  background: var(--fissio-light-gray);
+  border-color: var(--fissio-gray);
+  color: var(--bs-white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(107, 107, 107, 0.3);
+}
+
+.modal-cancelar .btn-cancelar-turno {
+  background: linear-gradient(135deg, var(--fissio-gray) 0%, var(--fissio-light-gray) 100%);
+  border: 2px solid var(--fissio-gray);
+  color: var(--bs-white);
+  font-weight: 600;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(107, 107, 107, 0.3);
+}
+
+.modal-cancelar .btn-cancelar-turno:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--fissio-light-gray) 0%, var(--fissio-gray) 100%);
+  border-color: var(--fissio-light-gray);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(107, 107, 107, 0.4);
+}
+
+.modal-cancelar .btn-cancelar-turno:disabled,
+.modal-cancelar .btn-mantener:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.modal-cancelar button .material-symbols-outlined {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+}
+
+/* Spinner personalizado */
+.modal-cancelar .spinner-border {
+  border-color: var(--fissio-secondary);
+  border-right-color: transparent;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-cancelar .modal-header {
+    padding: 1rem;
+  }
+
+  .modal-cancelar .modal-footer {
+    padding: 0.875rem 1rem;
+  }
+
+  .modal-cancelar .btn-mantener,
+  .modal-cancelar .btn-cancelar-turno {
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-cancelar .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  .modal-cancelar .modal-header {
+    padding: 0.875rem;
+  }
+
+  .modal-cancelar .modal-body {
+    padding: 1rem !important;
+  }
+
+  .modal-cancelar .modal-footer {
+    padding: 0.75rem;
+  }
+
+  .modal-cancelar .warning-icon-container {
+    width: 70px;
+    height: 70px;
+  }
+
+  .modal-cancelar .turno-info-header {
+    padding: 0.625rem 0.875rem;
+  }
+}
+
+/* Animación de entrada */
+.modal-cancelar.show {
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mejoras de accesibilidad */
+.modal-cancelar button:focus {
+  outline: 2px solid var(--fissio-primary);
+  outline-offset: 2px;
+}

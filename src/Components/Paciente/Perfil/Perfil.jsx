@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '../../../Store/useAuthStore'
-import { obtenerPacientePorId, obtenerTurnosPorPaciente } from '../../../Custom/Paciente/CustomPacienteVista'
+import { obtenerPacientePorId, obtenerTurnosPorPaciente, obtenerEstadoTurnoPorPaciente} from '../../../Custom/Paciente/CustomPacienteVista'
+import CardProximosTurnos from '../Turnos/CardProximosTurnos'
 import '../../../Css/Paciente/Perfil/PerfilPaciente.css'
 
 const Perfil = ({ setActiveTab }) => {
   // Estados para manejar la información del paciente
   const [pacienteData, setPacienteData] = useState(null)
   const [turnosData, setTurnosData] = useState([])
+  const [turnosDetalles, setTurnosDetalles] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -39,6 +41,10 @@ const Perfil = ({ setActiveTab }) => {
         const turnos = await obtenerTurnosPorPaciente(idPaciente)
         setTurnosData(turnos)
 
+        // Cargar detalles de turnos (estado, fecha, hora)
+        const detalles = await obtenerEstadoTurnoPorPaciente(idPaciente)
+        setTurnosDetalles(detalles)
+
       } catch (err) {
         console.error('Error al cargar datos del paciente:', err)
         setError('Error al cargar la información del paciente')
@@ -49,23 +55,6 @@ const Perfil = ({ setActiveTab }) => {
 
     cargarDatosPaciente()
   }, [idPaciente])
-
-  // Funciones para calcular estadísticas de turnos
-  const calcularTurnosProximos = () => {
-    if (!turnosData) return 0
-    const hoy = new Date()
-    return turnosData.filter(turno => {
-      const fechaTurno = new Date(turno.FechaRequeridaTurno)
-      return fechaTurno >= hoy && (turno.EstadoTurno === 'Solicitado' || turno.EstadoTurno === 'Pendiente')
-    }).length
-  }
-
-  const calcularTurnosCompletados = () => {
-    if (!turnosData) return 0
-    return turnosData.filter(turno => 
-      turno.EstadoTurno === 'Finalizado'
-    ).length
-  }
 
   // Función para formatear la fecha actual
   const formatearFecha = () => {
@@ -85,19 +74,18 @@ const Perfil = ({ setActiveTab }) => {
     }
   }
 
-  const handleProximosTurnos = () => {
-    console.log('Navegando a próximos turnos...')
-    // Aquí iría la lógica de navegación
-  }
-
   const handleHistorialTurnos = () => {
     console.log('Navegando a historial de turnos...')
-    // Aquí iría la lógica de navegación
+    if (setActiveTab) {
+      setActiveTab('historial')
+    }
   }
 
   const handleAgendarTurno = () => {
     console.log('Navegando a agendar turno...')
-    // Aquí iría la lógica de navegación
+    if (setActiveTab) {
+      setActiveTab('agendar')
+    }
   }
 
   // Mostrar mensaje de error si existe
@@ -169,38 +157,15 @@ const Perfil = ({ setActiveTab }) => {
             
             <div className="row perfil-nav-cards slide-up g-3">
               {/* Card Próximos Turnos */}
-              <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
-                <div 
-                  className="perfil-nav-card h-100" 
-                  onClick={handleProximosTurnos}
-                  role="button"
-                  tabIndex={0}
-                >
-                  <div className="card-icon">
-                    <span className="material-symbols-outlined">event_available</span>
-                  </div>
-                  <h5 className="card-title">Próximos Turnos</h5>
-                  <p className="card-description">
-                    Consulta y gestiona tus próximas citas médicas programadas
-                  </p>
-                  <div className="card-stats">
-                    <div>
-                      <div className="stats-number">
-                        {loading ? '...' : calcularTurnosProximos()}
-                      </div>
-                      <div className="stats-label">Próximos</div>
-                    </div>
-                    <span className="material-symbols-outlined text-primary">
-                      arrow_forward
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <CardProximosTurnos 
+                turnosDetalles={turnosDetalles}
+                loading={loading}
+              />
 
               {/* Card Historial de Turnos */}
               <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
                 <div 
-                  className="perfil-nav-card h-100"
+                  className="perfil-nav-card"
                   onClick={handleHistorialTurnos}
                   role="button"
                   tabIndex={0}
@@ -209,16 +174,13 @@ const Perfil = ({ setActiveTab }) => {
                     <span className="material-symbols-outlined">history</span>
                   </div>
                   <h5 className="card-title">Historial de Turnos</h5>
-                  <p className="card-description">
+                  <p className="card-description mb-3">
                     Revisa el historial completo de tus consultas y tratamientos anteriores
                   </p>
-                  <div className="card-stats">
-                    <div>
-                      <div className="stats-number">
-                        {loading ? '...' : calcularTurnosCompletados()}
-                      </div>
-                      <div className="stats-label">Completados</div>
-                    </div>
+                  
+                  {/* Botón de acción sin contador */}
+                  <div className="d-flex justify-content-between align-items-center bg-light rounded p-3 border border-1">
+                    <span className="text-primary fw-medium">Ver Historial</span>
                     <span className="material-symbols-outlined text-primary">
                       arrow_forward
                     </span>
@@ -229,7 +191,7 @@ const Perfil = ({ setActiveTab }) => {
               {/* Card Agendar Turno */}
               <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
                 <div 
-                  className="perfil-nav-card h-100"
+                  className="perfil-nav-card"
                   onClick={handleAgendarTurno}
                   role="button"
                   tabIndex={0}
@@ -238,14 +200,13 @@ const Perfil = ({ setActiveTab }) => {
                     <span className="material-symbols-outlined">add_circle</span>
                   </div>
                   <h5 className="card-title">Agendar Turno</h5>
-                  <p className="card-description">
+                  <p className="card-description mb-3">
                     Solicita una nueva cita médica de forma rápida y sencilla
                   </p>
-                  <div className="card-stats">
-                    <div>
-                      <div className="stats-number">+</div>
-                      <div className="stats-label">Nuevo</div>
-                    </div>
+                  
+                  {/* Botón de acción sin contador */}
+                  <div className="d-flex justify-content-between align-items-center bg-light rounded p-3 border border-1">
+                    <span className="text-primary fw-medium">Nuevo Turno</span>
                     <span className="material-symbols-outlined text-primary">
                       arrow_forward
                     </span>
