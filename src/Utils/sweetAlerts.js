@@ -20,7 +20,7 @@ export const showSuccess = (title, text = '') => {
     icon: 'success',
     title: title,
     text: text,
-    timer: 2000,
+    timer: 4000,
     timerProgressBar: true,
     showConfirmButton: false
   });

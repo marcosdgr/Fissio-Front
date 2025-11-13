@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useAuthStore } from '../../../Store/useAuthStore'
 import { solicitarTurno } from '../../../Custom/Paciente/CustomPacienteVista'
+import { showSuccess } from '../../../Utils/sweetAlerts'
 import '../../../Css/Paciente/Perfil/PerfilPaciente.css'
 import '../../../Css/Paciente/Turnos/AgendarTurno.css'
 
@@ -161,8 +162,11 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
       // Enviar solicitud
       await solicitarTurno(turnoData)
       
-      // Mostrar alerta de éxito y redirigir
-      alert('🎉 ¡Turno solicitado con éxito!\n\nTu solicitud ha sido enviada correctamente. Recibirás una confirmación pronto.')
+      // Mostrar alerta de éxito
+      await showSuccess(
+        '¡Turno solicitado con éxito!',
+        'Tu solicitud ha sido enviada correctamente. Recibirás una confirmación pronto.'
+      )
       
       // Limpiar formulario
       setFormData({
