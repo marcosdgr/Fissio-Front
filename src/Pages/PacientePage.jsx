@@ -53,14 +53,8 @@ const PacientePage = () => {
 
   return (
     <div className="d-flex paciente-container">
-      {/* Overlay para móvil */}
-      <div 
-        className={`sidebar-overlay ${mobileMenuOpen ? 'show' : ''}`}
-        onClick={() => setMobileMenuOpen(false)}
-      ></div>
-
-      {/* Sidebar */}
-      <div className={`text-white paciente-sidebar ${mobileMenuOpen ? 'show' : ''}`}>
+      {/* Sidebar fijo */}
+      <div className="text-white paciente-sidebar">
         {/* Header */}
         <div className="p-3 sidebar-header">
           <div className="d-flex align-items-center justify-content-center">
