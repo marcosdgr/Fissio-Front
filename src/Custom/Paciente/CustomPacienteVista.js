@@ -125,3 +125,44 @@ export const solicitarTurno = async (turnoData) => {
         throw error;
     } 
 }
+// traer el estado, fecha y hora requerida del turno de un paciente
+export const obtenerEstadoTurnoPorPaciente = async (idPaciente) => {
+    try {
+        const response = await api.get(`/api/pacientes/v1/${idPaciente}/turnos/detalles`);
+        return response.data;
+    } catch (error) {   
+        console.error(`Error al obtener estado del turno para paciente con ID ${idPaciente}:`, error);
+        throw error;
+    }
+}
+// obtener mail del paciente por id
+export const obtenerEmailPacientePorId = async (id) => {
+    try {
+        const response = await api.get(`/api/pacientes/v1/${id}/mail`);
+        return response.data;
+    } catch (error) {   
+        console.error(`Error al obtener email del paciente con ID ${id}:`, error);
+        throw error;
+    }
+}
+
+// Función para que el paciente pueda cancelar un turno
+export const cancelarTurnoPaciente = async (idPaciente, idTurno) => {
+    try {
+        const response = await api.put(`/api/pacientes/v1/${idPaciente}/turnos/${idTurno}/cancelar`);   
+        return response.data;
+    } catch (error) {
+        console.error(`Error al cancelar turno con ID ${idTurno} del paciente ${idPaciente}:`, error);
+        // Manejar errores específicos del backend
+        if (error.response) {
+            // El servidor respondió con un código de estado fuera del rango 2xx
+            throw new Error(error.response.data.message || 'Error al cancelar el turno');
+        } else if (error.request) {
+            // La petición fue hecha pero no hubo respuesta
+            throw new Error('No se pudo conectar con el servidor');
+        } else {
+            // Algo pasó al configurar la petición
+            throw new Error('Error al procesar la solicitud');
+        }
+    }
+}

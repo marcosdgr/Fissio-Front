@@ -25,7 +25,7 @@
   position: relative;
 }
 
-/* Sidebar mejorado - Fijo sin colapsar */
+/* Sidebar mejorado - Fijo y sticky */
 .paciente-sidebar {
   width: 280px;
   background: var(--sidebar-bg);
@@ -96,7 +96,7 @@
   height: 100vh;
 }
 
-/* Ajustar contenido principal para sidebar fijo */
+/* Ajustar contenido principal para sidebar sticky */
 .paciente-main-content {
   margin-left: 280px;
   /* ocupar la altura disponible menos la barra superior y hacer el contenido interno scrollable
@@ -108,15 +108,21 @@
   position: relative;
 }
 
-/* Remover transición de margen ya que el sidebar es fijo */
+/* Remover estilos de collapsed */
+.paciente-sidebar.collapsed {
+  width: 280px;
+  height: calc(100vh - 180px);
+}
+
 .paciente-container:has(.paciente-sidebar.collapsed) .paciente-main-content {
-  margin-left: 280px; /* Mantener margen fijo */
+  flex: 1;
 }
 
 .sidebar-header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
+  flex-shrink: 0; /* No permitir que se encoja */
 }
 
 .sidebar-header h5 {
@@ -124,24 +130,37 @@
   font-weight: 700;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   margin: 0;
+  text-align: center;
+  width: 100%;
 }
 
+/* Remover estilos de botón toggle ya que no se usa */
 .sidebar-toggle {
-  color: var(--sidebar-text);
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 8px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  display: none;
 }
 
-.sidebar-toggle:hover,
-.sidebar-toggle:focus {
-  color: white;
+/* Nav del sidebar - con scroll si es necesario */
+.paciente-sidebar nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.paciente-sidebar nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.paciente-sidebar nav::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.paciente-sidebar nav::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.paciente-sidebar nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* Menu items mejorados */
@@ -222,6 +241,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.05);
   margin: 0.75rem;
+  margin-top: auto; /* Pegarlo al fondo del sidebar */
   border-radius: 12px;
   padding: 1rem !important;
   backdrop-filter: blur(10px);

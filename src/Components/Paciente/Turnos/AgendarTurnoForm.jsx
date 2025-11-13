@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAuthStore } from '../../../Store/useAuthStore'
 import { solicitarTurno } from '../../../Custom/Paciente/CustomPacienteVista'
 import '../../../Css/Paciente/Perfil/PerfilPaciente.css'
+import '../../../Css/Paciente/Turnos/AgendarTurno.css'
 
 const AgendarTurnoForm = ({ setActiveTab }) => {
   // Estados del formulario
@@ -16,15 +17,45 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
   const [error, setError] = useState(null)
   const [ordenMedicaFile, setOrdenMedicaFile] = useState(null)
   const [ordenMedicaPreview, setOrdenMedicaPreview] = useState(null)
+  const [isDragging, setIsDragging] = useState(false)
 
   // Obtener datos del paciente desde Zustand
   const { user } = useAuthStore()
   const pacienteInfo = user?.usuario || {}
   const idPaciente = pacienteInfo.idPaciente
 
-  // Función para manejar la selección de archivo
-  const handleArchivoChange = (e) => {
-    const file = e.target.files[0]
+  // Funciones para manejar drag and drop
+  const handleDragEnter = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+  }
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+
+    const files = e.dataTransfer.files
+    if (files && files.length > 0) {
+      const file = files[0]
+      handleArchivoValidation(file)
+    }
+  }
+
+  // Función para validar archivo
+  const handleArchivoValidation = (file) => {
     if (!file) return
 
     // Validar tipo de archivo
@@ -48,6 +79,12 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
     }
     reader.readAsDataURL(file)
     setError(null)
+  }
+
+  // Función para manejar la selección de archivo
+  const handleArchivoChange = (e) => {
+    const file = e.target.files[0]
+    handleArchivoValidation(file)
   }
 
   // Función para quitar la orden médica
@@ -212,7 +249,7 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
               </div>
             )}
 
-            <div className="perfil-nav-card">
+            <div className="perfil-nav-card agendar-turno-form">
               <div className="card-icon mb-4">
                 <span className="material-symbols-outlined">event_note</span>
               </div>
@@ -222,47 +259,59 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                 <div className="row g-4">
                   
                   {/* Orden médica */}
-                  <div className="col-md-12">
+                  <div className="col-12">
                     <label htmlFor="ordenMedica" className="form-label fw-bold">
                       <span className="material-symbols-outlined me-2">upload_file</span>
                       Orden Médica (Opcional)
                     </label>
                     
                     {!ordenMedicaFile ? (
-                      <div className="upload-area border-2 border-dashed rounded p-4 text-center position-relative">
+                      <div 
+                        className={`upload-area ${isDragging ? 'dragging' : ''}`}
+                        onDragEnter={handleDragEnter}
+                        onDragLeave={handleDragLeave}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                        onClick={() => document.getElementById('ordenMedica').click()}
+                      >
                         <input
                           type="file"
                           id="ordenMedica"
-                          className="position-absolute w-100 h-100 opacity-0"
-                          style={{cursor: 'pointer'}}
+                          className="d-none"
                           accept="image/*"
                           onChange={handleArchivoChange}
                           disabled={loading}
                         />
                         <div className="upload-content">
-                          <span className="material-symbols-outlined display-4 text-muted mb-3 d-block">cloud_upload</span>
-                          <p className="mb-2 fw-bold text-dark">Subir Orden Médica</p>
-                          <p className="mb-0 text-muted">
-                            Haz clic aquí o arrastra tu archivo<br/>
-                            <small>Formatos: JPG, PNG, WebP (máx. 5MB)</small>
+                          <span className={`material-symbols-outlined upload-icon ${isDragging ? 'text-primary' : ''}`}>
+                            cloud_upload
+                          </span>
+                          <p className="upload-title">
+                            {isDragging ? '¡Suelta aquí tu archivo!' : 'Subir Orden Médica'}
                           </p>
+                          <p className="upload-subtitle">
+                            Haz clic aquí o arrastra tu archivo
+                          </p>
+                          <small className="upload-info">
+                            <span className="material-symbols-outlined me-1">image</span>
+                            Formatos: JPG, PNG, WebP (máx. 5MB)
+                          </small>
                         </div>
                       </div>
                     ) : (
-                      <div className="uploaded-file border rounded p-3 d-flex align-items-center justify-content-between bg-light">
+                      <div className="uploaded-file">
                         <div className="d-flex align-items-center">
                           <img 
                             src={ordenMedicaPreview} 
                             alt="Orden médica" 
-                            className="rounded me-3"
-                            style={{width: '60px', height: '60px', objectFit: 'cover'}}
+                            className="uploaded-preview"
                           />
                           <div>
-                            <p className="mb-1 fw-bold text-success">
+                            <p className="uploaded-success">
                               <span className="material-symbols-outlined me-2">check_circle</span>
                               Orden médica seleccionada
                             </p>
-                            <small className="text-muted">{ordenMedicaFile.name}</small>
+                            <small className="uploaded-filename">{ordenMedicaFile.name}</small>
                           </div>
                         </div>
                         <button
@@ -276,13 +325,13 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                     )}
                     
                     <div className="form-text mt-2">
-                      <span className="material-symbols-outlined me-1" style={{fontSize: '1rem'}}>info</span>
+                      <span className="material-symbols-outlined icon-info">info</span>
                       Sube una foto de tu orden médica si la tienes
                     </div>
                   </div>
 
                   {/* Fecha del turno */}
-                  <div className="col-md-6">
+                  <div className="col-md-6 col-12">
                     <label htmlFor="FechaRequeridaTurno" className="form-label fw-bold">
                       <span className="material-symbols-outlined me-2">calendar_today</span>
                       Fecha del Turno *
@@ -298,13 +347,13 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                       required
                     />
                     <div className="form-text">
-                      <span className="material-symbols-outlined me-1" style={{fontSize: '1rem'}}>info</span>
+                      <span className="material-symbols-outlined icon-info">info</span>
                       Selecciona una fecha a partir de mañana
                     </div>
                   </div>
 
                   {/* Horario del turno */}
-                  <div className="col-md-6">
+                  <div className="col-md-6 col-12">
                     <label htmlFor="HorarioRequeridoTurno" className="form-label fw-bold">
                       <span className="material-symbols-outlined me-2">schedule</span>
                       Horario *
@@ -325,13 +374,13 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                       ))}
                     </select>
                     <div className="form-text">
-                      <span className="material-symbols-outlined me-1" style={{fontSize: '1rem'}}>info</span>
+                      <span className="material-symbols-outlined icon-info">info</span>
                       Horarios disponibles de 08:00 a 18:00
                     </div>
                   </div>
 
                   {/* Observaciones */}
-                  <div className="col-md-12">
+                  <div className="col-12">
                     <label htmlFor="observaciones" className="form-label fw-bold">
                       <span className="material-symbols-outlined me-2">note</span>
                       Observaciones (Opcional)
