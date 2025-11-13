@@ -4,7 +4,7 @@ import { FaInstagramSquare, FaFacebook, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, 
 import "../../Css/Common/Footer.css";
 
 const Footer = () => {
-  const mainMapLink = "https://www.google.com/maps?q=26.8167,-65.3167"; // Yerba Buena
+  const mainMapLink = "https://maps.app.goo.gl/uhqZ5ZtBsr3S1TXr8"; // Yerba Buena
 
   return (
     <footer className="site-footer text-white">
@@ -45,7 +45,7 @@ const Footer = () => {
 
           <div className="col-12 col-md-2 mb-4">
             <h6>Horario</h6>
-            <p className="small mb-0">Lun - Vie: 08:00 - 20:00<br/>Sáb: 08:00 - 13:00</p>
+            <p className="small mb-0">Lunes - Viernes: <br/> 09:00 - 13:00  | 15:30 - 20:30<br/>Sábado: <br/> 08:00 - 13:00</p>
           </div>
         </div>
 
