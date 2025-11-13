@@ -14,7 +14,7 @@ const Footer = () => {
             <h5 className="footer-brand">Centro de Kinesiología Fissio</h5>
             <p className="small">Atención profesional enfocada en rehabilitación y prevención. Tratamientos personalizados para recuperar tu movilidad.</p>
             <div className="social-icons mt-3">
-              <a href="https://www.instagram.com/karenherrera.bd" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="me-2 social-link">
+              <a href="https://www.instagram.com/fissio.tuc" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="me-2 social-link">
                 <FaInstagramSquare />
               </a>
               <a href="https://www.facebook.com/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="me-2 social-link">
@@ -38,9 +38,8 @@ const Footer = () => {
           <div className="col-6 col-md-3 mb-4">
             <h6>Enlaces</h6>
             <ul className="list-unstyled">
-              <li className="mb-2"><Link to="/faq" className="footer-link">Preguntas frecuentes</Link></li>
+              <li className="mb-2"><Link to="/faqs" className="footer-link">Preguntas frecuentes</Link></li>
               <li className="mb-2"><Link to="/turnos" className="footer-link">Pedir turno</Link></li>
-              <li><Link to="/nosotros" className="footer-link">Sobre nosotros</Link></li>
             </ul>
           </div>
 

@@ -59,14 +59,9 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
     return badges[estado] || 'bg-secondary';
   };
 
-  const descargarOrdenMedica = (url, descripcion) => {
-    // Crear un enlace temporal para descargar el archivo
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = descripcion || 'orden_medica';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const descargarOrdenMedica = (url) => {
+    // Abrir la orden médica en una nueva pestaña
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   if (!isOpen) return null;
@@ -175,13 +170,10 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                           <div className="col-md-4 text-end">
                             <button
                               className="btn btn-outline-primary"
-                              onClick={() => descargarOrdenMedica(
-                                detalles.ordenMedica.url, 
-                                detalles.ordenMedica.descripcion
-                              )}
+                              onClick={() => descargarOrdenMedica(detalles.ordenMedica.url)}
                             >
-                              <span className="material-symbols-outlined me-1">download</span>
-                              Descargar
+                              <span className="material-symbols-outlined me-1">open_in_new</span>
+                              Ver Orden Médica
                             </button>
                           </div>
                         </div>
