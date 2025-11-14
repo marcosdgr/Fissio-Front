@@ -1,0 +1,300 @@
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+  --fissio-bg-light: #f8f9fa;
+  --sidebar-bg: linear-gradient(180deg, #034a7a 0%, #0470BB 100%);
+  --sidebar-hover: rgba(255, 255, 255, 0.1);
+  --sidebar-active: rgba(255, 255, 255, 0.95);
+  --sidebar-text: rgba(255, 255, 255, 0.9);
+  --sidebar-text-muted: rgba(255, 255, 255, 0.7);
+  --content-bg: #f1f3f4;
+}
+
+/* Contenedor principal */
+.kinesiologo-container {
+  background: var(--content-bg);
+  min-height: calc(100vh - 120px);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+}
+
+/* Sidebar */
+.kinesiologo-sidebar {
+  width: 280px;
+  background: var(--sidebar-bg);
+  position: fixed;
+  top: 60px;
+  left: 0;
+  height: calc(100vh - 180px);
+  overflow-y: auto;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+.kinesiologo-sidebar.collapsed {
+  width: 280px;
+}
+
+.kinesiologo-main-content {
+  margin-left: 280px;
+  min-height: calc(100vh - 180px);
+  padding-bottom: 2rem;
+}
+
+.kinesiologo-container:has(.kinesiologo-sidebar.collapsed) .kinesiologo-main-content {
+  margin-left: 280px;
+}
+
+.sidebar-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.sidebar-header h5 {
+  color: var(--sidebar-text);
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-toggle {
+  color: var(--sidebar-text);
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.sidebar-toggle:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-nav-item {
+  background-color: transparent;
+  color: var(--sidebar-text);
+  border: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  margin: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  width: calc(100% - 1.5rem);
+}
+
+.sidebar-nav-item .material-symbols-outlined {
+  color: var(--sidebar-text);
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.sidebar-nav-item:hover {
+  background: var(--sidebar-hover) !important;
+  color: white !important;
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-nav-item:hover .material-symbols-outlined {
+  color: white !important;
+  transform: scale(1.1);
+}
+
+.sidebar-nav-item.active {
+  background: var(--sidebar-active) !important;
+  color: var(--fissio-primary) !important;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateX(2px);
+}
+
+.sidebar-nav-item.active .material-symbols-outlined {
+  color: var(--fissio-primary) !important;
+}
+
+.sidebar-text {
+  transition: opacity 0.3s ease;
+  margin-left: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.kinesiologo-sidebar.collapsed .sidebar-text {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-collapsed-indicator {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: linear-gradient(180deg, white 0%, rgba(255, 255, 255, 0.8) 100%);
+  border-radius: 2px;
+  opacity: 0.9;
+}
+
+.sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  margin: 0.75rem;
+  border-radius: 12px;
+  padding: 1rem !important;
+  backdrop-filter: blur(10px);
+}
+
+.kinesiologo-avatar {
+  background: linear-gradient(135deg, white 0%, #f8f9fa 100%);
+  color: var(--fissio-primary);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.kinesiologo-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-footer .fw-bold {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sidebar-user-email {
+  color: var(--sidebar-text-muted);
+  font-size: 0.8rem;
+}
+
+.kinesiologo-main-content {
+  background: var(--content-bg);
+  min-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2rem;
+}
+
+.kinesiologo-header {
+  background: linear-gradient(135deg, white 0%, #f8f9fa 100%);
+  border-bottom: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 0 0 16px 16px;
+  margin: 0 1rem 1rem 1rem;
+  padding: 1.5rem 2rem !important;
+}
+
+.kinesiologo-header h4 {
+  color: var(--fissio-primary);
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.kinesiologo-header small {
+  color: var(--fissio-gray);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.mobile-menu-btn {
+  display: flex;
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--fissio-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-shadow: 0 2px 8px rgba(4, 112, 187, 0.3);
+}
+
+.sidebar-overlay {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.sidebar-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 1200px) {
+  .kinesiologo-sidebar { width: 240px; }
+  .kinesiologo-main-content { margin-left: 240px; }
+}
+
+@media (max-width: 992px) {
+  .kinesiologo-sidebar { width: 80px; }
+  .kinesiologo-main-content { margin-left: 80px; }
+  .sidebar-text, .sidebar-header h5, .sidebar-footer .fw-bold, .sidebar-footer .sidebar-user-email { display: none; }
+  .sidebar-nav-item { justify-content: center; margin: 0.25rem; width: calc(100% - 0.5rem); }
+}
+
+@media (max-width: 768px) {
+  .kinesiologo-sidebar {
+    transform: translateX(-100%);
+    width: 280px;
+    position: fixed;
+    z-index: 1050;
+    height: calc(100vh - 120px);
+  }
+  .kinesiologo-sidebar.show { transform: translateX(0); }
+  .kinesiologo-main-content { margin-left: 0; width: 100%; }
+  .kinesiologo-header { margin: 0; border-radius: 0; padding: 1rem 1.5rem !important; }
+  .p-4 { padding: 1rem !important; }
+}
+
+@media (max-width: 576px) {
+  .kinesiologo-header { padding: 0.75rem 1rem !important; }
+  .kinesiologo-header h4 { font-size: 1.2rem; margin-left: 3rem; }
+  .kinesiologo-header small { margin-left: 3rem; font-size: 0.8rem; }
+  .mobile-menu-btn { left: 0.75rem; }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu-btn, .sidebar-overlay { display: none !important; }
+}
+
+.kinesiologo-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.kinesiologo-sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+.kinesiologo-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+.kinesiologo-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+* { box-sizing: border-box; }
+.kinesiologo-container * { transition: margin 0.3s ease, width 0.3s ease; }
+footer { position: relative !important; z-index: 1001 !important; margin-left: 0 !important; width: 100% !important; }
+.kinesiologo-main-content > div:last-child { margin-bottom: 2rem; }

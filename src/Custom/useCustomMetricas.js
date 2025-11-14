@@ -1,0 +1,54 @@
+// src/Custom/useCustomMetricasEnVivo.js
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { BASE_URL } from '../Api/api';
+import { toast } from 'sonner';
+
+const useCustomMetricas = () => {
+  const [metrica, setMetrica] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const obtenerMetrica = async (fecha = null) => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${BASE_URL}api/metricas/vivo`, {
+        params: { fecha }
+      });
+
+      const data = res.data;
+
+      const parseada = {
+        ...data,
+        IngresosCobrados: parseFloat(data.IngresosCobrados) || 0,
+        EgresosPagados: parseFloat(data.EgresosPagados) || 0,
+        BalanceDelDia: parseFloat(data.BalanceDelDia) || 0,
+        TurnosProgramados: parseInt(data.TurnosProgramados) || 0,
+        TurnosAtendidos: parseInt(data.TurnosAtendidos) || 0,
+        HorasTrabajadasTotales: parseFloat(data.HorasTrabajadasTotales) || 0,
+        HorasEmpleadoTop: parseFloat(data.HorasEmpleadoTop) || 0,
+        VecesServicioTop: parseInt(data.VecesServicioTop) || 0,
+        TurnosPacienteTop: parseInt(data.TurnosPacienteTop) || 0,
+        NuevosPacientes: parseInt(data.NuevosPacientes) || 0,
+        CalificacionPromedio: parseFloat(data.CalificacionPromedio) || 0,
+      };
+
+      setMetrica(parseada);
+      toast.success("Métricas en vivo cargadas");
+    } catch (err) {
+      console.error("ERROR MÉTRICAS EN VIVO:", err.response || err);
+      setError("Error al cargar métricas en vivo");
+      toast.error("Error al cargar métricas");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    obtenerMetrica();
+  }, []);
+
+  return { metrica, loading, error, obtenerMetrica };
+};
+
+export default useCustomMetricas;

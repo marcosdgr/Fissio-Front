@@ -1,0 +1,94 @@
+/* src/Css/MetricasDiarias/MetricasDiarias.css */
+.chart-container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.chart-container h6 {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.table th {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table td {
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.btn-agregar {
+  border-radius: 12px;
+  padding: 0.6rem 1.4rem;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 280px;
+    padding: 1rem;
+  }
+  
+  .row.g-4 > div {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Loading */
+.loading-alert {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+}
+
+/* Modal */
+.custom-modal .modal-content {
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.modal-header.bg-primary {
+  background: linear-gradient(135deg, #0470BB, #3AB1CF) !important;
+}
+
+.btn-close-modal-x {
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.25);
+  border: none;
+  border-radius: 50%;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.7rem;
+  transition: all 0.35s ease;
+}
+
+.btn-close-modal-x:hover {
+  background: white;
+  color: #0470BB;
+  transform: translateY(-50%) scale(1.2);
+}
+
+.fade-in { animation: modalFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

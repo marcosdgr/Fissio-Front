@@ -1,0 +1,318 @@
+/* ============================================= */
+/*        PERFIL KINESIÓLOGO - FISSIO PRO        */
+/* ============================================= */
+
+/* Variables de color FISSIO - KINESIÓLOGO EDITION */
+:root {
+  --fissio-kine-primary: #0470BB;      /* Azul Fissio potente */
+  --fissio-kine-secondary: #00A8CC;    /* Cian vibrante */
+  --fissio-kine-accent: #FF6B35;       /* Naranja energético */
+  --fissio-kine-success: #2ECC71;      /* Verde salud */
+  --fissio-kine-gray: #555555;
+  --fissio-kine-light: #f8f9fa;
+  --fissio-kine-dark: #2d3748;
+  --fissio-kine-gradient: linear-gradient(135deg, #0470BB 0%, #00A8CC 100%);
+  --fissio-kine-shadow: 0 15px 35px rgba(4, 112, 187, 0.25);
+  --fissio-kine-glow: 0 0 20px rgba(0, 168, 204, 0.4);
+}
+
+/* Contenedor principal */
+.perfil-kinesiologo-container {
+  background: linear-gradient(135deg, 
+    rgba(0, 168, 204, 0.1) 0%, 
+    rgba(4, 112, 187, 0.05) 100%);
+  min-height: 100vh;
+  padding: 1.5rem;
+  padding-bottom: 3rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header de bienvenida - ÉPICO */
+.kine-welcome-section {
+  background: var(--fissio-kine-gradient);
+  border-radius: 20px;
+  color: white;
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--fissio-kine-shadow);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.kine-welcome-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+.kine-welcome-section::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" d="M100,10 Q150,50 140,100 Q130,150 100,190 Q70,150 60,100 Q50,50 100,10"/></svg>');
+  background-size: 60px;
+  animation: float 20s linear infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes float {
+  from { transform: translateY(0) rotate(0deg); }
+  to { transform: translateY(-30px) rotate(360deg); }
+}
+
+/* Avatar profesional */
+.kine-avatar {
+  width: 110px;
+  height: 110px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 4px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), var(--fissio-kine-glow);
+  transition: all 0.4s ease;
+}
+
+.kine-avatar:hover {
+  transform: scale(1.08) rotate(5deg);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 168, 204, 0.6);
+}
+
+.kine-avatar .material-symbols-outlined {
+  font-size: 3.2rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Textos */
+.kine-welcome-name {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.kine-welcome-subtitle {
+  font-size: 1.3rem;
+  opacity: 0.95;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.kine-welcome-date {
+  opacity: 0.9;
+  font-size: 1rem;
+  font-weight: 400;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+}
+
+/* Cards principales */
+.kine-nav-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 0 -0.75rem;
+}
+
+.kine-nav-card {
+  flex: 1;
+  min-width: 300px;
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.15);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 168, 204, 0.15);
+}
+
+.kine-nav-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 168, 204, 0.1), transparent);
+  transition: left 0.7s ease;
+}
+
+.kine-nav-card:hover::before {
+  left: 100%;
+}
+
+.kine-nav-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(4, 112, 187, 0.3), var(--fissio-kine-glow);
+  border-left: 5px solid var(--fissio-kine-primary);
+}
+
+.kine-card-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--fissio-kine-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.4);
+  transition: all 0.4s ease;
+}
+
+.kine-nav-card:hover .kine-card-icon {
+  transform: scale(1.15) rotate(360deg);
+  box-shadow: 0 12px 35px rgba(4, 112, 187, 0.5), var(--fissio-kine-glow);
+}
+
+.kine-card-icon .material-symbols-outlined {
+  color: white;
+  font-size: 2.4rem;
+}
+
+.kine-card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--fissio-kine-primary);
+  margin-bottom: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.kine-nav-card:hover .kine-card-title {
+  color: var(--fissio-kine-secondary);
+  text-shadow: 0 2px 4px rgba(0, 168, 204, 0.2);
+}
+
+.kine-card-description {
+  color: var(--fissio-kine-gray);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.kine-card-stats {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(33, 150, 243, 0.2);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.kine-stats-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--fissio-kine-primary);
+  text-shadow: 0 2px 4px rgba(4, 112, 187, 0.2);
+}
+
+.kine-stats-label {
+  font-size: 0.85rem;
+  color: var(--fissio-kine-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* Botón volver */
+.kine-btn-volver {
+  background: white;
+  color: var(--fissio-kine-primary);
+  border: 2px solid var(--fissio-kine-primary);
+  padding: 0.8rem 1.8rem;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(4, 112, 187, 0.2);
+}
+
+.kine-btn-volver:hover {
+  background: var(--fissio-kine-primary);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .kine-nav-cards {
+    gap: 1rem;
+  }
+  .kine-nav-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .perfil-kinesiologo-container {
+    padding: 1rem;
+  }
+  .kine-welcome-section {
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  .kine-welcome-name {
+    font-size: 2rem;
+  }
+  .kine-avatar {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 1rem;
+  }
+  .kine-nav-cards {
+    flex-direction: column;
+  }
+  .kine-nav-card {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .kine-welcome-name {
+    font-size: 1.7rem;
+  }
+  .kine-card-icon {
+    width: 70px;
+    height: 70px;
+  }
+  .kine-card-icon .material-symbols-outlined {
+    font-size: 2rem;
+  }
+  .kine-stats-number {
+    font-size: 1.6rem;
+  }
+}
+
+/* Animaciones */
+.kine-fade-in {
+  animation: kineFadeIn 0.8s ease-out;
+}
+
+@keyframes kineFadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.kine-slide-up {
+  animation: kineSlideUp 0.9s ease-out;
+}
+
+@keyframes kineSlideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -38,49 +38,75 @@ const FormTratamientos = ({ tratamiento, onSuccess }) => {
     setNuevoTratamiento({ ...nuevoTratamiento, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    if (procesando) return;
+const handleSubmit = async (e) => {
+  e.preventDefault(); 
+  if (procesando) return;
 
-    setProcesando(true);
+  setProcesando(true);
 
-    try {
-      let res;
-      if (tratamiento) {
-        // EDITAR
-        const result = await Swal.fire({
-          title: "¿Editar tratamiento?",
-          text: "Se actualizarán los datos",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonText: "Sí, actualizar",
-          cancelButtonText: "Cancelar"
-        });
+  try {
+    let res;
 
-        if (!result.isConfirmed) {
-          setProcesando(false);
-          return;
-        }
+    if (tratamiento) {
+      // === EDITAR (con confirmación) ===
+      const result = await Swal.fire({
+        title: "¿Editar tratamiento?",
+        text: `Se actualizarán los datos de "${nuevoTratamiento.NombreTratamiento}"`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#ffc107",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Sí, actualizar",
+        cancelButtonText: "Cancelar",
+      });
 
-        res = await editarTratamiento(tratamiento.idTratamiento, nuevoTratamiento);
-      } else {
-        // AGREGAR
-        res = await agregarTratamiento(nuevoTratamiento);
+      if (!result.isConfirmed) {
+        setProcesando(false);
+        return;
       }
 
-      if (res.success) {
-        toast.success(tratamiento ? 'Tratamiento editado' : 'Tratamiento agregado');
-        onSuccess(); 
-      } else {
-        toast.error(res.error || 'Error al guardar');
+      res = await editarTratamiento(tratamiento.idTratamiento, nuevoTratamiento);
+    } else {
+      // === CREAR NUEVO (CON CONFIRMACIÓN ÉPICA) ===
+      const result = await Swal.fire({
+        title: "¿Crear nuevo tratamiento?",
+        html: `
+          <p><strong>Nombre:</strong> ${nuevoTratamiento.NombreTratamiento}</p>
+          <p><strong>Duración:</strong> ${nuevoTratamiento.DuracionTratamiento} min</p>
+          <p>¿Estás seguro de crear este tratamiento?</p>
+        `,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#dc3545",
+        confirmButtonText: "Sí, crear",
+        cancelButtonText: "Cancelar",
+        width: "500px"
+      });
+
+      if (!result.isConfirmed) {
+        toast.info("Creación cancelada");
+        setProcesando(false);
+        return;
       }
-    } catch (err) {
-      toast.error('Error inesperado');
-      console.error(err);
-    } finally {
-      setProcesando(false);
+
+      res = await agregarTratamiento(nuevoTratamiento);
     }
-  };
+
+    // === ÉXITO ===
+    if (res.success) {
+      toast.success(tratamiento ? 'Tratamiento editado' : 'Tratamiento creado con éxito');
+      onSuccess(); 
+    } else {
+      toast.error(res.error || 'Error al guardar');
+    }
+  } catch (err) {
+    toast.error('Error inesperado');
+    console.error(err);
+  } finally {
+    setProcesando(false);
+  }
+};
 
   return (
     <form onSubmit={handleSubmit} className="form-tratamientos">
