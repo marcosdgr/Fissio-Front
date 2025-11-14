@@ -31,7 +31,9 @@ const ComentariosDelPaciente = () => {
   // Obtener datos del usuario
   const { user } = useAuthStore()
   const userData = user?.usuario || {}
-  // Usar idPaciente si existe, sino intentar con idUsuario
+  // idUsuario es el ID del usuario en la tabla usuarios (para crear comentarios)
+  const idUsuario = userData.idUsuario
+  // idPaciente es el ID del paciente en la tabla pacientes (para obtener comentarios)
   const idPaciente = userData.idPaciente || userData.idUsuario
 
   // Cargar comentarios del paciente específico
@@ -77,8 +79,8 @@ const ComentariosDelPaciente = () => {
       return
     }
 
-    if (!idPaciente) {
-      showError('Error', 'No se pudo identificar al paciente')
+    if (!idUsuario) {
+      showError('Error', 'No se pudo identificar al usuario')
       return
     }
 
@@ -88,7 +90,7 @@ const ComentariosDelPaciente = () => {
       const datosComentario = {
         CalificacionComentario: calificacion,
         Comentario: comentario.trim(),
-        idUsuario: idPaciente,
+        idUsuario: idUsuario,
       }
 
       await axios.post(`${BASE_URL}api/comentarios/v1/crear`, datosComentario)
