@@ -166,3 +166,14 @@ export const cancelarTurnoPaciente = async (idPaciente, idTurno) => {
         }
     }
 }
+
+// Obtener todos los comentarios de un paciente por su ID
+export const obtenerComentariosPorPaciente = async (idPaciente) => {
+    try {
+        const response = await api.get(`/api/pacientes/v1/${idPaciente}/comentarios`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error al obtener comentarios del paciente con ID ${idPaciente}:`, error);
+        throw error;
+    }
+}

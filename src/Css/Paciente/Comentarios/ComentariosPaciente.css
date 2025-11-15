@@ -1,0 +1,754 @@
+/* Variables de color Fissio */
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+  --fissio-bg-light: #f8f9fa;
+  --fissio-white: #ffffff;
+  --fissio-star: #FFD700;
+  --fissio-star-empty: #ddd;
+}
+
+/* ============================================
+   MODAL OVERLAY Y CONTENEDOR
+============================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content-feedback {
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideInUp 0.4s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-close-btn:hover {
+  background: var(--fissio-primary);
+  transform: rotate(90deg) scale(1.1);
+}
+
+.modal-close-btn:hover .material-symbols-outlined {
+  color: white;
+}
+
+.modal-close-btn .material-symbols-outlined {
+  font-size: 1.5rem;
+  color: var(--fissio-gray);
+  transition: color 0.3s ease;
+}
+
+/* ============================================
+   FORMULARIO DE COMENTARIO
+============================================ */
+.comentario-form-card {
+  background: linear-gradient(145deg, var(--fissio-white) 0%, var(--fissio-bg-light) 100%);
+  border: 1px solid rgba(58, 177, 207, 0.2);
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 6px 20px rgba(58, 177, 207, 0.15);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.comentario-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(58, 177, 207, 0.2);
+}
+
+.comentario-form-title {
+  color: var(--fissio-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.comentario-form-footer {
+  margin-top: 1.5rem;
+}
+
+/* ============================================
+   ESTILOS PARA COMPONENTES DE FEEDBACK
+============================================ */
+
+/* Sección de calificación del componente FeedbackEstrellas */
+.calificacion-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(4, 112, 187, 0.05) 0%, rgba(58, 177, 207, 0.05) 100%);
+  border-radius: 15px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.calificacion-section:hover {
+  border-color: var(--fissio-primary);
+  background: linear-gradient(135deg, rgba(4, 112, 187, 0.1) 0%, rgba(58, 177, 207, 0.1) 100%);
+}
+
+.calificacion-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--fissio-gray);
+  margin: 0;
+  text-align: center;
+}
+
+/* Estrellas del componente FeedbackEstrellas */
+.estrellas-container {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.estrella {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3rem;
+  color: #cccccc;
+  transition: all 0.3s ease;
+  padding: 0;
+  outline: none;
+  line-height: 1;
+}
+
+.estrella:focus {
+  outline: 2px solid var(--fissio-primary);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.estrella:hover {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.estrella.activa {
+  color: var(--fissio-star);
+  animation: starPulse 0.3s ease-out;
+}
+
+@keyframes starPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3) rotate(15deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.estrella i {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Mensaje de calificación del componente FeedbackEstrellas */
+.calificacion-mensaje {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--fissio-white);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mensaje-emoji {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--fissio-primary);
+}
+
+/* Estilos del componente FeedbackComentario */
+.comentario-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.comentario-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--fissio-gray);
+  margin: 0;
+}
+
+.comentario-textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid var(--fissio-light-gray);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--fissio-gray);
+  resize: vertical;
+  min-height: 150px;
+  transition: all 0.3s ease;
+}
+
+.comentario-textarea:focus {
+  outline: none;
+  border-color: var(--fissio-primary);
+  box-shadow: 0 0 0 4px rgba(4, 112, 187, 0.1);
+}
+
+.comentario-textarea::placeholder {
+  color: var(--fissio-light-gray);
+}
+
+.contador-caracteres {
+  text-align: right;
+  font-size: 0.9rem;
+  color: var(--fissio-light-gray);
+  font-weight: 500;
+}
+
+/* ============================================
+   CARDS DE COMENTARIOS
+============================================ */
+.comentario-card-paciente {
+  background: var(--fissio-white);
+  border: 1px solid rgba(58, 177, 207, 0.2);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.comentario-card-paciente:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(58, 177, 207, 0.2);
+  border-color: var(--fissio-secondary);
+}
+
+.comentario-card-header-paciente {
+  background: linear-gradient(135deg, var(--fissio-bg-light) 0%, var(--fissio-white) 100%);
+  padding: 1.25rem;
+  border-bottom: 2px solid rgba(58, 177, 207, 0.1);
+}
+
+.comentario-avatar-paciente {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.3);
+  flex-shrink: 0;
+}
+
+.comentario-avatar-paciente .material-symbols-outlined {
+  color: white;
+  font-size: 1.75rem;
+}
+
+.comentario-rating-paciente {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.comentario-estrellas-display {
+  display: flex;
+  gap: 0.25rem;
+  font-size: 1.25rem;
+}
+
+.estrella-display {
+  color: var(--fissio-star-empty);
+  transition: all 0.2s ease;
+}
+
+.estrella-display.filled {
+  color: var(--fissio-star);
+  filter: drop-shadow(0 1px 2px rgba(255, 215, 0, 0.3));
+}
+
+.comentario-card-body-paciente {
+  padding: 1.5rem;
+}
+
+.comentario-texto-paciente {
+  color: var(--fissio-gray);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.comentario-card-footer-paciente {
+  background: rgba(255, 193, 7, 0.1);
+  border-top: 1px solid rgba(255, 193, 7, 0.3);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comentario-card-footer-paciente small {
+  display: flex;
+  align-items: center;
+  color: #856404;
+  font-weight: 500;
+}
+
+/* ============================================
+   SECTION TITLE
+============================================ */
+.section-title {
+  color: var(--fissio-primary);
+  font-weight: 700;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--fissio-secondary);
+}
+
+.section-title .material-symbols-outlined {
+  font-size: 1.75rem;
+}
+
+/* ============================================
+   UTILIDADES
+============================================ */
+.icon-small {
+  font-size: 1rem !important;
+}
+
+.empty-icon {
+  font-size: 4rem !important;
+}
+
+/* ============================================
+   PAGINACIÓN
+============================================ */
+.comentarios-paginacion {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  padding: 1rem 0;
+}
+
+.pagination-comentarios {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+
+.pagination-item {
+  display: flex;
+  align-items: center;
+}
+
+.pagination-btn {
+  border: 2px solid var(--fissio-light-gray);
+  background: var(--fissio-white);
+  color: var(--fissio-gray);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--fissio-primary);
+  color: var(--fissio-white);
+  border-color: var(--fissio-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.3);
+}
+
+.pagination-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.pagination-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background: var(--fissio-bg-light);
+}
+
+.pagination-arrow {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.pagination-number {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 0.75rem;
+}
+
+.pagination-item.active .pagination-btn {
+  background: var(--fissio-primary);
+  color: var(--fissio-white);
+  border-color: var(--fissio-primary);
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.4);
+}
+
+.pagination-btn:focus {
+  outline: 2px solid var(--fissio-secondary);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 768px) {
+  .comentario-form-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .comentario-form-title {
+    font-size: 1.25rem;
+  }
+
+  .calificacion-section-paciente {
+    padding: 1rem;
+  }
+
+  .estrellas-container-paciente {
+    gap: 0.25rem;
+  }
+
+  .estrella-btn-paciente {
+    font-size: 2rem;
+  }
+
+  .calificacion-mensaje-paciente span {
+    font-size: 1rem;
+  }
+
+  .comentario-card-header-paciente {
+    padding: 1rem;
+  }
+
+  .comentario-avatar-paciente {
+    width: 45px;
+    height: 45px;
+  }
+
+  .comentario-avatar-paciente .material-symbols-outlined {
+    font-size: 1.5rem;
+  }
+
+  .comentario-estrellas-display {
+    font-size: 1.1rem;
+  }
+
+  .comentario-card-body-paciente {
+    padding: 1rem;
+  }
+
+  .comentario-texto-paciente {
+    font-size: 0.95rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .comentario-form-card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .comentario-form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .comentario-form-title {
+    font-size: 1.1rem;
+  }
+
+  .calificacion-section-paciente {
+    padding: 0.75rem;
+  }
+
+  .estrella-btn-paciente {
+    font-size: 1.75rem;
+  }
+
+  .calificacion-mensaje-paciente span {
+    font-size: 0.9rem;
+  }
+
+  .comentario-card-header-paciente {
+    padding: 0.75rem;
+  }
+
+  .comentario-avatar-paciente {
+    width: 40px;
+    height: 40px;
+  }
+
+  .comentario-avatar-paciente .material-symbols-outlined {
+    font-size: 1.25rem;
+  }
+
+  .comentario-rating-paciente {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .comentario-estrellas-display {
+    font-size: 1rem;
+    gap: 0.15rem;
+  }
+
+  .comentario-card-body-paciente {
+    padding: 0.75rem;
+  }
+
+  .comentario-texto-paciente {
+    font-size: 0.9rem;
+  }
+
+  .comentario-card-footer-paciente {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+
+  .section-title .material-symbols-outlined {
+    font-size: 1.5rem;
+  }
+
+  .empty-icon {
+    font-size: 3rem !important;
+  }
+
+  .pagination-comentarios {
+    gap: 0.35rem;
+  }
+
+  .pagination-arrow,
+  .pagination-number {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .comentario-form-card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .comentario-form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .comentario-form-title {
+    font-size: 1.1rem;
+  }
+
+  .calificacion-section-paciente {
+    padding: 0.75rem;
+  }
+
+  .estrella-btn-paciente {
+    font-size: 1.75rem;
+  }
+
+  .calificacion-mensaje-paciente span {
+    font-size: 0.9rem;
+  }
+
+  .comentario-card-header-paciente {
+    padding: 0.75rem;
+  }
+
+  .comentario-avatar-paciente {
+    width: 40px;
+    height: 40px;
+  }
+
+  .comentario-avatar-paciente .material-symbols-outlined {
+    font-size: 1.25rem;
+  }
+
+  .comentario-rating-paciente {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .comentario-estrellas-display {
+    font-size: 1rem;
+    gap: 0.15rem;
+  }
+
+  .comentario-card-body-paciente {
+    padding: 0.75rem;
+  }
+
+  .comentario-texto-paciente {
+    font-size: 0.9rem;
+  }
+
+  .comentario-card-footer-paciente {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+
+  .section-title .material-symbols-outlined {
+    font-size: 1.5rem;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem !important;
+  }
+
+  .pagination-comentarios {
+    gap: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .pagination-arrow,
+  .pagination-number {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ============================================
+   ANIMACIONES ADICIONALES
+============================================ */
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Efecto hover suave para botones */
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Estilo para textarea del formulario */
+.comentario-form-card .form-control {
+  border: 2px solid var(--fissio-light-gray);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.comentario-form-card .form-control:focus {
+  border-color: var(--fissio-primary);
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
+}
+
+/* Loading spinner personalizado */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15rem;
+}

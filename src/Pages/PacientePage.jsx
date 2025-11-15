@@ -8,9 +8,11 @@ import Configuracion from '../Components/Paciente/Configuracion/Configuracion'
 import { obtenerPacientePorId, obtenerEmailPacientePorId  } from '../Custom/Paciente/CustomPacienteVista'
 import { useAuthStore } from '../Store/useAuthStore'
 import '../Css/Paciente/PacientePage.css'
+import '../Css/Paciente/SidebarPaciente.css'
 
 const PacientePage = () => {
   const [activeTab, setActiveTab] = useState("perfil");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pacienteData, setPacienteData] = useState(null)
   const [emailPaciente, setEmailPaciente] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -53,57 +55,68 @@ const PacientePage = () => {
 
   return (
     <div className="d-flex paciente-container">
+      {/* Overlay para móvil */}
+      {sidebarOpen && (
+        <div 
+          className="sidebar-overlay show" 
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar fijo */}
-      <div className="text-white paciente-sidebar">
+      <div className={`text-white paciente-sidebar ${sidebarOpen ? 'show' : ''}`}>
         {/* Header */}
         <div className="p-3 sidebar-header">
           <div className="d-flex align-items-center justify-content-center">
             <h5 className="mb-0 fw-bold text-white">
               <p></p>
-              <span className="material-symbols-outlined me-2 fs-1">
-                favorite
-              </span>
               {loading ? 'Fissio' : `Hola, ${pacienteData?.NombrePaciente || 'Paciente'}`}
             </h5>
           </div>
         </div>
 
-        {/* Menú */}
-        <nav className="nav flex-column p-3">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              className={`nav-link text-start rounded mb-2 p-3 d-flex align-items-center sidebar-nav-item
-                ${activeTab === item.id ? "active" : ""}`}
-              onClick={() => setActiveTab(item.id)}
-            >
-              <span className="material-symbols-outlined me-3 fs-4">
-                {item.icon}
-              </span>
-              <span className="fw-medium sidebar-text">{item.label}</span>
-            </button>
-          ))}
-        </nav>
+        {/* Contenedor scrolleable para el menú y footer */}
+        <div className="sidebar-scroll-container">
+          {/* Menú */}
+          <nav className="nav flex-column">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                className={`nav-link text-start rounded mb-2 p-3 d-flex align-items-center sidebar-nav-item
+                  ${activeTab === item.id ? "active" : ""}`}
+                onClick={() => {
+                  setActiveTab(item.id)
+                  setSidebarOpen(false)
+                }}
+              >
+                <span className="material-symbols-outlined me-3 fs-4">
+                  {item.icon}
+                </span>
+                <span className="fw-medium sidebar-text">{item.label}</span>
+              </button>
+            ))}
+          </nav>
 
-        {/* Footer */}
-        <div className="mt-auto p-3 sidebar-footer">
-          <div className="d-flex align-items-center">
-            <div className="paciente-avatar rounded-circle p-2 me-3">
-              <span className="material-symbols-outlined">person</span>
-            </div>
-            <div>
-              {loading ? (
-                <div className="fw-bold text-white">Cargando...</div>
-              ) : (
-                <>
-                  <div className="fw-bold text-white">
-                    {pacienteData ? `${pacienteData.NombrePaciente} ${pacienteData.ApellidoPaciente}` : 'Paciente'}
-                  </div>
-                  <small className="sidebar-user-email">
-                    {emailPaciente || 'paciente@fissio.com'}
-                  </small>
-                </>
-              )}
+          {/* Footer */}
+          <div className="p-3 sidebar-footer">
+            <div className="d-flex align-items-center">
+              <div className="paciente-avatar rounded-circle p-2 me-3">
+                <span className="material-symbols-outlined">person</span>
+              </div>
+              <div>
+                {loading ? (
+                  <div className="fw-bold text-white">Cargando...</div>
+                ) : (
+                  <>
+                    <div className="fw-bold text-white">
+                      {pacienteData ? `${pacienteData.NombrePaciente} ${pacienteData.ApellidoPaciente}` : 'Paciente'}
+                    </div>
+                    <small className="sidebar-user-email">
+                      {emailPaciente || 'paciente@fissio.com'}
+                    </small>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -112,6 +125,15 @@ const PacientePage = () => {
       {/* Contenido Principal */}
       <div className="flex-grow-1 paciente-main-content">
         <div className="paciente-header shadow-sm p-4">
+          <button 
+            className="mobile-menu-btn"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-label="Toggle sidebar"
+          >
+            <span className="material-symbols-outlined">
+              {sidebarOpen ? 'close' : 'menu'}
+            </span>
+          </button>
           <h4 className="mb-0 fw-bold">
             {menuItems.find((m) => m.id === activeTab)?.label || "Panel del Paciente"}
           </h4>

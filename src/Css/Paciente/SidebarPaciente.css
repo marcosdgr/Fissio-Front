@@ -1,0 +1,411 @@
+/* SidebarPaciente.css - Estilos exclusivos del Sidebar */
+
+/* Variables de colores Fissio */
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+  --sidebar-bg: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
+  --sidebar-hover: rgba(255, 255, 255, 0.1);
+  --sidebar-active: rgba(255, 255, 255, 0.95);
+  --sidebar-text: rgba(255, 255, 255, 0.9);
+  --sidebar-text-muted: rgba(255, 255, 255, 0.7);
+}
+
+/* Sidebar mejorado - Fijo y sticky */
+.paciente-sidebar {
+  width: 280px;
+  background: var(--sidebar-bg);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+  overflow: hidden;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  padding-top: 60px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+/* Efecto de burbujas en el sidebar */
+.paciente-sidebar::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  animation: floatSlow 25s ease-in-out infinite;
+}
+
+.paciente-sidebar::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  animation: floatSlow 30s ease-in-out infinite reverse;
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(20px, -20px);
+  }
+}
+
+/* Permitir scroll interno del sidebar */
+.paciente-sidebar > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Contenedor scrolleable del sidebar */
+.sidebar-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.paciente-sidebar .nav {
+  flex: 0 0 auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar personalizada del sidebar */
+.paciente-sidebar nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.paciente-sidebar nav::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.paciente-sidebar nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.paciente-sidebar nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Scrollbar del contenedor scrolleable */
+.sidebar-scroll-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.sidebar-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+  padding: 0.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sidebar-header h5 {
+  color: var(--sidebar-text);
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
+
+/* Menu items mejorados */
+.sidebar-nav-item {
+  background-color: transparent;
+  color: var(--sidebar-text);
+  border: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  margin: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  width: calc(100% - 1.5rem);
+  flex-shrink: 0;
+  min-height: fit-content;
+}
+
+.sidebar-nav-item .material-symbols-outlined {
+  color: var(--sidebar-text);
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.sidebar-nav-item:hover {
+  background: var(--sidebar-hover) !important;
+  color: white !important;
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-nav-item:hover .material-symbols-outlined {
+  color: white !important;
+  transform: scale(1.1);
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+.sidebar-nav-item.active {
+  background: var(--sidebar-active) !important;
+  color: var(--fissio-primary) !important;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateX(2px);
+}
+
+.sidebar-nav-item.active .material-symbols-outlined {
+  color: var(--fissio-primary) !important;
+  font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+}
+
+.sidebar-text {
+  transition: opacity 0.3s ease;
+  margin-left: 0.75rem;
+  font-size: 0.9rem;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  margin: 0.75rem;
+  margin-top: auto;
+  border-radius: 12px;
+  padding: 1rem !important;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.paciente-avatar {
+  background: linear-gradient(135deg, white 0%, #f8f9fa 100%);
+  color: var(--fissio-primary);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.paciente-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-footer .fw-bold {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sidebar-user-email {
+  color: var(--sidebar-text-muted);
+  font-size: 0.8rem;
+}
+
+/* Sidebar Scrollbar general */
+.paciente-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.paciente-sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.paciente-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.paciente-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Estado collapsed (reservado para futuro) */
+.paciente-sidebar.collapsed {
+  width: 280px;
+}
+
+/* Responsive - Pantallas grandes (1200px) */
+@media (max-width: 1200px) {
+  .paciente-sidebar {
+    width: 240px;
+  }
+}
+
+/* Responsive - Tablet (992px) */
+@media (max-width: 992px) {
+  .paciente-sidebar {
+    width: 80px;
+  }
+  
+  .sidebar-text {
+    display: none;
+  }
+  
+  .sidebar-header h5 {
+    display: none;
+  }
+  
+  .sidebar-footer .fw-bold,
+  .sidebar-footer .sidebar-user-email {
+    display: none;
+  }
+  
+  .sidebar-nav-item {
+    justify-content: center;
+    margin: 0.25rem;
+    width: calc(100% - 0.5rem);
+  }
+}
+
+/* Responsive - Mobile (768px) */
+@media (max-width: 768px) {
+  .paciente-sidebar {
+    transform: translateX(-100%);
+    width: 280px;
+    position: fixed;
+    z-index: 1050;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    bottom: auto;
+  }
+  
+  .paciente-sidebar.show {
+    transform: translateX(0);
+  }
+}
+
+/* Responsive - Small Mobile (576px) */
+@media (max-width: 576px) {
+  .paciente-sidebar {
+    width: 280px;
+  }
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 0.75rem;
+    top: 0.75rem;
+    background: var(--fissio-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 2px 8px rgba(4, 112, 187, 0.3);
+    cursor: pointer;
+    z-index: 1051;
+    width: 40px;
+    height: 40px;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu-btn:active {
+    background: #035a99;
+    box-shadow: 0 4px 12px rgba(4, 112, 187, 0.4);
+    transform: scale(0.95);
+  }
+}
+
+@media (max-width: 576px) {
+  .mobile-menu-btn {
+    left: 0.5rem;
+    top: 0.5rem;
+  }
+}
+
+/* Ocultar botón móvil en desktop */
+@media (min-width: 769px) {
+  .mobile-menu-btn {
+    display: none !important;
+  }
+}
+
+/* Sidebar Overlay para móvil */
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .sidebar-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Ocultar overlay en desktop */
+@media (min-width: 769px) {
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+/* Transiciones suaves para el sidebar */
+.paciente-sidebar * {
+  transition: margin 0.3s ease, width 0.3s ease;
+}
