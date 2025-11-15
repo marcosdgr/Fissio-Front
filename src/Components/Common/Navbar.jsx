@@ -23,6 +23,17 @@ const Navbar = () => {
   const mostrarPedirTurno = !esAdmin && !esEmpleado;
   const mostrarFAQs = !esAdmin && !esEmpleado;
 
+  // Función para obtener la ruta del panel según el rol
+  const obtenerRutaPanel = () => {
+    if (esAdmin) return "/admin";
+    if (esPaciente) return "/paciente";
+    if (esEmpleado) {
+      if (permiso === "Kinesiología") return "/kinesiologo";
+      if (permiso === "Administración") return "/secretaria";
+    }
+    return "/";
+  };
+
   // Función para cerrar sesión
   const handleLogout = async () => {
     const result = await showConfirm(
@@ -93,6 +104,19 @@ const Navbar = () => {
               <li className="nav-item">
                 <Link className="nav-link" to="/mensajes">
                   Mensajes
+                </Link>
+              </li>
+            )}
+            
+            {/* Icono de Panel - Solo para usuarios logueados */}
+            {isLoggedIn && (
+              <li className="nav-item">
+                <Link 
+                  className="nav-link" 
+                  to={obtenerRutaPanel()}
+                  title="Ir a mi panel"
+                >
+                  <span className="material-symbols-outlined">dashboard</span>
                 </Link>
               </li>
             )}
