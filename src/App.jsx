@@ -12,7 +12,7 @@ import FAQsPublicPage from "./Pages/FAQsPublicPage";
 import LoginPage from "./Pages/LoginPage";
 import AsistenciaEmpleado from "./Components/Asistencia/AsistenciaEmpleado.jsx";
 import TurnosWebPage from "./Pages/TurnosWebPage.jsx";
-import SecretariaPage from "./Pages/SecretariaPage.jsx";
+
 
 import PublicRutes from "./Routes/PublicRutes.jsx";
 import PrivateRutes from "./Routes/PrivateRutes.jsx";
