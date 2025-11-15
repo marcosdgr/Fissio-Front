@@ -3,59 +3,68 @@ import { FaStar, FaQuoteLeft, FaChevronLeft, FaChevronRight } from "react-icons/
 
 const CardComentariosHome = () => {
   const [currentTestimonio, setCurrentTestimonio] = useState(0);
+  const [testimonios, setTestimonios] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const testimonios = [
-    {
-      id: 1,
-      nombre: "María González",
-      edad: 45,
-      tratamiento: "Kinesiología General",
-      rating: 5,
-      comentario: "Excelente atención profesional. Me recuperé completamente de mi lesión de espalda gracias al tratamiento personalizado que recibí.",
-      fecha: "Hace 2 semanas",
-      avatar: "/avatar-mujer-1.jpg"
-    },
-    {
-      id: 2,
-      nombre: "Carlos Rodríguez",
-      edad: 32,
-      tratamiento: "Rehabilitación Deportiva",
-      rating: 5,
-      comentario: "Como futbolista amateur, necesitaba recuperarme rápido de mi lesión. El equipo de Fissio me ayudó a volver a la cancha en tiempo récord.",
-      fecha: "Hace 1 mes",
-      avatar: "/avatar-hombre-1.jpg"
-    },
-    {
-      id: 3,
-      nombre: "Ana Martínez",
-      edad: 38,
-      tratamiento: "Reeducación Postural",
-      rating: 5,
-      comentario: "Después de años trabajando en oficina, tenía dolores constantes. Ahora puedo trabajar sin molestias. ¡Muy recomendable!",
-      fecha: "Hace 3 semanas",
-      avatar: "/avatar-mujer-2.jpg"
-    },
-    {
-      id: 4,
-      nombre: "Roberto Silva",
-      edad: 58,
-      tratamiento: "Kinesiología Respiratoria",
-      rating: 5,
-      comentario: "Mi calidad de vida mejoró notablemente. Los ejercicios respiratorios que me enseñaron los practico a diario.",
-      fecha: "Hace 2 meses",
-      avatar: "/avatar-hombre-2.jpg"
-    },
-    {
-      id: 5,
-      nombre: "Laura Fernández",
-      edad: 29,
-      tratamiento: "Terapia Manual",
-      rating: 5,
-      comentario: "Las técnicas manuales fueron increíbles para mi dolor cervical. Profesionales muy capacitados y empáticos.",
-      fecha: "Hace 1 semana",
-      avatar: "/avatar-mujer-3.jpg"
-    }
-  ];
+  // Cargar comentarios publicados desde la BD
+  useEffect(() => {
+    const cargarComentarios = async () => {
+      setLoading(true);
+      try {
+        // Usar el endpoint principal y filtrar los publicados
+        const response = await fetch(`http://localhost:4000/api/comentarios/v1/`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const todosLosComentarios = await response.json();
+        console.log('Comentarios recibidos del backend:', todosLosComentarios);
+        console.log('Primer comentario:', todosLosComentarios[0]);
+        
+        // Filtrar solo los comentarios publicados (IsPublicado = 1)
+        const comentariosPublicados = todosLosComentarios.filter(c => c.IsPublicado === 1);
+        console.log('Comentarios publicados filtrados:', comentariosPublicados);
+        
+        // Transformar los comentarios de la BD al formato esperado
+        const testimoniosFormateados = comentariosPublicados.map(comentario => ({
+          id: comentario.idComentario,
+          nombre: `${comentario.NombrePaciente} ${comentario.ApellidoPaciente}`,
+          edad: null, // No tenemos este dato
+          tratamiento: comentario.NombreTratamiento || "Fisioterapia",
+          rating: comentario.CalificacionComentario,
+          comentario: comentario.Comentario,
+          fecha: formatearFecha(comentario.FechaComentario),
+          avatar: null // No tenemos avatares
+        }));
+
+        console.log('Testimonios formateados:', testimoniosFormateados);
+        setTestimonios(testimoniosFormateados);
+      } catch (error) {
+        console.error('Error al cargar comentarios:', error);
+        // Si hay error, no mostrar nada
+        setTestimonios([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarComentarios();
+  }, []);
+
+  const formatearFecha = (fechaStr) => {
+    const fecha = new Date(fechaStr);
+    const ahora = new Date();
+    const diffMs = ahora - fecha;
+    const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    if (diffDias === 0) return "Hoy";
+    if (diffDias === 1) return "Ayer";
+    if (diffDias < 7) return `Hace ${diffDias} días`;
+    if (diffDias < 30) return `Hace ${Math.floor(diffDias / 7)} semanas`;
+    if (diffDias < 365) return `Hace ${Math.floor(diffDias / 30)} meses`;
+    return `Hace ${Math.floor(diffDias / 365)} años`;
+  };
 
   // Auto-slide cada 8 segundos
   useEffect(() => {
@@ -82,6 +91,25 @@ const CardComentariosHome = () => {
       />
     ));
   };
+
+  // Estados de carga y sin datos
+  if (loading) {
+    return (
+      <div className="text-center py-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando comentarios...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (testimonios.length === 0) {
+    return (
+      <div className="text-center py-5">
+        <p className="text-muted">No hay comentarios publicados aún.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="testimonios-container">
@@ -129,7 +157,7 @@ const CardComentariosHome = () => {
                           <div className="autor-info">
                             <h6 className="autor-nombre mb-1">{testimonio.nombre}</h6>
                             <small className="autor-detalles text-muted">
-                              {testimonio.edad} años • {testimonio.tratamiento}
+                              {testimonio.tratamiento}
                             </small>
                             <br />
                             <small className="testimonio-fecha text-muted">

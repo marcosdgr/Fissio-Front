@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../../Store/useAuthStore';
 import useCustomEmpleados from '../../Custom/Empleados/CustomEmpleados';
+import { getTurnosDelDia } from '../../Custom/CustomTurnos';
 import '../../Css/Kinesiologo/PerfilKinesiologo.css';
 
 const PerfilKinesiologo = ({ setActiveTab }) => {
@@ -11,12 +12,100 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
   const nombreLogin = `${user?.usuario?.NombreKinesiologo || ''} ${user?.usuario?.ApellidoKinesiologo || ''}`.trim().toLowerCase();
 
   const { empleados, loading } = useCustomEmpleados();
+  const [turnosHoy, setTurnosHoy] = useState(0);
+  const [turnosSemana, setTurnosSemana] = useState(0);
+  const [loadingTurnos, setLoadingTurnos] = useState(true);
 
   // BÚSQUEDA INTELIGENTE 
   const kine = empleados.find(e => 
     e.MailUsuario?.toLowerCase() === emailLogin?.toLowerCase() || 
     `${e.NombreEmpleado || ''} ${e.ApellidoEmpleado || ''}`.trim().toLowerCase() === nombreLogin
   );
+
+  // Obtener turnos reales del kinesiólogo
+  useEffect(() => {
+    const cargarTurnos = async () => {
+      if (!kine?.idEmpleado) {
+        console.log('No hay idEmpleado del kine');
+        setLoadingTurnos(false);
+        return;
+      }
+      
+      console.log('Cargando turnos para kinesiólogo:', kine.idEmpleado, kine.NombreEmpleado, kine.ApellidoEmpleado);
+      setLoadingTurnos(true);
+      try {
+        // Turnos de hoy
+        const hoy = new Date().toISOString().split('T')[0];
+        console.log('Consultando turnos de hoy:', hoy);
+        const turnosHoyResponse = await getTurnosDelDia(hoy);
+        console.log('Respuesta turnos hoy:', turnosHoyResponse);
+        
+        const todosTurnosHoy = [
+          ...(turnosHoyResponse.turnos?.solicitados || []),
+          ...(turnosHoyResponse.turnos?.enCurso || []),
+          ...(turnosHoyResponse.turnos?.finalizados || [])
+        ];
+        console.log('Todos los turnos de hoy:', todosTurnosHoy);
+        
+        // Mostrar un turno completo para ver qué campos tiene
+        if (todosTurnosHoy.length > 0) {
+          console.log('Campos del primer turno:', Object.keys(todosTurnosHoy[0]));
+          console.log('Turno completo:', todosTurnosHoy[0]);
+        }
+        
+        const turnosDelKineHoy = todosTurnosHoy.filter(t => {
+          // Comparar por nombre completo ya que el backend no devuelve idEmpleado
+          const nombreCompletoTurno = `${t.NombreEmpleado || ''} ${t.ApellidoEmpleado || ''}`.trim().toLowerCase();
+          const nombreCompletoKine = `${kine.NombreEmpleado} ${kine.ApellidoEmpleado}`.trim().toLowerCase();
+          const coincide = nombreCompletoTurno === nombreCompletoKine;
+          
+          if (coincide) {
+            console.log('✓ Turno', t.idTurno, 'es del kine:', nombreCompletoTurno);
+          }
+          
+          return coincide;
+        });
+        console.log('Turnos del kine hoy:', turnosDelKineHoy.length, turnosDelKineHoy);
+        setTurnosHoy(turnosDelKineHoy.length);
+
+        // Turnos de la semana
+        const ahora = new Date();
+        const diaSemana = ahora.getDay();
+        const lunes = new Date(ahora);
+        lunes.setDate(ahora.getDate() - (diaSemana === 0 ? 6 : diaSemana - 1));
+        
+        let totalTurnosSemana = 0;
+        for (let i = 0; i < 7; i++) {
+          const fecha = new Date(lunes);
+          fecha.setDate(lunes.getDate() + i);
+          const fechaStr = fecha.toISOString().split('T')[0];
+          
+          try {
+            const response = await getTurnosDelDia(fechaStr);
+            const nombreCompletoKine = `${kine.NombreEmpleado} ${kine.ApellidoEmpleado}`.trim().toLowerCase();
+            const turnosDelKine = [
+              ...(response.turnos?.solicitados || []),
+              ...(response.turnos?.enCurso || []),
+              ...(response.turnos?.finalizados || [])
+            ].filter(t => {
+              const nombreCompletoTurno = `${t.NombreEmpleado || ''} ${t.ApellidoEmpleado || ''}`.trim().toLowerCase();
+              return nombreCompletoTurno === nombreCompletoKine;
+            });
+            totalTurnosSemana += turnosDelKine.length;
+          } catch (err) {
+            console.error(`Error al cargar turnos del ${fechaStr}:`, err);
+          }
+        }
+        setTurnosSemana(totalTurnosSemana);
+      } catch (error) {
+        console.error('Error al cargar turnos:', error);
+      } finally {
+        setLoadingTurnos(false);
+      }
+    };
+
+    cargarTurnos();
+  }, [kine]);
 
   // ESTADOS DE CARGA
   if (loading) {
@@ -48,8 +137,6 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
   }
 
   const nombreKine = `${kine.NombreEmpleado} ${kine.ApellidoEmpleado}`.trim();
-  const turnosHoy = 8;
-  const turnosSemana = 42;
 
   const handleInfoPersonal = () => setActiveTab('perfilInfo');
 

@@ -25,7 +25,7 @@ const KinesiologoPage = () => {
         <div className="p-3 sidebar-header">
           <h5 className="mb-0 fw-bold text-white">
             <span className="material-symbols-outlined me-2">health_and_safety</span>
-            Fissio Kinesiólogo
+            Panel Profesional
           </h5>
         </div>
         <nav className="nav flex-column p-3">
