@@ -24,13 +24,14 @@ html, body {
 
 .admin-sidebar {
   position: fixed !important;
-  top: 0;
+  top: 60px;
   left: 0;
-  height: 100vh;
+  bottom: 0;
+  height: auto;
   width: 250px;
   background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
   transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1050;
+  z-index: 999;
   overflow-y: auto;
   box-shadow: 6px 0 30px rgba(4, 112, 187, 0.35);
   flex-shrink: 0;
