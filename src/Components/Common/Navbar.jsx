@@ -11,16 +11,16 @@ const Navbar = () => {
   // Función para cerrar sesión
   const handleLogout = async () => {
     const result = await showConfirm(
-      '¿Cerrar sesión?',
-      '¿Estás seguro que deseas salir de tu cuenta?',
-      'Sí, cerrar sesión',
-      'Cancelar'
+      "¿Cerrar sesión?",
+      "¿Estás seguro que deseas salir de tu cuenta?",
+      "Sí, cerrar sesión",
+      "Cancelar"
     );
 
     if (result.isConfirmed) {
       logout();
-      showSuccess('¡Hasta pronto!', 'Has cerrado sesión correctamente');
-      navigate('/');
+      showSuccess("¡Hasta pronto!", "Has cerrado sesión correctamente");
+      navigate("/");
     }
   };
 
@@ -29,8 +29,11 @@ const Navbar = () => {
       <div className="container">
         <Link className="navbar-brand d-flex align-items-center" to="/">
           {/* Logo servido desde la carpeta public */}
-          <img src="/logo-negro.png" alt="Fissio" className="fissio-logo me-2" />
-          
+          <img
+            src="/logo-negro.png"
+            alt="Fissio"
+            className="fissio-logo me-2"
+          />
         </Link>
         <button
           className="navbar-toggler"
@@ -47,19 +50,19 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="fissioNavbar">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
             <li className="nav-item">
-              <Link className="nav-link" to="/">Inicio</Link>
+              <Link className="nav-link" to="/">
+                Inicio
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/servicios">Servicios</Link>
+              <Link className="nav-link" to="/faqs">
+                Preguntas frecuentes
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/faqs">Preguntas frecuentes</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/turnos">Pedir turno</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/contacto">Contacto</Link>
+              <Link className="nav-link" to="/turnos">
+                Pedir turno
+              </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/mensajes">
@@ -68,17 +71,19 @@ const Navbar = () => {
             </li>
             {isLoggedIn ? (
               <li className="nav-item">
-                <button 
+                <button
                   className="nav-link btn btn-link text-decoration-none"
                   onClick={handleLogout}
-                  style={{ border: 'none', background: 'transparent' }}
+                  style={{ border: "none", background: "transparent" }}
                 >
                   Logout
                 </button>
               </li>
             ) : (
               <li className="nav-item">
-                <Link className="nav-link" to="/Login">Login</Link>
+                <Link className="nav-link" to="/Login">
+                  Login
+                </Link>
               </li>
             )}
           </ul>
