@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminPage from "./Pages/AdminPage";
 import PacientePage from "./Pages/PacientePage";
 import KinesiologoPage from "./Pages/KinesiologoPage";
+import SecretariaPage from "./Pages/SecretariaPage";
 import MensajeriaInterna from "./Components/MensajeriaInterna/MensajeriaInterna.jsx";
 import Footer from "./Components/Common/Footer";
 import Navbar from "./Components/Common/Navbar";

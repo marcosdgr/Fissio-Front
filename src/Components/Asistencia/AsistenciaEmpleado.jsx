@@ -213,6 +213,14 @@ const AsistenciaEmpleado = () => {
         minute: '2-digit' 
     });
 
+    // Debug: ver qué horarios se están recibiendo
+    console.log('🔍 Horarios semanales:', horariosSemanales);
+    if (horariosSemanales.length > 0) {
+        console.log('📋 Primer horario completo:', JSON.stringify(horariosSemanales[0], null, 2));
+    }
+    console.log('📅 Días semana array:', diasSemana);
+    console.log('📆 Día actual:', diaActual);
+
     return (
         <div className="asistencia-empleado-container">
             <div className="asistencia-header">
@@ -412,39 +420,49 @@ const AsistenciaEmpleado = () => {
                     ) : (
                         <div className="horarios-grid">
                             {diasSemana.map((dia) => {
-                                const horario = horariosSemanales.find(h => h.DiaSemana === dia);
+                                // Buscar TODOS los horarios de este día
+                                const horariosDelDia = horariosSemanales.filter(h => {
+                                    if (!h.Fecha) return false;
+                                    const fecha = new Date(h.Fecha);
+                                    const diaSemanaIndex = fecha.getDay() === 0 ? 6 : fecha.getDay() - 1;
+                                    const diaSemanaDelHorario = diasSemana[diaSemanaIndex];
+                                    return diaSemanaDelHorario === dia;
+                                });
+                                
                                 const esHoy = dia === diaActual;
                                 
                                 return (
                                     <div 
                                         key={dia} 
-                                        className={`horario-card ${esHoy ? 'dia-actual' : ''} ${!horario ? 'sin-horario' : ''}`}
+                                        className={`horario-card ${esHoy ? 'dia-actual' : ''} ${horariosDelDia.length === 0 ? 'sin-horario' : ''}`}
                                     >
                                         <div className="horario-dia">
                                             {dia}
                                             {esHoy && <span className="badge-hoy">HOY</span>}
                                         </div>
-                                        {horario ? (
-                                            <div className="horario-horas">
-                                                <div className="hora-item">
-                                                    <i className="fas fa-sign-in-alt"></i>
-                                                    <span>{formatearHora(horario.HoraEntradaEsperada)}</span>
+                                        {horariosDelDia.length > 0 ? (
+                                            horariosDelDia.map((horario, index) => (
+                                                <div key={index} className="horario-horas">
+                                                    <div className="hora-item">
+                                                        <i className="fas fa-sign-in-alt"></i>
+                                                        <span>{formatearHora(horario.HoraEntradaEsperada) || 'No disponible'}</span>
+                                                    </div>
+                                                    <div className="separador">-</div>
+                                                    <div className="hora-item">
+                                                        <i className="fas fa-sign-out-alt"></i>
+                                                        <span>{formatearHora(horario.HoraSalidaEsperada) || 'No disponible'}</span>
+                                                    </div>
+                                                    {horario.DescripcionHorario && (
+                                                        <div className="horario-descripcion">
+                                                            {horario.DescripcionHorario}
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                <div className="separador">-</div>
-                                                <div className="hora-item">
-                                                    <i className="fas fa-sign-out-alt"></i>
-                                                    <span>{formatearHora(horario.HoraSalidaEsperada)}</span>
-                                                </div>
-                                            </div>
+                                            ))
                                         ) : (
                                             <div className="sin-horario-text">
                                                 <i className="fas fa-times-circle"></i>
-                                                <span>Sin horario</span>
-                                            </div>
-                                        )}
-                                        {horario && horario.DescripcionHorario && (
-                                            <div className="horario-descripcion">
-                                                {horario.DescripcionHorario}
+                                                <span>No disponible</span>
                                             </div>
                                         )}
                                     </div>
