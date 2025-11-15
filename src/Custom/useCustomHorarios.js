@@ -11,11 +11,22 @@ const useCustomHorarios = () => {
     try {
       setLoading(true);
       setError(null);
-      const [horariosRes, asignacionesRes, empleadosRes] = await Promise.all([
-        axios.get(`${BASE_URL}api/horariosTrabajo/v1/activos`),
-        axios.get(`${BASE_URL}api/empleadosHorarios/v1`),
-        axios.get(`${BASE_URL}api/empleados/v1/activos`)
-      ]);
+      
+      console.log("Obteniendo horarios de:", `${BASE_URL}api/horariosTrabajo/v1`);
+      const horariosRes = await axios.get(`${BASE_URL}api/horariosTrabajo/v1`);
+      console.log("✅ Horarios obtenidos:", horariosRes.data);
+      
+      // Filtrar solo los horarios activos
+      const horariosActivos = horariosRes.data.filter(h => h.IsActive === 1 || h.IsActive === true);
+      console.log("📋 Horarios activos filtrados:", horariosActivos);
+      
+      console.log("Obteniendo asignaciones de:", `${BASE_URL}api/empleadosHorarios/v1`);
+      const asignacionesRes = await axios.get(`${BASE_URL}api/empleadosHorarios/v1`);
+      console.log("✅ Asignaciones obtenidas:", asignacionesRes.data);
+      
+      console.log("Obteniendo empleados de:", `${BASE_URL}api/empleados/v1/activos`);
+      const empleadosRes = await axios.get(`${BASE_URL}api/empleados/v1/activos`);
+      console.log("✅ Empleados obtenidos:", empleadosRes.data);
 
       // Mapear todos los empleados activos
       const empleadosLista = empleadosRes.data.map(e => ({
@@ -24,12 +35,15 @@ const useCustomHorarios = () => {
       }));
 
       setData({
-        horarios: horariosRes.data,
+        horarios: horariosActivos,
         asignaciones: asignacionesRes.data,
         empleados: empleadosLista
       });
     } catch (err) {
-      console.error("Error al cargar datos:", err);
+      console.error("❌ Error al cargar datos:", err);
+      console.error("URL que falló:", err.config?.url);
+      console.error("Status:", err.response?.status);
+      console.error("Respuesta del servidor:", err.response?.data);
       setError(err.response?.data?.message || "Error de conexión");
     } finally {
       setLoading(false);
@@ -56,7 +70,7 @@ const useCustomHorarios = () => {
 
   const desactivarHorario = async (id) => {
     try {
-      await axios.put(`${BASE_URL}api/horariosTrabajo/v1/borradoLogico/${id}`);
+      await axios.put(`${BASE_URL}api/horariosTrabajo/v1/${id}/desactivar`);
       return { success: true };
     } catch (err) {
       return { success: false, error: err.response?.data?.error || "Error al desactivar" };
@@ -65,7 +79,7 @@ const useCustomHorarios = () => {
 
   const reactivarHorario = async (id) => {
     try {
-      await axios.put(`${BASE_URL}api/horariosTrabajo/v1/reactivar/${id}`);
+      await axios.put(`${BASE_URL}api/horariosTrabajo/v1/${id}/activar`);
       return { success: true };
     } catch (err) {
       return { success: false, error: err.response?.data?.error || "Error al reactivar" };

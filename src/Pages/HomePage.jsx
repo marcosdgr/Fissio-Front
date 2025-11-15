@@ -4,6 +4,7 @@ import CardServiciosHome from "../Components/Home/CardServiciosHome";
 import CardComentariosHome from "../Components/Home/CardComentariosHome";
 import TurnoHome from "../Components/Home/TurnoHome";
 import "../Css/Home/Home.css";
+import Chatbot from "../Components/BOT/Chatbot";
 
 const HomePage = () => {
   return (
@@ -42,6 +43,8 @@ const HomePage = () => {
       <section className="turno-section">
         <TurnoHome />
       </section>
+              {/* Chatbot flotante - visible en todas las páginas */}
+        <Chatbot />
     </div>
   );
 };
