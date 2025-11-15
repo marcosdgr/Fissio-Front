@@ -81,3 +81,24 @@ const cambiarEstadoEmpleado = async (idEmpleado, nuevoEstado) => {
 };
 
 export default useCustomEmpleados;
+
+// Funciones independientes para usar en el componente de configuración
+export const obtenerEmpleadoPorId = async (idEmpleado) => {
+  try {
+    const response = await axios.get(`${BASE_URL}api/empleados/v1/${idEmpleado}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener empleado:', error);
+    throw error;
+  }
+};
+
+export const actualizarEmpleado = async (idEmpleado, datosActualizados) => {
+  try {
+    const response = await axios.put(`${BASE_URL}api/empleados/v1/actualizarEmpleado/${idEmpleado}`, datosActualizados);
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar empleado:', error);
+    throw error;
+  }
+};
