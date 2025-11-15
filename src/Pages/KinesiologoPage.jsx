@@ -3,6 +3,7 @@ import MensajeriaInterna from '../Components/MensajeriaInterna/MensajeriaInterna
 import AsistenciaKinesiologo from '../Components/Kinesiologo/AsistenciaKinesiologo';
 import PerfilKinesiologo from '../Components/Kinesiologo/PerfilKinesiologo';
 import PerfilInfoKinesiologo from '../Components/Kinesiologo/PerfilInfoKinesiologo';
+import TurnosKinesiologo from '../Components/Kinesiologo/TurnosKinesiologo';
 
 import '../Css/Kinesiologo/KinesiologoPage.css';
 
@@ -11,6 +12,7 @@ const KinesiologoPage = () => {
 
   const menuItems = [
     { id: "mensajes", label: "Mensajes", icon: "mail" },
+    { id: "turnos", label: "Mis Turnos", icon: "event" },
     { id: "asistencia", label: "Mi Asistencia", icon: "access_time" },
     { id: "perfil", label: "Mi Perfil", icon: "person" },
     { id: "perfilInfo", label: "Info Personal", icon: "badge" },
@@ -49,6 +51,7 @@ const KinesiologoPage = () => {
         </div>
         <div className="p-4">
           {activeTab === "mensajes" && <MensajeriaInterna />}
+          {activeTab === "turnos" && <TurnosKinesiologo />}
           {activeTab === "asistencia" && <AsistenciaKinesiologo />}
           {activeTab === "perfil" && <PerfilKinesiologo setActiveTab={setActiveTab} />}
           {activeTab === "perfilInfo" && <PerfilInfoKinesiologo setActiveTab={setActiveTab} />}

@@ -1,7 +1,6 @@
-// src/Custom/useDashboardData.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../Api/api';
+import { BASE_URL } from '../Api/api.js';
 
 const useDashboardData = () => {
   const [data, setData] = useState({
@@ -11,7 +10,7 @@ const useDashboardData = () => {
     tratamientos: [],
     profesionales: [],
     metricas: [],
-    // turnos, servicios, asistencias → NO EXISTEN → ELIMINADOS
+    turnos: []
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,35 +21,39 @@ const useDashboardData = () => {
       setError(null);
 
       const endpoints = [
-        'pacientes/v1',
-        'cobros/v1',
-        'pagos/v1',
-        'tratamientos/v1',
-        'empleados/v1',     // ← Profesionales
-        'metricas/vivo'
+        'pacientes/v1',          
+        'cobros/v1',          
+        'pagos/v1',              
+        'tratamientos/v1',       
+        'empleados/v1',      
+        'metricas/vivo',        
+        'turnos/v1'               
       ];
 
-      const requests = endpoints.map(ep => 
+      const requests = endpoints.map(ep =>
         axios.get(`${BASE_URL}api/${ep}`).catch(err => {
           console.warn(`Endpoint /api/${ep} falló:`, err.response?.status || err.message);
-          return { data: [] };
+          return { data: null };
         })
       );
 
       const responses = await Promise.all(requests);
 
-      const extractData = (res) => {
+      const extractArray = (res, key = null) => {
         if (!res || !res.data) return [];
-        return Array.isArray(res.data) ? res.data : (res.data?.data || res.data || []);
+        if (Array.isArray(res.data)) return res.data;
+        if (key && res.data[key]) return res.data[key];
+        return [];
       };
 
       setData({
-        pacientes: extractData(responses[0]),
-        cobros: extractData(responses[1]),
-        pagos: extractData(responses[2]),
-        tratamientos: extractData(responses[3]),
-        profesionales: extractData(responses[4]),
-        metricas: extractData(responses[5])
+        pacientes: extractArray(responses[0], 'pacientes'),
+        cobros: extractArray(responses[1]),
+        pagos: extractArray(responses[2]),
+        tratamientos: extractArray(responses[3]),
+        profesionales: extractArray(responses[4]),
+        metricas: extractArray(responses[5], 'metricas'),
+        turnos: extractArray(responses[6], 'turnos')
       });
     } catch (err) {
       console.error("Error en dashboard:", err);
@@ -62,6 +65,8 @@ const useDashboardData = () => {
 
   useEffect(() => {
     fetchAll();
+    const interval = setInterval(fetchAll, 30000); 
+    return () => clearInterval(interval);
   }, []);
 
   return { data, loading, error, refetch: fetchAll };

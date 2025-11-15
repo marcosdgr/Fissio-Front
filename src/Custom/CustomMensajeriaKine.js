@@ -1,4 +1,3 @@
-// src/Custom/Kinesiologo/CustomMensajeriaKine.js
 import axios from "axios";
 import { BASE_URL } from "../../Api/api.js";
 
@@ -8,8 +7,6 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-// Obtener token desde localStorage (o sessionStorage)
 const getToken = () => {
   try {
     const authData = JSON.parse(localStorage.getItem("auth") || "{}");

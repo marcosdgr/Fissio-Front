@@ -3,19 +3,22 @@ import axios from 'axios';
 import { BASE_URL } from '../Api/api.js';
 
 const useCustomPacientesCobros = () => {
-  const [pacientes, setPacientes] = useState({ pacientes: [] });
+  const [pacientes, setPacientes] = useState([]);
+  const [pacientesObj, setPacientesObj] = useState({ pacientes: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const obtenerPacientes = async () => {
     try {
       setLoading(true);
-      setError(null);
       const res = await axios.get(`${BASE_URL}api/pacientes/v1`);
-      setPacientes({ pacientes: res.data.pacientes || [] });
+      const data = Array.isArray(res.data) ? res.data : (res.data?.pacientes || []);
+      setPacientes(data);
+      setPacientesObj({ pacientes: data });
     } catch (err) {
       setError("Error al cargar pacientes");
-      console.error(err);
+      setPacientes([]);
+      setPacientesObj({ pacientes: [] });
     } finally {
       setLoading(false);
     }
@@ -25,7 +28,7 @@ const useCustomPacientesCobros = () => {
     obtenerPacientes();
   }, []);
 
-  return { pacientes, loading, error, obtenerPacientes };
+  return { pacientes, pacientesObj, loading, error, obtenerPacientes };
 };
 
 export default useCustomPacientesCobros;

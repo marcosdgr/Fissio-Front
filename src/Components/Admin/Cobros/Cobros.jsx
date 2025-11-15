@@ -1,17 +1,76 @@
-﻿import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 import FormCobros from "./FormCobros";
 import useCustomCobros from "../../../Custom/useCustomCobros";
+import useCustomPacientesCobros from "../../../Custom/useCustomPacientesCobros";
 import Swal from "sweetalert2";
 import "../../../Css/Cobros/Cobros.css";
 
 const Cobros = () => {
   const { cobros, loading, error, eliminarCobro, obtenerCobros } = useCustomCobros();
+  const { pacientesObj } = useCustomPacientesCobros();
 
   const [openModal, setOpenModal] = useState(false);
   const [openFormModal, setOpenFormModal] = useState(false);
   const [cobroSeleccionado, setCobroSeleccionado] = useState(null);
 
-  const resultado = (cobros.cobros || []).slice().sort((a, b) => b.idCobro - a.idCobro);
+  // Estados para filtros y paginación
+  const [busquedaDNI, setBusquedaDNI] = useState("");
+  const [ordenFecha, setOrdenFecha] = useState("desc");
+  const [paginaActual, setPaginaActual] = useState(1);
+  const cobrosPorPagina = 10;
+
+  // Estados para los datos filtrados
+  const [cobrosFiltrados, setCobrosFiltrados] = useState([]);
+  const [cobrosActuales, setCobrosActuales] = useState([]);
+  const [totalPaginas, setTotalPaginas] = useState(0);
+
+  // Filtrar y ordenar cobros con useEffect
+  useEffect(() => {
+    let resultado = (cobros.cobros || []).slice();
+
+    // Filtrar por DNI si hay búsqueda
+    if (busquedaDNI.trim()) {
+      resultado = resultado.filter(cobro => {
+        // Buscar el paciente por el nombre del cobro
+        const paciente = pacientesObj.pacientes.find(p => 
+          `${p.NombrePaciente} ${p.ApellidoPaciente}` === cobro.Paciente
+        );
+        return paciente && paciente.DNI.includes(busquedaDNI.trim());
+      });
+    }
+
+    // Ordenar por fecha
+    resultado.sort((a, b) => {
+      const fechaA = new Date(a.FechaCobro);
+      const fechaB = new Date(b.FechoCobro);
+      return ordenFecha === "asc" ? fechaA - fechaB : fechaB - fechaA;
+    });
+
+    setCobrosFiltrados(resultado);
+  }, [cobros.cobros, busquedaDNI, ordenFecha, pacientesObj.pacientes]);
+
+  // Calcular paginación con useEffect
+  useEffect(() => {
+    const totalPags = Math.ceil(cobrosFiltrados.length / cobrosPorPagina);
+    setTotalPaginas(totalPags);
+
+    const indiceInicio = (paginaActual - 1) * cobrosPorPagina;
+    const indiceFin = indiceInicio + cobrosPorPagina;
+    const cobrosParaMostrar = cobrosFiltrados.slice(indiceInicio, indiceFin);
+    
+    setCobrosActuales(cobrosParaMostrar);
+  }, [cobrosFiltrados, paginaActual, cobrosPorPagina]);
+
+  // Resetear a página 1 cuando cambian los filtros
+  const handleBusquedaChange = (valor) => {
+    setBusquedaDNI(valor);
+    setPaginaActual(1);
+  };
+
+  const handleOrdenChange = (orden) => {
+    setOrdenFecha(orden);
+    setPaginaActual(1);
+  };
 
   const refrescarLista = async () => {
     await obtenerCobros();
@@ -54,10 +113,12 @@ const Cobros = () => {
     });
 
     if (result.isConfirmed) {
-      const { success } = await eliminarCobro(cobro.idCobro);
-      if (success) {
+      const respuesta = await eliminarCobro(cobro.idCobro);
+      if (respuesta.success) {
         Swal.fire("Eliminado", "El cobro fue eliminado.", "success");
         refrescarLista();
+      } else {
+        Swal.fire("Error", respuesta.error || "No se pudo eliminar el cobro", "error");
       }
     }
   };
@@ -93,52 +154,156 @@ const Cobros = () => {
                   </div>
                 </div>
               ) : (
-                <div className="card-body p-0">
-                  <div className="table-responsive">
-                    <table className="table table-hover align-middle mb-0">
-                      <thead className="table-light">
-                        <tr>
-                          <th className="table-id">ID</th>
-                          <th>Fecha</th>
-                          <th>Paciente</th>
-                          <th>Monto</th>
-                          <th>Medio</th>
-                          <th>Estado</th>
-                          <th className="text-center">Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {resultado.map((cobro) => (
-                          <tr key={cobro.idCobro}>
-                            <td className="table-id">{cobro.idCobro}</td>
-                            <td>{new Date(cobro.FechaCobro).toLocaleDateString("es-AR")}</td>
-                            <td className="fw-bold">{cobro.Paciente}</td>
-                            <td className="text-success fw-bold">${cobro.MontoCobro}</td>
-                            <td>{cobro.MedioPago}</td>
-                            <td>
-                              <span className={`badge ${cobro.EstadoCobro === "Cobrado" ? "bg-success" : "bg-warning"} rounded-pill px-2`}>
-                                {cobro.EstadoCobro === "Cobrado" ? "PAGADO" : "PENDIENTE"}
-                              </span>
-                            </td>
-                            <td className="text-center">
-                              <div className="action-buttons">
-                                <button className="btn btn-info btn-sm btn-action" title="Ver" onClick={() => verCobro(cobro)}>
-                                  Ver
-                                </button>
-                                <button className="btn btn-primary btn-sm btn-action" title="Editar" onClick={() => abrirModalEditar(cobro)}>
-                                  Editar
-                                </button>
-                                <button className="btn btn-danger btn-sm btn-action" title="Eliminar" onClick={() => handleEliminar(cobro)}>
-                                  Eliminar
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                <>
+                  {/* Filtros */}
+                  <div className="card-body pb-2">
+                    <div className="row g-3 align-items-end">
+                      <div className="col-md-4">
+                        <label className="form-label fw-bold">Buscar por DNI</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Ingrese DNI del paciente..."
+                          value={busquedaDNI}
+                          onChange={(e) => handleBusquedaChange(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <label className="form-label fw-bold">Ordenar por Fecha</label>
+                        <select
+                          className="form-select"
+                          value={ordenFecha}
+                          onChange={(e) => handleOrdenChange(e.target.value)}
+                        >
+                          <option value="desc">Más reciente primero</option>
+                          <option value="asc">Más antiguo primero</option>
+                        </select>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="text-muted small">
+                          Mostrando {cobrosActuales.length} de {cobrosFiltrados.length} cobros
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+
+                  {cobrosFiltrados.length === 0 ? (
+                    <div className="card-body">
+                      <div className="alert alert-warning" role="alert">
+                        No se encontraron cobros con ese DNI.
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="card-body p-0">
+                        <div className="table-responsive">
+                          <table className="table table-hover align-middle mb-0">
+                            <thead className="table-light">
+                              <tr>
+                                <th>DNI</th>
+                                <th>Fecha</th>
+                                <th>Paciente</th>
+                                <th>Monto</th>
+                                <th>Medio</th>
+                                <th>Estado</th>
+                                <th className="text-center">Acciones</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {cobrosActuales.map((cobro) => {
+                                const paciente = pacientesObj.pacientes.find(p => 
+                                  `${p.NombrePaciente} ${p.ApellidoPaciente}` === cobro.Paciente
+                                );
+                                return (
+                                  <tr key={cobro.idCobro}>
+                                    <td className="fw-bold">{paciente?.DNI || '—'}</td>
+                                    <td>{new Date(cobro.FechaCobro).toLocaleDateString("es-AR")}</td>
+                                    <td className="fw-bold">{cobro.Paciente}</td>
+                                    <td className="text-success fw-bold">${cobro.MontoCobro}</td>
+                                    <td>{cobro.MedioPago}</td>
+                                    <td>
+                                      <span className={`badge ${cobro.EstadoCobro === "Cobrado" ? "bg-success" : "bg-warning"} rounded-pill px-2`}>
+                                        {cobro.EstadoCobro === "Cobrado" ? "PAGADO" : "PENDIENTE"}
+                                      </span>
+                                    </td>
+                                    <td className="text-center">
+                                      <div className="action-buttons">
+                                        <button className="btn btn-info btn-sm btn-action" title="Ver" onClick={() => verCobro(cobro)}>
+                                          Ver
+                                        </button>
+                                        <button className="btn btn-primary btn-sm btn-action" title="Editar" onClick={() => abrirModalEditar(cobro)}>
+                                          Editar
+                                        </button>
+                                        <button className="btn btn-danger btn-sm btn-action" title="Eliminar" onClick={() => handleEliminar(cobro)}>
+                                          Eliminar
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      {/* Paginación */}
+                      {totalPaginas > 1 && (
+                        <div className="card-footer bg-white border-top">
+                          <nav>
+                            <ul className="pagination justify-content-center mb-0">
+                              <li className={`page-item ${paginaActual === 1 ? 'disabled' : ''}`}>
+                                <button 
+                                  className="page-link" 
+                                  onClick={() => setPaginaActual(paginaActual - 1)}
+                                  disabled={paginaActual === 1}
+                                >
+                                  Anterior
+                                </button>
+                              </li>
+                              
+                              {[...Array(totalPaginas)].map((_, index) => {
+                                const pagina = index + 1;
+                                if (
+                                  pagina === 1 ||
+                                  pagina === totalPaginas ||
+                                  (pagina >= paginaActual - 1 && pagina <= paginaActual + 1)
+                                ) {
+                                  return (
+                                    <li key={pagina} className={`page-item ${paginaActual === pagina ? 'active' : ''}`}>
+                                      <button 
+                                        className="page-link" 
+                                        onClick={() => setPaginaActual(pagina)}
+                                      >
+                                        {pagina}
+                                      </button>
+                                    </li>
+                                  );
+                                } else if (
+                                  pagina === paginaActual - 2 ||
+                                  pagina === paginaActual + 2
+                                ) {
+                                  return <li key={pagina} className="page-item disabled"><span className="page-link">...</span></li>;
+                                }
+                                return null;
+                              })}
+                              
+                              <li className={`page-item ${paginaActual === totalPaginas ? 'disabled' : ''}`}>
+                                <button 
+                                  className="page-link" 
+                                  onClick={() => setPaginaActual(paginaActual + 1)}
+                                  disabled={paginaActual === totalPaginas}
+                                >
+                                  Siguiente
+                                </button>
+                              </li>
+                            </ul>
+                          </nav>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </div>
           )}

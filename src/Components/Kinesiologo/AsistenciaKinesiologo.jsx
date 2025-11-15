@@ -25,11 +25,10 @@ const AsistenciaEmpleado = () => {
         filtrarPorMes
     } = useCustomAsistencias(idEmpleadoLocal);
 
-    const [vistaActual, setVistaActual] = useState('horarios'); // 'horarios', 'historial'
+    const [vistaActual, setVistaActual] = useState('horarios');
     const [observaciones, setObservaciones] = useState('');
     const [mostrarObservaciones, setMostrarObservaciones] = useState(false);
 
-    // Si no tiene idEmpleado, buscarlo por idUsuario
     useEffect(() => {
         const buscarIdEmpleado = async () => {
             const userData = user?.usuario || user;
@@ -160,11 +159,6 @@ const AsistenciaEmpleado = () => {
         const diff = (timeSalida - timeEntrada) / (1000 * 60 * 60);
         return `${Math.floor(diff)}h ${Math.round((diff % 1) * 60)}min`;
     };
-
-    
-
-    // Obtener estadísticas (se usa si quieres mantenerlas en otro lado)
-    // const estadisticas = calcularEstadisticas();
 
     // Buscar por rango de fechas (mantener la funcionalidad de búsqueda)
     const buscarPorRango = () => {

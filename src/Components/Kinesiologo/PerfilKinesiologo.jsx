@@ -12,7 +12,7 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
 
   const { empleados, loading } = useCustomEmpleados();
 
-  // BÚSQUEDA INTELIGENTE → POR EMAIL O NOMBRE COMPLETO
+  // BÚSQUEDA INTELIGENTE 
   const kine = empleados.find(e => 
     e.MailUsuario?.toLowerCase() === emailLogin?.toLowerCase() || 
     `${e.NombreEmpleado || ''} ${e.ApellidoEmpleado || ''}`.trim().toLowerCase() === nombreLogin
@@ -48,7 +48,7 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
   }
 
   const nombreKine = `${kine.NombreEmpleado} ${kine.ApellidoEmpleado}`.trim();
-  const turnosHoy = 8; // ← después lo cambiamos por datos reales
+  const turnosHoy = 8;
   const turnosSemana = 42;
 
   const handleInfoPersonal = () => setActiveTab('perfilInfo');

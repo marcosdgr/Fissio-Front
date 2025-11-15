@@ -9,11 +9,29 @@ const useCustomMetricas = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const obtenerMetrica = async (fecha = null) => {
+  const obtenerMetrica = async (tipo = 'dia', fecha = null) => {
+    let fechaParam = null;
+
+    if (fecha) {
+      if (tipo === 'dia') {
+        fechaParam = fecha; // YYYY-MM-DD
+      } else if (tipo === 'semana') {
+        const [year, week] = fecha.split('-W');
+        const d = new Date(parseInt(year), 0, (parseInt(week) - 1) * 7 + 1);
+        const day = d.getDay();
+        const monday = new Date(d);
+        monday.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
+        fechaParam = monday.toISOString().split('T')[0];
+      } else if (tipo === 'mes') {
+
+        fechaParam = `${fecha}-01`;
+      }
+    }
+
     try {
       setLoading(true);
       const res = await axios.get(`${BASE_URL}api/metricas/vivo`, {
-        params: { fecha }
+        params: { tipo, fecha: fechaParam }
       });
 
       const data = res.data;
@@ -31,13 +49,15 @@ const useCustomMetricas = () => {
         TurnosPacienteTop: parseInt(data.TurnosPacienteTop) || 0,
         NuevosPacientes: parseInt(data.NuevosPacientes) || 0,
         CalificacionPromedio: parseFloat(data.CalificacionPromedio) || 0,
+        TipoRango: data.TipoRango || 'dia',
+        FechaBalance: data.FechaBalance || ''
       };
 
       setMetrica(parseada);
-      toast.success("Métricas en vivo cargadas");
+      toast.success(`Métricas ${tipo} cargadas`);
     } catch (err) {
-      console.error("ERROR MÉTRICAS EN VIVO:", err.response || err);
-      setError("Error al cargar métricas en vivo");
+      console.error("ERROR MÉTRICAS:", err.response || err);
+      setError("Error al cargar métricas");
       toast.error("Error al cargar métricas");
     } finally {
       setLoading(false);

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import useCustomFaqs from '../../../Custom/useCustomFaqs';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
-import axios from 'axios';
-import { BASE_URL } from '../../../Api/api';
 import "../../../Css/Faqs/FormFaqs.css";
 
 const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
@@ -15,8 +13,6 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
     idCatFAQ: ''
   });
 
-  const [nuevaCategoria, setNuevaCategoria] = useState('');
-  const [mostrarInputCategoria, setMostrarInputCategoria] = useState(false);
   const [procesando, setProcesando] = useState(false);
 
   useEffect(() => {
@@ -34,21 +30,6 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNuevaFaq({ ...nuevaFaq, [name]: value });
-  };
-
-  const crearCategoriaDesdeModal = async () => {
-    if (!nuevaCategoria.trim()) return;
-
-    try {
-      const res = await axios.post(`${BASE_URL}api/cat-faqs/v1`, { NombreCategoria: nuevaCategoria });
-      toast.success('Categoría creada');
-      setNuevaCategoria('');
-      setMostrarInputCategoria(false);
-      onSuccess();
-      setNuevaFaq(prev => ({ ...prev, idCatFAQ: res.data.data.idCatFAQ }));
-    } catch (err) {
-      toast.error('Error al crear categoría');
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -88,6 +69,7 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
         }
       }
     } catch (err) {
+      console.error('Error en handleSubmit:', err);
       toast.error('Error inesperado');
     } finally {
       setProcesando(false);
@@ -148,47 +130,6 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
               </option>
             ))}
           </select>
-
-          <div className="mt-2">
-            {mostrarInputCategoria ? (
-              <div className="input-group input-group-sm">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Nombre de nueva categoría"
-                  value={nuevaCategoria}
-                  onChange={(e) => setNuevaCategoria(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && crearCategoriaDesdeModal()}
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  className="btn btn-success btn-sm"
-                  onClick={crearCategoriaDesdeModal}
-                >
-                  Crear
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => {
-                    setMostrarInputCategoria(false);
-                    setNuevaCategoria('');
-                  }}
-                >
-                  Cancelar
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                className="btn btn-link p-0 text-primary"
-                onClick={() => setMostrarInputCategoria(true)}
-              >
-                + Crear nueva categoría
-              </button>
-            )}
-          </div>
         </div>
 
         <div className="d-grid mt-4">

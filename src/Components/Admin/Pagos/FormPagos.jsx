@@ -28,16 +28,17 @@ const FormPagos = ({ pago, onSuccess, onClose }) => {
         idMedioPago: pago.idMedioPago || '',
         MontoPago: pago.MontoPago || '',
         Descripcion: pago.Descripcion || '',
-        EstadoPago: pago.EstadoPago || 'Pendiente'
+        EstadoPago: pago.EstadoPago || 'Pagado'
       });
     } else {
+      // Al crear un nuevo pago, se asigna automáticamente la fecha actual
       setNuevoPago({
         FechaPago: new Date().toISOString().split("T")[0],
         idTipoPago: '',
         idMedioPago: '',
         MontoPago: '',
         Descripcion: '',
-        EstadoPago: 'Pendiente'
+        EstadoPago: 'Pagado'
       });
     }
   }, [pago]);
@@ -90,19 +91,6 @@ const FormPagos = ({ pago, onSuccess, onClose }) => {
 
   return (
     <form onSubmit={handleSubmit} className="form-pagos">
-      <div className="mb-3">
-        <label className="form-label">Fecha</label>
-        <input
-          name="FechaPago"
-          type="date"
-          value={nuevoPago.FechaPago}
-          onChange={handleChange}
-          className="form-control"
-          required
-          disabled={procesando}
-        />
-      </div>
-
       <div className="mb-3">
         <label className="form-label">Tipo de Pago</label>
         <select
@@ -161,20 +149,6 @@ const FormPagos = ({ pago, onSuccess, onClose }) => {
           rows="3"
           disabled={procesando}
         />
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label">Estado</label>
-        <select
-          name="EstadoPago"
-          value={nuevoPago.EstadoPago}
-          onChange={handleChange}
-          className="form-select"
-          disabled={procesando}
-        >
-          <option value="Pendiente">Pendiente</option>
-          <option value="Pagado">Pagado</option>
-        </select>
       </div>
 
       <div className="d-grid">

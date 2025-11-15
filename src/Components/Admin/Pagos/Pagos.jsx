@@ -1,6 +1,7 @@
-﻿import React, { useState } from "react";
+﻿import React, { useState, useMemo } from "react";
 import FormPagos from "./FormPagos";
 import useCustomPagos from "../../../Custom/useCustomPagos";
+import useCustomCatPagos from "../../../Custom/useCustomCatPagos";
 import Swal from "sweetalert2";
 import "../../../Css/Pagos/Pagos.css";
 
@@ -13,13 +14,68 @@ const Pagos = () => {
     eliminarPago
   } = useCustomPagos();
 
+  const { tiposPago } = useCustomCatPagos();
+
   const [openModal, setOpenModal] = useState(false);
   const [openFormModal, setOpenFormModal] = useState(false);
   const [pagoSeleccionado, setPagoSeleccionado] = useState(null);
 
-  const resultado = (pagos.pagos || [])
-    .slice()
-    .sort((a, b) => b.idPago - a.idPago);
+  // Estados para filtros y paginación
+  const [categoriaFiltro, setCategoriaFiltro] = useState("");
+  const [ordenMonto, setOrdenMonto] = useState("");
+  const [ordenFecha, setOrdenFecha] = useState("desc"); 
+  const [paginaActual, setPaginaActual] = useState(1);
+  const pagosPorPagina = 10;
+
+  // Filtrar y ordenar pagos
+  const pagosFiltrados = useMemo(() => {
+    let resultado = (pagos.pagos || []).slice();
+
+    // Filtrar por categoría
+    if (categoriaFiltro) {
+      resultado = resultado.filter(pago => pago.TipoPago === categoriaFiltro);
+    }
+
+    // Ordenar
+    resultado.sort((a, b) => {
+      // Primero ordenar por monto si está seleccionado
+      if (ordenMonto) {
+        const montoA = parseFloat(a.MontoPago);
+        const montoB = parseFloat(b.MontoPago);
+        const comparacionMonto = ordenMonto === "asc" ? montoA - montoB : montoB - montoA;
+        if (comparacionMonto !== 0) return comparacionMonto;
+      }
+
+      // Luego ordenar por fecha
+      const fechaA = new Date(a.FechaPago);
+      const fechaB = new Date(b.FechaPago);
+      return ordenFecha === "asc" ? fechaA - fechaB : fechaB - fechaA;
+    });
+
+    return resultado;
+  }, [pagos.pagos, categoriaFiltro, ordenMonto, ordenFecha]);
+
+  // Calcular paginación
+  const totalPaginas = Math.ceil(pagosFiltrados.length / pagosPorPagina);
+  const indiceInicio = (paginaActual - 1) * pagosPorPagina;
+  const indiceFin = indiceInicio + pagosPorPagina;
+  const pagosActuales = pagosFiltrados.slice(indiceInicio, indiceFin);
+
+  // Resetear a página 1 cuando cambian los filtros
+  const handleCategoriaChange = (valor) => {
+    setCategoriaFiltro(valor);
+    setPaginaActual(1);
+  };
+
+  const handleOrdenMontoChange = (orden) => {
+    setOrdenMonto(orden);
+    setPaginaActual(1);
+  };
+
+  const handleOrdenFechaChange = (orden) => {
+    setOrdenFecha(orden);
+    setPaginaActual(1);
+  };
 
   const refrescarLista = async () => {
     await obtenerPagos();
@@ -114,60 +170,174 @@ const Pagos = () => {
                   </div>
                 </div>
               ) : (
-                <div className="card-body p-0">
-                  <div className="table-responsive">
-                    <table className="table table-hover align-middle mb-0">
-                      <thead className="table-light">
-                        <tr>
-                          <th className="table-id">ID</th>
-                          <th>Fecha</th>
-                          <th>Descripción</th>
-                          <th>Tipo</th>
-                          <th>Medio</th>
-                          <th>Monto</th>
-                          <th>Estado</th>
-                          <th className="text-center">Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {resultado.map((pago) => (
-                          <tr key={pago.idPago}>
-                            <td className="table-id">{pago.idPago}</td>
-                            <td>{new Date(pago.FechaPago).toLocaleDateString("es-AR")}</td>
-                            <td className="fw-bold">{pago.Descripcion?.substring(0, 50) || "Sin descripción"}...</td>
-                            <td>{pago.TipoPago}</td>
-                            <td>{pago.MedioPago}</td>
-                            <td className="text-danger fw-bold">
-                              ${parseFloat(pago.MontoPago).toLocaleString("es-AR")}
-                            </td>
-                            <td>
-                              <span className={`badge ${pago.EstadoPago === "Pagado" ? "bg-success" : "bg-danger"} rounded-pill px-2`}>
-                                {pago.EstadoPago.toUpperCase()}
-                              </span>
-                            </td>
-                            <td className="text-center">
-                              <div className="action-buttons">
-                                <button className="btn btn-info btn-sm btn-action" title="Ver" onClick={() => verPago(pago)}>
-                                  Ver
-                                </button>
-                                <button className="btn btn-primary btn-sm btn-action" title="Editar" onClick={() => abrirModalEditar(pago)}>
-                                  Editar
-                                </button>
-                                <button
-                                  className="btn btn-danger btn-sm btn-action"
-                                  title="Eliminar"
-                                  onClick={() => handleEliminarPago(pago)}
-                                >
-                                  Eliminar
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                <>
+                  {/* Filtros */}
+                  <div className="card-body pb-2">
+                    <div className="row g-3 align-items-end">
+                      <div className="col-md-3">
+                        <label className="form-label fw-bold">Filtrar por Categoría</label>
+                        <select
+                          className="form-select"
+                          value={categoriaFiltro}
+                          onChange={(e) => handleCategoriaChange(e.target.value)}
+                        >
+                          <option value="">Todas las categorías</option>
+                          {tiposPago && tiposPago.length > 0 && tiposPago.map(tipo => (
+                            <option key={tipo.idTipoPago} value={tipo.NombreTipo}>
+                              {tipo.NombreTipo}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="col-md-3">
+                        <label className="form-label fw-bold">Ordenar por Monto</label>
+                        <select
+                          className="form-select"
+                          value={ordenMonto}
+                          onChange={(e) => handleOrdenMontoChange(e.target.value)}
+                        >
+                          <option value="">Sin ordenar por monto</option>
+                          <option value="desc">Mayor a menor</option>
+                          <option value="asc">Menor a mayor</option>
+                        </select>
+                      </div>
+                      <div className="col-md-3">
+                        <label className="form-label fw-bold">Ordenar por Fecha</label>
+                        <select
+                          className="form-select"
+                          value={ordenFecha}
+                          onChange={(e) => handleOrdenFechaChange(e.target.value)}
+                        >
+                          <option value="desc">Más reciente primero</option>
+                          <option value="asc">Más antiguo primero</option>
+                        </select>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="text-muted small">
+                          Mostrando {pagosActuales.length} de {pagosFiltrados.length} pagos
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+
+                  {pagosFiltrados.length === 0 ? (
+                    <div className="card-body">
+                      <div className="alert alert-warning" role="alert">
+                        No se encontraron pagos con los filtros seleccionados.
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="card-body p-0">
+                        <div className="table-responsive">
+                          <table className="table table-hover align-middle mb-0">
+                            <thead className="table-light">
+                              <tr>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Tipo</th>
+                                <th>Medio</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                                <th className="text-center">Acciones</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {pagosActuales.map((pago) => (
+                                <tr key={pago.idPago}>
+                                  <td>{new Date(pago.FechaPago).toLocaleDateString("es-AR")}</td>
+                                  <td className="fw-bold">{pago.Descripcion?.substring(0, 50) || "Sin descripción"}...</td>
+                                  <td>{pago.TipoPago}</td>
+                                  <td>{pago.MedioPago}</td>
+                                  <td className="text-danger fw-bold">
+                                    ${parseFloat(pago.MontoPago).toLocaleString("es-AR")}
+                                  </td>
+                                  <td>
+                                    <span className={`badge ${pago.EstadoPago === "Pagado" ? "bg-success" : "bg-danger"} rounded-pill px-2`}>
+                                      {pago.EstadoPago.toUpperCase()}
+                                    </span>
+                                  </td>
+                                  <td className="text-center">
+                                    <div className="action-buttons">
+                                      <button className="btn btn-info btn-sm btn-action" title="Ver" onClick={() => verPago(pago)}>
+                                        Ver
+                                      </button>
+                                      <button className="btn btn-primary btn-sm btn-action" title="Editar" onClick={() => abrirModalEditar(pago)}>
+                                        Editar
+                                      </button>
+                                      <button
+                                        className="btn btn-danger btn-sm btn-action"
+                                        title="Eliminar"
+                                        onClick={() => handleEliminarPago(pago)}
+                                      >
+                                        Eliminar
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      {/* Paginación */}
+                      {totalPaginas > 1 && (
+                        <div className="card-footer bg-white border-top">
+                          <nav>
+                            <ul className="pagination justify-content-center mb-0">
+                              <li className={`page-item ${paginaActual === 1 ? 'disabled' : ''}`}>
+                                <button 
+                                  className="page-link" 
+                                  onClick={() => setPaginaActual(paginaActual - 1)}
+                                  disabled={paginaActual === 1}
+                                >
+                                  Anterior
+                                </button>
+                              </li>
+                              
+                              {[...Array(totalPaginas)].map((_, index) => {
+                                const pagina = index + 1;
+                                if (
+                                  pagina === 1 ||
+                                  pagina === totalPaginas ||
+                                  (pagina >= paginaActual - 1 && pagina <= paginaActual + 1)
+                                ) {
+                                  return (
+                                    <li key={pagina} className={`page-item ${paginaActual === pagina ? 'active' : ''}`}>
+                                      <button 
+                                        className="page-link" 
+                                        onClick={() => setPaginaActual(pagina)}
+                                      >
+                                        {pagina}
+                                      </button>
+                                    </li>
+                                  );
+                                } else if (
+                                  pagina === paginaActual - 2 ||
+                                  pagina === paginaActual + 2
+                                ) {
+                                  return <li key={pagina} className="page-item disabled"><span className="page-link">...</span></li>;
+                                }
+                                return null;
+                              })}
+                              
+                              <li className={`page-item ${paginaActual === totalPaginas ? 'disabled' : ''}`}>
+                                <button 
+                                  className="page-link" 
+                                  onClick={() => setPaginaActual(paginaActual + 1)}
+                                  disabled={paginaActual === totalPaginas}
+                                >
+                                  Siguiente
+                                </button>
+                              </li>
+                            </ul>
+                          </nav>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </div>
           )}

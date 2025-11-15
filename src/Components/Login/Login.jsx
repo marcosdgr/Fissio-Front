@@ -50,10 +50,21 @@ const Login = () => {
       login(response);
       
       // Mostrar mensaje de éxito
-      showSuccess('¡Login exitoso!', `Bienvenido ${response.usuario?.NombrePaciente || response.usuario?.MailUsuario || 'a Fissio'}`);
+      showSuccess('¡Login exitoso!', `Bienvenido ${response.usuario?.NombrePaciente || response.usuario?.NombreProfesional || response.usuario?.MailUsuario || 'a Fissio'}`);
       
-      // Navegar a home
-      navigate('/paciente');
+      // Redirigir según el tipo de usuario
+      const tipoUsuario = response.usuario?.idTipoUsuario || response.usuario?.TipoUsuario;
+      
+      if (tipoUsuario === 1 || tipoUsuario === 'Administrador') {
+        navigate('/admin');
+      } else if (tipoUsuario === 2 || tipoUsuario === 'Profesional' || tipoUsuario === 'Kinesiologo') {
+        navigate('/kinesiologo');
+      } else if (tipoUsuario === 3 || tipoUsuario === 'Paciente') {
+        navigate('/paciente');
+      } else {
+        // Por defecto, navegar a paciente si no se reconoce el tipo
+        navigate('/paciente');
+      }
       
     } catch (error) {
       console.error('Error en login:', error);

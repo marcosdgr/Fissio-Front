@@ -27,10 +27,12 @@ const useCustomFaqs = () => {
 
   const agregarFaq = async (data) => {
     try {
-      const res = await axios.post(`${BASE_URL}api/faqs/v1`, data);
+      console.log('Datos enviados a agregarFaq:', data);
+      const res = await axios.post(`${BASE_URL}api/faqs/v1/`, data);
       return { success: true, data: res.data.data };
     } catch (err) {
-      return { success: false, error: err.response?.data?.errores?.[0]?.msg || "Error al agregar" };
+      console.error('Error completo al agregar FAQ:', err.response?.data);
+      return { success: false, error: err.response?.data?.errores?.[0]?.msg || err.response?.data?.message || "Error al agregar" };
     }
   };
 

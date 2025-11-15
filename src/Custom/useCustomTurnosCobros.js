@@ -1,4 +1,3 @@
-// src/Custom/useCustomTurnosCobros.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../Api/api.js';
@@ -13,7 +12,7 @@ const useCustomTurnosCobros = () => {
       const res = await axios.get(`${BASE_URL}api/turnos/v1`);
       const turnosConCobrado = (res.data.turnos || []).map(t => ({
         ...t,
-        cobrado: false // por defecto
+        cobrado: false 
       }));
 
       // Detectar si tiene cobro

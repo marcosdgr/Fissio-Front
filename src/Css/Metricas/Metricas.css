@@ -1,94 +1,312 @@
-/* src/Css/MetricasDiarias/MetricasDiarias.css */
-.chart-container {
-  background: #fff;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  height: 320px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+/* ============================================= */
+/*  MÉTRICAS EN VIVO - FISSIO DESIGN SYSTEM      */
+/* ============================================= */
+
+:root {
+  --fissio-primary: #0470BB;
+  --fissio-secondary: #3AB1CF;
+  --fissio-gray: #6B6B6B;
+  --fissio-light-gray: #A7B1B4;
+  --fissio-bg-light: #f8f9fa;
+  --fissio-white: #ffffff;
+  --fissio-success: #198754;
+  --fissio-danger: #dc3545;
+  --fissio-warning: #ffc107;
+  --fissio-info: #0dcaf0;
+  --fissio-dark: #212529;
+  --fissio-shadow: 0 8px 25px rgba(4, 112, 187, 0.12);
+  --fissio-radius: 18px;
+  --fissio-radius-sm: 12px;
+  --fissio-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.chart-container h6 {
-  font-weight: 600;
-  color: #2c3e50;
+/* ============================================= */
+/*  CARD PRINCIPAL                               */
+/* ============================================= */
+.card {
+  border: none;
+  border-radius: var(--fissio-radius);
+  overflow: hidden;
+  box-shadow: var(--fissio-shadow);
+  transition: var(--fissio-transition);
+  background: var(--fissio-white);
 }
 
-.table th {
-  font-weight: 600;
-  color: #495057;
-  font-size: 0.9rem;
-  text-transform: uppercase;
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 35px rgba(4, 112, 187, 0.18);
+}
+
+/* ============================================= */
+/*  HEADER CON GRADIENTE FISSIO                  */
+/* ============================================= */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--fissio-primary), var(--fissio-secondary)) !important;
+  padding: 1.5rem 2rem;
+  border-bottom: none;
+}
+
+.bg-gradient-primary h3 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.5rem;
   letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.table td {
-  vertical-align: middle;
+/* ============================================= */
+/*  SELECTORES (DÍA, SEMANA, MES)                */
+/* ============================================= */
+.form-select,
+.form-control {
+  border-radius: var(--fissio-radius-sm);
+  border: 1.5px solid #dee2e6;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  transition: var(--fissio-transition);
+  background-color: var(--fissio-white);
+}
+
+.form-select:focus,
+.form-control:focus {
+  border-color: var(--fissio-primary);
+  box-shadow: 0 0 0 3px rgba(4, 112, 187, 0.15);
+  outline: none;
+}
+
+.form-select option {
+  background: var(--fissio-white);
+  color: var(--fissio-dark);
+}
+
+/* ============================================= */
+/*  BOTÓN ACTUALIZAR                             */
+/* ============================================= */
+.btn-light {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: var(--fissio-radius-sm);
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--fissio-primary);
+  transition: var(--fissio-transition);
+  backdrop-filter: blur(10px);
+}
+
+.btn-light:hover {
+  background: var(--fissio-white);
+  color: var(--fissio-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(4, 112, 187, 0.2);
+}
+
+/* ============================================= */
+/*  TARJETAS DE MÉTRICA                          */
+/* ============================================= */
+.metric-card {
+  border-radius: var(--fissio-radius-sm);
+  padding: 1.5rem;
+  text-align: center;
+  transition: var(--fissio-transition);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--fissio-primary), var(--fissio-secondary));
+}
+
+.bg-success { background: linear-gradient(135deg, #198754, #20c997) !important; }
+.bg-info { background: linear-gradient(135deg, #0dcaf0, #0d6efd) !important; }
+.bg-primary { background: linear-gradient(135deg, var(--fissio-primary), var(--fissio-secondary)) !important; }
+.bg-warning { background: linear-gradient(135deg, #ffc107, #fd7e14) !important; color: #212529 !important; }
+
+.metric-card h5 {
+  margin: 0 0 0.5rem 0;
   font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  opacity: 0.9;
 }
 
-.btn-agregar {
-  border-radius: 12px;
-  padding: 0.6rem 1.4rem;
+.metric-card h2,
+.metric-card h4 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.metric-card h2 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.metric-card h4 {
+  font-size: 1.3rem;
+}
+
+.metric-card small {
+  font-size: 0.85rem;
+  opacity: 0.9;
   font-weight: 500;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .chart-container {
-    height: 280px;
-    padding: 1rem;
+/* ============================================= */
+/*  GRÁFICOS                                     */
+/* ============================================= */
+.chart-container {
+  background: var(--fissio-white);
+  border-radius: var(--fissio-radius-sm);
+  padding: 1.8rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #e9ecef;
+  transition: var(--fissio-transition);
+}
+
+.chart-container:hover {
+  box-shadow: 0 8px 25px rgba(4, 112, 187, 0.1);
+  border-color: var(--fissio-primary);
+}
+
+/* Títulos de gráficos */
+.chart-container .chartjs-title {
+  font-weight: 600;
+  color: var(--fissio-gray);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* ============================================= */
+/*  LOADING                                      */
+/* ============================================= */
+.loading-alert {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: var(--fissio-radius);
+  color: var(--fissio-gray);
+  font-size: 1.1rem;
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3em;
+  border-color: var(--fissio-primary) transparent var(--fissio-secondary) transparent;
+}
+
+/* ============================================= */
+/*  FOOTER INFO                                  */
+/* ============================================= */
+.text-success.fw-bold {
+  font-size: 0.85rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, var(--fissio-success), #20c997);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================= */
+/*  RESPONSIVE                                   */
+/* ============================================= */
+@media (max-width: 992px) {
+  .bg-gradient-primary {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
   }
-  
+
+  .bg-gradient-primary h3 {
+    font-size: 1.3rem;
+  }
+
+  .metric-card h2 {
+    font-size: 1.7rem;
+  }
+
+  .chart-container {
+    height: 300px;
+    padding: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+
   .row.g-4 > div {
     margin-bottom: 1.5rem;
   }
+
+  .chart-container {
+    height: 280px;
+  }
+
+  .d-flex.gap-2 {
+    flex-wrap: wrap;
+  }
+
+  .form-control,
+  .form-select,
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
 }
 
-/* Loading */
-.loading-alert {
-  display: flex;
-  align-items: center;
-  border-radius: 12px;
+@media (max-width: 576px) {
+  .bg-gradient-primary {
+    padding: 1.2rem;
+  }
+
+  .bg-gradient-primary h3 {
+    font-size: 1.1rem;
+  }
+
+  .metric-card {
+    padding: 1.2rem;
+  }
+
+  .metric-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .chart-container {
+    height: 250px;
+    padding: 1rem;
+  }
 }
 
-/* Modal */
-.custom-modal .modal-content {
-  border-radius: 18px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+/* ============================================= */
+/*  ANIMACIONES SUAVES                           */
+/* ============================================= */
+* {
+  transition: var(--fissio-transition);
 }
 
-.modal-header.bg-primary {
-  background: linear-gradient(135deg, #0470BB, #3AB1CF) !important;
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
 }
 
-.btn-close-modal-x {
-  position: absolute;
-  top: 50%;
-  right: 1.5rem;
-  transform: translateY(-50%);
-  background: rgba(255,255,255,0.25);
-  border: none;
-  border-radius: 50%;
-  width: 46px;
-  height: 46px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.7rem;
-  transition: all 0.35s ease;
-}
-
-.btn-close-modal-x:hover {
-  background: white;
-  color: #0470BB;
-  transform: translateY(-50%) scale(1.2);
-}
-
-.fade-in { animation: modalFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-@keyframes modalFadeIn {
-  from { opacity: 0; transform: translateY(-30px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

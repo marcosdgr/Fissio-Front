@@ -1,4 +1,3 @@
-// src/Components/Admin/Cobros/FormCobros.jsx
 import React, { useState, useEffect } from 'react';
 import useCustomCobros from '../../../Custom/useCustomCobros';
 import useCustomPacientesCobros from '../../../Custom/useCustomPacientesCobros';
@@ -7,65 +6,72 @@ import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import "../../../Css/Cobros/FormCobros.css";
 
-const FormCobros = ({ cobro, onSuccess }) => {
-  const { agregarCobro, cobros } = useCustomCobros();
-  const { pacientes } = useCustomPacientesCobros();
+const FormCobros = ({ cobro, onSuccess, onClose }) => {
+  const { agregarCobro, editarCobro, cobros, loading: loadingCobros, error: errorCobros, obtenerCobros } = useCustomCobros();
+  const { pacientesObj } = useCustomPacientesCobros();
   const { turnos } = useCustomTurnosCobros();
 
-  // Estados
-  const [busqueda, setBusqueda] = useState('');
+  const esEdicion = !!cobro?.idCobro;
+
+  const [dniBusqueda, setDniBusqueda] = useState('');
   const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
   const [mostrarPacientes, setMostrarPacientes] = useState(false);
 
   const [turnoSeleccionado, setTurnoSeleccionado] = useState(null);
   const [mostrarTurnos, setMostrarTurnos] = useState(false);
 
+  const fechaActual = new Date().toISOString().split('T')[0];
+
   const [nuevoCobro, setNuevoCobro] = useState({
-    FechaCobro: new Date().toISOString().split('T')[0],
+    FechaCobro: fechaActual,
     idTurno: '',
     TipoCobro: 'Paciente',
     idMedioPago: '',
     MontoCobro: '',
+    EstadoCobro: 'Cobrado',
     Descripcion: ''
   });
 
   const [procesando, setProcesando] = useState(false);
   const [errores, setErrores] = useState({});
 
-  // Cargar datos si es edición
+  // MEDIOS DE PAGO DESDE COBROS
+  const mediosPagoValidos = Array.from(
+    new Map(
+      cobros.cobros
+        .filter(c => c.idMedioPago && c.MedioPago)
+        .map(c => [c.idMedioPago, { id: c.idMedioPago, nombre: c.MedioPago }])
+    ).values()
+  );
+
   useEffect(() => {
-    if (cobro) {
+    if (esEdicion && cobro) {
       setNuevoCobro({
         FechaCobro: cobro.FechaCobro.split('T')[0],
         idTurno: cobro.idTurno,
         TipoCobro: cobro.TipoCobro,
-        idMedioPago: cobro.idMedioPago,
+        idMedioPago: cobro.idMedioPago?.toString() || '',
         MontoCobro: cobro.MontoCobro,
+        EstadoCobro: cobro.EstadoCobro || 'Cobrado',
         Descripcion: cobro.Descripcion || ''
       });
 
       const turno = turnos.turnos.find(t => t.idTurno == cobro.idTurno);
       if (turno) {
-        const pac = pacientes.pacientes.find(p => p.idPaciente == turno.idPaciente);
-        setPacienteSeleccionado(pac);
-        setBusqueda(`${pac.NombrePaciente} ${pac.ApellidoPaciente}`);
-        setTurnoSeleccionado(turno);
+        const pac = pacientesObj.pacientes.find(p => p.idPaciente == turno.idPaciente);
+        if (pac) {
+          setPacienteSeleccionado(pac);
+          setDniBusqueda(pac.DNI);
+          setTurnoSeleccionado(turno);
+        }
       }
     }
-  }, [cobro, pacientes, turnos]);
+  }, [cobro, pacientesObj, turnos, esEdicion, cobros.cobros]);
 
-  // Filtrar pacientes al escribir
-  const pacientesFiltrados = pacientes.pacientes
-    .filter(p => {
-      if (!busqueda.trim()) return false;
-      const term = busqueda.toLowerCase().trim();
-      const nombreCompleto = `${p.NombrePaciente} ${p.ApellidoPaciente}`.toLowerCase();
-      const dni = p.DNI.toLowerCase();
-      return nombreCompleto.includes(term) || dni.includes(term);
-    })
+  const pacientesFiltrados = pacientesObj.pacientes
+    .filter(p => dniBusqueda.trim() && p.DNI.includes(dniBusqueda.trim()))
     .slice(0, 6);
 
-  // Todos los turnos del paciente seleccionado
   const turnosDelPaciente = turnos.turnos
     .filter(t => t.idPaciente == pacienteSeleccionado?.idPaciente)
     .map(t => ({
@@ -73,12 +79,10 @@ const FormCobros = ({ cobro, onSuccess }) => {
       label: `${new Date(t.FechaRequeridaTurno).toLocaleDateString('es-AR')} - ${t.HorarioRequeridoTurno?.slice(0,5)} - ${t.NombreTratamiento || 'Turno'}`
     }));
 
-  // Validación
   const validar = () => {
     const errs = {};
-    if (!nuevoCobro.FechaCobro) errs.FechaCobro = "Fecha requerida";
     if (!nuevoCobro.idTurno) errs.idTurno = "Selecciona un turno";
-    if (!nuevoCobro.idMedioPago) errs.idMedioPago = "Selecciona medio";
+    if (!nuevoCobro.idMedioPago) errs.idMedioPago = "Selecciona un medio de pago";
     if (!nuevoCobro.MontoCobro || nuevoCobro.MontoCobro <= 0) errs.MontoCobro = "Monto > 0";
     setErrores(errs);
     return Object.keys(errs).length === 0;
@@ -92,7 +96,7 @@ const FormCobros = ({ cobro, onSuccess }) => {
 
   const seleccionarPaciente = (pac) => {
     setPacienteSeleccionado(pac);
-    setBusqueda(`${pac.NombrePaciente} ${pac.ApellidoPaciente}`);
+    setDniBusqueda(pac.DNI);
     setMostrarPacientes(false);
     setTurnoSeleccionado(null);
     setNuevoCobro(prev => ({ ...prev, idTurno: '' }));
@@ -118,11 +122,14 @@ const FormCobros = ({ cobro, onSuccess }) => {
 
     try {
       const result = await Swal.fire({
-        title: "¿Registrar cobro?",
+        title: esEdicion ? "¿Actualizar cobro?" : "¿Registrar cobro?",
         html: `
           <div style="text-align:left; font-size:1rem;">
             <p><strong>Paciente:</strong> ${pacienteSeleccionado?.NombrePaciente} ${pacienteSeleccionado?.ApellidoPaciente}</p>
+            <p><strong>DNI:</strong> ${pacienteSeleccionado?.DNI}</p>
             <p><strong>Turno:</strong> ${turnoSeleccionado?.label}</p>
+            <p><strong>Fecha:</strong> ${esEdicion ? new Date(cobro.FechaCobro).toLocaleDateString('es-AR') : new Date().toLocaleDateString('es-AR')}</p>
+            <p><strong>Medio:</strong> ${mediosPagoValidos.find(m => m.id == nuevoCobro.idMedioPago)?.nombre || '—'}</p>
             <p><strong>Monto:</strong> <span style="color:#28a745;font-weight:bold">$${parseFloat(nuevoCobro.MontoCobro).toFixed(2)}</span></p>
           </div>
           <p class="mt-3">¿Confirmas?</p>
@@ -131,21 +138,39 @@ const FormCobros = ({ cobro, onSuccess }) => {
         showCancelButton: true,
         confirmButtonColor: "#28a745",
         cancelButtonColor: "#dc3545",
-        confirmButtonText: "Sí, registrar",
+        confirmButtonText: "Sí, confirmar",
         cancelButtonText: "Cancelar",
         width: "560px"
       });
 
       if (!result.isConfirmed) {
-        toast.info("Cobro cancelado");
+        toast.info("Operación cancelada");
         return setProcesando(false);
       }
 
-      const res = await agregarCobro(nuevoCobro);
+      let res;
+      if (esEdicion) {
+        // Formatear datos para enviar al backend
+        const datosParaActualizar = {
+          FechaCobro: nuevoCobro.FechaCobro,
+          idTurno: parseInt(nuevoCobro.idTurno),
+          TipoCobro: nuevoCobro.TipoCobro || 'Paciente',
+          idMedioPago: parseInt(nuevoCobro.idMedioPago),
+          MontoCobro: parseFloat(nuevoCobro.MontoCobro),
+          EstadoCobro: nuevoCobro.EstadoCobro || 'Cobrado',
+          Descripcion: nuevoCobro.Descripcion || null
+        };
+        console.log("📤 Enviando datos de edición:", datosParaActualizar);
+        res = await editarCobro(cobro.idCobro, datosParaActualizar);
+      } else {
+        res = await agregarCobro(nuevoCobro);
+      }
 
       if (res.success) {
-        toast.success('Cobro registrado');
+        toast.success(esEdicion ? 'Cobro actualizado' : 'Cobro registrado');
+        await obtenerCobros();
         onSuccess();
+        onClose();
       } else {
         toast.error(res.error || 'Error');
       }
@@ -160,121 +185,138 @@ const FormCobros = ({ cobro, onSuccess }) => {
   return (
     <form onSubmit={handleSubmit} className="form-cobros">
       <div className="row">
-        {/* BUSCADOR DE PACIENTE */}
         <div className="col-md-6 mb-3 position-relative">
-          <label className="form-label">Paciente</label>
+          <label className="form-label">DNI del Paciente</label>
           <input
             type="text"
             className="form-control"
-            placeholder="Escribe nombre, apellido o DNI..."
-            value={busqueda}
+            placeholder="Escribe el DNI..."
+            value={dniBusqueda}
             onChange={(e) => {
-              setBusqueda(e.target.value);
+              setDniBusqueda(e.target.value);
               setMostrarPacientes(true);
-              setPacienteSeleccionado(null);
-              setTurnoSeleccionado(null);
+              if (!esEdicion) {
+                setPacienteSeleccionado(null);
+                setTurnoSeleccionado(null);
+              }
             }}
             onFocus={() => setMostrarPacientes(true)}
             onBlur={() => setTimeout(() => setMostrarPacientes(false), 200)}
-            disabled={procesando}
+            disabled={procesando || esEdicion}
             autoComplete="off"
           />
-          
           {mostrarPacientes && pacientesFiltrados.length > 0 && (
-            <ul className="list-group position-absolute w-100 mt-1 shadow-sm" 
-                style={{ zIndex: 1000, maxHeight: '220px', overflowY: 'auto', borderRadius: '8px' }}>
+            <ul className="list-group position-absolute w-100 mt-1 shadow-sm" style={{ zIndex: 1000, maxHeight: '220px', overflowY: 'auto', borderRadius: '8px' }}>
               {pacientesFiltrados.map(pac => (
-                <li 
-                  key={pac.idPaciente} 
-                  className="list-group-item list-group-item-action py-2"
-                  onMouseDown={() => seleccionarPaciente(pac)}
-                  style={{ cursor: 'pointer', fontSize: '0.95rem' }}
-                >
-                  <div><strong>{pac.NombrePaciente} {pac.ApellidoPaciente}</strong></div>
-                  <small className="text-muted">DNI: {pac.DNI}</small>
+                <li key={pac.idPaciente} className="list-group-item list-group-item-action py-2" onMouseDown={() => seleccionarPaciente(pac)} style={{ cursor: 'pointer', fontSize: '0.95rem' }}>
+                  <div><strong>{pac.DNI}</strong> - {pac.NombrePaciente} {pac.ApellidoPaciente}</div>
                 </li>
               ))}
             </ul>
           )}
-
-          {mostrarPacientes && busqueda && pacientesFiltrados.length === 0 && (
+          {mostrarPacientes && dniBusqueda && pacientesFiltrados.length === 0 && (
             <div className="position-absolute w-100 mt-1 p-2 bg-light border rounded text-center text-muted small">
-              No se encontraron pacientes
+              No se encontró paciente con ese DNI
             </div>
           )}
         </div>
 
-        {/* SELECCIÓN DE TURNO (CUALQUIERA) */}
         <div className="col-md-6 mb-3 position-relative">
           <label className="form-label">Turno</label>
           <input
             type="text"
             className={`form-control ${errores.idTurno ? 'is-invalid' : ''}`}
-            placeholder={pacienteSeleccionado ? "Selecciona un turno..." : "Primero elige un paciente"}
+            placeholder={pacienteSeleccionado ? "Selecciona un turno..." : "Primero ingresa el DNI"}
             value={turnoSeleccionado?.label || ''}
             readOnly
-            onClick={() => pacienteSeleccionado && setMostrarTurnos(true)}
-            disabled={procesando || !pacienteSeleccionado}
+            onClick={() => pacienteSeleccionado && !esEdicion && setMostrarTurnos(true)}
+            disabled={procesando || !pacienteSeleccionado || esEdicion}
           />
           {errores.idTurno && <div className="invalid-feedback">{errores.idTurno}</div>}
-          
           {mostrarTurnos && turnosDelPaciente.length > 0 && (
-            <ul className="list-group position-absolute w-100 mt-1 shadow-sm" 
-                style={{ zIndex: 1000, maxHeight: '200px', overflowY: 'auto', borderRadius: '8px' }}>
+            <ul className="list-group position-absolute w-100 mt-1 shadow-sm" style={{ zIndex: 1000, maxHeight: '200px', overflowY: 'auto', borderRadius: '8px' }}>
               {turnosDelPaciente.map(t => (
-                <li 
-                  key={t.idTurno} 
-                  className="list-group-item list-group-item-action py-2"
-                  onMouseDown={() => seleccionarTurno(t)}
-                  style={{ cursor: 'pointer', fontSize: '0.95rem' }}
-                >
+                <li key={t.idTurno} className="list-group-item list-group-item-action py-2" onMouseDown={() => seleccionarTurno(t)} style={{ cursor: 'pointer', fontSize: '0.95rem' }}>
                   <div><strong>{t.label}</strong></div>
                   <small className="text-success">Precio: ${t.PrecioTotal || '—'}</small>
                 </li>
               ))}
             </ul>
           )}
-          
-          {pacienteSeleccionado && turnosDelPaciente.length === 0 && (
-            <small className="text-muted d-block mt-1">Este paciente no tiene turnos</small>
-          )}
         </div>
       </div>
 
-      {/* RESTO DEL FORMULARIO */}
       <div className="row">
         <div className="col-md-6 mb-3">
-          <label className="form-label">Fecha Cobro</label>
-          <input name="FechaCobro" type="date" value={nuevoCobro.FechaCobro}
-            onChange={handleChange} className="form-control" required disabled={procesando} />
+          <label className="form-label">Fecha del Cobro</label>
+          <input 
+            type="text" 
+            className="form-control" 
+            value={esEdicion ? new Date(cobro.FechaCobro).toLocaleDateString('es-AR') : new Date().toLocaleDateString('es-AR')} 
+            readOnly 
+            disabled
+            style={{ backgroundColor: '#f8f9fa' }}
+          />
+          <small className="text-muted">
+            {esEdicion ? 'Fecha original del cobro' : 'Se registra automáticamente'}
+          </small>
         </div>
 
         <div className="col-md-6 mb-3">
           <label className="form-label">Medio de Pago</label>
-          <select name="idMedioPago" value={nuevoCobro.idMedioPago} onChange={handleChange}
-            className={`form-select ${errores.idMedioPago ? 'is-invalid' : ''}`} required disabled={procesando}>
-            <option value="">Selecciona...</option>
-            {Array.from(new Map(
-              cobros.cobros.filter(c => c.idMedioPago).map(c => [c.idMedioPago, c.MedioPago])
-            ).values()).map((nombre, id) => (
-              <option key={id} value={id}>{nombre}</option>
-            ))}
-          </select>
+          {loadingCobros ? (
+            <div className="text-center p-2">
+              <div className="spinner-border spinner-border-sm text-primary" role="status">
+                <span className="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          ) : mediosPagoValidos.length === 0 ? (
+            <div className="text-muted small p-2">
+              No hay medios de pago en cobros registrados
+            </div>
+          ) : (
+            <select 
+              name="idMedioPago" 
+              value={nuevoCobro.idMedioPago} 
+              onChange={handleChange}
+              className={`form-select ${errores.idMedioPago ? 'is-invalid' : ''}`} 
+              required 
+              disabled={procesando}
+            >
+              <option value="">Selecciona un medio...</option>
+              {mediosPagoValidos.map(medio => (
+                <option key={medio.id} value={medio.id}>
+                  {medio.nombre}
+                </option>
+              ))}
+            </select>
+          )}
           {errores.idMedioPago && <div className="invalid-feedback">{errores.idMedioPago}</div>}
         </div>
       </div>
 
       <div className="mb-3">
         <label className="form-label">Monto</label>
-        <input name="MontoCobro" type="number" step="0.01" value={nuevoCobro.MontoCobro}
-          onChange={handleChange} className={`form-control ${errores.MontoCobro ? 'is-invalid' : ''}`}
-          required disabled={procesando} />
+        <input 
+          name="MontoCobro" 
+          type="number" 
+          step="0.01" 
+          value={nuevoCobro.MontoCobro}
+          onChange={handleChange} 
+          className={`form-control ${errores.MontoCobro ? 'is-invalid' : ''}`}
+          required 
+          disabled={procesando} 
+        />
         {errores.MontoCobro && <div className="invalid-feedback">{errores.MontoCobro}</div>}
       </div>
 
       <div className="d-grid">
-        <button type="submit" className="btn btn-primary btn-submit" disabled={procesando}>
-          {procesando ? <>Procesando...</> : 'Registrar Cobro'}
+        <button 
+          type="submit" 
+          className="btn btn-primary btn-submit" 
+          disabled={procesando || loadingCobros || mediosPagoValidos.length === 0}
+        >
+          {procesando ? <>Procesando...</> : (esEdicion ? 'Actualizar Cobro' : 'Registrar Cobro')}
         </button>
       </div>
     </form>

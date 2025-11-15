@@ -164,3 +164,53 @@
   padding: 0.6rem 1.4rem;
   font-weight: 500;
 }
+
+/* Estilos para filtros y paginación */
+.form-label.fw-bold {
+  font-size: 0.9rem;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0470BB;
+  box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
+}
+
+.pagination {
+  margin-top: 1rem;
+}
+
+.pagination .page-link {
+  color: #0470BB;
+  border: 1px solid #dee2e6;
+  padding: 0.5rem 0.75rem;
+  margin: 0 2px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #e9f5ff;
+  border-color: #0470BB;
+  color: #0470BB;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #0470BB;
+  border-color: #0470BB;
+  color: white;
+  font-weight: 600;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
+
+.card-footer {
+  padding: 1rem 1.5rem;
+}

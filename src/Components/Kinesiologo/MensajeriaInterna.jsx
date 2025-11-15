@@ -10,8 +10,7 @@ const MensajeriaInterna = () => {
   const [empleados, setEmpleados] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ID del kinesiólogo (fíjalo o pásalo por contexto)
-  const idKinesiologo = 5; // Cambiar por login real
+  const idKinesiologo = 5; 
 
   const cargarEmpleados = async () => {
     try {
