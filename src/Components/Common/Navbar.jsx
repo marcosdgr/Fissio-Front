@@ -6,7 +6,22 @@ import "../../Css/Common/Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, logout } = useAuthStore();
+  const { isLoggedIn, user, logout } = useAuthStore();
+
+  // Obtener rol y permiso del usuario
+  const rol = user?.usuario?.NombreRol;
+  const permiso = user?.usuario?.PermisosEmpleado;
+
+  // Determinar qué botones mostrar según el rol
+  const esAdmin = rol === "Administrador";
+  const esPaciente = rol === "Paciente";
+  const esEmpleado = rol === "Empleado";
+  
+  // Paciente: NO ver Mensajes
+  // Admin/Empleado: NO ver Solicitud de turno ni Preguntas frecuentes
+  const mostrarMensajes = esAdmin || esEmpleado;
+  const mostrarPedirTurno = !esAdmin && !esEmpleado;
+  const mostrarFAQs = !esAdmin && !esEmpleado;
 
   // Función para cerrar sesión
   const handleLogout = async () => {
@@ -54,21 +69,34 @@ const Navbar = () => {
                 Inicio
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/faqs">
-                Preguntas frecuentes
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/turnos">
-                Pedir turno
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/mensajes">
-                Mensajes
-              </Link>
-            </li>
+            
+            {/* Solo mostrar para usuarios no logueados, pacientes o visitantes */}
+            {mostrarFAQs && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/faqs">
+                  Preguntas frecuentes
+                </Link>
+              </li>
+            )}
+            
+            {/* Solo mostrar para usuarios no logueados, pacientes o visitantes */}
+            {mostrarPedirTurno && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/turnos">
+                  Pedir turno
+                </Link>
+              </li>
+            )}
+            
+            {/* Solo mostrar para Admin y Empleados */}
+            {mostrarMensajes && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/mensajes">
+                  Mensajes
+                </Link>
+              </li>
+            )}
+            
             {isLoggedIn ? (
               <li className="nav-item">
                 <button
