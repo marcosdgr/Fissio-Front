@@ -213,6 +213,14 @@ const AsistenciaEmpleado = () => {
         minute: '2-digit' 
     });
 
+    // Debug: ver qué horarios se están recibiendo
+    console.log('🔍 Horarios semanales:', horariosSemanales);
+    if (horariosSemanales.length > 0) {
+        console.log('📋 Primer horario completo:', JSON.stringify(horariosSemanales[0], null, 2));
+    }
+    console.log('📅 Días semana array:', diasSemana);
+    console.log('📆 Día actual:', diaActual);
+
     return (
         <div className="asistencia-empleado-container">
             <div className="asistencia-header">
@@ -412,7 +420,15 @@ const AsistenciaEmpleado = () => {
                     ) : (
                         <div className="horarios-grid">
                             {diasSemana.map((dia) => {
-                                const horario = horariosSemanales.find(h => h.DiaSemana === dia);
+                                // Buscar horario por día de la semana extraído de la Fecha
+                                const horario = horariosSemanales.find(h => {
+                                    if (!h.Fecha) return false;
+                                    const fecha = new Date(h.Fecha);
+                                    const diaSemanaIndex = fecha.getDay() === 0 ? 6 : fecha.getDay() - 1;
+                                    const diaSemanaDelHorario = diasSemana[diaSemanaIndex];
+                                    return diaSemanaDelHorario === dia;
+                                });
+                                
                                 const esHoy = dia === diaActual;
                                 
                                 return (
@@ -428,18 +444,18 @@ const AsistenciaEmpleado = () => {
                                             <div className="horario-horas">
                                                 <div className="hora-item">
                                                     <i className="fas fa-sign-in-alt"></i>
-                                                    <span>{formatearHora(horario.HoraEntradaEsperada)}</span>
+                                                    <span>{formatearHora(horario.HoraEntradaEsperada) || 'No disponible'}</span>
                                                 </div>
                                                 <div className="separador">-</div>
                                                 <div className="hora-item">
                                                     <i className="fas fa-sign-out-alt"></i>
-                                                    <span>{formatearHora(horario.HoraSalidaEsperada)}</span>
+                                                    <span>{formatearHora(horario.HoraSalidaEsperada) || 'No disponible'}</span>
                                                 </div>
                                             </div>
                                         ) : (
                                             <div className="sin-horario-text">
                                                 <i className="fas fa-times-circle"></i>
-                                                <span>Sin horario</span>
+                                                <span>No disponible</span>
                                             </div>
                                         )}
                                         {horario && horario.DescripcionHorario && (
