@@ -23,18 +23,23 @@ const useCustomMetricas = () => {
         monday.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
         fechaParam = monday.toISOString().split('T')[0];
       } else if (tipo === 'mes') {
-
-        fechaParam = `${fecha}-01`;
+        // Para mes: formato YYYY-MM -> convertir a YYYY-MM-15 (mitad del mes)
+        // Esto evita problemas de zona horaria donde el backend podría restar un día
+        fechaParam = `${fecha}-15`;
       }
     }
 
     try {
       setLoading(true);
+      console.log('Solicitando métricas:', { tipo, fecha: fechaParam });
       const res = await axios.get(`${BASE_URL}api/metricas/vivo`, {
         params: { tipo, fecha: fechaParam }
       });
 
       const data = res.data;
+      console.log('Respuesta del servidor (métricas):', data);
+      console.log('IngresosCobrados recibido:', data.IngresosCobrados, 'tipo:', typeof data.IngresosCobrados);
+      console.log('EgresosPagados recibido:', data.EgresosPagados, 'tipo:', typeof data.EgresosPagados);
 
       const parseada = {
         ...data,
