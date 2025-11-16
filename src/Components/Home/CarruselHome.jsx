@@ -7,27 +7,21 @@ const CarruselHome = () => {
       title: "Centro de Kinesiología Fissio",
       subtitle: "Atención profesional para tu bienestar",
       description: "Especialistas en rehabilitación y prevención con tratamientos personalizados",
-      imageUrl: "/hero-imagen-1.jpg", // Colocar imágenes en public/
-      ctaText: "Conocer más",
-      ctaLink: "/servicios"
+      imageUrl: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1920&h=800&fit=crop"
     },
     {
       id: 2,
       title: "Recuperación y Rehabilitación",
       subtitle: "Tecnología avanzada al servicio de tu salud",
       description: "Equipamiento moderno y técnicas innovadoras para tu mejor recuperación",
-      imageUrl: "/hero-imagen-2.jpg",
-      ctaText: "Ver servicios",
-      ctaLink: "/servicios"
+      imageUrl: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1920&h=800&fit=crop"
     },
     {
       id: 3,
       title: "Agenda tu Turno",
       subtitle: "Atención personalizada cuando lo necesites",
       description: "Horarios flexibles y profesionales dedicados a tu recuperación",
-      imageUrl: "/hero-imagen-3.jpg",
-      ctaText: "Pedir turno",
-      ctaLink: "/turnos"
+      imageUrl: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1920&h=800&fit=crop"
     }
   ];
 
@@ -74,11 +68,6 @@ const CarruselHome = () => {
                     <p className="carousel-description lead mb-4" data-aos="fade-up" data-aos-delay="400">
                       {slide.description}
                     </p>
-                    <div data-aos="fade-up" data-aos-delay="600">
-                      <a href={slide.ctaLink} className="btn btn-primary btn-lg carousel-cta">
-                        {slide.ctaText}
-                      </a>
-                    </div>
                   </div>
                 </div>
               </div>

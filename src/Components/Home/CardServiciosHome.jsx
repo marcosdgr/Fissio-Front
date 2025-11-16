@@ -8,7 +8,6 @@ const CardServiciosHome = () => {
       icon: <FaUserMd />,
       titulo: "Kinesiología General",
       descripcion: "Tratamiento integral para lesiones musculoesqueléticas y recuperación funcional.",
-      precio: "Desde $8.000",
       caracteristicas: ["Evaluación completa", "Plan personalizado", "Seguimiento continuo"]
     },
     {
@@ -16,7 +15,6 @@ const CardServiciosHome = () => {
       icon: <FaDumbbell />,
       titulo: "Rehabilitación Deportiva",
       descripcion: "Especialización en lesiones deportivas y retorno seguro a la actividad física.",
-      precio: "Desde $10.000",
       caracteristicas: ["Atletas de elite", "Técnicas avanzadas", "Prevención de lesiones"]
     },
     {
@@ -24,7 +22,6 @@ const CardServiciosHome = () => {
       icon: <FaHeartbeat />,
       titulo: "Kinesiología Respiratoria",
       descripcion: "Tratamiento especializado para afecciones del sistema respiratorio.",
-      precio: "Desde $9.000",
       caracteristicas: ["Técnicas específicas", "Ejercicios respiratorios", "Mejora de capacidad"]
     },
     {
@@ -32,7 +29,6 @@ const CardServiciosHome = () => {
       icon: <FaBaby />,
       titulo: "Kinesiología Pediátrica",
       descripcion: "Atención especializada para niños con enfoque lúdico y familiar.",
-      precio: "Desde $8.500",
       caracteristicas: ["Desarrollo motor", "Terapia lúdica", "Seguimiento familiar"]
     },
     {
@@ -40,7 +36,6 @@ const CardServiciosHome = () => {
       icon: <FaRunning />,
       titulo: "Reeducación Postural",
       descripcion: "Corrección de posturas y prevención de dolores crónicos.",
-      precio: "Desde $7.500",
       caracteristicas: ["Análisis postural", "Ejercicios correctivos", "Educación preventiva"]
     },
     {
@@ -48,7 +43,6 @@ const CardServiciosHome = () => {
       icon: <FaHands />,
       titulo: "Terapia Manual",
       descripcion: "Técnicas manuales especializadas para tratamiento del dolor.",
-      precio: "Desde $9.500",
       caracteristicas: ["Técnicas osteopáticas", "Movilización articular", "Liberación miofascial"]
     }
   ];
@@ -72,10 +66,6 @@ const CardServiciosHome = () => {
               <p className="card-text servicio-descripcion text-center mb-3 flex-grow-1">
                 {servicio.descripcion}
               </p>
-              
-              <div className="servicio-precio text-center mb-3">
-                <span className="precio-text fw-bold">{servicio.precio}</span>
-              </div>
               
               <ul className="servicio-caracteristicas list-unstyled mb-4">
                 {servicio.caracteristicas.map((caracteristica, index) => (

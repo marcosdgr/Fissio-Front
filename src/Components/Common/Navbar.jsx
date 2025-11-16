@@ -56,7 +56,7 @@ const Navbar = () => {
         <Link className="navbar-brand d-flex align-items-center" to="/">
           {/* Logo servido desde la carpeta public */}
           <img
-            src="/logo-negro.png"
+            src="/logo-blanco.png"
             alt="Fissio"
             className="fissio-logo me-2"
           />
@@ -116,7 +116,7 @@ const Navbar = () => {
                   to={obtenerRutaPanel()}
                   title="Ir a mi panel"
                 >
-                  <span className="material-symbols-outlined">dashboard</span>
+                  <span className="material-symbols-outlined">person</span>
                 </Link>
               </li>
             )}

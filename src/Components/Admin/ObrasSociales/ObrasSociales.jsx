@@ -310,7 +310,7 @@ const ObrasSociales = () => {
 
       {/* Planes asociados (se muestra debajo de la tabla de obras) */}
       <div className="mt-4">
-        <PlanesObras />
+        <PlanesObras obrasSocialesProp={obrasSociales} refrescarObras={obtenerTodasLasObrasSociales} />
       </div>
 
       <MobileCards visible={visible} onView={openView} onEdit={openEdit} onToggle={onToggle} />

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../../Store/useAuthStore';
 import { obtenerEmpleadoPorId, actualizarEmpleado } from '../../Custom/Empleados/CustomEmpleados';
 import { getLocalidades } from '../../Custom/CustomRegister';
+import { showConfirm, showSuccess, showError } from '../../Utils/sweetAlerts';
 import '../../Css/Secretaria/ConfiguracionSecretaria.css';
 
 const ConfiguracionSecretaria = () => {
@@ -123,35 +124,76 @@ const ConfiguracionSecretaria = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let datosActualizados = null;
+
     try {
-      setSaving(true);
       setError(null);
 
       validarFormulario();
 
       if (!hayChangeios()) {
-        setError('No hay cambios para guardar');
+        await showError('Sin cambios', 'No hay cambios para guardar');
         return;
       }
 
-      const datosActualizados = {
+      // Mostrar confirmación antes de guardar
+      const result = await showConfirm(
+        '¿Guardar cambios?',
+        'Se actualizarán tus datos personales',
+        'Sí, guardar',
+        'Cancelar'
+      );
+
+      if (!result || !result.isConfirmed) {
+        return;
+      }
+
+      setSaving(true);
+
+      // Normalizar PermisosEmpleado para que coincida con los valores del backend
+      let permisosNormalizados = empleadoOriginal.PermisosEmpleado;
+      if (permisosNormalizados) {
+        const permisosStr = String(permisosNormalizados).toLowerCase();
+        if (permisosStr.includes('administr')) {
+          permisosNormalizados = 'Administracion';
+        } else if (permisosStr.includes('kines')) {
+          permisosNormalizados = 'Kinesiologia';
+        } else {
+          permisosNormalizados = 'Otros';
+        }
+      }
+
+      datosActualizados = {
         ...formData,
-        idLocalidad: parseInt(formData.idLocalidad)
+        idLocalidad: parseInt(formData.idLocalidad),
+        // Incluir campos obligatorios del backend que no se editan
+        DNI: empleadoOriginal.DNI,
+        SalarioEmpleado: empleadoOriginal.SalarioEmpleado,
+        PermisosEmpleado: permisosNormalizados,
+        idCatEmpleado: empleadoOriginal.idCatEmpleado,
+        idUsuario: empleadoOriginal.idUsuario
       };
+
+      console.log('📤 Enviando datos al backend:', datosActualizados);
 
       await actualizarEmpleado(idEmpleado, datosActualizados);
 
-      setSuccess(true);
       setEmpleadoOriginal({
         ...empleadoOriginal,
         ...datosActualizados
       });
 
-      setTimeout(() => setSuccess(false), 3000);
+      await showSuccess('¡Datos actualizados!', 'Tu información ha sido guardada correctamente');
 
     } catch (err) {
-      console.error('Error al actualizar datos:', err);
-      setError(err.message || 'Error al actualizar los datos');
+      console.error('❌ Error al actualizar datos:', err);
+      console.error('📋 Respuesta del servidor:', err.response?.data);
+      if (datosActualizados) {
+        console.error('📦 Datos enviados:', datosActualizados);
+      }
+      const errorMsg = err.response?.data?.message || err.message || 'Error al actualizar los datos';
+      await showError('Error al guardar', errorMsg);
+      setError(errorMsg);
     } finally {
       setSaving(false);
     }

@@ -9,9 +9,12 @@ import PlanCreateModal from './PlanCreateModal'
 import PlanEditModal from './PlanEditModal'
 import PlanViewModal from './PlanViewModal'
 
-const PlanesObras = () => {
+const PlanesObras = ({ obrasSocialesProp }) => {
   const { planes = [], obtenerTodosLosPlanes, crearPlanObra, actualizarPlanObra, cambiarEstadoPlanObra } = useCustomPlanesObra()
-  const { obrasSociales = [], obtenerTodasLasObrasSociales } = useCustomObrasSociales()
+  const { obrasSociales: obrasSocialesLocal = [], obtenerTodasLasObrasSociales } = useCustomObrasSociales()
+
+  // Usar las obras sociales del padre si están disponibles, de lo contrario usar las locales
+  const obrasSociales = obrasSocialesProp || obrasSocialesLocal
 
   const [obraFilter, setObraFilter] = useState('')
   const [estadoFilter, setEstadoFilter] = useState('')
@@ -24,7 +27,13 @@ const PlanesObras = () => {
   const [errors, setErrors] = useState({})
   const [loadingOp, setLoadingOp] = useState(false)
 
-  useEffect(() => { obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales(); obtenerTodosLosPlanes && obtenerTodosLosPlanes() }, [])
+  useEffect(() => { 
+    // Solo obtener obras sociales localmente si no vienen como prop
+    if (!obrasSocialesProp && obtenerTodasLasObrasSociales) {
+      obtenerTodasLasObrasSociales();
+    }
+    obtenerTodosLosPlanes && obtenerTodosLosPlanes();
+  }, [])
 
   // DEBUG: mostrar estructura de datos para ayudar en desarrollo
   useEffect(() => {
