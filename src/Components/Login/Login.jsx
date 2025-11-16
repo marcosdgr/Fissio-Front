@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../../Custom/CustomLogin';
+import { loginUser, envioCorreoRecuperacion } from '../../Custom/CustomLogin';
 import { useAuthStore } from '../../Store/useAuthStore';
 import { showSuccess, showError } from '../../Utils/sweetAlerts';
 import '../../Css/Login/Login.css';
@@ -17,6 +17,9 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [mostrarRecuperacion, setMostrarRecuperacion] = useState(false);
+  const [emailRecuperacion, setEmailRecuperacion] = useState('');
+  const [isLoadingRecuperacion, setIsLoadingRecuperacion] = useState(false);
 
   // Manejo de inputs
   const handleChange = (e) => {
@@ -49,8 +52,6 @@ const Login = () => {
         PasswordUsuario: formData.password
       });
 
-      console.log("LOGIN RESPONSE:", response);
-
       // Guardar en Zustand
       login(response);
 
@@ -69,8 +70,6 @@ const Login = () => {
       // ===============================
       const rol = response.usuario?.NombreRol;              // Administrador / Paciente / Empleado
       const permiso = response.usuario?.PermisosEmpleado;   // Kinesiologia / Administracion / null
-
-      console.log("ROL:", rol, "PERMISO:", permiso);
 
       if (rol === "Administrador") {
         navigate("/admin");
@@ -127,6 +126,44 @@ const Login = () => {
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Función para solicitar recuperación de contraseña
+  const handleRecuperarPassword = async (e) => {
+    e.preventDefault();
+    
+    if (!emailRecuperacion) {
+      showError('Email requerido', 'Por favor ingrese su correo electrónico');
+      return;
+    }
+
+    setIsLoadingRecuperacion(true);
+    
+    try {
+      await envioCorreoRecuperacion(emailRecuperacion);
+      
+      showSuccess(
+        '¡Correo enviado!',
+        'Revisa tu bandeja de entrada. Te hemos enviado un link para restablecer tu contraseña (válido por 15 minutos).'
+      );
+      
+      // Limpiar y cerrar modal
+      setEmailRecuperacion('');
+      setMostrarRecuperacion(false);
+      
+    } catch (error) {
+      console.error('Error al solicitar recuperación:', error);
+      
+      const message = error.response?.data?.message;
+      
+      if (error.response?.status === 404) {
+        showError('Usuario no encontrado', 'No existe una cuenta con este correo electrónico');
+      } else {
+        showError('Error', message || 'No se pudo enviar el correo de recuperación');
+      }
+    } finally {
+      setIsLoadingRecuperacion(false);
     }
   };
 
@@ -217,6 +254,17 @@ const Login = () => {
                 )}
               </button>
 
+              {/* Link para recuperar contraseña */}
+              <div className="text-center mb-3">
+                <button
+                  type="button"
+                  className="btn btn-link text-decoration-none p-0"
+                  onClick={() => setMostrarRecuperacion(true)}
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
+              </div>
+
             </form>
 
             {/* LINK REGISTER */}
@@ -243,6 +291,92 @@ const Login = () => {
         </div>
 
       </div>
+
+      {/* MODAL DE RECUPERACIÓN DE CONTRASEÑA */}
+      {mostrarRecuperacion && (
+        <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  <span className="material-symbols-outlined me-2">lock_reset</span>
+                  Recuperar Contraseña
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => {
+                    setMostrarRecuperacion(false);
+                    setEmailRecuperacion('');
+                  }}
+                  disabled={isLoadingRecuperacion}
+                ></button>
+              </div>
+              
+              <form onSubmit={handleRecuperarPassword}>
+                <div className="modal-body">
+                  <p className="text-muted mb-3">
+                    Ingresa tu correo electrónico y te enviaremos un link para restablecer tu contraseña.
+                  </p>
+                  
+                  <div className="mb-3">
+                    <label htmlFor="emailRecuperacion" className="form-label">
+                      <span className="material-symbols-outlined me-2">email</span>
+                      Correo Electrónico
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="emailRecuperacion"
+                      value={emailRecuperacion}
+                      onChange={(e) => setEmailRecuperacion(e.target.value)}
+                      placeholder="ejemplo@correo.com"
+                      required
+                      disabled={isLoadingRecuperacion}
+                    />
+                  </div>
+                  
+                  <div className="alert alert-info d-flex align-items-start">
+                    <span className="material-symbols-outlined me-2">info</span>
+                    <small>El link de recuperación será válido por 15 minutos.</small>
+                  </div>
+                </div>
+                
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setMostrarRecuperacion(false);
+                      setEmailRecuperacion('');
+                    }}
+                    disabled={isLoadingRecuperacion}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={isLoadingRecuperacion}
+                  >
+                    {isLoadingRecuperacion ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2"></span>
+                        Enviando...
+                      </>
+                    ) : (
+                      <>
+                        <span className="material-symbols-outlined me-2">send</span>
+                        Enviar Link
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

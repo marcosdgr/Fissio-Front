@@ -10,6 +10,7 @@ import HomePage from "./Pages/HomePage";
 import RegisterPage from "./Pages/RegisterPage";
 import FAQsPublicPage from "./Pages/FAQsPublicPage";
 import LoginPage from "./Pages/LoginPage";
+import ResetPasswordPage from "./Pages/ResetPasswordPage";
 import AsistenciaEmpleado from "./Components/Asistencia/AsistenciaEmpleado.jsx";
 import TurnosWebPage from "./Pages/TurnosWebPage.jsx";
 
@@ -47,6 +48,9 @@ function App() {
                 </PublicRutes>
               }
             />
+            
+            {/* Reset Password → Pública, recibe token por parámetro */}
+            <Route path="/auth/cambio_password/:token" element={<ResetPasswordPage />} />
 
             {/* 🔒 RUTAS PRIVADAS POR ROL / PERMISO */}
 
