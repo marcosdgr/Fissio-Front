@@ -51,7 +51,7 @@ const FeedbackTabla = ({ comentariosFiltrados, loading, onVerComentario }) => {
                   {comentariosFiltrados.length > 0 ? (
                     comentariosFiltrados.map(comentario => (
                       <tr key={comentario.idComentario}>
-                        <td className="fw-medium">{comentario.pacienteNombre || 'Sin nombre'}</td>
+                        <td className="fw-medium">{comentario.NombrePaciente || 'Sin nombre'}</td>
                         <td>
                           <span className={`fw-bold ${getCalificacionColor(comentario.CalificacionComentario)}`}>
                             {renderEstrellas(comentario.CalificacionComentario)}

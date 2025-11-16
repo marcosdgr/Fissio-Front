@@ -13,6 +13,7 @@ const useCustomCatPagos = () => {
       const res = await axios.get(`${BASE_URL}api/catMedioPago/v1`);
       setMediosPago(res.data || []);
     } catch (err) {
+      console.log(err);
       toast.error("Error al cargar medios de pago");
     }
   };
@@ -21,7 +22,8 @@ const useCustomCatPagos = () => {
     try {
       const res = await axios.get(`${BASE_URL}api/catTipoPago/v1`);
       setTiposPago(res.data || []);
-    } catch (err) {
+    } catch (err) { 
+      console.log(err);
       toast.error("Error al cargar tipos de pago");
     }
   };
