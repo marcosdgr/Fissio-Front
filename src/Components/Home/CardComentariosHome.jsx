@@ -12,7 +12,7 @@ const CardComentariosHome = () => {
       setLoading(true);
       try {
         // Usar el endpoint principal y filtrar los publicados
-        const response = await fetch(`http://localhost:4000/api/comentarios/v1/`);
+        const response = await fetch(`http://localhost:3000/api/comentarios/v1/`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

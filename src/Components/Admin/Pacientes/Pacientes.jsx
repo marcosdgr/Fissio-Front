@@ -193,6 +193,7 @@ const Pacientes = () => {
           timer: 2000,
           timerProgressBar: true
         });
+      // eslint-disable-next-line no-unused-vars
       } catch (error) {
         Swal.fire({ title: 'Error', text: 'No se pudo cambiar el estado.', icon: 'error', confirmButtonColor: '#0470BB' });
       }

@@ -11,10 +11,11 @@ const useCustomPacientesCobros = () => {
   const obtenerPacientes = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${BASE_URL}api/pacientes/v1`);
+      const res = await axios.get(`${BASE_URL}api/pacientesCobros/v1`);
       const data = Array.isArray(res.data) ? res.data : (res.data?.pacientes || []);
       setPacientes(data);
       setPacientesObj({ pacientes: data });
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setError("Error al cargar pacientes");
       setPacientes([]);
