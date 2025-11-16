@@ -40,7 +40,7 @@ const FeedbackModal = ({ show, comentario, onClose, onPublicar }) => {
               {/* Información del paciente */}
               <div className="mb-4">
                 <h6 className="text-muted mb-2">Paciente</h6>
-                <p className="fs-5 fw-bold mb-0">{comentario.pacienteNombre || 'Sin nombre'}</p>
+                <p className="fs-5 fw-bold mb-0">{comentario.NombrePaciente || 'Sin nombre'}</p>
                 <small className="text-muted">
                   {formatearFecha(comentario.FechaComentario)}
                 </small>

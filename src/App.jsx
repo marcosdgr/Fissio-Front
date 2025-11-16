@@ -30,7 +30,7 @@ function App() {
             <Route path="/faqs" element={<FAQsPublicPage />} />
             <Route path="/turnos" element={<TurnosWebPage />} />
 
-            {/* Login y Register → públicas, pero redirigen si ya está logueado */}
+            {/* Login y Register → públicas, pero redirigen si ya está logueado, sajdhjs */}
             <Route
               path="/login"
               element={
