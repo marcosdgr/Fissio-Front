@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { getTurnosDelDia } from '../../Custom/CustomTurnos';
 import { showError } from '../../Utils/sweetAlerts';
 import FinalizarTurnoModal from '../Admin/Turnos/FinalizarTurnoModal';
@@ -66,8 +66,16 @@ const TurnosKinesiologo = () => {
         // Último día del mes
         const ultimoDia = new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0);
         
-        fechaInicio = primerDia.toISOString().split('T')[0];
-        fechaFin = ultimoDia.toISOString().split('T')[0];
+        // Formatear en hora local para evitar problemas de zona horaria
+        const formatearFechaLocal = (date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        };
+        
+        fechaInicio = formatearFechaLocal(primerDia);
+        fechaFin = formatearFechaLocal(ultimoDia);
         break;
       }
       
@@ -82,7 +90,7 @@ const TurnosKinesiologo = () => {
   const cargarTurnos = async (fecha = null) => {
     setIsLoading(true);
     try {
-      const fechaBase = fecha ? new Date(fecha) : new Date();
+      const fechaBase = fecha ? new Date(fecha + 'T12:00:00') : new Date();
       const { fechaInicio, fechaFin } = obtenerRangoFechas(vistaSeleccionada, fechaBase);
       
       if (vistaSeleccionada === 'dia') {
@@ -192,9 +200,14 @@ const TurnosKinesiologo = () => {
       const diasHastaLunes = (primerDiaAnio.getDay() === 0 ? -6 : 1) - primerDiaAnio.getDay();
       primerDiaAnio.setDate(primerDiaAnio.getDate() + diasHastaLunes);
       primerDiaAnio.setDate(primerDiaAnio.getDate() + (week - 1) * 7);
-      fechaParaApi = primerDiaAnio.toISOString().split('T')[0];
+      const year2 = primerDiaAnio.getFullYear();
+      const month2 = String(primerDiaAnio.getMonth() + 1).padStart(2, '0');
+      const day2 = String(primerDiaAnio.getDate()).padStart(2, '0');
+      fechaParaApi = `${year2}-${month2}-${day2}`;
     } else if (vistaSeleccionada === 'mes' && nuevaFecha) {
-      fechaParaApi = `${nuevaFecha}-01`;
+      // Para mes, usar el primer día del mes seleccionado
+      const [year, month] = nuevaFecha.split('-');
+      fechaParaApi = `${year}-${month}-01`;
     }
     
     cargarTurnos(fechaParaApi);
