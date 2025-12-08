@@ -74,19 +74,16 @@ const AsistenciasTabla = ({ asistencias, loading }) => {
               <th><i className="fas fa-user"></i> Empleado</th>
               <th><i className="fas fa-id-card"></i> DNI</th>
               <th><i className="fas fa-calendar"></i> Fecha</th>
-              <th><i className="fas fa-clock"></i> Entrada Esperada</th>
-              <th><i className="fas fa-sign-in-alt"></i> Entrada Real</th>
-              <th><i className="fas fa-clock"></i> Salida Esperada</th>
-              <th><i className="fas fa-sign-out-alt"></i> Salida Real</th>
+              <th><i className="fas fa-sign-in-alt"></i> Entrada </th>
+              <th><i className="fas fa-sign-out-alt"></i> Salida </th>
               <th><i className="fas fa-hourglass-half"></i> Horas Trabajadas</th>
               <th><i className="fas fa-comment"></i> Observaciones</th>
             </tr>
           </thead>
           <tbody>
             {asistencias.map((asistencia) => {
-              // Obtener horarios esperados - pueden venir con diferentes nombres del backend
-              const horaEntradaEsperada = asistencia.HoraEntradaEsperada || asistencia.HoraInicio || asistencia.horaInicio;
-              const horaSalidaEsperada = asistencia.HoraSalidaEsperada || asistencia.HoraFin || asistencia.horaFin;
+             
+             
 
               return (
                 <tr key={asistencia.idAsistencia}>
@@ -100,15 +97,11 @@ const AsistenciasTabla = ({ asistencias, loading }) => {
                   </td>
                   <td>{asistencia.DNI || '-'}</td>
                   <td>{formatearFecha(asistencia.Fecha)}</td>
-                  <td className="hora-cell">
-                    {formatearHora(horaEntradaEsperada)}
-                  </td>
+                  
                   <td className="hora-cell">
                     {formatearHora(asistencia.HoraEntrada)}
                   </td>
-                  <td className="hora-cell">
-                    {formatearHora(horaSalidaEsperada)}
-                  </td>
+                
                   <td className="hora-cell">
                     {formatearHora(asistencia.HoraSalida)}
                   </td>
