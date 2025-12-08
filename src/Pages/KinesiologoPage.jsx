@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import MensajeriaInterna from '../Components/MensajeriaInterna/MensajeriaInterna';
-import AsistenciaKinesiologo from '../Components/Kinesiologo/AsistenciaKinesiologo';
 import PerfilKinesiologo from '../Components/Kinesiologo/PerfilKinesiologo';
 import PerfilInfoKinesiologo from '../Components/Kinesiologo/PerfilInfoKinesiologo';
 import TurnosKinesiologo from '../Components/Kinesiologo/TurnosKinesiologo';
 
 import '../Css/Kinesiologo/KinesiologoPage.css';
+import AsistenciaEmpleado from '../Components/Asistencia/AsistenciaEmpleado';
 
 const KinesiologoPage = () => {
   const [activeTab, setActiveTab] = useState("mensajes");
@@ -52,7 +52,7 @@ const KinesiologoPage = () => {
         <div className="p-4">
           {activeTab === "mensajes" && <MensajeriaInterna />}
           {activeTab === "turnos" && <TurnosKinesiologo />}
-          {activeTab === "asistencia" && <AsistenciaKinesiologo />}
+          {activeTab === "asistencia" && <AsistenciaEmpleado />}
           {activeTab === "perfil" && <PerfilKinesiologo setActiveTab={setActiveTab} />}
           {activeTab === "perfilInfo" && <PerfilInfoKinesiologo setActiveTab={setActiveTab} />}
         </div>

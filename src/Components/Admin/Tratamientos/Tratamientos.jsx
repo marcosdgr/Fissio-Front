@@ -141,19 +141,19 @@ const Tratamientos = () => {
                               </span>
                             </td>
                             <td className="text-center">
-                              <div className="action-buttons">
-                                <button className="btn btn-info btn-sm btn-action" title="Ver" onClick={() => verTratamiento(trat)}>
-                                  Ver
+                              <div className="d-flex gap-2 justify-content-center">
+                                <button className="btn btn-sm btn-outline-info" title="Ver" onClick={() => verTratamiento(trat)}>
+                                  <span className="material-symbols-outlined">visibility</span>
                                 </button>
-                                <button className="btn btn-primary btn-sm btn-action" title="Editar" onClick={() => abrirModalEditar(trat)}>
-                                  Editar
+                                <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => abrirModalEditar(trat)}>
+                                  <span className="material-symbols-outlined">edit</span>
                                 </button>
                                 <button
-                                  className={`btn ${trat.IsActive ? "btn-warning" : "btn-success"} btn-sm btn-action`}
+                                  className={`btn btn-sm ${trat.IsActive ? "btn-outline-danger" : "btn-outline-success"}`}
                                   title={trat.IsActive ? "Desactivar" : "Activar"}
                                   onClick={() => handleCambiarEstado(trat)}
                                 >
-                                  {trat.IsActive ? "Desactivar" : "Activar"}
+                                  <span className="material-symbols-outlined">{trat.IsActive ? "block" : "check_circle"}</span>
                                 </button>
                               </div>
                             </td>

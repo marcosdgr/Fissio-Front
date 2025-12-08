@@ -1,7 +1,7 @@
 .site-navbar{
-  background-color:#034a7a; /* color solicitado */
+  background-color:#034a7a; 
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  z-index: 1030; /* Por encima de todo: sidebar (1020) y footer (1025) */
+  z-index: 1030; 
 }
 
 .fissio-logo{

@@ -142,6 +142,7 @@ const FAQs = () => {
       setNuevaCategoria("");
       refrescarLista();
     } catch (err) {
+      console.error(err);
       toast.error("Error al crear categoría");
     }
   };
@@ -233,18 +234,19 @@ const FAQs = () => {
                                 </span>
                               </td>
                               <td className="text-center">
-                                <div className="action-buttons">
-                                  <button className="btn btn-ver" onClick={() => verFaq(faq)}>
-                                    Ver
+                                <div className="d-flex gap-2 justify-content-center">
+                                  <button className="btn btn-sm btn-outline-info" title="Ver" onClick={() => verFaq(faq)}>
+                                    <span className="material-symbols-outlined">visibility</span>
                                   </button>
-                                  <button className="btn btn-editar" onClick={() => abrirModalEditar(faq)}>
-                                    Editar
+                                  <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => abrirModalEditar(faq)}>
+                                    <span className="material-symbols-outlined">edit</span>
                                   </button>
                                   <button
-                                    className={`btn ${faq.IsActive ? "btn-desactivar" : "btn-activar"}`}
+                                    className={`btn btn-sm ${faq.IsActive ? "btn-outline-danger" : "btn-outline-success"}`}
+                                    title={faq.IsActive ? "Desactivar" : "Activar"}
                                     onClick={() => handleCambiarEstadoFaq(faq.idFAQ)}
                                   >
-                                    {faq.IsActive ? "Desactivar" : "Activar"}
+                                    <span className="material-symbols-outlined">{faq.IsActive ? "block" : "check_circle"}</span>
                                   </button>
                                 </div>
                               </td>
@@ -315,19 +317,19 @@ const FAQs = () => {
                               </span>
                             </td>
                             <td>
-                              <div className="action-buttons">
+                              <div className="d-flex gap-2">
                                 {cat.IsActive ? (
                                   <>
-                                    <button className="btn btn-editar btn-sm" onClick={() => iniciarEdicion(cat)}>
-                                      Editar
+                                    <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => iniciarEdicion(cat)}>
+                                      <span className="material-symbols-outlined">edit</span>
                                     </button>
-                                    <button className="btn btn-desactivar btn-sm" onClick={() => handleCambiarEstadoCat(cat)}>
-                                      Desactivar
+                                    <button className="btn btn-sm btn-outline-danger" title="Desactivar" onClick={() => handleCambiarEstadoCat(cat)}>
+                                      <span className="material-symbols-outlined">block</span>
                                     </button>
                                   </>
                                 ) : (
-                                  <button className="btn btn-activar btn-sm" onClick={() => handleCambiarEstadoCat(cat)}>
-                                    Activar
+                                  <button className="btn btn-sm btn-outline-success" title="Activar" onClick={() => handleCambiarEstadoCat(cat)}>
+                                    <span className="material-symbols-outlined">check_circle</span>
                                   </button>
                                 )}
                               </div>

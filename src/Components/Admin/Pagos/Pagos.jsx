@@ -258,19 +258,19 @@ const Pagos = () => {
                                     </span>
                                   </td>
                                   <td className="text-center">
-                                    <div className="action-buttons">
-                                      <button className="btn btn-info btn-sm btn-action" title="Ver" onClick={() => verPago(pago)}>
-                                        Ver
+                                    <div className="d-flex gap-2 justify-content-center">
+                                      <button className="btn btn-sm btn-outline-info" title="Ver" onClick={() => verPago(pago)}>
+                                        <span className="material-symbols-outlined">visibility</span>
                                       </button>
-                                      <button className="btn btn-primary btn-sm btn-action" title="Editar" onClick={() => abrirModalEditar(pago)}>
-                                        Editar
+                                      <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => abrirModalEditar(pago)}>
+                                        <span className="material-symbols-outlined">edit</span>
                                       </button>
                                       <button
-                                        className="btn btn-danger btn-sm btn-action"
+                                        className="btn btn-sm btn-outline-danger"
                                         title="Eliminar"
                                         onClick={() => handleEliminarPago(pago)}
                                       >
-                                        Eliminar
+                                        <span className="material-symbols-outlined">block</span>
                                       </button>
                                     </div>
                                   </td>

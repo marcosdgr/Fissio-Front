@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import AdminPage from "./Pages/AdminPage";
 import PacientePage from "./Pages/PacientePage";
 import KinesiologoPage from "./Pages/KinesiologoPage";
@@ -10,6 +10,7 @@ import HomePage from "./Pages/HomePage";
 import RegisterPage from "./Pages/RegisterPage";
 import FAQsPublicPage from "./Pages/FAQsPublicPage";
 import LoginPage from "./Pages/LoginPage";
+import ResetPasswordPage from "./Pages/ResetPasswordPage";
 import AsistenciaEmpleado from "./Components/Asistencia/AsistenciaEmpleado.jsx";
 import TurnosWebPage from "./Pages/TurnosWebPage.jsx";
 
@@ -17,14 +18,19 @@ import TurnosWebPage from "./Pages/TurnosWebPage.jsx";
 import PublicRutes from "./Routes/PublicRutes.jsx";
 import PrivateRutes from "./Routes/PrivateRutes.jsx";
 
-function App() {
-  return (
-    <BrowserRouter>
-      <div className="d-flex flex-column min-vh-100">
-        <Navbar />
+function AppContent() {
+  const location = useLocation();
+  
+  // Rutas donde NO se muestra el footer (paneles privados)
+  const rutasSinFooter = ['/admin', '/secretaria', '/kinesiologo', '/paciente', '/mensajes', '/asistencia'];
+  const mostrarFooter = !rutasSinFooter.some(ruta => location.pathname.startsWith(ruta));
 
-        <main className="flex-fill app-main">
-          <Routes>
+  return (
+    <div className="d-flex flex-column min-vh-100">
+      <Navbar />
+
+      <main className="flex-fill">
+        <Routes>
             {/* 🔓 RUTAS PÚBLICAS */}
             <Route path="/" element={<HomePage />} />
             <Route path="/faqs" element={<FAQsPublicPage />} />
@@ -47,6 +53,9 @@ function App() {
                 </PublicRutes>
               }
             />
+            
+            {/* Reset Password → Pública, recibe token por parámetro */}
+            <Route path="/auth/cambio_password/:token" element={<ResetPasswordPage />} />
 
             {/* 🔒 RUTAS PRIVADAS POR ROL / PERMISO */}
 
@@ -118,8 +127,15 @@ function App() {
           </Routes>
         </main>
 
-        <Footer />
+        {mostrarFooter && <Footer />}
       </div>
+    );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }

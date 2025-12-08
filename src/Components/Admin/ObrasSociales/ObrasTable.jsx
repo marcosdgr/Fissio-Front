@@ -32,10 +32,16 @@ const ObrasTable = ({ visible = [], onView = () => {}, onEdit = () => {}, onTogg
                       <td>{email}</td>
                       <td><span className={`badge ${badgeClass}`}>{estadoReal}</span></td>
                       <td>
-                        <div className="d-flex gap-1">
-                          <button className="btn btn-sm btn-outline-info" onClick={() => onView(obra)}>Ver</button>
-                          <button className="btn btn-sm btn-outline-primary" onClick={() => onEdit(obra)}>Editar</button>
-                          <button className={`btn btn-sm ${isActive ? 'btn-outline-danger' : 'btn-outline-success'}`} onClick={() => onToggle(obra)}>{isActive ? 'Desactivar' : 'Activar'}</button>
+                        <div className="d-flex gap-2">
+                          <button className="btn btn-sm btn-outline-info" title="Ver" onClick={() => onView(obra)}>
+                            <span className="material-symbols-outlined">visibility</span>
+                          </button>
+                          <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => onEdit(obra)}>
+                            <span className="material-symbols-outlined">edit</span>
+                          </button>
+                          <button className={`btn btn-sm ${isActive ? 'btn-outline-danger' : 'btn-outline-success'}`} title={isActive ? 'Desactivar' : 'Activar'} onClick={() => onToggle(obra)}>
+                            <span className="material-symbols-outlined">{isActive ? 'block' : 'check_circle'}</span>
+                          </button>
                         </div>
                       </td>
                     </tr>

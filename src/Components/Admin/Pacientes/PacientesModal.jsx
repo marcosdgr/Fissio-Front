@@ -127,8 +127,9 @@ const PacientesModal = ({
                     required
                   >
                     <option value="">Seleccionar...</option>
-                    <option value="M">Masculino</option>
-                    <option value="F">Femenino</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
                   </select>
                 </div>
                 
