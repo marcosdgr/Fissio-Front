@@ -170,7 +170,7 @@ const HorariosTrabajo = () => {
                                 </span>
                               </td>
                               <td>
-                                <div className="d-flex gap-1">
+                                <div className="d-flex gap-2">
                                   <button
                                     className="btn btn-sm btn-outline-primary"
                                     onClick={() => abrirModal(h)}

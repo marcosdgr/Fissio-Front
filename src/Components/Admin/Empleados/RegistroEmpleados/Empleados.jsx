@@ -145,6 +145,8 @@ const Empleados = () => {
           PermisosEmpleado: formData.PermisosEmpleado || null,
           MailUsuario: formData.MailUsuario || undefined
         }
+        console.log('Payload enviado:', payload)
+        console.log('ID empleado:', id)
         await editarEmpleado(id, payload)
         Swal.fire({ title: 'Empleado actualizado', text: `Empleado ${formData.NombreEmpleado} actualizado correctamente.`, icon: 'success', confirmButtonColor: '#0470BB', timer: 1500, timerProgressBar: true })
       }

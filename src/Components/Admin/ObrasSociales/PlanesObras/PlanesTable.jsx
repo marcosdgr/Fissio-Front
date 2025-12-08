@@ -37,10 +37,16 @@ const PlanesTable = ({ visible, obrasSociales, openView, openEdit, onToggle }) =
                       <td>{obraName}</td>
                       <td><EstadoBadge estado={plan.EstadoPlan ?? 'Vigente'} /></td>
                       <td>
-                        <div className="d-flex gap-1">
-                          <button className="btn btn-sm btn-outline-info" onClick={() => openView(plan)}>Ver</button>
-                          <button className="btn btn-sm btn-outline-primary" onClick={() => openEdit(plan)}>Editar</button>
-                          <button className={`btn btn-sm ${isVigente ? 'btn-outline-danger' : 'btn-outline-success'}`} onClick={() => onToggle(plan)}>{isVigente ? 'Desactivar' : 'Activar'}</button>
+                        <div className="d-flex gap-2">
+                          <button className="btn btn-sm btn-outline-info" title="Ver" onClick={() => openView(plan)}>
+                            <span className="material-symbols-outlined">visibility</span>
+                          </button>
+                          <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => openEdit(plan)}>
+                            <span className="material-symbols-outlined">edit</span>
+                          </button>
+                          <button className={`btn btn-sm ${isVigente ? 'btn-outline-danger' : 'btn-outline-success'}`} title={isVigente ? 'Desactivar' : 'Activar'} onClick={() => onToggle(plan)}>
+                            <span className="material-symbols-outlined">{isVigente ? 'block' : 'check_circle'}</span>
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -68,10 +74,16 @@ const PlanesTable = ({ visible, obrasSociales, openView, openEdit, onToggle }) =
                 <span className={`badge ${plan.IsActive ? 'bg-success' : 'bg-warning text-dark'}`}>{plan.IsActive ? 'Activo' : 'Inactivo'}</span>
               </div>
             </div>
-            <div className="mt-3 d-flex">
-              <button className="btn btn-sm btn-outline-info me-2" onClick={() => openView(plan)}>Ver</button>
-              <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => openEdit(plan)}>Editar</button>
-              <button className={`btn btn-sm ${((plan.EstadoPlan ?? (plan.IsActive ? 'Vigente' : 'No vigente')) === 'Vigente') ? 'btn-outline-danger' : 'btn-outline-success'}`} onClick={() => onToggle(plan)}>{((plan.EstadoPlan ?? (plan.IsActive ? 'Vigente' : 'No vigente')) === 'Vigente') ? 'Desactivar' : 'Activar'}</button>
+            <div className="mt-3 d-flex gap-2">
+              <button className="btn btn-sm btn-outline-info" title="Ver" onClick={() => openView(plan)}>
+                <span className="material-symbols-outlined">visibility</span>
+              </button>
+              <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => openEdit(plan)}>
+                <span className="material-symbols-outlined">edit</span>
+              </button>
+              <button className={`btn btn-sm ${((plan.EstadoPlan ?? (plan.IsActive ? 'Vigente' : 'No vigente')) === 'Vigente') ? 'btn-outline-danger' : 'btn-outline-success'}`} title={((plan.EstadoPlan ?? (plan.IsActive ? 'Vigente' : 'No vigente')) === 'Vigente') ? 'Desactivar' : 'Activar'} onClick={() => onToggle(plan)}>
+                <span className="material-symbols-outlined">{((plan.EstadoPlan ?? (plan.IsActive ? 'Vigente' : 'No vigente')) === 'Vigente') ? 'block' : 'check_circle'}</span>
+              </button>
             </div>
           </div>
         ))}
