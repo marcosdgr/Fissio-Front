@@ -19,12 +19,14 @@ const HomePage = () => {
         <div className="container">
           <div className="row">
             <div className="col-12 text-center mb-4">
-              <h2 className="section-title">Nuestros Servicios</h2>
-              <p className="section-subtitle">Tratamientos profesionales para tu recuperación y bienestar</p>
+              <h2 className="section-title text-center">Nuestros Servicios</h2>
+              <p className="section-subtitle text-center">
+                Tratamientos profesionales para tu recuperación y bienestar
+              </p>
             </div>
           </div>
-          <CardServiciosHome />
         </div>
+        <CardServiciosHome />
       </section>
 
       {/* Sección de Comentarios/Testimonios */}
@@ -32,8 +34,10 @@ const HomePage = () => {
         <div className="container">
           <div className="row">
             <div className="col-12 text-center mb-4">
-              <h2 className="section-title">Lo que dicen nuestros pacientes</h2>
-              <p className="section-subtitle">Testimonios reales de personas que confiaron en nosotros</p>
+              <h2 className="section-title text-center">Lo que dicen nuestros pacientes</h2>
+              <p className="section-subtitle">
+                Testimonios reales de personas que confiaron en nosotros
+              </p>
             </div>
           </div>
           <CardComentariosHome />
@@ -43,7 +47,7 @@ const HomePage = () => {
       <section className="turno-section">
         <TurnoHome />
       </section>
-      <Chatbot/>
+      <Chatbot />
     </div>
   );
 };
