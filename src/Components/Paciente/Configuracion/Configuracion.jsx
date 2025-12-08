@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '../../../Store/useAuthStore'
 import { obtenerPacientePorId, actualizarPaciente, obtenerEmailPacientePorId} from '../../../Custom/Paciente/CustomPacienteVista'
 import { getLocalidades } from '../../../Custom/CustomRegister'
+import Swal from 'sweetalert2'
 import '../../../Css/Paciente/Perfil/ConfigPaciente.css'
 
 const Configuracion = () => {
@@ -161,10 +162,7 @@ const Configuracion = () => {
     e.preventDefault()
 
     try {
-      setSaving(true)
-      setError(null)
-
-      // Validar formulario
+      // Validar formulario primero
       validarFormulario()
 
       // Verificar si hay cambios
@@ -172,6 +170,27 @@ const Configuracion = () => {
         setError('No hay cambios para guardar')
         return
       }
+
+      // Mostrar confirmación antes de guardar
+      const result = await Swal.fire({
+        title: '¿Guardar cambios?',
+        text: '¿Estás seguro de que deseas actualizar tu información personal?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#0470BB',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      })
+
+      // Si el usuario cancela, no hacer nada
+      if (!result.isConfirmed) {
+        return
+      }
+
+      setSaving(true)
+      setError(null)
 
       // Preparar datos para actualizar
       const datosActualizados = {
@@ -182,15 +201,24 @@ const Configuracion = () => {
       // Actualizar paciente
       await actualizarPaciente(idPaciente, datosActualizados)
 
-      // Mostrar éxito
-      setSuccess(true)
-      
       // Actualizar datos originales
       setPacienteOriginal({
         ...pacienteOriginal,
         ...datosActualizados
       })
 
+      // Mostrar mensaje de éxito
+      await Swal.fire({
+        title: '¡Cambios guardados!',
+        text: 'Tu información ha sido actualizada correctamente',
+        icon: 'success',
+        confirmButtonColor: '#0470BB',
+        timer: 3000,
+        timerProgressBar: true
+      })
+
+      setSuccess(true)
+      
       // Auto-ocultar mensaje de éxito después de 3 segundos
       setTimeout(() => {
         setSuccess(false)
@@ -198,7 +226,16 @@ const Configuracion = () => {
 
     } catch (err) {
       console.error('Error al actualizar datos:', err)
-      setError(err.message || 'Error al actualizar los datos')
+      const errorMsg = err.message || 'Error al actualizar los datos'
+      setError(errorMsg)
+      
+      // Mostrar error con SweetAlert2
+      await Swal.fire({
+        title: 'Error',
+        text: errorMsg,
+        icon: 'error',
+        confirmButtonColor: '#0470BB'
+      })
     } finally {
       setSaving(false)
     }
