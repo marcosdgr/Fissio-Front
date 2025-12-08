@@ -118,8 +118,8 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
       throw new Error('El horario del turno es requerido')
     }
 
-    // Validar que la fecha no sea en el pasado
-    const fechaSeleccionada = new Date(FechaRequeridaTurno)
+    // Validar que la fecha no sea en el pasado (anterior a hoy)
+    const fechaSeleccionada = new Date(FechaRequeridaTurno + 'T00:00:00')
     const hoy = new Date()
     hoy.setHours(0, 0, 0, 0)
     
@@ -190,11 +190,10 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
     }
   }
 
-  // Función para obtener fecha mínima (mañana)
+  // Función para obtener fecha mínima (hoy)
   const getFechaMinima = () => {
-    const mañana = new Date()
-    mañana.setDate(mañana.getDate() + 1)
-    return mañana.toISOString().split('T')[0]
+    const hoy = new Date()
+    return hoy.toISOString().split('T')[0]
   }
 
   // Función para generar opciones de horarios

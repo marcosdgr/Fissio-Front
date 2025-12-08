@@ -130,8 +130,8 @@ const TurnosWeb = () => {
         return;
       }
 
-      // Validar que la fecha no sea en el pasado
-      const fechaSeleccionada = new Date(formData.FechaRequeridaTurno);
+      // Validar que la fecha no sea en el pasado (anterior a hoy)
+      const fechaSeleccionada = new Date(formData.FechaRequeridaTurno + 'T00:00:00');
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
       
@@ -181,11 +181,10 @@ const TurnosWeb = () => {
     }
   };
 
-  // Obtener fecha mínima (mañana)
+  // Obtener fecha mínima (hoy)
   const getFechaMinima = () => {
-    const mañana = new Date();
-    mañana.setDate(mañana.getDate() + 1);
-    return mañana.toISOString().split('T')[0];
+    const hoy = new Date();
+    return hoy.toISOString().split('T')[0];
   };
 
   return (
