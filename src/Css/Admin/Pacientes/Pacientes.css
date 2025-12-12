@@ -1,4 +1,4 @@
-/* Variables de color Fissio */
+
 :root {
   --fissio-primary: #0470BB;
   --fissio-secondary: #3AB1CF;
@@ -10,14 +10,12 @@
   --fissio-danger: #dc3545;
 }
 
-/* Contenedor principal */
 .pacientes-container {
   background-color: var(--fissio-bg-light);
   min-height: 100vh;
   padding: 2rem;
 }
 
-/* Header del componente */
 .pacientes-header {
   margin-bottom: 2rem;
 }
@@ -41,7 +39,6 @@
   font-size: 1.1rem;
 }
 
-/* Botones con estilo Fissio */
 .btn-fissio-primary {
   background-color: var(--fissio-primary);
   border-color: var(--fissio-primary);
@@ -83,7 +80,7 @@
   transform: translateY(-1px);
 }
 
-/* Cards de estadísticas */
+
 .stats-card {
   background: var(--fissio-white);
   transition: all 0.3s ease;
@@ -98,7 +95,7 @@
   box-shadow: 0 8px 25px rgba(4, 112, 187, 0.15);
 }
 
-/* Cards clickeables */
+
 .stats-card.clickable {
   cursor: pointer;
   position: relative;
@@ -150,7 +147,7 @@
   line-height: 1;
 }
 
-/* Sección de filtros */
+
 .pacientes-filters {
   background: var(--fissio-white);
   padding: 1.5rem;
@@ -177,7 +174,7 @@
   box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
 }
 
-/* Tabla de pacientes */
+
 .pacientes-table .card {
   border: none;
   border-radius: 12px;
@@ -219,7 +216,7 @@
   border-bottom: none;
 }
 
-/* Badges de estado */
+
 .badge {
   font-size: 0.75rem;
   font-weight: 500;
@@ -237,7 +234,7 @@
   background-color: var(--fissio-danger) !important;
 }
 
-/* Botones de acción en tabla */
+
 .pacientes-table .btn-sm {
   padding: 0.375rem 0.5rem;
   font-size: 0.875rem;
@@ -261,12 +258,12 @@
   line-height: 1;
 }
 
-/* Contenedor de botones de acción */
+
 .pacientes-table .d-flex.gap-1 {
   gap: 0.375rem !important;
 }
 
-/* Colores específicos para botones de acción */
+
 .pacientes-table .btn-outline-primary {
   color: var(--fissio-primary);
   border-color: var(--fissio-primary);
@@ -290,13 +287,13 @@
   color: white;
 }
 
-/* Estado vacío */
+
 .pacientes-table .text-center .material-symbols-outlined {
   color: var(--fissio-light-gray);
   opacity: 0.5;
 }
 
-/* Modal personalizado */
+
 .modal-content {
   border: none;
   border-radius: 12px;
@@ -341,7 +338,7 @@
   border-radius: 0 0 12px 12px;
 }
 
-/* Formularios */
+
 .form-label {
   color: var(--fissio-gray);
   font-weight: 500;
@@ -362,7 +359,7 @@
   box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
 }
 
-/* Spinner de loading */
+
 .spinner-border {
   width: 3rem;
   height: 3rem;
@@ -429,7 +426,7 @@
   animation: fadeIn 0.6s ease-out;
 }
 
-/* Efectos de hover mejorados */
+
 .btn:hover {
   transform: translateY(-1px);
   transition: all 0.3s ease;
@@ -440,18 +437,18 @@
   transition: all 0.3s ease;
 }
 
-/* Modal backdrop personalizado */
+
 .modal-backdrop-custom {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Icono de error en formularios */
+
 .error-icon {
   font-size: 16px;
   vertical-align: middle;
 }
 
-/* Estilos específicos para pacientes */
+
 .pacientes-info {
   background: linear-gradient(135deg, var(--fissio-white) 0%, rgba(58, 177, 207, 0.05) 100%);
   border-left: 4px solid var(--fissio-secondary);
@@ -490,7 +487,7 @@
   font-size: 0.8rem;
 }
 
-/* Estilos adicionales específicos para información del paciente */
+
 .patient-info-row {
   background-color: rgba(4, 112, 187, 0.02);
   border-left: 3px solid var(--fissio-secondary);
@@ -518,7 +515,7 @@
   font-size: 0.9rem;
 }
 
-/* Indicadores de estado para pacientes */
+
 .patient-status-active {
   background: linear-gradient(135deg, var(--fissio-success) 0%, #28a745 100%);
   color: white;
@@ -531,7 +528,7 @@
   text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-/* Mejoras para formularios de pacientes */
+
 .form-group-patient {
   margin-bottom: 1.25rem;
 }
@@ -553,7 +550,7 @@
   border-bottom: 2px solid var(--fissio-bg-light);
 }
 
-/* Estilos de Paginación */
+
 .pacientes-pagination {
   background: var(--fissio-white);
   padding: 1.5rem 2rem;
@@ -636,13 +633,13 @@
   background-color: #f8f9fa;
 }
 
-/* Navegación de páginas con iconos */
+
 .pagination-controls .page-link .material-symbols-outlined {
   font-size: 1.1rem;
   line-height: 1;
 }
 
-/* Responsive para paginación */
+/* Responsive */
 @media (max-width: 768px) {
   .pacientes-pagination {
     padding: 1rem;
@@ -660,7 +657,7 @@
     min-width: 40px;
   }
   
-  /* Ocultar números de página en móviles y mostrar solo navegación */
+
   .pagination-controls .page-item:not(.page-nav):not(.active) {
     display: none;
   }
@@ -684,13 +681,12 @@
   }
 }
 
-/* Efectos de hover mejorados para paginación */
 .pagination-controls .page-link:focus {
   box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.25);
   z-index: 3;
 }
 
-/* Animación suave para cambios de página */
+
 .pacientes-table.loading {
   opacity: 0.7;
   transition: opacity 0.3s ease;
@@ -701,7 +697,7 @@
   transition: opacity 0.3s ease;
 }
 
-/* Indicador de página actual en la información */
+
 .pagination-current-page {
   background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
   color: var(--fissio-white);
@@ -712,7 +708,7 @@
   margin: 0 0.5rem;
 }
 
-/* Separador visual en paginación */
+
 .pagination-separator {
   color: var(--fissio-light-gray);
   font-weight: 500;

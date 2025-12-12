@@ -1,6 +1,5 @@
 
 
-/* Variables de colores Fissio */
 :root {
   --fissio-primary: #0470BB;
   --fissio-primary-hover: #0356a3;
@@ -9,7 +8,7 @@
   --fissio-light-bg: #f8f9fa;
 }
 
-/* Botón principal de login */
+
 .login-btn-primary {
   background-color: var(--fissio-primary) !important;
   border-color: var(--fissio-primary) !important;
@@ -24,7 +23,7 @@
   box-shadow: 0 0 0 0.2rem var(--fissio-primary-focus) !important;
 }
 
-/* Enlaces con color de marca */
+
 .login-link-primary {
   color: var(--fissio-primary) !important;
 }
@@ -33,12 +32,11 @@
   color: var(--fissio-primary-hover) !important;
 }
 
-/* Panel derecho con información */
+
 .login-info-panel {
   background-color: var(--fissio-light-bg);
 }
 
-/* Título de bienvenida */
 .login-welcome-title {
   color: var(--fissio-primary);
 }

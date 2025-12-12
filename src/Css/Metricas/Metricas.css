@@ -1,6 +1,4 @@
-/* ============================================= */
-/*  MÉTRICAS EN VIVO - FISSIO DESIGN SYSTEM      */
-/* ============================================= */
+
 
 :root {
   --fissio-primary: #0470BB;
@@ -20,9 +18,6 @@
   --fissio-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ============================================= */
-/*  CARD PRINCIPAL                               */
-/* ============================================= */
 .card {
   border: none;
   border-radius: var(--fissio-radius);
@@ -37,9 +32,7 @@
   box-shadow: 0 16px 35px rgba(4, 112, 187, 0.18);
 }
 
-/* ============================================= */
-/*  HEADER CON GRADIENTE FISSIO                  */
-/* ============================================= */
+
 .bg-gradient-primary {
   background: linear-gradient(135deg, var(--fissio-primary), var(--fissio-secondary)) !important;
   padding: 1.5rem 2rem;
@@ -54,9 +47,7 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* ============================================= */
-/*  SELECTORES (DÍA, SEMANA, MES)                */
-/* ============================================= */
+
 .form-select,
 .form-control {
   border-radius: var(--fissio-radius-sm);
@@ -79,9 +70,7 @@
   color: var(--fissio-dark);
 }
 
-/* ============================================= */
-/*  BOTÓN ACTUALIZAR                             */
-/* ============================================= */
+
 .btn-light {
   background: rgba(255, 255, 255, 0.9);
   border: none;
@@ -101,9 +90,7 @@
   box-shadow: 0 4px 12px rgba(4, 112, 187, 0.2);
 }
 
-/* ============================================= */
-/*  TARJETAS DE MÉTRICA                          */
-/* ============================================= */
+
 .metric-card {
   border-radius: var(--fissio-radius-sm);
   padding: 1.5rem;
@@ -159,9 +146,7 @@
   font-weight: 500;
 }
 
-/* ============================================= */
-/*  GRÁFICOS                                     */
-/* ============================================= */
+
 .chart-container {
   background: var(--fissio-white);
   border-radius: var(--fissio-radius-sm);
@@ -180,7 +165,7 @@
   border-color: var(--fissio-primary);
 }
 
-/* Títulos de gráficos */
+
 .chart-container .chartjs-title {
   font-weight: 600;
   color: var(--fissio-gray);
@@ -188,9 +173,7 @@
   font-size: 1.1rem;
 }
 
-/* ============================================= */
-/*  LOADING                                      */
-/* ============================================= */
+
 .loading-alert {
   display: flex;
   flex-direction: column;
@@ -210,9 +193,7 @@
   border-color: var(--fissio-primary) transparent var(--fissio-secondary) transparent;
 }
 
-/* ============================================= */
-/*  FOOTER INFO                                  */
-/* ============================================= */
+
 .text-success.fw-bold {
   font-size: 0.85rem;
   letter-spacing: 1.2px;
@@ -223,9 +204,7 @@
   background-clip: text;
 }
 
-/* ============================================= */
-/*  RESPONSIVE                                   */
-/* ============================================= */
+
 @media (max-width: 992px) {
   .bg-gradient-primary {
     flex-direction: column;
@@ -295,9 +274,7 @@
   }
 }
 
-/* ============================================= */
-/*  ANIMACIONES SUAVES                           */
-/* ============================================= */
+
 * {
   transition: var(--fissio-transition);
 }

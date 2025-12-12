@@ -1,4 +1,4 @@
-/* Styles for Empleados component: move inline modal/backdrop styles here */
+
 .modal-backdrop-custom {
 	background-color: rgba(0,0,0,0.5);
 }
@@ -15,7 +15,6 @@
 	}
 }
 
-/* Responsive table tweaks */
 .servicios-table .table {
 	font-size: 0.95rem;
 }

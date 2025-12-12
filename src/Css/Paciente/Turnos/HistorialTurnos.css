@@ -1,6 +1,4 @@
-/* HistorialTurnos.css */
 
-/* Tarjetas de estadísticas */
 .stat-card {
   background: var(--bs-white);
   border-radius: 0.75rem;
@@ -90,7 +88,6 @@
   font-weight: 500;
 }
 
-/* Botones de filtro */
 .filter-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -124,7 +121,6 @@
   font-weight: 600;
 }
 
-/* Tarjetas de turnos */
 .turno-card {
   background: var(--bs-white);
   border-radius: 1rem;
@@ -215,7 +211,7 @@
   padding: 1.25rem 1rem;
 }
 
-/* Items de información del turno */
+
 .turno-info-item {
   display: flex;
   align-items: flex-start;
@@ -255,7 +251,7 @@
   word-break: break-word;
 }
 
-/* Responsive Adjustments */
+
 @media (max-width: 992px) {
   .stat-card {
     padding: 0.875rem;
@@ -360,7 +356,6 @@
   }
 }
 
-/* Animaciones */
 .turno-card {
   animation: fadeInUp 0.5s ease-out;
 }
@@ -376,20 +371,17 @@
   }
 }
 
-/* Estados vacíos */
 .text-center .material-symbols-outlined {
   display: block;
   margin: 0 auto;
 }
 
-/* Mejoras de accesibilidad */
 .filter-btn:focus,
 .turno-cancel-btn:focus {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
-/* Transiciones suaves */
 .stat-card,
 .filter-btn,
 .turno-card,
@@ -397,7 +389,6 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Paginación */
 .pagination-container {
   display: flex;
   flex-direction: column;
@@ -471,7 +462,6 @@
   font-size: clamp(1.25rem, 3vw, 1.5rem);
 }
 
-/* Responsive para paginación */
 @media (max-width: 768px) {
   .pagination-container {
     padding: 1rem;

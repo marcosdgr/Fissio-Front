@@ -203,9 +203,7 @@
   color: var(--fissio-primary);
 }
 
-/* ============================================
-   SECCIÓN DE COMENTARIO
-============================================ */
+
 .comentario-section {
   display: flex;
   flex-direction: column;
@@ -249,9 +247,7 @@
   font-weight: 500;
 }
 
-/* ============================================
-   BOTÓN DE ENVÍO
-============================================ */
+
 .btn-enviar {
   width: 100%;
   padding: 1.2rem 2rem;
@@ -291,9 +287,6 @@
   font-size: 1.2rem;
 }
 
-/* ============================================
-   FOOTER
-============================================ */
 .feedback-footer {
   margin-top: 2rem;
   padding-top: 2rem;
@@ -316,9 +309,6 @@
   text-align: center;
 }
 
-/* ============================================
-   CARD DE ÉXITO
-============================================ */
 .success-card {
   text-align: center;
   padding: 4rem 3rem;
@@ -398,9 +388,7 @@
   box-shadow: 0 8px 20px rgba(4, 112, 187, 0.3);
 }
 
-/* ============================================
-   CARDS DE ERROR Y CARGA
-============================================ */
+
 .error-card,
 .loading-card {
   text-align: center;
@@ -435,9 +423,7 @@
   margin: 0;
 }
 
-/* ============================================
-   RESPONSIVE
-============================================ */
+
 @media (max-width: 768px) {
   .feedback-container {
     padding: 1.5rem;

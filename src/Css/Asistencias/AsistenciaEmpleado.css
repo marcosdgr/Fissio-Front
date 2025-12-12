@@ -1,4 +1,4 @@
-/* Colores Fissio */
+
 :root {
     --fissio-primary: #0470BB;
     --fissio-secondary: #03A9F4;
@@ -11,7 +11,7 @@
     --fissio-gray: #95A5A6;
 }
 
-/* Container principal */
+
 .asistencia-empleado-container {
     padding: 2rem;
     max-width: 1400px;
@@ -20,7 +20,7 @@
     min-height: 100vh;
 }
 
-/* Header */
+
 .asistencia-header {
     display: flex;
     justify-content: space-between;
@@ -57,7 +57,7 @@
     color: var(--fissio-primary);
 }
 
-/* Card de registro de asistencia */
+
 .registro-asistencia-card {
     background: var(--fissio-white);
     border-radius: 15px;
@@ -170,7 +170,7 @@
     font-weight: 500;
 }
 
-/* Jornada completada */
+
 .jornada-completada {
     background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
     padding: 2rem;
@@ -257,7 +257,6 @@
     font-style: italic;
 }
 
-/* Botones de registro */
 .btn-registrar {
     padding: 1.2rem 2rem;
     font-size: 1.1rem;
@@ -294,7 +293,6 @@
     box-shadow: 0 8px 16px rgba(244, 67, 54, 0.3);
 }
 
-/* Sección de observaciones */
 .observaciones-section {
     display: flex;
     flex-direction: column;
@@ -369,7 +367,6 @@
     transform: scale(1.02);
 }
 
-/* Tabs de navegación */
 .tabs-container {
     display: flex;
     gap: 1rem;
@@ -405,7 +402,6 @@
     box-shadow: 0 4px 8px rgba(4, 112, 187, 0.3);
 }
 
-/* Horarios semanales */
 .horarios-semanales-card {
     background: var(--fissio-white);
     border-radius: 15px;
@@ -525,7 +521,7 @@
     color: var(--fissio-white);
 }
 
-/* Historial de asistencias */
+
 .historial-card {
     background: var(--fissio-white);
     border-radius: 15px;
@@ -545,7 +541,6 @@
     color: var(--fissio-primary);
 }
 
-/* Filtros */
 .filtros-container {
     background: var(--fissio-light);
     border-radius: 12px;
@@ -658,7 +653,6 @@
     transform: scale(1.05);
 }
 
-/* Estadísticas */
 .estadisticas-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -707,7 +701,6 @@
     opacity: 0.9;
 }
 
-/* Tabla de asistencias */
 .tabla-container {
     overflow-x: auto;
 }
@@ -816,7 +809,6 @@
     }
 }
 
-/* Loading y sin datos */
 .loading {
     text-align: center;
     padding: 3rem;

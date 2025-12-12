@@ -42,9 +42,7 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* ==========================================================================
-   CARRUSEL STYLES
-   ========================================================================== */
+
 
 #fissioCarousel {
   height: 60vh;
@@ -129,7 +127,7 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Indicadores del carrusel */
+
 .carousel-indicators {
   bottom: 30px;
 }
@@ -149,7 +147,6 @@
   border-color: #3AB1CF;
 }
 
-/* Controles del carrusel */
 .carousel-control-prev,
 .carousel-control-next {
   width: 5%;
@@ -161,9 +158,6 @@
   opacity: 1;
 }
 
-/* ==========================================================================
-   CARDS DE SERVICIOS
-   ========================================================================== */
 
 .servicio-card {
   border: none;
@@ -240,9 +234,6 @@
   font-size: 1rem;
 }
 
-/* ==========================================================================
-   TESTIMONIOS/COMENTARIOS
-   ========================================================================== */
 
 .testimonios-container {
   position: relative;
@@ -359,7 +350,6 @@
   font-size: 0.8rem;
 }
 
-/* Controles de navegación */
 .testimonios-controls {
   position: absolute;
   top: 50%;
@@ -393,7 +383,6 @@
   transform: scale(1.1);
 }
 
-/* Indicadores */
 .testimonios-indicators {
   position: absolute;
   bottom: -50px;
@@ -419,11 +408,7 @@
   transform: scale(1.3);
 }
 
-/* ==========================================================================
-   RESPONSIVE DESIGN
-   ========================================================================== */
 
-/* Tablets */
 @media (max-width: 768px) {
   #fissioCarousel {
     height: 50vh;
@@ -476,7 +461,6 @@
   }
 }
 
-/* Móviles */
 @media (max-width: 576px) {
   #fissioCarousel {
     height: 45vh;
@@ -565,7 +549,6 @@
   }
 }
 
-/* Móviles muy pequeños */
 @media (max-width: 375px) {
   .carousel-title {
     font-size: 1.7rem;
@@ -611,7 +594,6 @@
   }
 }
 
-/* Pantallas grandes */
 @media (min-width: 1200px) {
   .section-title {
     font-size: 3rem;
@@ -640,9 +622,7 @@
   }
 }
 
-/* ==========================================================================
-   TURNO HOME - CTA SECTION
-   ========================================================================== */
+
 
 .turno-section {
   position: relative;
@@ -734,11 +714,7 @@
   border: 1px solid rgba(167, 177, 180, 0.2);
 }
 
-/* ==========================================================================
-   TURNO HOME - RESPONSIVE
-   ========================================================================== */
 
-/* Tablets */
 @media (max-width: 768px) {
   .turno-cta-container {
     padding: 40px 0;
@@ -764,7 +740,6 @@
   }
 }
 
-/* Móviles */
 @media (max-width: 576px) {
   .turno-cta-container {
     padding: 35px 0;
@@ -801,7 +776,6 @@
   }
 }
 
-/* Móviles muy pequeños */
 @media (max-width: 375px) {
   .turno-title {
     font-size: 1.2rem;
@@ -817,7 +791,6 @@
   }
 }
 
-/* Desktop grande */
 @media (min-width: 1200px) {
   .turno-cta-container {
     padding: 60px 0;

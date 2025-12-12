@@ -1,4 +1,4 @@
-/* Variables de color Fissio para Configuración */
+
 :root {
   --fissio-primary: #0470BB;
   --fissio-secondary: #3AB1CF;
@@ -9,8 +9,7 @@
   --fissio-success: #198754;
   --fissio-danger: #dc3545;
   --fissio-warning: #ffc107;
-  
-  /* Nuevos colores para evitar tanto blanco */
+
   --config-bg-primary: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
   --config-bg-secondary: linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
   --config-form-bg: linear-gradient(145deg, #ffffff 0%, #f9fafb 100%);
@@ -19,7 +18,7 @@
   --config-input-shadow: 0 2px 8px rgba(4, 112, 187, 0.08);
 }
 
-/* Contenedor principal de configuración */
+
 .config-paciente-container {
   background: var(--config-bg-primary);
   min-height: 100vh;
@@ -27,7 +26,6 @@
   padding-bottom: 2rem;
 }
 
-/* Header de configuración mejorado */
 .config-welcome-section {
   background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
   border-radius: 20px;
@@ -75,7 +73,7 @@
   transform: scale(1.05) rotateY(10deg);
 }
 
-/* Formulario principal */
+
 .config-form-card {
   background: var(--config-form-bg);
   border: none;
@@ -123,7 +121,6 @@
   text-shadow: 0 1px 3px rgba(4, 112, 187, 0.1);
 }
 
-/* Campos del formulario mejorados */
 .config-form-group {
   margin-bottom: 1.5rem;
 }
@@ -168,7 +165,6 @@
   transform: translateY(-1px);
 }
 
-/* Sección de información no editable */
 .config-readonly-section {
   background: linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 100%);
   border: none;
@@ -208,7 +204,6 @@
   font-size: 0.95rem;
 }
 
-/* Botones mejorados */
 .config-btn-primary {
   background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
   border: none;
@@ -253,7 +248,6 @@
   transform: none !important;
 }
 
-/* Alertas mejoradas */
 .config-alert-success {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   border: none;
@@ -287,7 +281,6 @@
   }
 }
 
-/* Estados de carga */
 .config-loading-container {
   display: flex;
   flex-direction: column;
@@ -314,7 +307,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Información adicional */
 .config-info-card {
   background: linear-gradient(145deg, #f0f9ff 0%, #e0f2fe 100%);
   border: 1px solid rgba(58, 177, 207, 0.2);
@@ -338,7 +330,6 @@
   font-size: 0.9rem;
 }
 
-/* Mejoras para campos específicos */
 .config-age-display {
   background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
   border-radius: 8px;
@@ -351,7 +342,6 @@
   align-items: center;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .config-paciente-container {
     padding: 0.5rem;
@@ -409,7 +399,6 @@
   }
 }
 
-/* Efectos de interacción adicionales */
 .config-form-control:valid {
   border-color: rgba(16, 185, 129, 0.3);
 }
@@ -418,7 +407,6 @@
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-/* Animaciones suaves */
 .config-fade-in {
   animation: configFadeIn 0.6s ease-out;
 }
@@ -434,14 +422,12 @@
   }
 }
 
-/* Hover en campos de solo lectura */
 .config-readonly-item:hover {
   background: rgba(255, 255, 255, 0.9);
   transform: translateY(-1px);
   transition: all 0.2s ease;
 }
 
-/* Estilos para iconos mejorados */
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }

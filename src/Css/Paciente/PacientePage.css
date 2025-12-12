@@ -1,6 +1,4 @@
-/* PacientePage Styles */
 
-/* Variables de colores */
 :root {
   --fissio-primary: #0470BB;
   --fissio-secondary: #3AB1CF;
@@ -10,7 +8,7 @@
   --content-bg: #f1f3f4;
 }
 
-/* Contenedor principal */
+
 .paciente-container {
   background: var(--content-bg);
   min-height: 100%;
@@ -18,7 +16,7 @@
   position: relative;
 }
 
-/* Ajustar contenido principal para sidebar sticky */
+
 .paciente-main-content {
   margin-left: 280px;
   min-height: calc(100vh - 60px);
@@ -30,7 +28,7 @@
   transition: margin-left 0.3s ease;
 }
 
-/* Contenido principal extendido */
+
 .paciente-main-content > div:last-child {
   flex: 1;
 }
@@ -60,7 +58,7 @@
   margin-top: 0.25rem;
 }
 
-/* Botones personalizados */
+
 .btn-fissio-primary {
   background-color: var(--fissio-primary);
   border-color: var(--fissio-primary);
@@ -99,7 +97,7 @@
   color: white;
 }
 
-/* Cards generales */
+
 .card {
   background: white;
   transition: all 0.3s;
@@ -113,18 +111,18 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Headers de cards */
+
 .card-header h5 {
   color: var(--fissio-primary);
 }
 
-/* Iconos grandes */
+
 .dashboard-icon-large {
   font-size: 5rem;
   color: var(--fissio-secondary);
 }
 
-/* Texto con gradiente */
+
 .gradient-text {
   background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
   -webkit-background-clip: text;
@@ -132,7 +130,7 @@
   background-clip: text;
 }
 
-/* Formularios */
+
 .form-control:focus,
 .form-select:focus {
   border-color: var(--fissio-primary);
@@ -144,7 +142,7 @@
   font-weight: 500;
 }
 
-/* Estados de badges */
+
 .badge.bg-primary {
   background-color: var(--fissio-primary) !important;
 }
@@ -153,7 +151,6 @@
   background-color: var(--fissio-secondary) !important;
 }
 
-/* Tablas */
 .table th {
   background-color: var(--fissio-bg-light);
   color: var(--fissio-gray);
@@ -165,7 +162,6 @@
   background-color: rgba(4, 112, 187, 0.05);
 }
 
-/* Loading spinner */
 .loading-spinner {
   display: inline-block;
   width: 20px;
@@ -180,7 +176,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* Animaciones */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -196,7 +192,7 @@ main > * {
   animation: fadeIn 0.6s ease-out;
 }
 
-/* Responsive mejorado */
+
 @media (max-width: 1200px) {
   .paciente-main-content {
     margin-left: 240px;
@@ -255,12 +251,10 @@ main > * {
   }
 }
 
-/* Transiciones suaves para cambios de layout */
 * {
   box-sizing: border-box;
 }
 
-/* Asegurar que el footer sea visible */
 footer {
   position: relative !important;
   z-index: 1001 !important;

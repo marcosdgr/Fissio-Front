@@ -1,4 +1,4 @@
-/* Styles for PlanesObras component - responsive and no inline styles */
+
 .planes-container { padding: 1rem; }
 .planes-header .planes-title { margin: 0; font-size: 1.25rem; }
 .planes-subtitle { margin: 0; color: #6c757d; }
@@ -21,5 +21,4 @@
 .ver-field-label { font-weight: 600; color: #495057; }
 .ver-field-value { color: #212529; }
 
-/* small helpers */
 .cards-filtro-wrapper { gap: 1rem; }

@@ -1,4 +1,4 @@
-/* Variables de color Fissio */
+
 :root {
   --fissio-primary: #0470BB;
   --fissio-secondary: #3AB1CF;
@@ -10,9 +10,7 @@
   --fissio-star-empty: #ddd;
 }
 
-/* ============================================
-   MODAL OVERLAY Y CONTENEDOR
-============================================ */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -82,9 +80,7 @@
   transition: color 0.3s ease;
 }
 
-/* ============================================
-   FORMULARIO DE COMENTARIO
-============================================ */
+
 .comentario-form-card {
   background: linear-gradient(145deg, var(--fissio-white) 0%, var(--fissio-bg-light) 100%);
   border: 1px solid rgba(58, 177, 207, 0.2);
@@ -127,11 +123,7 @@
   margin-top: 1.5rem;
 }
 
-/* ============================================
-   ESTILOS PARA COMPONENTES DE FEEDBACK
-============================================ */
 
-/* Sección de calificación del componente FeedbackEstrellas */
 .calificacion-section {
   display: flex;
   flex-direction: column;
@@ -157,7 +149,7 @@
   text-align: center;
 }
 
-/* Estrellas del componente FeedbackEstrellas */
+
 .estrellas-container {
   display: flex;
   gap: 1rem;
@@ -207,7 +199,7 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-/* Mensaje de calificación del componente FeedbackEstrellas */
+
 .calificacion-mensaje {
   margin-top: 0.5rem;
   padding: 0.75rem 1.5rem;
@@ -234,7 +226,7 @@
   color: var(--fissio-primary);
 }
 
-/* Estilos del componente FeedbackComentario */
+
 .comentario-section {
   display: flex;
   flex-direction: column;
@@ -278,9 +270,7 @@
   font-weight: 500;
 }
 
-/* ============================================
-   CARDS DE COMENTARIOS
-============================================ */
+
 .comentario-card-paciente {
   background: var(--fissio-white);
   border: 1px solid rgba(58, 177, 207, 0.2);
@@ -370,9 +360,7 @@
   font-weight: 500;
 }
 
-/* ============================================
-   SECTION TITLE
-============================================ */
+
 .section-title {
   color: var(--fissio-primary);
   font-weight: 700;
@@ -388,9 +376,7 @@
   font-size: 1.75rem;
 }
 
-/* ============================================
-   UTILIDADES
-============================================ */
+
 .icon-small {
   font-size: 1rem !important;
 }
@@ -399,9 +385,7 @@
   font-size: 4rem !important;
 }
 
-/* ============================================
-   PAGINACIÓN
-============================================ */
+
 .comentarios-paginacion {
   display: flex;
   justify-content: center;
@@ -479,9 +463,7 @@
   outline-offset: 2px;
 }
 
-/* ============================================
-   RESPONSIVE
-============================================ */
+
 @media (max-width: 768px) {
   .comentario-form-card {
     padding: 1.5rem 1rem;
@@ -714,14 +696,11 @@
   }
 }
 
-/* ============================================
-   ANIMACIONES ADICIONALES
-============================================ */
+
 .fade-in {
   animation: fadeIn 0.6s ease-out;
 }
 
-/* Efecto hover suave para botones */
 .btn {
   transition: all 0.3s ease;
 }
@@ -734,7 +713,6 @@
   transform: translateY(0);
 }
 
-/* Estilo para textarea del formulario */
 .comentario-form-card .form-control {
   border: 2px solid var(--fissio-light-gray);
   border-radius: 10px;
@@ -746,7 +724,6 @@
   box-shadow: 0 0 0 0.2rem rgba(4, 112, 187, 0.15);
 }
 
-/* Loading spinner personalizado */
 .spinner-border-sm {
   width: 1rem;
   height: 1rem;

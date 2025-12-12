@@ -1,7 +1,3 @@
-/* ==========================================================================
-   FAQs.css - FISSIO ADMIN - VERSIÓN FINAL CON BOTÓN X
-   @launavarroo_ - 10/11/2025 05:31 PM -03
-   ========================================================================== */
 
 .action-buttons {
   display: flex;
@@ -36,13 +32,11 @@
   font-size: 0.8rem;
 }
 
-/* COLORES PERSONALIZADOS */
 .btn-ver        { background-color: #17a2b8; border-color: #17a2b8; color: white; }
 .btn-editar     { background-color: #007bff; border-color: #007bff; color: white; }
 .btn-desactivar { background-color: #dc3545; border-color: #dc3545; color: white; }
 .btn-activar    { background-color: #28a745; border-color: #28a745; color: white; }
 
-/* FILAS INACTIVAS */
 .faq-inactiva, .cat-inactiva {
   opacity: 0.6;
   background-color: #f8f9fa !important;
@@ -61,18 +55,15 @@
   transform: translateY(-50%);
 }
 
-/* BADGES */
 .badge-activa   { background-color: #28a745 !important; color: white; }
 .badge-inactiva { background-color: #dc3545 !important; color: white; }
 
-/* BOTÓN AGREGAR */
 .btn-agregar {
   border-radius: 12px;
   padding: 0.6rem 1.4rem;
   font-weight: 500;
 }
 
-/* MODAL ESTILO */
 .custom-modal .modal-content {
   max-width: 560px;
   width: 90%;
@@ -99,7 +90,6 @@
   padding-left: 1rem;
 }
 
-/* BOTÓN X PREMIUM */
 .btn-close-modal-x {
   position: absolute;
   top: 50%;
@@ -127,7 +117,6 @@
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.7);
 }
 
-/* ANIMACIÓN DE ENTRADA */
 .fade-in {
   animation: modalFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -143,7 +132,6 @@
   }
 }
 
-/* HEADER AZUL FISSIO */
 .modal-header.bg-primary {
   background: linear-gradient(135deg, #0470BB, #3AB1CF) !important;
   border-bottom: none;

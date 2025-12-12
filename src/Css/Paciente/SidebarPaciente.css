@@ -1,6 +1,4 @@
-/* SidebarPaciente.css - Estilos exclusivos del Sidebar */
 
-/* Variables de colores Fissio */
 :root {
   --fissio-primary: #0470BB;
   --fissio-secondary: #3AB1CF;
@@ -13,7 +11,6 @@
   --sidebar-text-muted: rgba(255, 255, 255, 0.7);
 }
 
-/* Sidebar mejorado - Fijo y sticky */
 .paciente-sidebar {
   width: 280px;
   background: var(--sidebar-bg);
@@ -31,7 +28,6 @@
   transition: transform 0.3s ease;
 }
 
-/* Efecto de burbujas en el sidebar */
 .paciente-sidebar::before {
   content: '';
   position: absolute;
@@ -69,13 +65,11 @@
   }
 }
 
-/* Permitir scroll interno del sidebar */
 .paciente-sidebar > * {
   position: relative;
   z-index: 1;
 }
 
-/* Contenedor scrolleable del sidebar */
 .sidebar-scroll-container {
   flex: 1;
   overflow-y: auto;
@@ -92,7 +86,6 @@
   flex-direction: column;
 }
 
-/* Scrollbar personalizada del sidebar */
 .paciente-sidebar nav::-webkit-scrollbar {
   width: 4px;
 }
@@ -110,7 +103,6 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Scrollbar del contenedor scrolleable */
 .sidebar-scroll-container::-webkit-scrollbar {
   width: 4px;
 }
@@ -128,7 +120,6 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Sidebar Header */
 .sidebar-header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.05);
@@ -149,7 +140,6 @@
   width: 100%;
 }
 
-/* Menu items mejorados */
 .sidebar-nav-item {
   background-color: transparent;
   color: var(--sidebar-text);
@@ -207,7 +197,6 @@
   font-size: 0.9rem;
 }
 
-/* Sidebar Footer */
 .sidebar-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.05);
@@ -244,7 +233,6 @@
   font-size: 0.8rem;
 }
 
-/* Sidebar Scrollbar general */
 .paciente-sidebar::-webkit-scrollbar {
   width: 6px;
 }
@@ -262,19 +250,16 @@
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* Estado collapsed (reservado para futuro) */
 .paciente-sidebar.collapsed {
   width: 280px;
 }
 
-/* Responsive - Pantallas grandes (1200px) */
 @media (max-width: 1200px) {
   .paciente-sidebar {
     width: 240px;
   }
 }
 
-/* Responsive - Tablet (992px) */
 @media (max-width: 992px) {
   .paciente-sidebar {
     width: 80px;
@@ -300,7 +285,6 @@
   }
 }
 
-/* Responsive - Mobile (768px) */
 @media (max-width: 768px) {
   .paciente-sidebar {
     transform: translateX(-100%);
@@ -318,14 +302,12 @@
   }
 }
 
-/* Responsive - Small Mobile (576px) */
 @media (max-width: 576px) {
   .paciente-sidebar {
     width: 280px;
   }
 }
 
-/* Mobile Menu Button */
 .mobile-menu-btn {
   display: none;
 }
@@ -365,14 +347,12 @@
   }
 }
 
-/* Ocultar botón móvil en desktop */
 @media (min-width: 769px) {
   .mobile-menu-btn {
     display: none !important;
   }
 }
 
-/* Sidebar Overlay para móvil */
 .sidebar-overlay {
   display: none;
 }
@@ -398,14 +378,12 @@
   }
 }
 
-/* Ocultar overlay en desktop */
 @media (min-width: 769px) {
   .sidebar-overlay {
     display: none !important;
   }
 }
 
-/* Transiciones suaves para el sidebar */
 .paciente-sidebar * {
   transition: margin 0.3s ease, width 0.3s ease;
 }

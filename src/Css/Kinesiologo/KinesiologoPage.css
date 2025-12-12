@@ -12,7 +12,7 @@
   --content-bg: #f1f3f4;
 }
 
-/* Contenedor principal */
+
 .kinesiologo-container {
   background: var(--content-bg);
   min-height: calc(100vh - 120px);
@@ -20,7 +20,7 @@
   position: relative;
 }
 
-/* Sidebar */
+
 .kinesiologo-sidebar {
   width: 280px;
   background: var(--sidebar-bg);

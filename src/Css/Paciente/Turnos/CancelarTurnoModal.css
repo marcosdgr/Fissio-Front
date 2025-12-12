@@ -1,6 +1,4 @@
-/* CancelarTurnoModal.css - Estilos con colores Fissio */
 
-/* Variables de colores Fissio */
 :root {
   --fissio-primary: #0470BB;
   --fissio-secondary: #3AB1CF;
@@ -8,13 +6,12 @@
   --fissio-light-gray: #A7B1B4;
 }
 
-/* Overlay del modal */
+
 .modal-cancelar-overlay {
   background-color: rgba(107, 107, 107, 0.7) !important;
   backdrop-filter: blur(4px);
 }
 
-/* Modal content */
 .modal-cancelar .modal-content {
   border: none;
   border-radius: 1rem;
@@ -22,7 +19,6 @@
   overflow: hidden;
 }
 
-/* Header con colores Fissio */
 .modal-cancelar .modal-header {
   background: linear-gradient(135deg, var(--fissio-gray) 0%, var(--fissio-light-gray) 100%);
   border-bottom: 3px solid var(--fissio-primary);
@@ -62,12 +58,10 @@
   opacity: 1;
 }
 
-/* Body del modal */
 .modal-cancelar .modal-body {
   background: linear-gradient(to bottom, var(--bs-white) 0%, var(--bs-light) 100%);
 }
 
-/* Alerta de error personalizada */
 .modal-cancelar .alert-danger {
   background: linear-gradient(135deg, rgba(107, 107, 107, 0.1) 0%, rgba(107, 107, 107, 0.05) 100%);
   border-left: 4px solid var(--fissio-gray);
@@ -79,7 +73,6 @@
   color: var(--fissio-gray);
 }
 
-/* Alerta de éxito */
 .modal-cancelar .alert-success {
   background: linear-gradient(135deg, rgba(4, 112, 187, 0.1) 0%, rgba(58, 177, 207, 0.1) 100%);
   border-left: 4px solid var(--fissio-primary);
@@ -87,7 +80,6 @@
   color: var(--fissio-primary);
 }
 
-/* Icono de advertencia */
 .modal-cancelar .warning-icon-container {
   background: linear-gradient(135deg, rgba(167, 177, 180, 0.15) 0%, rgba(167, 177, 180, 0.05) 100%);
   border-radius: 50%;
@@ -118,7 +110,6 @@
   font-size: clamp(0.875rem, 2.5vw, 1rem);
 }
 
-/* Card de información del turno */
 .modal-cancelar .turno-info-card {
   background: var(--bs-white);
   border: 2px solid rgba(4, 112, 187, 0.1);
@@ -164,7 +155,6 @@
   font-weight: 600;
 }
 
-/* Alerta de advertencia importante */
 .modal-cancelar .alert-warning {
   background: linear-gradient(135deg, rgba(167, 177, 180, 0.15) 0%, rgba(167, 177, 180, 0.05) 100%);
   border-left: 4px solid var(--fissio-secondary);
@@ -176,14 +166,12 @@
   color: var(--fissio-secondary);
 }
 
-/* Footer del modal */
 .modal-cancelar .modal-footer {
   background: linear-gradient(to top, var(--bs-light) 0%, var(--bs-white) 100%);
   border-top: 1px solid rgba(4, 112, 187, 0.1);
   padding: 1rem 1.5rem;
 }
 
-/* Botones personalizados */
 .modal-cancelar .btn-mantener {
   background: var(--bs-white);
   border: 2px solid var(--fissio-light-gray);
@@ -231,13 +219,11 @@
   font-size: clamp(1.25rem, 3vw, 1.5rem);
 }
 
-/* Spinner personalizado */
 .modal-cancelar .spinner-border {
   border-color: var(--fissio-secondary);
   border-right-color: transparent;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .modal-cancelar .modal-header {
     padding: 1rem;
@@ -280,7 +266,6 @@
   }
 }
 
-/* Animación de entrada */
 .modal-cancelar.show {
   animation: modalFadeIn 0.3s ease-out;
 }
@@ -296,7 +281,6 @@
   }
 }
 
-/* Mejoras de accesibilidad */
 .modal-cancelar button:focus {
   outline: 2px solid var(--fissio-primary);
   outline-offset: 2px;

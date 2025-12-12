@@ -1,4 +1,4 @@
-/* Variables de color Fissio */
+
 :root {
   --fissio-primary: #0470BB;
   --fissio-secondary: #3AB1CF;
@@ -11,7 +11,7 @@
   --fissio-warning: #ffc107;
 }
 
-/* Contenedor principal del perfil */
+
 .perfil-paciente-container {
   background: linear-gradient(135deg, 
     rgba(58, 177, 207, 0.08) 0%, 
@@ -20,7 +20,6 @@
   padding-bottom: 2rem;
 }
 
-/* Mensaje de bienvenida */
 .welcome-section {
   background: linear-gradient(135deg, var(--fissio-primary) 0%, var(--fissio-secondary) 100%);
   border-radius: 15px;
@@ -76,7 +75,6 @@
   margin-top: 1rem;
 }
 
-/* Cards de navegación */
 .perfil-nav-cards {
   margin: 0 -0.75rem;
   display: flex;
@@ -193,7 +191,6 @@
   letter-spacing: 0.5px;
 }
 
-/* Estados de carga */
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -218,7 +215,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Estados de error */
 .error-container {
   background: var(--fissio-white);
   border-radius: 15px;
@@ -261,7 +257,6 @@
   box-shadow: 0 4px 12px rgba(4, 112, 187, 0.3);
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
   .perfil-nav-cards {
     gap: 1rem;
@@ -282,7 +277,7 @@
 }
 
 @media (max-width: 1199px) {
-  /* En pantallas XL y menores, mantener cards en línea */
+
   .perfil-nav-cards > div {
     flex: 0 0 33.333333%;
     max-width: 33.333333%;
@@ -290,7 +285,7 @@
 }
 
 @media (max-width: 991px) {
-  /* En pantallas LG y menores, cards ocupan todo el ancho */
+
   .perfil-nav-cards > div {
     flex: 0 0 100%;
     max-width: 100%;
@@ -404,7 +399,6 @@
   }
 }
 
-/* Reducir espaciado adicional */
 .perfil-paciente-container .container-fluid:last-child {
   margin-bottom: 0;
 }
@@ -413,7 +407,6 @@
   margin-bottom: 0;
 }
 
-/* Animaciones adicionales */
 .fade-in {
   animation: fadeIn 0.6s ease-out;
 }
@@ -444,7 +437,6 @@
   }
 }
 
-/* Efectos de pulso para elementos interactivos */
 .pulse-effect {
   animation: pulse 2s ease-in-out infinite;
 }
@@ -458,7 +450,6 @@
   }
 }
 
-/* Mejoras adicionales para el degradado de cards */
 .perfil-nav-card:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(4, 112, 187, 0.25);
@@ -469,7 +460,6 @@
   background: linear-gradient(145deg, #e9ecef 0%, #dee2e6 50%, #ced4da 100%);
 }
 
-/* Efectos de texto en hover */
 .perfil-nav-card:hover .card-title {
   text-shadow: 0 1px 3px rgba(4, 112, 187, 0.1);
 }
@@ -478,7 +468,6 @@
   text-shadow: 0 1px 2px rgba(4, 112, 187, 0.2);
 }
 
-/* Sombra interna sutil para profundidad */
 .perfil-nav-card::after {
   content: '';
   position: absolute;

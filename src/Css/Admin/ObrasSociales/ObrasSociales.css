@@ -1,4 +1,4 @@
-/* Styles for ObrasSocialesStandalone component */
+
 .servicios-container {
   padding: 1rem 1.25rem;
 }
@@ -52,7 +52,7 @@
 }
 .obra-card .meta { color: #6c757d; font-size: 0.9rem; }
 
-/* Modal overrides (simple, CSS-only modals) */
+
 .modal-obras-overlay { background: rgba(0,0,0,0.45); }
 .modal-obras-dialog { max-width: 900px; }
 .modal-ver-dialog { max-width: 560px; }
@@ -62,7 +62,7 @@
 .ver-field-label { color:#6c757d; font-size:0.85rem }
 .ver-field-value { font-weight:600; font-size:1rem }
 
-/* Responsive: switch to cards on small screens */
+/* Responsive*/
 @media (max-width: 768px) {
   .servicios-table { display: none; }
   .obras-cards { display: block; }
@@ -70,11 +70,11 @@
   .stats-card { flex: 1 1 30%; }
 }
 
-/* Small helpers */
+
 .btn-outline-info { border-color: #17a2b8; color: #17a2b8 }
 .btn-outline-primary { border-color: #0d6efd; color: #0d6efd }
 
-/* Mejorar visibilidad de errores de formulario */
+
 .form-control.is-invalid {
   border-color: #dc3545;
   box-shadow: none;

@@ -55,13 +55,12 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.22);
 }
 
-/* COLORES */
+
 .btn-editar     { background-color: #007bff; border-color: #007bff; color: white; }
 .btn-desactivar { background-color: #dc3545; border-color: #dc3545; color: white; }
 .btn-activar    { background-color: #28a745; border-color: #28a745; color: white; }
 .btn-agregar    { border-radius: 12px; padding: 0.6rem 1.4rem; font-weight: 500; }
 
-/* HORARIO INACTIVO */
 .horario-inactivo {
   opacity: 0.6;
   background-color: #f8f9fa !important;
@@ -80,11 +79,10 @@
   transform: translateY(-50%);
 }
 
-/* BADGES */
+
 .badge-activo   { background-color: #28a745 !important; color: white; }
 .badge-inactivo { background-color: #6c757d !important; color: white; }
 
-/* TABLA ID */
 .table-id {
   width: 60px;
   font-family: 'Courier New', monospace;
@@ -92,7 +90,7 @@
   font-weight: bold;
 }
 
-/* BOTÓN X PREMIUM - HORARIOS */
+
 .btn-close-modal-x {
   position: absolute;
   top: 50%;
@@ -120,7 +118,7 @@
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.7);
 }
 
-/* ANIMACIÓN */
+
 .fade-in {
   animation: modalFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -130,7 +128,7 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* HEADER FISSIO */
+
 .modal-header.bg-primary {
   background: linear-gradient(135deg, #0470BB, #3AB1CF) !important;
   border-bottom: none;

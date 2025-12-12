@@ -1,9 +1,9 @@
-/* Styles for Categorias component moved from inline styles in the component */
+
 .modal-backdrop-custom {
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Make modal dialogs responsive */
+
 .modal-backdrop-custom .modal-dialog {
 	max-width: 900px;
 	margin: 1.75rem auto;
@@ -16,7 +16,7 @@
 	}
 }
 
-/* Table and cards responsiveness tweaks */
+
 .servicios-table .table td, .servicios-table .table th {
 	vertical-align: middle;
 }

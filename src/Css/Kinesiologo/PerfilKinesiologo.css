@@ -1,13 +1,9 @@
-/* ============================================= */
-/*        PERFIL KINESIÓLOGO - FISSIO PRO        */
-/* ============================================= */
 
-/* Variables de color FISSIO - KINESIÓLOGO EDITION */
 :root {
-  --fissio-kine-primary: #0470BB;      /* Azul Fissio potente */
-  --fissio-kine-secondary: #00A8CC;    /* Cian vibrante */
-  --fissio-kine-accent: #FF6B35;       /* Naranja energético */
-  --fissio-kine-success: #2ECC71;      /* Verde salud */
+  --fissio-kine-primary: #0470BB;      
+  --fissio-kine-secondary: #00A8CC;    
+  --fissio-kine-accent: #FF6B35;       
+  --fissio-kine-success: #2ECC71;     
   --fissio-kine-gray: #555555;
   --fissio-kine-light: #f8f9fa;
   --fissio-kine-dark: #2d3748;
@@ -16,7 +12,7 @@
   --fissio-kine-glow: 0 0 20px rgba(0, 168, 204, 0.4);
 }
 
-/* Contenedor principal */
+
 .perfil-kinesiologo-container {
   background: linear-gradient(135deg, 
     rgba(0, 168, 204, 0.1) 0%, 
@@ -27,7 +23,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Header de bienvenida - ÉPICO */
+
 .kine-welcome-section {
   background: var(--fissio-kine-gradient);
   border-radius: 20px;
@@ -70,7 +66,7 @@
   to { transform: translateY(-30px) rotate(360deg); }
 }
 
-/* Avatar profesional */
+
 .kine-avatar {
   width: 110px;
   height: 110px;
@@ -91,7 +87,7 @@
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
-/* Textos */
+
 .kine-welcome-name {
   font-size: 2.5rem;
   font-weight: 800;
@@ -118,7 +114,7 @@
   backdrop-filter: blur(10px);
 }
 
-/* Cards principales */
+
 .kine-nav-cards {
   display: flex;
   flex-wrap: wrap;
@@ -229,7 +225,7 @@
   font-weight: 600;
 }
 
-/* Botón volver */
+
 .kine-btn-volver {
   background: white;
   color: var(--fissio-kine-primary);
@@ -248,7 +244,6 @@
   box-shadow: 0 8px 25px rgba(4, 112, 187, 0.4);
 }
 
-/* Responsive */
 @media (max-width: 992px) {
   .kine-nav-cards {
     gap: 1rem;
@@ -298,7 +293,7 @@
   }
 }
 
-/* Animaciones */
+
 .kine-fade-in {
   animation: kineFadeIn 0.8s ease-out;
 }
