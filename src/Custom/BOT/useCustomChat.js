@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../../Api/api";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const useCustomChat = () => {
   const [mensajes, setMensajes] = useState([]);
@@ -8,14 +8,7 @@ const useCustomChat = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (mensajes.length === 0) {
-      iniciarConversacionAutomatica();
-    }
-
-  }, []);
-
-  const iniciarConversacionAutomatica = async () => {
+  const iniciarConversacionAutomatica = useCallback(async () => {
     let currentSessionId = sessionId;
     if (!currentSessionId) {
       currentSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -55,7 +48,13 @@ const useCustomChat = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (mensajes.length === 0) {
+      iniciarConversacionAutomatica();
+    }
+  }, [mensajes.length, iniciarConversacionAutomatica]);
 
 
   const iniciarConversacion = async () => {
