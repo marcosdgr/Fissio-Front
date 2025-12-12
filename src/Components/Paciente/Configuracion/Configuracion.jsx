@@ -6,11 +6,10 @@ import Swal from 'sweetalert2'
 import '../../../Css/Paciente/Perfil/ConfigPaciente.css'
 
 const Configuracion = () => {
-  // Estados del formulario
   const [formData, setFormData] = useState({
     NombrePaciente: '',
     ApellidoPaciente: '',
-    DNI: '', // Agregamos DNI (solo para envío, no editable)
+    DNI: '', 
     TelefonoPaciente: '',
     DireccionPaciente: '',
     FechaNacPaciente: '',
@@ -18,7 +17,6 @@ const Configuracion = () => {
     idLocalidad: ''
   })
 
-  // Estados de la aplicación
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
@@ -27,12 +25,10 @@ const Configuracion = () => {
   const [pacienteOriginal, setPacienteOriginal] = useState(null)
   const [emailPaciente, setEmailPaciente] = useState(null)
 
-  // Obtener datos del paciente desde Zustand
   const { user } = useAuthStore()
   const pacienteInfo = user?.usuario || {}
   const idPaciente = pacienteInfo.idPaciente
 
-  // useEffect para cargar datos iniciales
   useEffect(() => {
     const cargarDatos = async () => {
       if (!idPaciente) {
@@ -45,22 +41,19 @@ const Configuracion = () => {
         setLoading(true)
         setError(null)
 
-        // Cargar datos del paciente, email y localidades en paralelo
         const [datosPaciente, emailData, localidadesData] = await Promise.all([
           obtenerPacientePorId(idPaciente),
           obtenerEmailPacientePorId(idPaciente),
           getLocalidades()
         ])
 
-        // Guardar datos originales
         setPacienteOriginal(datosPaciente)
         setEmailPaciente(emailData.MailUsuario)
 
-        // Llenar formulario con datos actuales
         setFormData({
           NombrePaciente: datosPaciente.NombrePaciente || '',
           ApellidoPaciente: datosPaciente.ApellidoPaciente || '',
-          DNI: datosPaciente.DNI || '', // Incluir DNI para envío
+          DNI: datosPaciente.DNI || '', 
           TelefonoPaciente: datosPaciente.TelefonoPaciente || '',
           DireccionPaciente: datosPaciente.DireccionPaciente || '',
           FechaNacPaciente: datosPaciente.FechaNacPaciente ? 
@@ -82,7 +75,6 @@ const Configuracion = () => {
     cargarDatos()
   }, [idPaciente])
 
-  // Función para manejar cambios en el formulario
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -90,12 +82,10 @@ const Configuracion = () => {
       [name]: value
     }))
     
-    // Limpiar mensajes
     if (error) setError(null)
     if (success) setSuccess(false)
   }
 
-  // Función para validar el formulario
   const validarFormulario = () => {
     const { NombrePaciente, ApellidoPaciente, TelefonoPaciente, DireccionPaciente, FechaNacPaciente, Sexo, idLocalidad } = formData
 
@@ -127,21 +117,18 @@ const Configuracion = () => {
       throw new Error('La localidad es requerida')
     }
 
-    // Validar fecha de nacimiento (no puede ser futura)
     const fechaNac = new Date(FechaNacPaciente)
     const hoy = new Date()
     if (fechaNac > hoy) {
       throw new Error('La fecha de nacimiento no puede ser futura')
     }
 
-    // Validar edad mínima (ej: 18 años)
     const edad = Math.floor((hoy - fechaNac) / (365.25 * 24 * 60 * 60 * 1000))
     if (edad < 0) {
       throw new Error('La fecha de nacimiento no es válida')
     }
   }
 
-  // Función para verificar si hay cambios
   const hayChangeios = () => {
     if (!pacienteOriginal) return false
     
@@ -153,25 +140,20 @@ const Configuracion = () => {
       formData.FechaNacPaciente !== (pacienteOriginal.FechaNacPaciente ? pacienteOriginal.FechaNacPaciente.split('T')[0] : '') ||
       formData.Sexo !== (pacienteOriginal.Sexo || '') ||
       parseInt(formData.idLocalidad) !== (pacienteOriginal.idLocalidad || 0)
-      // Nota: No verificamos DNI porque no es editable
     )
   }
 
-  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
-      // Validar formulario primero
       validarFormulario()
 
-      // Verificar si hay cambios
       if (!hayChangeios()) {
         setError('No hay cambios para guardar')
         return
       }
 
-      // Mostrar confirmación antes de guardar
       const result = await Swal.fire({
         title: '¿Guardar cambios?',
         text: '¿Estás seguro de que deseas actualizar tu información personal?',
@@ -207,7 +189,6 @@ const Configuracion = () => {
         ...datosActualizados
       })
 
-      // Mostrar mensaje de éxito
       await Swal.fire({
         title: '¡Cambios guardados!',
         text: 'Tu información ha sido actualizada correctamente',
@@ -218,8 +199,7 @@ const Configuracion = () => {
       })
 
       setSuccess(true)
-      
-      // Auto-ocultar mensaje de éxito después de 3 segundos
+
       setTimeout(() => {
         setSuccess(false)
       }, 3000)
@@ -228,8 +208,7 @@ const Configuracion = () => {
       console.error('Error al actualizar datos:', err)
       const errorMsg = err.message || 'Error al actualizar los datos'
       setError(errorMsg)
-      
-      // Mostrar error con SweetAlert2
+
       await Swal.fire({
         title: 'Error',
         text: errorMsg,
@@ -241,14 +220,13 @@ const Configuracion = () => {
     }
   }
 
-  // Función para restablecer el formulario
   const handleReset = () => {
     if (!pacienteOriginal) return
 
     setFormData({
       NombrePaciente: pacienteOriginal.NombrePaciente || '',
       ApellidoPaciente: pacienteOriginal.ApellidoPaciente || '',
-      DNI: pacienteOriginal.DNI || '', // Incluir DNI en reset
+      DNI: pacienteOriginal.DNI || '', 
       TelefonoPaciente: pacienteOriginal.TelefonoPaciente || '',
       DireccionPaciente: pacienteOriginal.DireccionPaciente || '',
       FechaNacPaciente: pacienteOriginal.FechaNacPaciente ? 
@@ -261,7 +239,7 @@ const Configuracion = () => {
     setSuccess(false)
   }
 
-  // Función para calcular edad
+
   const calcularEdad = (fechaNacimiento) => {
     if (!fechaNacimiento) return 'No disponible'
     const hoy = new Date()
@@ -270,7 +248,6 @@ const Configuracion = () => {
     return `${edad} años`
   }
 
-  // Loading state
   if (loading) {
     return (
       <div className="config-paciente-container">
@@ -284,7 +261,6 @@ const Configuracion = () => {
 
   return (
     <div className="config-paciente-container config-fade-in">
-      {/* Header */}
       <div className="config-welcome-section">
         <div className="container-fluid">
           <div className="row align-items-center">
@@ -309,12 +285,9 @@ const Configuracion = () => {
         </div>
       </div>
 
-      {/* Formulario */}
       <div className="container-fluid mt-4">
         <div className="row justify-content-center">
           <div className="col-xl-8 col-lg-10 col-md-12">
-            
-            {/* Mensajes de estado */}
             {success && (
               <div className="config-alert-success d-flex align-items-center" role="alert">
                 <span className="material-symbols-outlined me-2">check_circle</span>
@@ -342,8 +315,6 @@ const Configuracion = () => {
 
               <form onSubmit={handleSubmit}>
                 <div className="row g-4">
-                  
-                  {/* Nombre */}
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="NombrePaciente" className="config-form-label">
                       <span className="material-symbols-outlined">person</span>
@@ -360,8 +331,6 @@ const Configuracion = () => {
                       required
                     />
                   </div>
-
-                  {/* Apellido */}
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="ApellidoPaciente" className="config-form-label">
                       <span className="material-symbols-outlined">person</span>
@@ -379,7 +348,6 @@ const Configuracion = () => {
                     />
                   </div>
 
-                  {/* Teléfono */}
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="TelefonoPaciente" className="config-form-label">
                       <span className="material-symbols-outlined">phone</span>
@@ -396,8 +364,6 @@ const Configuracion = () => {
                       required
                     />
                   </div>
-
-                  {/* Fecha de Nacimiento */}
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="FechaNacPaciente" className="config-form-label">
                       <span className="material-symbols-outlined">cake</span>
@@ -420,8 +386,6 @@ const Configuracion = () => {
                       </div>
                     )}
                   </div>
-
-                  {/* Sexo */}
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="Sexo" className="config-form-label">
                       <span className="material-symbols-outlined">wc</span>
@@ -440,8 +404,6 @@ const Configuracion = () => {
                       <option value="Femenino">Femenino</option>
                     </select>
                   </div>
-
-                  {/* Localidad */}
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="idLocalidad" className="config-form-label">
                       <span className="material-symbols-outlined">location_on</span>
@@ -464,7 +426,6 @@ const Configuracion = () => {
                     </select>
                   </div>
 
-                  {/* Dirección */}
                   <div className="col-md-12 config-form-group">
                     <label htmlFor="DireccionPaciente" className="config-form-label">
                       <span className="material-symbols-outlined">home</span>
@@ -482,7 +443,6 @@ const Configuracion = () => {
                     />
                   </div>
 
-                  {/* Información no editable */}
                   <div className="col-12">
                     <div className="config-readonly-section">
                       <h6 className="config-readonly-title">
@@ -515,7 +475,6 @@ const Configuracion = () => {
                     </div>
                   </div>
 
-                  {/* Botones */}
                   <div className="col-12">
                     <div className="d-flex gap-3 justify-content-end">
                       <button
@@ -554,8 +513,6 @@ const Configuracion = () => {
             </div>
           </div>
         </div>
-
-        {/* Información adicional */}
         <div className="row mt-4 mb-0">
           <div className="col-12">
             <div className="config-info-card">

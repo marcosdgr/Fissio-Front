@@ -19,7 +19,6 @@ const TurnosWeb = () => {
   
   const { user } = useAuthStore();
 
-  // Cargar idPaciente del usuario autenticado
   useEffect(() => {
     if (user?.usuario?.idPaciente) {
       setFormData(prev => ({
@@ -29,7 +28,6 @@ const TurnosWeb = () => {
     }
   }, [user]);
 
-  // Función para mostrar alertas de éxito
   const showSuccess = (title, message) => {
     Swal.fire({
       icon: 'success',
@@ -40,7 +38,6 @@ const TurnosWeb = () => {
     });
   };
 
-  // Función para mostrar alertas de error
   const showError = (title, message) => {
     Swal.fire({
       icon: 'error',
@@ -50,7 +47,6 @@ const TurnosWeb = () => {
     });
   };
 
-  // Manejar cambios en el formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -58,25 +54,22 @@ const TurnosWeb = () => {
       [name]: value
     }));
 
-    // Si cambia la fecha, cargar horarios disponibles
     if (name === 'FechaRequeridaTurno' && value) {
       cargarHorariosDisponibles(value);
     }
   };
 
-  // Manejar cambio de archivo
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validar tipo de archivo (imágenes y PDFs)
+
       const tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
       if (!tiposPermitidos.includes(file.type)) {
         showError('Archivo no válido', 'Solo se permiten imágenes (JPG, PNG) y archivos PDF');
         e.target.value = '';
         return;
       }
-      
-      // Validar tamaño (máximo 10MB)
+
       if (file.size > 10 * 1024 * 1024) {
         showError('Archivo muy grande', 'El archivo debe ser menor a 10MB');
         e.target.value = '';
@@ -87,21 +80,18 @@ const TurnosWeb = () => {
     }
   };
 
-  // Cargar horarios disponibles para una fecha
   const cargarHorariosDisponibles = async (fecha) => {
     setIsLoadingHorarios(true);
     try {
       const response = await getDisponibilidadHorarios(fecha);
-      
-      // El backend devuelve horariosDisponibles como array de objetos {value, label, horario, cupoMaximo, disponibles}
+
       let horarios = [];
       if (response.horariosDisponibles && Array.isArray(response.horariosDisponibles)) {
         horarios = response.horariosDisponibles.filter(h => h.value && h.label);
       }
       
       setHorariosDisponibles(horarios);
-      
-      // Limpiar horario seleccionado si ya no está disponible
+
       if (formData.HorarioRequeridoTurno && 
           !horarios.find(h => h.value === formData.HorarioRequeridoTurno)) {
         setFormData(prev => ({
@@ -118,19 +108,17 @@ const TurnosWeb = () => {
     }
   };
 
-  // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // Validaciones del frontend
+
       if (!formData.FechaRequeridaTurno || !formData.HorarioRequeridoTurno || !formData.idPaciente) {
         showError('Campos requeridos', 'Por favor complete todos los campos obligatorios');
         return;
       }
 
-      // Validar que la fecha no sea en el pasado (anterior a hoy)
       const fechaSeleccionada = new Date(formData.FechaRequeridaTurno + 'T00:00:00');
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
@@ -140,7 +128,6 @@ const TurnosWeb = () => {
         return;
       }
 
-      // Crear FormData para enviar archivo
       const formDataToSend = new FormData();
       formDataToSend.append('FechaRequeridaTurno', formData.FechaRequeridaTurno);
       formDataToSend.append('HorarioRequeridoTurno', formData.HorarioRequeridoTurno);
@@ -158,7 +145,6 @@ const TurnosWeb = () => {
         response.message || 'Su solicitud será procesada por nuestro personal. Recibirá confirmación pronto.'
       );
 
-      // Limpiar formulario
       setFormData({
         FechaRequeridaTurno: '',
         HorarioRequeridoTurno: '',
@@ -167,8 +153,7 @@ const TurnosWeb = () => {
       });
       setOrdenMedica(null);
       setHorariosDisponibles([]);
-      
-      // Limpiar input de archivo
+
       const fileInput = document.getElementById('ordenMedica');
       if (fileInput) fileInput.value = '';
 
@@ -181,7 +166,6 @@ const TurnosWeb = () => {
     }
   };
 
-  // Obtener fecha mínima (hoy)
   const getFechaMinima = () => {
     const hoy = new Date();
     return hoy.toISOString().split('T')[0];
@@ -201,7 +185,6 @@ const TurnosWeb = () => {
             
             <div className="card-body p-4">
               <form onSubmit={handleSubmit}>
-                {/* Información del paciente */}
                 <div className="mb-4">
                   <h6 className="text-muted mb-3">
                     <span className="material-symbols-outlined me-1">person</span>
@@ -237,7 +220,6 @@ const TurnosWeb = () => {
                   )}
                 </div>
 
-                {/* Fecha requerida */}
                 <div className="mb-3">
                   <label htmlFor="FechaRequeridaTurno" className="form-label">
                     <span className="material-symbols-outlined me-1">calendar_today</span>
@@ -257,8 +239,6 @@ const TurnosWeb = () => {
                     Seleccione la fecha en que desea su turno
                   </small>
                 </div>
-
-                {/* Horario requerido */}
                 <div className="mb-3">
                   <label htmlFor="HorarioRequeridoTurno" className="form-label">
                     <span className="material-symbols-outlined me-1">schedule</span>
@@ -294,7 +274,6 @@ const TurnosWeb = () => {
                   </small>
                 </div>
 
-                {/* Observaciones */}
                 <div className="mb-3">
                   <label htmlFor="InformeTurno" className="form-label">
                     <span className="material-symbols-outlined me-1">note_add</span>
@@ -315,7 +294,6 @@ const TurnosWeb = () => {
                   </small>
                 </div>
 
-                {/* Orden médica */}
                 <div className="mb-4">
                   <label htmlFor="ordenMedica" className="form-label">
                     <span className="material-symbols-outlined me-1">upload_file</span>
@@ -341,7 +319,6 @@ const TurnosWeb = () => {
                   )}
                 </div>
 
-                {/* Información importante */}
                 <div className="alert alert-warning">
                   <h6 className="alert-heading">
                     <span className="material-symbols-outlined me-1">info</span>
@@ -355,7 +332,6 @@ const TurnosWeb = () => {
                   </ul>
                 </div>
 
-                {/* Botones */}
                 <div className="d-grid gap-2">
                   <button
                     type="submit"

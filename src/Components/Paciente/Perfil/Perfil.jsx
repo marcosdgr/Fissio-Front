@@ -5,23 +5,18 @@ import CardProximosTurnos from '../Turnos/CardProximosTurnos'
 import '../../../Css/Paciente/Perfil/PerfilPaciente.css'
 
 const Perfil = ({ setActiveTab }) => {
-  // Estados para manejar la información del paciente
   const [pacienteData, setPacienteData] = useState(null)
   const [turnosData, setTurnosData] = useState([])
   const [turnosDetalles, setTurnosDetalles] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Obtener datos del paciente desde Zustand
   const { user } = useAuthStore()
   
-  // Obtener información del paciente de la estructura del login
   const pacienteInfo = user?.usuario || {}
   const idPaciente = pacienteInfo.idPaciente
   const nombrePaciente = pacienteData?.NombrePaciente || pacienteInfo.NombrePaciente || 'Usuario'
-  //const apellidoPaciente = pacienteData?.ApellidoPaciente || pacienteInfo.ApellidoPaciente || ''
 
-  // useEffect para cargar datos del paciente
   useEffect(() => {
     const cargarDatosPaciente = async () => {
       if (!idPaciente) {
@@ -33,15 +28,12 @@ const Perfil = ({ setActiveTab }) => {
         setLoading(true)
         setError(null)
 
-        // Cargar datos del paciente
         const datosPaciente = await obtenerPacientePorId(idPaciente)
         setPacienteData(datosPaciente)
 
-        // Cargar turnos del paciente
         const turnos = await obtenerTurnosPorPaciente(idPaciente)
         setTurnosData(turnos)
 
-        // Cargar detalles de turnos (estado, fecha, hora)
         const detalles = await obtenerEstadoTurnoPorPaciente(idPaciente)
         setTurnosDetalles(detalles)
 
@@ -56,7 +48,6 @@ const Perfil = ({ setActiveTab }) => {
     cargarDatosPaciente()
   }, [idPaciente])
 
-  // Función para formatear la fecha actual
   const formatearFecha = () => {
     return new Date().toLocaleDateString('es-AR', {
       weekday: 'long',
@@ -66,7 +57,6 @@ const Perfil = ({ setActiveTab }) => {
     })
   }
 
-  // Funciones para manejar clicks de las cards y navegación
   const handlePerfilInfo = () => {
     console.log('Navegando a información del perfil...')
     if (setActiveTab) {
@@ -88,7 +78,6 @@ const Perfil = ({ setActiveTab }) => {
     }
   }
 
-  // Mostrar mensaje de error si existe
   if (error) {
     return (
       <div className="perfil-paciente-container">
@@ -104,7 +93,6 @@ const Perfil = ({ setActiveTab }) => {
 
   return (
     <div className="perfil-paciente-container">
-      {/* Mensaje de Bienvenida */}
       <div className="welcome-section fade-in">
         <div className="container-fluid">
           <div className="row align-items-center">
@@ -146,7 +134,6 @@ const Perfil = ({ setActiveTab }) => {
         </div>
       </div>
 
-      {/* Cards de Navegación */}
       <div className="container-fluid mt-4">
         <div className="row">
           <div className="col-12">
@@ -156,13 +143,10 @@ const Perfil = ({ setActiveTab }) => {
             </h3>
             
             <div className="row perfil-nav-cards slide-up g-3">
-              {/* Card Próximos Turnos */}
               <CardProximosTurnos 
                 turnosDetalles={turnosDetalles}
                 loading={loading}
               />
-
-              {/* Card Historial de Turnos */}
               <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
                 <div 
                   className="perfil-nav-card"
@@ -177,8 +161,6 @@ const Perfil = ({ setActiveTab }) => {
                   <p className="card-description mb-3">
                     Revisa el historial completo de tus consultas y tratamientos anteriores
                   </p>
-                  
-                  {/* Botón de acción sin contador */}
                   <div className="d-flex justify-content-between align-items-center bg-light rounded p-3 border border-1">
                     <span className="text-primary fw-medium">Ver Historial</span>
                     <span className="material-symbols-outlined text-primary">
@@ -188,7 +170,6 @@ const Perfil = ({ setActiveTab }) => {
                 </div>
               </div>
 
-              {/* Card Agendar Turno */}
               <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
                 <div 
                   className="perfil-nav-card"
@@ -203,8 +184,7 @@ const Perfil = ({ setActiveTab }) => {
                   <p className="card-description mb-3">
                     Solicita una nueva cita médica de forma rápida y sencilla
                   </p>
-                  
-                  {/* Botón de acción sin contador */}
+
                   <div className="d-flex justify-content-between align-items-center bg-light rounded p-3 border border-1">
                     <span className="text-primary fw-medium">Nuevo Turno</span>
                     <span className="material-symbols-outlined text-primary">
@@ -217,7 +197,6 @@ const Perfil = ({ setActiveTab }) => {
           </div>
         </div>
 
-        {/* Información adicional */}
         <div className="row mt-3 mb-0">
           <div className="col-12">
             <div className="card bg-light border-0 shadow-sm">

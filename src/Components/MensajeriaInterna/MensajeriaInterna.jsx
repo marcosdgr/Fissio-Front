@@ -5,14 +5,14 @@ import '../../Css/mensajeriainterna/MensajeriaInterna.css';
 
 const MensajeriaInterna = () => {
   const [empleados, setEmpleados] = useState([]);
-  const [empleadoActual, setEmpleadoActual] = useState(null); // El empleado logueado
+  const [empleadoActual, setEmpleadoActual] = useState(null); 
   const [selectedEmpleado, setSelectedEmpleado] = useState(null);
   const [conversacion, setConversacion] = useState([]);
   const [mensaje, setMensaje] = useState('');
   const [loading, setLoading] = useState(false);
-  const [unreadCounts, setUnreadCounts] = useState({}); // { idEmpleado: count }
-  const [vistaActual, setVistaActual] = useState('inbox'); // 'inbox' o 'chat'
-  const [mensajesNoLeidos, setMensajesNoLeidos] = useState([]); // Array de mensajes no leídos
+  const [unreadCounts, setUnreadCounts] = useState({}); 
+  const [vistaActual, setVistaActual] = useState('inbox'); 
+  const [mensajesNoLeidos, setMensajesNoLeidos] = useState([]); 
 
   const authUser = useAuthStore(state => state.user);
   const mensajesApi = useCustomMensajeria;
@@ -29,7 +29,7 @@ const MensajeriaInterna = () => {
     const allUnreadMessages = [];
     
     for (const emp of empleadosList) {
-      if (emp.idEmpleado === empActual.idEmpleado) continue; // No contar mensajes propios
+      if (emp.idEmpleado === empActual.idEmpleado) continue; 
       
       try {
         const conv = await mensajesApi.getConversation(empActual.idUsuario, emp.idUsuario);
@@ -42,7 +42,7 @@ const MensajeriaInterna = () => {
           unreadMessages.forEach(msg => {
             allUnreadMessages.push({
               ...msg,
-              remitenteInfo: emp // Info completa del empleado que envió
+              remitenteInfo: emp 
             });
           });
         }
@@ -50,8 +50,7 @@ const MensajeriaInterna = () => {
         console.error(`Error cargando mensajes de empleado ${emp.idEmpleado}`, err);
       }
     }
-    
-    // Ordenar por fecha más reciente
+
     allUnreadMessages.sort((a, b) => new Date(b.FechaEnvio) - new Date(a.FechaEnvio));
     
     setUnreadCounts(counts);
@@ -61,26 +60,19 @@ const MensajeriaInterna = () => {
   useEffect(() => {
     const init = async () => {
       try {
-        console.log('🔍 Iniciando carga de empleados...');
-        console.log('authUser:', authUser);
-        
         const data = await mensajesApi.getActiveEmployees();
-        console.log('📋 Empleados obtenidos:', data);
         setEmpleados(data || []);
-        
-        // Encontrar el empleado actual (el que está logueado)
+
         const idUsuarioLogueado = authUser?.usuario?.idUsuario || authUser?.idUsuario;
-        console.log('👤 ID Usuario logueado:', idUsuarioLogueado);
         
         const empActual = data.find(e => e.idUsuario === idUsuarioLogueado);
-        console.log('✅ Empleado actual encontrado:', empActual);
         
         if (empActual) {
           setEmpleadoActual(empActual);
-          // Obtener mensajes no leídos para cada empleado
+
           await loadUnreadCounts(data, empActual);
         } else {
-          console.error('❌ No se encontró el empleado actual en la lista de empleados');
+          console.error(' No se encontró el empleado actual en la lista de empleados');
           console.error('Buscando idUsuario:', idUsuarioLogueado, 'en lista:', data.map(e => e.idUsuario));
         }
       } catch (err) {
@@ -94,63 +86,46 @@ const MensajeriaInterna = () => {
     scrollToBottom();
   }, [conversacion]);
 
-  const handleSelectEmpleado = async (emp) => {
-    console.log('📨 Seleccionando empleado:', emp);
-    console.log('👤 Empleado actual:', empleadoActual);
-    
+  const handleSelectEmpleado = async (emp) => {;    
     if (!empleadoActual) {
-      console.error('❌ No se encontró información del empleado actual');
+      console.error(' No se encontró información del empleado actual');
       return;
     }
 
     setSelectedEmpleado(emp);
-    setVistaActual('chat'); // Cambiar a vista de chat
+    setVistaActual('chat'); 
     setLoading(true);
     try {
-      console.log('🔄 Obteniendo conversación entre:', empleadoActual.idUsuario, 'y', emp.idUsuario);
       const conv = await mensajesApi.getConversation(empleadoActual.idUsuario, emp.idUsuario);
-      console.log('💬 Conversación obtenida:', conv);
       setConversacion(conv || []);
-
-      // Marcar como leídos los mensajes recibidos
       const mensajesParaMarcar = (conv || []).filter(
         m => {
           const esNoLeido = !m.Leido || m.Leido === 0 || m.Leido === false;
           const esMiMensaje = m.idEmpleadoDestinatario === empleadoActual.idEmpleado;
-          console.log(`📧 Mensaje ${m.idNotificacion}: Leido=${m.Leido}, esNoLeido=${esNoLeido}, esMiMensaje=${esMiMensaje}`);
           return esNoLeido && esMiMensaje;
         }
       );
-      
-      console.log(`📬 Mensajes para marcar como leídos: ${mensajesParaMarcar.length}`);
-      
+ 
       for (const m of mensajesParaMarcar) {
         try {
-          console.log(`✅ Marcando mensaje ${m.idNotificacion} como leído para empleado ${empleadoActual.idEmpleado}`);
           const response = await mensajesApi.markAsRead(m.idNotificacion, empleadoActual.idEmpleado);
-          console.log(`✅ Respuesta del servidor:`, response);
+          console.log(` Respuesta del servidor:`, response);
           m.Leido = 1;
         } catch (err) {
-          console.error(`❌ Error marcando mensaje ${m.idNotificacion} como leido:`, err);
+          console.error(`Error marcando mensaje ${m.idNotificacion} como leido:`, err);
           console.error('Detalles del error:', err.response?.data);
         }
       }
       
       if (mensajesParaMarcar.length > 0) {
         setConversacion([...(conv || [])]);
-        console.log('🔄 Conversación actualizada con mensajes marcados como leídos');
       }
-      
-      // Actualizar contador de no leídos para este empleado
+
       setUnreadCounts(prev => ({
         ...prev,
         [emp.idEmpleado]: 0
       }));
-      
-      // Recargar mensajes no leídos (esto actualizará la bandeja de entrada)
-      console.log('🔄 Recargando lista de mensajes no leídos...');
       await loadUnreadCounts(empleados, empleadoActual);
-      console.log('✅ Lista de mensajes no leídos actualizada');
     } catch (err) {
       console.error('Error al obtener conversacion', err);
     } finally {
@@ -165,7 +140,6 @@ const MensajeriaInterna = () => {
   };
   
   const handleClickMensajeNoLeido = async (mensaje) => {
-    // Encontrar el empleado remitente en la lista
     const empleadoRemitente = empleados.find(e => e.idUsuario === mensaje.idRemitente);
     if (empleadoRemitente) {
       await handleSelectEmpleado(empleadoRemitente);
@@ -173,42 +147,34 @@ const MensajeriaInterna = () => {
   };
 
   const handleSend = async () => {
-    console.log('📤 Intentando enviar mensaje...');
-    console.log('Mensaje:', mensaje);
-    console.log('Empleado seleccionado:', selectedEmpleado);
-    console.log('Empleado actual:', empleadoActual);
-    
     if (!mensaje.trim()) {
-      console.warn('⚠️ Mensaje vacío');
+      console.warn('Mensaje vacío');
       return;
     }
     if (!selectedEmpleado) {
-      console.warn('⚠️ No hay empleado seleccionado');
+      console.warn('No hay empleado seleccionado');
       return;
     }
     if (!empleadoActual) {
-      console.warn('⚠️ No hay empleado actual');
+      console.warn('No hay empleado actual');
       return;
     }
     
     try {
-      // destinatarios son idEmpleado (la API espera ids de empleados)
+      // destinatarios son idEmpleado
       const destinatarios = [selectedEmpleado.idEmpleado];
-      console.log('🎯 Enviando mensaje a destinatarios:', destinatarios);
       
       const response = await mensajesApi.sendMessage(mensaje.trim(), destinatarios);
-      console.log('✅ Mensaje enviado correctamente:', response);
       
       setMensaje('');
 
       // refrescar conversacion
-      console.log('🔄 Refrescando conversación...');
       await handleSelectEmpleado(selectedEmpleado);
       
       // Recargar contadores de no leídos para todos los empleados
       await loadUnreadCounts(empleados, empleadoActual);
     } catch (err) {
-      console.error('❌ Error enviando mensaje', err);
+      console.error('Error enviando mensaje', err);
       console.error('Detalles del error:', err.response?.data);
     }
   };
@@ -231,7 +197,7 @@ const MensajeriaInterna = () => {
 
         <ul className="empleados-list">
           {empleados
-            .filter(emp => emp.idEmpleado !== empleadoActual?.idEmpleado) // No mostrar al usuario actual
+            .filter(emp => emp.idEmpleado !== empleadoActual?.idEmpleado)
             .map(emp => {
               const isSelected = selectedEmpleado?.idEmpleado === emp.idEmpleado;
               const unreadCount = unreadCounts[emp.idEmpleado] || 0;
@@ -357,7 +323,6 @@ const MensajeriaInterna = () => {
                 </div>
               ) : (
                 conversacion.map(m => {
-                  // Un mensaje es saliente si el remitente es el usuario actual
                   const isOutgoing = empleadoActual && m.idRemitente === empleadoActual.idUsuario;
                   const leido = m.Leido === 1 || m.Leido === true;
                   

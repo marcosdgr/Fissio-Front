@@ -6,26 +6,23 @@ import '../../../Css/Paciente/Perfil/PerfilPaciente.css'
 import '../../../Css/Paciente/Turnos/AgendarTurno.css'
 
 const AgendarTurnoForm = ({ setActiveTab }) => {
-  // Estados del formulario
+
   const [formData, setFormData] = useState({
     FechaRequeridaTurno: '',
     HorarioRequeridoTurno: '',
     observaciones: ''
   })
   
-  // Estados de la aplicación
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [ordenMedicaFile, setOrdenMedicaFile] = useState(null)
   const [ordenMedicaPreview, setOrdenMedicaPreview] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
 
-  // Obtener datos del paciente desde Zustand
   const { user } = useAuthStore()
   const pacienteInfo = user?.usuario || {}
   const idPaciente = pacienteInfo.idPaciente
 
-  // Funciones para manejar drag and drop
   const handleDragEnter = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -55,7 +52,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
     }
   }
 
-  // Función para validar archivo
   const handleArchivoValidation = (file) => {
     if (!file) return
 
@@ -101,12 +97,10 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
       ...prev,
       [name]: value
     }))
-    
-    // Limpiar mensajes de error cuando el usuario empiece a escribir
+
     if (error) setError(null)
   }
 
-  // Función para validar el formulario
   const validarFormulario = () => {
     const { FechaRequeridaTurno, HorarioRequeridoTurno } = formData
 
@@ -118,7 +112,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
       throw new Error('El horario del turno es requerido')
     }
 
-    // Validar que la fecha no sea en el pasado (anterior a hoy)
     const fechaSeleccionada = new Date(FechaRequeridaTurno + 'T00:00:00')
     const hoy = new Date()
     hoy.setHours(0, 0, 0, 0)
@@ -127,14 +120,12 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
       throw new Error('No puede agendar un turno en una fecha pasada')
     }
 
-    // Validar horario de atención (ejemplo: 8:00 a 18:00)
     const [hora] = HorarioRequeridoTurno.split(':').map(Number)
     if (hora < 8 || hora > 18) {
       throw new Error('El horario debe estar entre 08:00 y 18:00')
     }
   }
 
-  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault()
     
@@ -146,11 +137,9 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
     try {
       setLoading(true)
       setError(null)
-      
-      // Validar formulario
+
       validarFormulario()
 
-      // Preparar datos para el backend
       const turnoData = {
         FechaRequeridaTurno: formData.FechaRequeridaTurno,
         HorarioRequeridoTurno: formData.HorarioRequeridoTurno,
@@ -159,16 +148,13 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
         ordenMedicaFile: ordenMedicaFile
       }
 
-      // Enviar solicitud
       await solicitarTurno(turnoData)
-      
-      // Mostrar alerta de éxito
+
       await showSuccess(
         '¡Turno solicitado con éxito!',
         'Tu solicitud ha sido enviada correctamente. Recibirás una confirmación pronto.'
       )
-      
-      // Limpiar formulario
+
       setFormData({
         FechaRequeridaTurno: '',
         HorarioRequeridoTurno: '',
@@ -176,8 +162,7 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
       })
       setOrdenMedicaFile(null)
       setOrdenMedicaPreview(null)
-      
-      // Redirigir al perfil
+
       if (setActiveTab) {
         setActiveTab('perfil')
       }
@@ -190,18 +175,16 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
     }
   }
 
-  // Función para obtener fecha mínima (hoy)
   const getFechaMinima = () => {
     const hoy = new Date()
     return hoy.toISOString().split('T')[0]
   }
 
-  // Función para generar opciones de horarios
   const generarHorarios = () => {
     const horarios = []
     for (let hora = 8; hora <= 18; hora++) {
       for (let minutos of [0, 30]) {
-        if (hora === 18 && minutos === 30) break // No permitir 18:30
+        if (hora === 18 && minutos === 30) break 
         const horaStr = hora.toString().padStart(2, '0')
         const minStr = minutos.toString().padStart(2, '0')
         horarios.push(`${horaStr}:${minStr}`)
@@ -212,7 +195,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
 
   return (
     <div className="perfil-paciente-container">
-      {/* Header */}
       <div className="welcome-section fade-in">
         <div className="container-fluid">
           <div className="row align-items-center">
@@ -237,12 +219,10 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
         </div>
       </div>
 
-      {/* Formulario */}
       <div className="container-fluid mt-4">
         <div className="row justify-content-center">
           <div className="col-xl-8 col-lg-10 col-md-12">
-            
-            {/* Mensajes de estado */}
+
             {error && (
               <div className="alert alert-danger d-flex align-items-center mb-4" role="alert">
                 <span className="material-symbols-outlined me-2">error</span>
@@ -260,8 +240,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
 
               <form onSubmit={handleSubmit}>
                 <div className="row g-4">
-                  
-                  {/* Orden médica */}
                   <div className="col-12">
                     <label htmlFor="ordenMedica" className="form-label fw-bold">
                       <span className="material-symbols-outlined me-2">upload_file</span>
@@ -333,7 +311,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                     </div>
                   </div>
 
-                  {/* Fecha del turno */}
                   <div className="col-md-6 col-12">
                     <label htmlFor="FechaRequeridaTurno" className="form-label fw-bold">
                       <span className="material-symbols-outlined me-2">calendar_today</span>
@@ -355,7 +332,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                     </div>
                   </div>
 
-                  {/* Horario del turno */}
                   <div className="col-md-6 col-12">
                     <label htmlFor="HorarioRequeridoTurno" className="form-label fw-bold">
                       <span className="material-symbols-outlined me-2">schedule</span>
@@ -382,7 +358,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                     </div>
                   </div>
 
-                  {/* Observaciones */}
                   <div className="col-12">
                     <label htmlFor="observaciones" className="form-label fw-bold">
                       <span className="material-symbols-outlined me-2">note</span>
@@ -402,7 +377,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                     </div>
                   </div>
 
-                  {/* Botones */}
                   <div className="col-12">
                     <div className="d-flex gap-3 justify-content-end">
                       <button
@@ -451,7 +425,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
           </div>
         </div>
 
-        {/* Información adicional */}
         <div className="row mt-4 mb-0">
           <div className="col-12">
             <div className="card bg-light border-0 shadow-sm">

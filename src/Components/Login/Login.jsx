@@ -21,7 +21,6 @@ const Login = () => {
   const [emailRecuperacion, setEmailRecuperacion] = useState('');
   const [isLoadingRecuperacion, setIsLoadingRecuperacion] = useState(false);
 
-  // Manejo de inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -33,13 +32,11 @@ const Login = () => {
     if (error) setError('');
   };
 
-  // Submit del login
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    // Validaciones frontend
     if (!formData.email || !formData.password) {
       showError('Campos requeridos', 'Por favor ingrese email y contraseña');
       setIsLoading(false);
@@ -52,10 +49,8 @@ const Login = () => {
         PasswordUsuario: formData.password
       });
 
-      // Guardar en Zustand
       login(response);
 
-      // Mensaje de bienvenida
       showSuccess(
         '¡Login exitoso!',
         `Bienvenido ${
@@ -65,11 +60,8 @@ const Login = () => {
         }`
       );
 
-      // ===============================
-      // 🔥 NUEVA REDIRECCIÓN POR ROLES
-      // ===============================
-      const rol = response.usuario?.NombreRol;              // Administrador / Paciente / Empleado
-      const permiso = response.usuario?.PermisosEmpleado;   // Kinesiologia / Administracion / null
+      const rol = response.usuario?.NombreRol;          
+      const permiso = response.usuario?.PermisosEmpleado;  
 
       if (rol === "Administrador") {
         navigate("/admin");
@@ -148,7 +140,6 @@ const Login = () => {
         'Revisa tu bandeja de entrada. Te hemos enviado un link para restablecer tu contraseña (válido por 15 minutos).'
       );
       
-      // Limpiar y cerrar modal
       setEmailRecuperacion('');
       setMostrarRecuperacion(false);
       
@@ -171,7 +162,6 @@ const Login = () => {
     <div className="container-fluid vh-100">
       <div className="row h-100">
 
-        {/* FORMULARIO */}
         <div className="col-md-6 d-flex align-items-center justify-content-center px-3 px-md-0">
           <div className="w-100" style={{ maxWidth: '400px' }}>
             <div className="text-center mb-4">
@@ -235,7 +225,6 @@ const Login = () => {
                 </div>
               </div>
 
-              {/* BOTÓN */}
               <button
                 type="submit"
                 className="btn btn-primary w-100 mb-3 login-btn-primary"
