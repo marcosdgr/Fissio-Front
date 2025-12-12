@@ -31,12 +31,12 @@ function AppContent() {
 
       <main className="flex-fill">
         <Routes>
-            {/* 🔓 RUTAS PÚBLICAS */}
+            {/*RUTAS PÚBLICAS*/}
             <Route path="/" element={<HomePage />} />
             <Route path="/faqs" element={<FAQsPublicPage />} />
             <Route path="/turnos" element={<TurnosWebPage />} />
 
-            {/* Login y Register → públicas, pero redirigen si ya está logueado, sajdhjs */}
+            {/*Login y Register → públicas, pero redirigen si ya está logueado */}
             <Route
               path="/login"
               element={
@@ -57,7 +57,7 @@ function AppContent() {
             {/* Reset Password → Pública, recibe token por parámetro */}
             <Route path="/auth/cambio_password/:token" element={<ResetPasswordPage />} />
 
-            {/* 🔒 RUTAS PRIVADAS POR ROL / PERMISO */}
+            {/* RUTAS PRIVADAS POR ROL / PERMISO */}
 
             {/* Solo Administrador */}
             <Route
@@ -102,7 +102,7 @@ function AppContent() {
               }
             />
 
-            {/* Mensajería interna: Admin + cualquier Empleado */}
+            {/* Mensajería interna*/}
             <Route
               path="/mensajes"
               element={
@@ -112,7 +112,7 @@ function AppContent() {
               }
             />
 
-            {/* Asistencia: cualquier Empleado (kine o admin) */}
+            {/* Asistencia*/}
             <Route
               path="/asistencia"
               element={
