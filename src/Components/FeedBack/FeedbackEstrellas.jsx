@@ -1,4 +1,4 @@
-// Componente para las estrellas de calificación
+// calificación
 const FeedbackEstrellas = ({ calificacion, calificacionHover, onCalificacionChange, onHoverChange }) => {
   
   const mensajes = {

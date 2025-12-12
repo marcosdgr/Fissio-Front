@@ -1,4 +1,4 @@
-// Componente para mostrar mensajes de error o carga
+// mensajes de error o carga
 const FeedbackMensaje = ({ tipo, titulo, mensaje, botonTexto, onBotonClick }) => {
   const iconos = {
     error: "⚠️",

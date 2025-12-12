@@ -1,4 +1,4 @@
-// Componente para mostrar el mensaje de éxito
+// mensaje de éxito
 const FeedbackExito = ({ calificacion, onNuevoComentario }) => {
   return (
     <div className="feedback-card success-card">

@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { getConversation, sendMessage, getActiveEmployees } from '../../../Custom/CustomMensajeriaKine';
 import { showSuccess, showError } from '../../../Utils/sweetAlerts';
 
 const MensajeriaInterna = () => {
-  const [conversaciones, setConversaciones] = useState([]);
+
   const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
   const [mensajes, setMensajes] = useState([]);
   const [nuevoMensaje, setNuevoMensaje] = useState('');
@@ -16,7 +17,7 @@ const MensajeriaInterna = () => {
     try {
       const data = await getActiveEmployees();
       setEmpleados(data.filter(e => e.idEmpleado !== idKinesiologo));
-    } catch (err) {
+    } catch (error) {
       showError('Error', 'No se pudieron cargar empleados');
     }
   };

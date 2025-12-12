@@ -16,13 +16,12 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
   const [turnosSemana, setTurnosSemana] = useState(0);
   const [loadingTurnos, setLoadingTurnos] = useState(true);
 
-  // BÚSQUEDA INTELIGENTE 
   const kine = empleados.find(e => 
     e.MailUsuario?.toLowerCase() === emailLogin?.toLowerCase() || 
     `${e.NombreEmpleado || ''} ${e.ApellidoEmpleado || ''}`.trim().toLowerCase() === nombreLogin
   );
 
-  // Obtener turnos reales del kinesiólogo
+  // Obtener turnos 
   useEffect(() => {
     const cargarTurnos = async () => {
       if (!kine?.idEmpleado) {
@@ -47,14 +46,14 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
         ];
         console.log('Todos los turnos de hoy:', todosTurnosHoy);
         
-        // Mostrar un turno completo para ver qué campos tiene
+        
         if (todosTurnosHoy.length > 0) {
           console.log('Campos del primer turno:', Object.keys(todosTurnosHoy[0]));
           console.log('Turno completo:', todosTurnosHoy[0]);
         }
         
         const turnosDelKineHoy = todosTurnosHoy.filter(t => {
-          // Comparar por nombre completo ya que el backend no devuelve idEmpleado
+         
           const nombreCompletoTurno = `${t.NombreEmpleado || ''} ${t.ApellidoEmpleado || ''}`.trim().toLowerCase();
           const nombreCompletoKine = `${kine.NombreEmpleado} ${kine.ApellidoEmpleado}`.trim().toLowerCase();
           const coincide = nombreCompletoTurno === nombreCompletoKine;
@@ -68,7 +67,7 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
         console.log('Turnos del kine hoy:', turnosDelKineHoy.length, turnosDelKineHoy);
         setTurnosHoy(turnosDelKineHoy.length);
 
-        // Turnos de la semana
+       
         const ahora = new Date();
         const diaSemana = ahora.getDay();
         const lunes = new Date(ahora);
@@ -107,7 +106,7 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
     cargarTurnos();
   }, [kine]);
 
-  // ESTADOS DE CARGA
+  
   if (loading) {
     return (
       <div className="perfil-kinesiologo-container d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
@@ -151,7 +150,7 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
 
   return (
     <div className="perfil-kinesiologo-container">
-      {/* HEADER ÉPICO */}
+    
       <div className="kine-welcome-section kine-fade-in">
         <div className="container-fluid">
           <div className="row align-items-center">
@@ -177,8 +176,16 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
             </div>
             <div className="col-lg-4 col-md-5 text-md-end mt-4 mt-md-0">
               <div className="kine-card-stats">
-                <div className="kine-stats-number">{turnosSemana}</div>
-                <div className="kine-stats-label">Turnos esta semana</div>
+                {loadingTurnos ? (
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Cargando...</span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="kine-stats-number">{turnosSemana}</div>
+                    <div className="kine-stats-label">Turnos esta semana</div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -193,7 +200,6 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
         </h3>
 
         <div className="kine-nav-cards kine-slide-up">
-          {/* TURNOS DE HOY */}
           <div className="kine-nav-card">
             <div className="kine-card-icon">
               <span className="material-symbols-outlined">today</span>
@@ -201,12 +207,19 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
             <h5 className="kine-card-title">Turnos de Hoy</h5>
             <p className="kine-card-description">Pacientes asignados para hoy</p>
             <div className="kine-card-stats">
-              <div className="kine-stats-number text-primary">{turnosHoy}</div>
-              <div className="kine-stats-label">Hoy</div>
+              {loadingTurnos ? (
+                <div className="spinner-border spinner-border-sm text-primary" role="status">
+                  <span className="visually-hidden">Cargando...</span>
+                </div>
+              ) : (
+                <>
+                  <div className="kine-stats-number text-primary">{turnosHoy}</div>
+                  <div className="kine-stats-label">Hoy</div>
+                </>
+              )}
             </div>
           </div>
 
-          {/* ESTA SEMANA */}
           <div className="kine-nav-card">
             <div className="kine-card-icon" style={{ background: 'linear-gradient(135deg, #2ECC71, #27AE60)' }}>
               <span className="material-symbols-outlined">date_range</span>
@@ -214,12 +227,19 @@ const PerfilKinesiologo = ({ setActiveTab }) => {
             <h5 className="kine-card-title">Esta Semana</h5>
             <p className="kine-card-description">Turnos programados</p>
             <div className="kine-card-stats">
-              <div className="kine-stats-number text-success">{turnosSemana}</div>
-              <div className="kine-stats-label">Semana</div>
+              {loadingTurnos ? (
+                <div className="spinner-border spinner-border-sm text-success" role="status">
+                  <span className="visually-hidden">Cargando...</span>
+                </div>
+              ) : (
+                <>
+                  <div className="kine-stats-number text-success">{turnosSemana}</div>
+                  <div className="kine-stats-label">Semana</div>
+                </>
+              )}
             </div>
           </div>
 
-          {/* INFO PERSONAL */}
           <div className="kine-nav-card" onClick={handleInfoPersonal} role="button">
             <div className="kine-card-icon" style={{ background: 'linear-gradient(135deg, #FF6B35, #F7931E)' }}>
               <span className="material-symbols-outlined">badge</span>

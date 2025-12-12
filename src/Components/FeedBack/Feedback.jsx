@@ -40,7 +40,7 @@ const Feedback = () => {
     );
   }
 
-  // Verificar si el usuario no es paciente
+
   if (userData.NombreRol !== "Paciente") {
     return (
       <FeedbackMensaje
@@ -51,7 +51,7 @@ const Feedback = () => {
     );
   }
 
-  // Mostrar pantalla de carga
+
   if (cargando) {
     return (
       <FeedbackMensaje
@@ -61,7 +61,7 @@ const Feedback = () => {
     );
   }
 
-  // Verificar si no se pudo cargar el ID del usuario
+
   if (!idUsuario && userData && userData.NombreRol === "Paciente") {
     const mensajeError = (
       <>
@@ -84,29 +84,25 @@ const Feedback = () => {
     );
   }
 
-  // Función para enviar el comentario
+
   const enviarComentario = async (e) => {
     e.preventDefault();
 
-    // Validar calificación
     if (calificacion === 0) {
       alert("Por favor, selecciona una calificación");
       return;
     }
 
-    // Validar comentario
     if (!comentario.trim()) {
       alert("Por favor, escribe tu comentario");
       return;
     }
 
-    // Validar ID de usuario
     if (!idUsuario) {
       alert("No se pudo identificar al paciente. Por favor, recarga la página.");
       return;
     }
 
-    // Intentar enviar el comentario
     try {
       setEnviando(true);
       
@@ -123,7 +119,6 @@ const Feedback = () => {
       
       console.log("Comentario enviado:", respuesta.data);
       
-  // Guardar la calificación enviada, limpiar formulario y mostrar éxito
   setUltimaCalificacion(calificacion);
   setCalificacion(0);
   setComentario("");
@@ -143,7 +138,7 @@ const Feedback = () => {
     }
   };
 
-  // Función para resetear el formulario
+
   const nuevoComentario = () => {
     setEnviado(false);
     setCalificacion(0);

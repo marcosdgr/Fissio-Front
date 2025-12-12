@@ -6,7 +6,7 @@ import '../../Css/Asistencias/AsistenciaEmpleado.css';
 
 const AsistenciaEmpleado = () => {
     const { user, login } = useAuthStore();
-    // El usuario puede estar en user.usuario o directamente en user
+    
     const userData = user?.usuario || user;
     const [idEmpleadoLocal, setIdEmpleadoLocal] = useState(userData?.idEmpleado || null);
     const [buscandoEmpleado, setBuscandoEmpleado] = useState(false);
@@ -42,7 +42,7 @@ const AsistenciaEmpleado = () => {
                         const empleado = empleados.find(emp => emp.idUsuario === userData.idUsuario);
                         if (empleado) {
                             setIdEmpleadoLocal(empleado.idEmpleado);
-                            // Actualizar el store con el idEmpleado
+                            
                             login({
                                 ...user,
                                 idEmpleado: empleado.idEmpleado,
@@ -62,7 +62,7 @@ const AsistenciaEmpleado = () => {
         buscarIdEmpleado();
     }, [user, idEmpleadoLocal, buscandoEmpleado, login]);
 
-    // Validar que el usuario esté logueado
+    
     if (!user) {
         return (
             <div className="asistencia-empleado-container">
@@ -74,7 +74,7 @@ const AsistenciaEmpleado = () => {
         );
     }
 
-    // Validar que sea empleado
+    
     if (userData.NombreRol !== 'Empleado') {
         return (
             <div className="asistencia-empleado-container">
@@ -109,14 +109,14 @@ const AsistenciaEmpleado = () => {
         );
     }
 
-    // Días de la semana
+    
     const diasSemana = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
 
 
-    // Obtener el día actual
+    
     const diaActual = diasSemana[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
 
-    // Manejar registro de entrada
+   
     const handleRegistrarEntrada = async () => {
         const exito = await registrarEntrada(observaciones);
         if (exito) {
@@ -125,7 +125,7 @@ const AsistenciaEmpleado = () => {
         }
     };
 
-    // Manejar registro de salida
+  
     const handleRegistrarSalida = async () => {
         const exito = await registrarSalida(observaciones);
         if (exito) {
@@ -134,7 +134,7 @@ const AsistenciaEmpleado = () => {
         }
     };
 
-    // Formatear fecha
+   
     const formatearFecha = (fecha) => {
         if (!fecha) return '-';
         const date = new Date(fecha);
@@ -145,13 +145,13 @@ const AsistenciaEmpleado = () => {
         });
     };
 
-    // Formatear hora
+   
     const formatearHora = (hora) => {
         if (!hora) return '-';
         return hora.substring(0, 5);
     };
 
-    // Calcular horas trabajadas
+    
     const calcularHorasTrabajadas = (entrada, salida) => {
         if (!entrada || !salida) return '-';
         const timeEntrada = new Date(`2000-01-01T${entrada}`);
@@ -160,14 +160,14 @@ const AsistenciaEmpleado = () => {
         return `${Math.floor(diff)}h ${Math.round((diff % 1) * 60)}min`;
     };
 
-    // Buscar por rango de fechas (mantener la funcionalidad de búsqueda)
+    
     const buscarPorRango = () => {
         if (filtros.fechaInicio && filtros.fechaFin) {
             obtenerAsistenciasPorRango(filtros.fechaInicio, filtros.fechaFin);
         }
     };
 
-    // Meses del año (para filtro por mes)
+    
     const meses = [
         { valor: 1, nombre: 'Enero' },
         { valor: 2, nombre: 'Febrero' },
@@ -183,14 +183,14 @@ const AsistenciaEmpleado = () => {
         { valor: 12, nombre: 'Diciembre' }
     ];
 
-    // Buscar por mes y año
+   
     const buscarPorMes = () => {
         if (filtros.mes && filtros.anio) {
             filtrarPorMes(parseInt(filtros.mes), parseInt(filtros.anio));
         }
     };
 
-    // Limpiar filtros y recargar todas las asistencias
+   
     const limpiarFiltros = () => {
         setFiltros({
             fechaInicio: '',
@@ -201,7 +201,7 @@ const AsistenciaEmpleado = () => {
         obtenerAsistenciasEmpleado();
     };
 
-    // Obtener hora actual
+  
     const horaActual = new Date().toLocaleTimeString('es-AR', { 
         hour: '2-digit', 
         minute: '2-digit' 
@@ -217,7 +217,7 @@ const AsistenciaEmpleado = () => {
                 </div>
             </div>
 
-            {/* Sección de registro de entrada/salida */}
+            {/* Sección de registro de entrada y salida */}
             <div className="registro-asistencia-card">
                 <div className="registro-header">
                     <h2>
@@ -282,7 +282,7 @@ const AsistenciaEmpleado = () => {
                             )}
                         </div>
                     ) : asistenciaActual.HoraSalida ? (
-                        // Jornada completada
+                        
                         <div className="jornada-completada">
                             <div className="completada-info">
                                 <i className="fas fa-check-circle"></i>
@@ -315,7 +315,7 @@ const AsistenciaEmpleado = () => {
                             )}
                         </div>
                     ) : (
-                        // Jornada activa (con entrada pero sin salida)
+                        
                         <div className="registro-salida">
                             <div className="jornada-activa">
                                 <div className="jornada-info">
@@ -385,7 +385,7 @@ const AsistenciaEmpleado = () => {
                 </button>
             </div>
 
-            {/* Vista de Horarios Semanales */}
+            {/* Horarios Semanales */}
             {vistaActual === 'horarios' && (
                 <div className="horarios-semanales-card">
                     <h2>
@@ -449,7 +449,7 @@ const AsistenciaEmpleado = () => {
                 </div>
             )}
 
-            {/* Vista de Historial de Asistencias */}
+            {/* Historial de Asistencias */}
             {vistaActual === 'historial' && (
                 <div className="historial-card">
                     <h2>
@@ -533,8 +533,6 @@ const AsistenciaEmpleado = () => {
                             </div>
                         </div>
                     </div>
-
-                    {/* Estadísticas removidas por petición del usuario */}
 
                     {/* Tabla de asistencias */}
                     <div className="tabla-container">

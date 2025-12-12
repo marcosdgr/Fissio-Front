@@ -1,4 +1,4 @@
-// Componente para el área de texto del comentario
+//  área de texto del comentario
 const FeedbackComentario = ({ comentario, onComentarioChange }) => {
   return (
     <div className="comentario-section">

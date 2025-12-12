@@ -6,12 +6,12 @@ const CardComentariosHome = () => {
   const [testimonios, setTestimonios] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Cargar comentarios publicados desde la BD
+  // Cargar comentarios publicados
   useEffect(() => {
     const cargarComentarios = async () => {
       setLoading(true);
       try {
-        // Usar el endpoint principal y filtrar los publicados
+        
         const response = await fetch(`http://localhost:3000/api/comentarios/v1/`);
         
         if (!response.ok) {
@@ -22,27 +22,27 @@ const CardComentariosHome = () => {
         console.log('Comentarios recibidos del backend:', todosLosComentarios);
         console.log('Primer comentario:', todosLosComentarios[0]);
         
-        // Filtrar solo los comentarios publicados (IsPublicado = 1)
+        
         const comentariosPublicados = todosLosComentarios.filter(c => c.IsPublicado === 1);
         console.log('Comentarios publicados filtrados:', comentariosPublicados);
         
-        // Transformar los comentarios de la BD al formato esperado
+        
         const testimoniosFormateados = comentariosPublicados.map(comentario => ({
           id: comentario.idComentario,
           nombre: `${comentario.NombrePaciente} ${comentario.ApellidoPaciente}`,
-          edad: null, // No tenemos este dato
+          edad: null, 
           tratamiento: comentario.NombreTratamiento || "Fisioterapia",
           rating: comentario.CalificacionComentario,
           comentario: comentario.Comentario,
           fecha: formatearFecha(comentario.FechaComentario),
-          avatar: null // No tenemos avatares
+          avatar: null 
         }));
 
         console.log('Testimonios formateados:', testimoniosFormateados);
         setTestimonios(testimoniosFormateados);
       } catch (error) {
         console.error('Error al cargar comentarios:', error);
-        // Si hay error, no mostrar nada
+        
         setTestimonios([]);
       } finally {
         setLoading(false);
@@ -92,7 +92,7 @@ const CardComentariosHome = () => {
     ));
   };
 
-  // Estados de carga y sin datos
+  
   if (loading) {
     return (
       <div className="text-center py-5">

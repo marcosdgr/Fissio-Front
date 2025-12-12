@@ -27,7 +27,7 @@ const PacienteFAQs = () => {
     }
   };
 
-  // Filtrar FAQs
+  // Filtro
   const faqsFiltradas = faqs
     .filter(faq => faq.IsActive)
     .filter(faq => 
@@ -52,7 +52,7 @@ const PacienteFAQs = () => {
           </p>
         </div>
 
-        {/* BUSCADOR + FILTRO */}
+        {/* buscador */}
         <div className="faqs-controls">
           <div className="search-box">
             <input
@@ -80,7 +80,7 @@ const PacienteFAQs = () => {
           </select>
         </div>
 
-        {/* ESTADO */}
+        {/* estado */}
         {loading ? (
           <div className="faqs-loading">
             <div className="spinner"></div>

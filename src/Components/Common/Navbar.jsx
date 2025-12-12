@@ -54,7 +54,6 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-light site-navbar fixed-top">
       <div className="container">
         <Link className="navbar-brand d-flex align-items-center" to="/">
-          {/* Logo servido desde la carpeta public */}
           <img
             src="/logo-blanco.png"
             alt="Fissio"
@@ -80,8 +79,7 @@ const Navbar = () => {
                 Inicio
               </Link>
             </li>
-            
-            {/* Solo mostrar para usuarios no logueados, pacientes o visitantes */}
+          
             {mostrarFAQs && (
               <li className="nav-item">
                 <Link className="nav-link" to="/faqs">
@@ -89,8 +87,7 @@ const Navbar = () => {
                 </Link>
               </li>
             )}
-            
-            {/* Solo mostrar para usuarios no logueados, pacientes o visitantes */}
+          
             {mostrarPedirTurno && (
               <li className="nav-item">
                 <Link className="nav-link" to="/turnos">
@@ -99,7 +96,6 @@ const Navbar = () => {
               </li>
             )}
             
-            {/* Solo mostrar para Admin y Empleados */}
             {mostrarMensajes && (
               <li className="nav-item">
                 <Link className="nav-link" to="/mensajes">
@@ -108,7 +104,6 @@ const Navbar = () => {
               </li>
             )}
             
-            {/* Icono de Panel - Solo para usuarios logueados */}
             {isLoggedIn && (
               <li className="nav-item">
                 <Link 

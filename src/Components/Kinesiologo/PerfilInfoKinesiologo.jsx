@@ -44,7 +44,7 @@ const PerfilInfoKinesiologo = ({ setActiveTab }) => {
 
   return (
     <div className="perfil-kinesiologo-container">
-      {/* BOTÓN VOLVER */}
+      {/* VOLVER */}
       <div className="container-fluid mb-4">
         <button className="kine-btn-volver d-flex align-items-center" onClick={handleVolver}>
           <span className="material-symbols-outlined me-2">arrow_back</span>
@@ -52,7 +52,6 @@ const PerfilInfoKinesiologo = ({ setActiveTab }) => {
         </button>
       </div>
 
-      {/* HEADER */}
       <div className="kine-welcome-section kine-fade-in">
         <div className="container-fluid">
           <div className="d-flex align-items-center">

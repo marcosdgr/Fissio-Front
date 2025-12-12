@@ -1,4 +1,4 @@
-// Componente para el formulario completo de feedback
+// formulario completo de feedback
 import FeedbackEstrellas from "./FeedbackEstrellas";
 import FeedbackComentario from "./FeedbackComentario";
 

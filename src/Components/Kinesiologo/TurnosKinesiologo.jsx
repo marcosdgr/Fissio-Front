@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { getTurnosDelDia } from '../../Custom/CustomTurnos';
 import { showError } from '../../Utils/sweetAlerts';
@@ -34,7 +35,6 @@ const TurnosKinesiologo = () => {
     turno: null
   });
 
-  // Obtener rango de fechas según la vista seleccionada
   const obtenerRangoFechas = (vista, fechaBase = new Date()) => {
     const fecha = new Date(fechaBase);
     let fechaInicio, fechaFin;
@@ -45,7 +45,6 @@ const TurnosKinesiologo = () => {
         break;
       
       case 'semana': {
-        // Obtener el lunes de la semana actual
         const diaSemana = fecha.getDay();
         const diferencia = diaSemana === 0 ? -6 : 1 - diaSemana;
         const lunes = new Date(fecha);
@@ -61,12 +60,9 @@ const TurnosKinesiologo = () => {
       }
       
       case 'mes': {
-        // Primer día del mes
         const primerDia = new Date(fecha.getFullYear(), fecha.getMonth(), 1);
-        // Último día del mes
         const ultimoDia = new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0);
         
-        // Formatear en hora local para evitar problemas de zona horaria
         const formatearFechaLocal = (date) => {
           const year = date.getFullYear();
           const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -86,7 +82,6 @@ const TurnosKinesiologo = () => {
     return { fechaInicio, fechaFin };
   };
 
-  // Cargar turnos según el rango de fechas
   const cargarTurnos = async (fecha = null) => {
     setIsLoading(true);
     try {
@@ -115,7 +110,6 @@ const TurnosKinesiologo = () => {
         setResumen(resumenData);
         setFechaConsulta(response.fechaConsulta);
       } else {
-        // Para semana y mes: obtener turnos día por día y consolidar
         const todosTurnos = {
           solicitados: [],
           enCurso: [],
@@ -126,7 +120,6 @@ const TurnosKinesiologo = () => {
         const inicio = new Date(fechaInicio);
         const fin = new Date(fechaFin);
         
-        // Iterar cada día del rango
         for (let d = new Date(inicio); d <= fin; d.setDate(d.getDate() + 1)) {
           try {
             const fechaStr = d.toISOString().split('T')[0];
@@ -143,7 +136,6 @@ const TurnosKinesiologo = () => {
           }
         }
         
-        // Calcular resumen
         const resumenData = {
           total: todosTurnos.solicitados.length + todosTurnos.enCurso.length + todosTurnos.finalizados.length + todosTurnos.cancelados.length,
           solicitados: todosTurnos.solicitados.length,
@@ -165,7 +157,6 @@ const TurnosKinesiologo = () => {
   };
 
   useEffect(() => {
-    // Resetear fechaConsulta al formato correcto según la vista
     const hoy = new Date();
     let nuevaFecha = '';
     
@@ -190,8 +181,6 @@ const TurnosKinesiologo = () => {
   const handleFechaChange = (e) => {
     const nuevaFecha = e.target.value;
     setFechaConsulta(nuevaFecha);
-    
-    // Convertir el formato según el tipo de input
     let fechaParaApi = nuevaFecha;
     
     if (vistaSeleccionada === 'semana' && nuevaFecha) {
@@ -205,7 +194,6 @@ const TurnosKinesiologo = () => {
       const day2 = String(primerDiaAnio.getDate()).padStart(2, '0');
       fechaParaApi = `${year2}-${month2}-${day2}`;
     } else if (vistaSeleccionada === 'mes' && nuevaFecha) {
-      // Para mes, usar el primer día del mes seleccionado
       const [year, month] = nuevaFecha.split('-');
       fechaParaApi = `${year}-${month}-01`;
     }
@@ -335,7 +323,6 @@ const TurnosKinesiologo = () => {
 
   return (
     <div className="container-fluid">
-      {/* Header con selector de vista y fecha */}
       <div className="row mb-4">
         <div className="col-12">
           <div className="card shadow-sm">
@@ -349,7 +336,6 @@ const TurnosKinesiologo = () => {
                 </div>
                 <div className="col-md-8">
                   <div className="d-flex justify-content-end align-items-center gap-3">
-                    {/* Selector de vista */}
                     <div className="btn-group" role="group">
                       <button 
                         type="button" 
@@ -373,8 +359,6 @@ const TurnosKinesiologo = () => {
                         Mes
                       </button>
                     </div>
-
-                    {/* Selector de fecha según vista */}
                     <div className="d-flex align-items-center gap-2">
                       {vistaSeleccionada === 'dia' && (
                         <>
@@ -422,8 +406,6 @@ const TurnosKinesiologo = () => {
           </div>
         </div>
       </div>
-
-      {/* Resumen de turnos */}
       <div className="row mb-4">
         <div className="col-md-3">
           <div className="card text-center shadow-sm">
@@ -506,7 +488,6 @@ const TurnosKinesiologo = () => {
             </div>
           )}
 
-          {/* Mensaje si no hay turnos */}
           {resumen.total === 0 && (
             <div className="alert alert-info text-center">
               <span className="material-symbols-outlined me-2">info</span>
@@ -516,7 +497,6 @@ const TurnosKinesiologo = () => {
         </>
       )}
 
-      {/* Modal para finalizar turno (editar informe) */}
       {modalFinalizarData.isOpen && (
         <FinalizarTurnoModal
           isOpen={modalFinalizarData.isOpen}
@@ -526,7 +506,6 @@ const TurnosKinesiologo = () => {
         />
       )}
 
-      {/* Modal para ver detalles */}
       {modalDetallesData.isOpen && (
         <DetallesTurnoModal
           isOpen={modalDetallesData.isOpen}

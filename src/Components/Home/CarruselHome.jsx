@@ -27,7 +27,7 @@ const CarruselHome = () => {
 
   return (
     <div id="fissioCarousel" className="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-      {/* Indicators */}
+      {/* Indicadores */}
       <div className="carousel-indicators">
         {slides.map((_, index) => (
           <button 
@@ -42,7 +42,7 @@ const CarruselHome = () => {
         ))}
       </div>
 
-      {/* Carousel Items */}
+      {/* Elementos del carrusel */}
       <div className="carousel-inner">
         {slides.map((slide, index) => (
           <div key={slide.id} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
@@ -76,7 +76,7 @@ const CarruselHome = () => {
         ))}
       </div>
 
-      {/* Controls */}
+      {/* Controles */}
       <button className="carousel-control-prev" type="button" data-bs-target="#fissioCarousel" data-bs-slide="prev">
         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
         <span className="visually-hidden">Anterior</span>
