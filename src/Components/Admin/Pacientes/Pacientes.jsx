@@ -1,7 +1,6 @@
-﻿// src/Components/Admin/Pacientes/Pacientes.jsx
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { crearPaciente, actualizarPaciente, cambiarEstadoPaciente, obtenerLocalidades } from '../../../Custom/CustomPaciente.js';
-import usePacientesWrapper from '../../../Custom/usePacientesWrapper.js'; // ← NUEVO
+import usePacientesWrapper from '../../../Custom/usePacientesWrapper.js';
 import Swal from 'sweetalert2';
 import '../../../Css/Admin/Pacientes/Pacientes.css';
 import PacientesHeader from './PacientesHeader';
@@ -38,16 +37,13 @@ const Pacientes = () => {
   const [paginaActual, setPaginaActual] = useState(1);
   const [pacientesPorPagina] = useState(10);
 
-  // Usa el wrapper para normalizar { pacientes: [...] } → [...]
   const { pacientes: pacientesWrapper, loading: loadingWrapper, refetch } = usePacientesWrapper();
 
-  // Sincroniza con el wrapper
   useEffect(() => {
     setPacientes(pacientesWrapper);
     setLoading(loadingWrapper);
   }, [pacientesWrapper, loadingWrapper]);
 
-  // Cargar localidades
   const fetchLocalidades = async () => {
     try {
       const data = await obtenerLocalidades();
@@ -62,7 +58,6 @@ const Pacientes = () => {
     fetchLocalidades();
   }, []);
 
-  // Filtrar pacientes
   const pacientesFiltrados = pacientes.filter(paciente => {
     const matchBusqueda = paciente.NombrePaciente?.toLowerCase().includes(busqueda.toLowerCase()) ||
                          paciente.ApellidoPaciente?.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -155,7 +150,7 @@ const Pacientes = () => {
         });
       }
       setShowModal(false);
-      refetch(); // ← Usa refetch del wrapper
+      refetch(); 
     } catch (error) {
       console.error('Error al guardar paciente:', error);
       let errorMessage = 'Hubo un problema al guardar el paciente.';
@@ -184,7 +179,7 @@ const Pacientes = () => {
       try {
         const nuevoEstado = isDeactivating ? 0 : 1;
         await cambiarEstadoPaciente(paciente.idPaciente, nuevoEstado);
-        refetch(); // ← Usa refetch
+        refetch(); 
         Swal.fire({
           title: isDeactivating ? '¡Desactivado!' : '¡Activado!',
           text: `El paciente ha sido ${isDeactivating ? 'desactivado' : 'activado'}.`,

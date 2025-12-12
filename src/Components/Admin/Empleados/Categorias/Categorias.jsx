@@ -12,7 +12,7 @@ const Categorias = () => {
 	const { categorias, loading, obtenerCategorias, crearCategoria, editarCategoria, cambiarEstadoCategoria } = useCustomCatEmpleados()
 
 	const [showModal, setShowModal] = useState(false)
-	const [modalMode, setModalMode] = useState('create') // 'create' | 'edit'
+	const [modalMode, setModalMode] = useState('create') 
 	const [selectedCategoria, setSelectedCategoria] = useState(null)
 	const [formData, setFormData] = useState({ NombreCategoria: '', DescripcionCategoria: '' })
 	const [filtro, setFiltro] = useState('todos')

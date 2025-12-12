@@ -21,20 +21,15 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
-  // Cargar kinesiologos y salas al abrir el modal
   useEffect(() => {
     const cargarDatos = async () => {
       setIsLoadingData(true);
       try {
-        // Obtener fecha del turno para kinesiologos presentes
-        let fechaTurno = new Date().toISOString().split("T")[0]; // fallback a hoy
+        let fechaTurno = new Date().toISOString().split("T")[0];
         
         if (turno?.FechaRequeridaTurno) {
-          // Si es un timestamp, extraer solo la fecha
           fechaTurno = new Date(turno.FechaRequeridaTurno).toISOString().split("T")[0];
         }
-
-        // Cargar kinesiologos y servicios en paralelo
         const [kinesiologosRes, serviciosRes] = await Promise.all([
           getKinesiologosDisponibles(fechaTurno),
           obtenerServicios()
@@ -56,7 +51,6 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
 
     if (isOpen) {
       cargarDatos();
-      // Pre-llenar con horario sugerido si existe
       if (turno?.HorarioRequeridoTurno) {
         const horario = turno.HorarioRequeridoTurno;
         setFormData((prev) => ({
@@ -78,7 +72,7 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
     const [horas, minutos] = inicio.split(":");
     const fechaInicio = new Date();
     fechaInicio.setHours(parseInt(horas), parseInt(minutos), 0);
-    fechaInicio.setMinutes(fechaInicio.getMinutes() + 60); // Agregar 1 hora
+    fechaInicio.setMinutes(fechaInicio.getMinutes() + 60);
     return fechaInicio.toTimeString().slice(0, 5);
   };
 
@@ -89,7 +83,6 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
       [name]: value,
     }));
 
-    // Auto-calcular hora fin cuando cambia hora inicio
     if (name === "HorarioInicioTurno") {
       setFormData((prev) => ({
         ...prev,
@@ -103,20 +96,14 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
     setIsLoading(true);
 
     try {
-      // Usar el ID correcto del turno y asegurarse de que sea un número limpio
       let idTurno = turno?.IdTurno || turno?.idTurno;
-      
-      // Limpiar el ID para asegurar que solo sea un número
       if (idTurno) {
         idTurno = String(idTurno).replace(/[^0-9]/g, '');
         idTurno = parseInt(idTurno, 10);
       }
-      
       if (!idTurno || isNaN(idTurno)) {
         throw new Error('No se pudo obtener un ID de turno válido');
       }
-
-      // Validar que se haya seleccionado un servicio
       if (!formData.idServicio) {
         throw new Error('Debe seleccionar un servicio');
       }
@@ -163,9 +150,7 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
               onClick={onClose}
             ></button>
           </div>
-
           <div className="modal-body">
-            {/* Información del paciente */}
             <div className="card mb-3">
               <div className="card-header bg-light">
                 <h6 className="mb-0">Información del Turno</h6>
@@ -283,8 +268,6 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
                         </div>
                       )}
                     </div>
-
-                    {/* Dropdown de Servicios */}
                     <div className="mb-3">
                       <label htmlFor="idServicio" className="form-label">
                         <span className="material-symbols-outlined me-1">
@@ -334,7 +317,6 @@ const AsignarRecursosModal = ({ turno, isOpen, onClose, onSuccess }) => {
                     placeholder="Observaciones adicionales (opcional)"
                   ></textarea>
                 </div>
-
                 <div className="modal-footer">
                   <button
                     type="button"

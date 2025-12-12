@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import useCustomHorarios from '../../../Custom/useCustomHorarios';
 import { toast } from 'sonner';
 import "../../../Css/Horarios/FormHorario.css";
@@ -9,7 +9,7 @@ const FormHorario = ({ horario, onSuccess }) => {
   const { crearHorario, editarHorario } = useCustomHorarios();
 
   const [form, setForm] = useState({
-    Fecha: '', // YYYY-MM-DD matches DB DATE column
+    Fecha: '', 
     HoraEntradaEsperada: '',
     HoraSalidaEsperada: '',
     DescripcionHorario: ''
@@ -35,12 +35,9 @@ const FormHorario = ({ horario, onSuccess }) => {
     setForm({ ...form, [name]: value });
   };
 
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setProcesando(true);
-    // Validación: Fecha obligatorio (solo calendario)
     if (!form.Fecha) {
       toast.error('Selecciona una fecha para el horario');
       setProcesando(false);

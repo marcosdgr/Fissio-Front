@@ -20,7 +20,6 @@ const FeedbackFiltrar = ({ busqueda, filtroCalificacion, onBusquedaChange, onFil
                 onChange={(e) => onBusquedaChange(e.target.value)}
               />
             </div>
-
             {/* Filtro por calificación */}
             <div className="col-md-6">
               <label className="form-label fw-medium">

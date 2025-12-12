@@ -12,16 +12,15 @@ const Servicios = () => {
   const [servicios, setServicios] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [modalMode, setModalMode] = useState('create') // crear o editar
+  const [modalMode, setModalMode] = useState('create') 
   const [selectedServicio, setSelectedServicio] = useState(null)
   const [formData, setFormData] = useState({
     NombreServicio: '',
     DescripcionServicio: ''
   })
-  const [filtro, setFiltro] = useState('todos') // 'todos', 'activos', 'inactivos'
+  const [filtro, setFiltro] = useState('todos') 
   const [busqueda, setBusqueda] = useState('')
 
-  // Cargar servicios
   const fetchServicios = async () => {
     try {
       setLoading(true)
@@ -38,7 +37,6 @@ const Servicios = () => {
     fetchServicios()
   }, [])
 
-  // Filtrar servicios
   const serviciosFiltrados = servicios.filter(servicio => {
     const matchBusqueda = servicio.NombreServicio?.toLowerCase().includes(busqueda.toLowerCase()) ||
                          servicio.DescripcionServicio?.toLowerCase().includes(busqueda.toLowerCase())
@@ -50,22 +48,17 @@ const Servicios = () => {
     return matchBusqueda && matchFiltro
   })
 
-  // Manejar cambios en el formulario
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-
-
-  // Abrir modal para crear
   const handleCreate = () => {
     setModalMode('create')
     setFormData({ NombreServicio: '', DescripcionServicio: '' })
     setShowModal(true)
   }
 
-  // Abrir modal para editar
   const handleEdit = (servicio) => {
     setModalMode('edit')
     setSelectedServicio(servicio)
@@ -76,7 +69,6 @@ const Servicios = () => {
     setShowModal(true)
   }
 
-  // Guardar servicio (crear o actualizar)
   const handleSave = async (e) => {
     e.preventDefault()
     try {
@@ -105,26 +97,23 @@ const Servicios = () => {
       fetchServicios()
     } catch (error) {
       console.error('Error al guardar servicio:', error)
-      
-      // Manejar errores específicos del backend
+
       let errorMessage = 'Hubo un problema al guardar el servicio. Por favor, inténtalo de nuevo.'
       let errorTitle = 'Error'
       
       if (error.response && error.response.data && error.response.data.error) {
         const backendError = error.response.data.error
-        
-        // Error de nombre duplicado
+
         if (backendError.includes('Ya existe un servicio con ese nombre') || 
             backendError.includes('Ya existe otro servicio con ese nombre')) {
           errorTitle = 'Nombre duplicado'
           errorMessage = `El nombre "${formData.NombreServicio}" ya está en uso. Por favor, elige un nombre diferente.`
         }
-        // Error de campo obligatorio
+
         else if (backendError.includes('obligatorio')) {
           errorTitle = 'Campo requerido'
           errorMessage = 'El nombre del servicio es obligatorio y no puede estar vacío.'
         }
-        // Otros errores específicos del backend
         else {
           errorMessage = backendError
         }
@@ -140,7 +129,6 @@ const Servicios = () => {
     }
   }
 
-  // Cambiar estado del servicio
   const handleToggleStatus = async (servicio) => {
     const isDeactivating = servicio.IsActive
     
@@ -158,7 +146,6 @@ const Servicios = () => {
 
     if (result.isConfirmed) {
       try {
-        // Enviar 0 para desactivar, 1 para activar
         const nuevoEstado = isDeactivating ? 0 : 1
         await cambiarEstadoServicio(servicio.idServicio, nuevoEstado)
         fetchServicios()
@@ -183,7 +170,6 @@ const Servicios = () => {
     }
   }
 
-  // Cerrar modal
   const handleCloseModal = () => {
     setShowModal(false)
     setSelectedServicio(null)

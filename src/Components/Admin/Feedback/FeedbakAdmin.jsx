@@ -10,11 +10,10 @@ import FeedbackModal from './FeedbackModal';
 const FeedbakAdmin = () => {
   const { comentarios, loading, publicarComentario, despublicarComentario } = useCustomFeedback();
   const [busqueda, setBusqueda] = useState('');
-  const [filtroCalificacion, setFiltroCalificacion] = useState('todos'); // 'todos', '1', '2', '3', '4', '5'
+  const [filtroCalificacion, setFiltroCalificacion] = useState('todos'); 
   const [showModal, setShowModal] = useState(false);
   const [comentarioSeleccionado, setComentarioSeleccionado] = useState(null);
 
-  // Filtrar comentarios
   const comentariosFiltrados = comentarios.filter(comentario => {
     const matchBusqueda = 
       comentario.pacienteNombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -27,19 +26,16 @@ const FeedbakAdmin = () => {
     return matchBusqueda && matchCalificacion;
   });
 
-  // Abrir modal para ver comentario completo
   const handleVerComentario = (comentario) => {
     setComentarioSeleccionado(comentario);
     setShowModal(true);
   };
 
-  // Cerrar modal
   const handleCerrarModal = () => {
     setShowModal(false);
     setComentarioSeleccionado(null);
   };
 
-  // Publicar/Despublicar comentario
   const handlePublicar = async (comentario) => {
     const estaPublicado = comentario.IsPublicado === 1;
     

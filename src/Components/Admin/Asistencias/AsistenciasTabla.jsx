@@ -56,7 +56,6 @@ const AsistenciasTabla = ({ asistencias, loading }) => {
     );
   }
 
-  // Console.log para debug - ver qué datos llegan
   if (asistencias.length > 0) {
     console.log('Datos de asistencias:', asistencias[0]);
   }
@@ -82,10 +81,7 @@ const AsistenciasTabla = ({ asistencias, loading }) => {
           </thead>
           <tbody>
             {asistencias.map((asistencia) => {
-             
-             
-
-              return (
+             return (
                 <tr key={asistencia.idAsistencia}>
                   <td className="empleado-cell">
                     <div className="empleado-info">

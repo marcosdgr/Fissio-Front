@@ -14,7 +14,6 @@ const PacientesDetalleModal = ({ showModal, pacienteDetalle, onClose }) => {
           </div>
           <div className="modal-body">
             <div className="row g-3">
-              {/* Información Personal */}
               <div className="col-12">
                 <h6 className="text-primary border-bottom pb-2 mb-3">
                   <span className="material-symbols-outlined me-1">person</span>
@@ -82,7 +81,6 @@ const PacientesDetalleModal = ({ showModal, pacienteDetalle, onClose }) => {
                 </p>
               </div>
 
-              {/* Información de Usuario */}
               <div className="col-12 mt-4">
                 <h6 className="text-primary border-bottom pb-2 mb-3">
                   <span className="material-symbols-outlined me-1">account_circle</span>
@@ -107,7 +105,6 @@ const PacientesDetalleModal = ({ showModal, pacienteDetalle, onClose }) => {
                 </div>
               </div>
 
-              {/* Información Adicional */}
               <div className="col-12 mt-4">
                 <h6 className="text-primary border-bottom pb-2 mb-3">
                   <span className="material-symbols-outlined me-1">info</span>

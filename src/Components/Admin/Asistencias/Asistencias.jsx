@@ -18,7 +18,6 @@ const Asistencias = () => {
     busqueda: ''
   });
 
-  // Cargar todas las asistencias
   const fetchAsistencias = async () => {
     try {
       setLoading(true);
@@ -36,31 +35,24 @@ const Asistencias = () => {
     fetchAsistencias();
   }, []);
 
-  // Aplicar filtros
   const aplicarFiltros = async () => {
     try {
       setLoading(true);
       let data;
-
-      // Filtro por empleado
       if (filtros.empleado) {
         data = await obtenerAsistenciasPorEmpleado(filtros.empleado);
       }
-      // Filtro por fecha específica
       else if (filtros.fecha) {
         data = await obtenerAsistenciasPorFecha(filtros.fecha);
       }
-      // Filtro por mes
       else if (filtros.mes && filtros.anio) {
         const primerDia = new Date(filtros.anio, filtros.mes - 1, 1).toISOString().split('T')[0];
         const ultimoDia = new Date(filtros.anio, filtros.mes, 0).toISOString().split('T')[0];
         data = await obtenerAsistenciasPorRango(primerDia, ultimoDia);
       }
-      // Sin filtros, traer todas
       else {
         data = await obtenerAsistencias();
       }
-
       setAsistencias(data);
     } catch (error) {
       console.error('Error al aplicar filtros:', error);
@@ -70,7 +62,6 @@ const Asistencias = () => {
     }
   };
 
-  // Limpiar filtros
   const limpiarFiltros = () => {
     setFiltros({
       empleado: '',
@@ -84,7 +75,6 @@ const Asistencias = () => {
     fetchAsistencias();
   };
 
-  // Filtrar por búsqueda local
   const asistenciasFiltradas = asistencias.filter(asistencia => {
     if (!filtros.busqueda) return true;
     const busqueda = filtros.busqueda.toLowerCase();
@@ -95,7 +85,6 @@ const Asistencias = () => {
     );
   });
 
-  // Calcular estadísticas
   const calcularEstadisticas = () => {
     const total = asistenciasFiltradas.length;
     const completas = asistenciasFiltradas.filter(a => a.HoraEntrada && a.HoraSalida).length;

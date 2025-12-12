@@ -78,7 +78,6 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
 
   return (
     <div className="form-faqs-container">
-      {/* TÍTULO */}
       <h4 className="form-title mb-4 text-center">
         {faq ? 'Editar FAQ' : 'Nueva FAQ'}
       </h4>

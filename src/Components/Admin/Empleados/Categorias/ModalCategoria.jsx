@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ModalCategoria = ({ showModal, modalMode, formData, handleInputChange, handleSave, handleCloseModal, nombreYaExiste }) => {
   if (!showModal) return null
   return (

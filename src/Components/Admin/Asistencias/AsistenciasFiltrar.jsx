@@ -3,7 +3,7 @@ import { obtenerEmpleadosActivos } from '../../../Custom/Asistencias/useCustomAs
 
 const AsistenciasFiltrar = ({ filtros, onFiltrosChange, onAplicarFiltros, onLimpiarFiltros }) => {
   const [empleados, setEmpleados] = useState([]);
-  const [tipoFiltro, setTipoFiltro] = useState('todos'); // 'todos', 'empleado', 'fecha', 'mes'
+  const [tipoFiltro, setTipoFiltro] = useState('todos');
 
   useEffect(() => {
     const fetchEmpleados = async () => {
@@ -43,7 +43,6 @@ const AsistenciasFiltrar = ({ filtros, onFiltrosChange, onAplicarFiltros, onLimp
       </div>
 
       <div className="filtrar-body">
-        {/* Búsqueda rápida */}
         <div className="filtro-row">
           <div className="filtro-busqueda">
             <i className="fas fa-search"></i>
@@ -56,7 +55,6 @@ const AsistenciasFiltrar = ({ filtros, onFiltrosChange, onAplicarFiltros, onLimp
           </div>
         </div>
 
-        {/* Tipo de filtro */}
         <div className="filtro-row">
           <div className="filtro-tipo-buttons">
             <button
@@ -86,7 +84,6 @@ const AsistenciasFiltrar = ({ filtros, onFiltrosChange, onAplicarFiltros, onLimp
           </div>
         </div>
 
-        {/* Filtro por empleado */}
         {tipoFiltro === 'empleado' && (
           <div className="filtro-row">
             <div className="filtro-item">
@@ -106,7 +103,6 @@ const AsistenciasFiltrar = ({ filtros, onFiltrosChange, onAplicarFiltros, onLimp
           </div>
         )}
 
-        {/* Filtro por fecha */}
         {tipoFiltro === 'fecha' && (
           <div className="filtro-row">
             <div className="filtro-item">
@@ -120,7 +116,6 @@ const AsistenciasFiltrar = ({ filtros, onFiltrosChange, onAplicarFiltros, onLimp
           </div>
         )}
 
-        {/* Filtro por mes */}
         {tipoFiltro === 'mes' && (
           <div className="filtro-row">
             <div className="filtro-item">
@@ -150,7 +145,6 @@ const AsistenciasFiltrar = ({ filtros, onFiltrosChange, onAplicarFiltros, onLimp
           </div>
         )}
 
-        {/* Botones */}
         <div className="filtro-actions">
           <button className="btn-aplicar" onClick={onAplicarFiltros}>
             <i className="fas fa-check"></i> Aplicar Filtros

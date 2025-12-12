@@ -1,5 +1,3 @@
-import React from 'react'
-
 const TablaCategorias = ({ categorias, loading, onEdit, onToggle }) => {
   return (
     <div className="servicios-table">

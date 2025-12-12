@@ -1,5 +1,3 @@
-import React from 'react'
-
 const SearchBar = ({ query, setQuery, filter, setFilter }) => (
   <div className="servicios-filters mb-3">
     <div className="row align-items-center">

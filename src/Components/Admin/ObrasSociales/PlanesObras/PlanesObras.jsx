@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useCustomPlanesObra from '../../../../Custom/ObrasSociales/useCustomPlanesObra'
 import useCustomObrasSociales from '../../../../Custom/ObrasSociales/useCustomObrasSociales'
 import { showConfirm, showSuccess, showError } from '../../../../Utils/sweetAlerts'
@@ -13,7 +13,6 @@ const PlanesObras = ({ obrasSocialesProp }) => {
   const { planes = [], obtenerTodosLosPlanes, crearPlanObra, actualizarPlanObra, cambiarEstadoPlanObra } = useCustomPlanesObra()
   const { obrasSociales: obrasSocialesLocal = [], obtenerTodasLasObrasSociales } = useCustomObrasSociales()
 
-  // Usar las obras sociales del padre si están disponibles, de lo contrario usar las locales
   const obrasSociales = obrasSocialesProp || obrasSocialesLocal
 
   const [obraFilter, setObraFilter] = useState('')
@@ -28,43 +27,33 @@ const PlanesObras = ({ obrasSocialesProp }) => {
   const [loadingOp, setLoadingOp] = useState(false)
 
   useEffect(() => { 
-    // Solo obtener obras sociales localmente si no vienen como prop
     if (!obrasSocialesProp && obtenerTodasLasObrasSociales) {
       obtenerTodasLasObrasSociales();
     }
     obtenerTodosLosPlanes && obtenerTodosLosPlanes();
   }, [])
 
-  // DEBUG: mostrar estructura de datos para ayudar en desarrollo
-  useEffect(() => {
-    // use console.log para que no quede oculto por niveles de filtrado en la consola
-    console.log('DEBUG planes:', planes)
-    console.log('DEBUG obrasSociales:', obrasSociales)
-  }, [planes, obrasSociales])
+  useEffect(() => {}, [planes, obrasSociales])
 
   const visible = useMemo(() => {
     const q = (query || '').trim().toLowerCase()
     let list = planes || []
     if (obraFilter) {
       const f = String(obraFilter)
-      // buscar la obra seleccionada para obtener su nombre (en caso de que los planes traigan solo el nombre)
       const obraObjFilter = obrasSociales.find(o => String(o.idObraSocial ?? o.id) === f)
       const obraNameFilter = obraObjFilter ? String(obraObjFilter.NombreObraSocial ?? obraObjFilter.Nombre ?? obraObjFilter.nombre ?? '').trim().toLowerCase() : null
 
       list = list.filter(p => {
-        // si el plan tiene el id de obra, compararlo
         const pid = p.idObraSocial ?? p.id_obraSocial ?? p.idObra
         if (pid !== undefined && pid !== null && pid !== '') {
           return String(pid) === f
         }
-        // si no tiene id, comparar por nombre de obra (normalizado)
         if (obraNameFilter && (p.NombreObraSocial ?? p.Nombre ?? p.nombre)) {
           return String(p.NombreObraSocial ?? p.Nombre ?? p.nombre).trim().toLowerCase() === obraNameFilter
         }
         return false
       })
     }
-    // filtrar por estado si está seleccionado
     if (estadoFilter) {
       const ef = String(estadoFilter).trim().toLowerCase()
       list = list.filter(p => {
@@ -93,8 +82,6 @@ const PlanesObras = ({ obrasSocialesProp }) => {
     }
     if (!idObra) errs.idObraSocial = 'Debe seleccionar una obra social'
     if (!estado) errs.EstadoPlan = 'Debe seleccionar el estado del plan'
-
-    // unicidad local: no repetir NombraPlan en la misma obra social
     const list = planes || []
     if (nombre && idObra) {
       const exists = list.some(p => {
@@ -111,12 +98,10 @@ const PlanesObras = ({ obrasSocialesProp }) => {
 
     return errs
   }
-
   const onCreate = async () => {
     const v = validate(form, false)
     if (Object.keys(v).length > 0) {
       setErrors(v)
-      // si el error es por nombre duplicado, mostrar alerta específica
       if (v.NombraPlan && String(v.NombraPlan).toLowerCase().includes('ya existe')) return showError('Nombre duplicado', v.NombraPlan)
       return showError('Validación', 'Corrige los campos en rojo')
     }
@@ -136,7 +121,6 @@ const PlanesObras = ({ obrasSocialesProp }) => {
     const v = validate(form, true)
     if (Object.keys(v).length > 0) {
       setErrors(v)
-      // si el error es por nombre duplicado, mostrar alerta específica
       if (v.NombraPlan && String(v.NombraPlan).toLowerCase().includes('ya existe')) return showError('Nombre duplicado', v.NombraPlan)
       return showError('Validación', 'Corrige los campos en rojo')
     }
@@ -153,7 +137,6 @@ const PlanesObras = ({ obrasSocialesProp }) => {
   }
 
   const onToggle = async (plan) => {
-    // Toggle EstadoPlan between 'Vigente' and 'No vigente'
     const currentEstado = plan.EstadoPlan ?? (plan.IsActive !== undefined ? (plan.IsActive ? 'Vigente' : 'No vigente') : 'Vigente')
     const nextEstado = currentEstado === 'Vigente' ? 'No vigente' : 'Vigente'
     const action = currentEstado === 'Vigente' ? 'pasar a No vigente' : 'pasar a Vigente'
@@ -196,7 +179,6 @@ const PlanesObras = ({ obrasSocialesProp }) => {
         setEstadoFilter={setEstadoFilter}
         onAdd={() => { resetForm(); setIsCreateOpen(true) }}
       />
-
       <PlanesTable visible={visible} obrasSociales={obrasSociales} openView={openView} openEdit={openEdit} onToggle={onToggle} />
 
       <PlanCreateModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} form={form} handleChange={handleChange} errors={errors} onCreate={onCreate} loadingOp={loadingOp} obrasSociales={obrasSociales} />

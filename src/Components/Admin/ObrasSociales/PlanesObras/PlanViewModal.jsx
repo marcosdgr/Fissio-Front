@@ -1,5 +1,3 @@
-import React from 'react'
-
 const PlanViewModal = ({ isOpen, selected, onClose, obrasSociales }) => {
   if (!isOpen || !selected) return null
   return (

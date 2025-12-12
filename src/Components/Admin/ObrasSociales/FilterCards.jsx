@@ -1,4 +1,3 @@
-import React from 'react'
 import StatsCard from './StatsCard'
 
 const FilterCards = ({ counts = { total: 0, act: 0, inac: 0 }, filter, setFilter }) => {

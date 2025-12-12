@@ -20,25 +20,20 @@ const Pagos = () => {
   const [openFormModal, setOpenFormModal] = useState(false);
   const [pagoSeleccionado, setPagoSeleccionado] = useState(null);
 
-  // Estados para filtros y paginación
   const [categoriaFiltro, setCategoriaFiltro] = useState("");
   const [ordenMonto, setOrdenMonto] = useState("");
   const [ordenFecha, setOrdenFecha] = useState("desc"); 
   const [paginaActual, setPaginaActual] = useState(1);
   const pagosPorPagina = 10;
 
-  // Filtrar y ordenar pagos
   const pagosFiltrados = useMemo(() => {
     let resultado = (pagos.pagos || []).slice();
 
-    // Filtrar por categoría
     if (categoriaFiltro) {
       resultado = resultado.filter(pago => pago.TipoPago === categoriaFiltro);
     }
 
-    // Ordenar
     resultado.sort((a, b) => {
-      // Primero ordenar por monto si está seleccionado
       if (ordenMonto) {
         const montoA = parseFloat(a.MontoPago);
         const montoB = parseFloat(b.MontoPago);
@@ -46,7 +41,6 @@ const Pagos = () => {
         if (comparacionMonto !== 0) return comparacionMonto;
       }
 
-      // Luego ordenar por fecha
       const fechaA = new Date(a.FechaPago);
       const fechaB = new Date(b.FechaPago);
       return ordenFecha === "asc" ? fechaA - fechaB : fechaB - fechaA;
@@ -55,13 +49,11 @@ const Pagos = () => {
     return resultado;
   }, [pagos.pagos, categoriaFiltro, ordenMonto, ordenFecha]);
 
-  // Calcular paginación
   const totalPaginas = Math.ceil(pagosFiltrados.length / pagosPorPagina);
   const indiceInicio = (paginaActual - 1) * pagosPorPagina;
   const indiceFin = indiceInicio + pagosPorPagina;
   const pagosActuales = pagosFiltrados.slice(indiceInicio, indiceFin);
 
-  // Resetear a página 1 cuando cambian los filtros
   const handleCategoriaChange = (valor) => {
     setCategoriaFiltro(valor);
     setPaginaActual(1);
@@ -106,7 +98,6 @@ const Pagos = () => {
     setPagoSeleccionado(null);
   };
 
-  // ELIMINAR PAGO
   const handleEliminarPago = async (pago) => {
     const result = await Swal.fire({
       title: `¿Eliminar pago #${pago.idPago}?`,
@@ -171,7 +162,6 @@ const Pagos = () => {
                 </div>
               ) : (
                 <>
-                  {/* Filtros */}
                   <div className="card-body pb-2">
                     <div className="row g-3 align-items-end">
                       <div className="col-md-3">
@@ -280,8 +270,6 @@ const Pagos = () => {
                           </table>
                         </div>
                       </div>
-
-                      {/* Paginación */}
                       {totalPaginas > 1 && (
                         <div className="card-footer bg-white border-top">
                           <nav>
@@ -344,7 +332,6 @@ const Pagos = () => {
         </div>
       </div>
 
-      {/* MODAL VER PAGO */}
       {openModal && pagoSeleccionado && (
         <div className="custom-modal fade-in">
           <div className="modal-dialog modal-lg modal-dialog-scrollable">
@@ -381,7 +368,6 @@ const Pagos = () => {
         </div>
       )}
 
-      {/* MODAL FORMULARIO */}
       {openFormModal && (
         <div className="custom-modal fade-in">
           <div className="modal-dialog modal-xl modal-dialog-scrollable">
@@ -414,8 +400,7 @@ const Pagos = () => {
           </div>
         </div>
       )}
-
-      {/* BACKDROP */}
+      
       {(openFormModal || openModal) && <div className="modal-backdrop-custom fade-in"></div>}
     </>
   );

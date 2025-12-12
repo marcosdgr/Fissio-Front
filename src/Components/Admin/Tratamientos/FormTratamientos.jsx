@@ -48,7 +48,6 @@ const handleSubmit = async (e) => {
     let res;
 
     if (tratamiento) {
-      // === EDITAR (con confirmación) ===
       const result = await Swal.fire({
         title: "¿Editar tratamiento?",
         text: `Se actualizarán los datos de "${nuevoTratamiento.NombreTratamiento}"`,
@@ -67,7 +66,6 @@ const handleSubmit = async (e) => {
 
       res = await editarTratamiento(tratamiento.idTratamiento, nuevoTratamiento);
     } else {
-      // === CREAR NUEVO (CON CONFIRMACIÓN ÉPICA) ===
       const result = await Swal.fire({
         title: "¿Crear nuevo tratamiento?",
         html: `
@@ -93,7 +91,6 @@ const handleSubmit = async (e) => {
       res = await agregarTratamiento(nuevoTratamiento);
     }
 
-    // === ÉXITO ===
     if (res.success) {
       toast.success(tratamiento ? 'Tratamiento editado' : 'Tratamiento creado con éxito');
       onSuccess(); 

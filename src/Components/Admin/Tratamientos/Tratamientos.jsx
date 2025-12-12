@@ -13,8 +13,8 @@ const Tratamientos = () => {
     obtenerTratamientos,
   } = useCustomTratamientos();
 
-  const [openModal, setOpenModal] = useState(false);        // Modal VER
-  const [openFormModal, setOpenFormModal] = useState(false); // Modal FORM
+  const [openModal, setOpenModal] = useState(false);        
+  const [openFormModal, setOpenFormModal] = useState(false); 
   const [tratamientoSeleccionado, setTratamientoSeleccionado] = useState(null);
 
   const resultado = (tratamientos.tratamientos || [])
@@ -169,7 +169,6 @@ const Tratamientos = () => {
         </div>
       </div>
 
-      {/* MODAL VER TRATAMIENTO */}
       {openModal && tratamientoSeleccionado && (
         <div className="custom-modal fade-in">
           <div className="modal-dialog modal-lg modal-dialog-scrollable">
@@ -200,7 +199,6 @@ const Tratamientos = () => {
         </div>
       )}
 
-      {/* MODAL FORMULARIO */}
       {openFormModal && (
         <div className="custom-modal fade-in">
           <div className="modal-dialog modal-xl modal-dialog-scrollable">
@@ -234,7 +232,6 @@ const Tratamientos = () => {
         </div>
       )}
 
-      {/* BACKDROP */}
       {(openFormModal || openModal) && <div className="modal-backdrop-custom fade-in"></div>}
     </>
   );

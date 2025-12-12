@@ -1,5 +1,3 @@
-import React from 'react'
-
 const PlanesFilters = ({ obraFilter, setObraFilter, obrasSociales, query, setQuery, estadoFilter, setEstadoFilter, onAdd }) => {
   return (
     <>

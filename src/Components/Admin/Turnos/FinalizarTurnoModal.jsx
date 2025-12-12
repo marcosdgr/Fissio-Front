@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { finalizarTurno, obtenerTratamientos, asignarTratamientoATurno } from '../../../Custom/CustomTurnos';
 import { showSuccess, showError } from '../../../Utils/sweetAlerts';
 
@@ -11,7 +11,6 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingTratamientos, setIsLoadingTratamientos] = useState(false);
 
-  // Cargar tratamientos cuando se abre el modal
   useEffect(() => {
     if (isOpen) {
       cargarTratamientos();
@@ -22,7 +21,6 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
     try {
       setIsLoadingTratamientos(true);
       const response = await obtenerTratamientos();
-      // Filtrar solo tratamientos activos
       const tratamientosActivos = response.filter(tratamiento => tratamiento.IsActive === 1);
       setTratamientos(tratamientosActivos);
     } catch (error) {
@@ -46,24 +44,17 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
     setIsLoading(true);
 
     try {
-      // Usar el ID correcto según lo que esté disponible
       const idTurno = turnoData?.IdTurno || turnoData?.idTurno;
       
       if (!idTurno) {
         showError('Error', 'No se pudo obtener el ID del turno');
         return;
       }
-
-      // Preparar datos de finalización
       const finalizacionData = {
         observacionesFinal: formData.observaciones || "",
         idEmpleado: turnoData.idEmpleado || turnoData.IdEmpleado || null
       };
-
-      // Finalizar el turno
       await finalizarTurno(idTurno, finalizacionData);
-
-      // Si se seleccionó un tratamiento, asignarlo al turno
       if (formData.tratamientoId) {
         const tratamientoData = {
           idTurno: idTurno,
@@ -76,14 +67,11 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
           showSuccess('Éxito', 'Turno finalizado y tratamiento asignado correctamente');
         } catch (tratamientoError) {
           console.error('Error al asignar tratamiento:', tratamientoError);
-          // Turno se finalizó pero tratamiento falló
           showSuccess('Turno Finalizado', 'Turno finalizado correctamente, pero hubo un error al asignar el tratamiento');
         }
       } else {
         showSuccess('Éxito', 'Turno finalizado correctamente');
       }
-      
-      // Resetear formulario
       setFormData({
         observaciones: '',
         tratamientoId: ''
@@ -93,8 +81,6 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
       onClose();
     } catch (error) {
       console.error('Error al finalizar turno:', error);
-      
-      // Verificar si es un error específico del backend
       if (error.response?.data?.message) {
         showError('Error', error.response.data.message);
       } else if (error.response?.status === 404) {

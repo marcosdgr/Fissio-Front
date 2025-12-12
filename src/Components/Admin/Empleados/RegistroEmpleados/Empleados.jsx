@@ -41,7 +41,6 @@ const Empleados = () => {
         setLocalidades([])
       }
     })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const empleadosFiltrados = (empleados || []).filter(emp => {
@@ -85,7 +84,6 @@ const Empleados = () => {
 
   const handleView = async (emp) => {
     try {
-      // Simplemente mostrar el empleado sin obtener detalles adicionales
       setViewEmpleado(emp)
       setShowViewModal(true)
     } catch (err) {

@@ -31,7 +31,6 @@ const FormPagos = ({ pago, onSuccess, onClose }) => {
         EstadoPago: pago.EstadoPago || 'Pagado'
       });
     } else {
-      // Al crear un nuevo pago, se asigna automáticamente la fecha actual
       setNuevoPago({
         FechaPago: new Date().toISOString().split("T")[0],
         idTipoPago: '',

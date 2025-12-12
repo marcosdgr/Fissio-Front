@@ -1,5 +1,3 @@
-import React from 'react';
-
 const AsistenciasEstadisticas = ({ estadisticas }) => {
   return (
     <div className="row mb-4">

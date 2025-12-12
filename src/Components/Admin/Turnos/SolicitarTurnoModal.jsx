@@ -14,7 +14,6 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
   const [loadingHorarios, setLoadingHorarios] = useState(false);
   const [errores, setErrores] = useState({});
 
-  // Función para cargar horarios disponibles
   const cargarHorariosDisponibles = async (fecha) => {
     if (!fecha) {
       setHorariosDisponibles([]);
@@ -25,8 +24,6 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
     try {
       const response = await getDisponibilidadHorarios(fecha);
       setHorariosDisponibles(response.horariosDisponibles || []);
-      
-      // Limpiar horario seleccionado si ya no está disponible
       if (formData.horarioRequerido && !response.horariosDisponibles?.some(h => h.value === formData.horarioRequerido)) {
         setFormData(prev => ({ ...prev, horarioRequerido: '' }));
       }
@@ -38,14 +35,11 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
       setLoadingHorarios(false);
     }
   };
-
-  // Cargar horarios cuando cambia la fecha
   useEffect(() => {
     cargarHorariosDisponibles(formData.fechaRequerida);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.fechaRequerida]);
 
-  // Función para validar el formulario
   const validarFormulario = () => {
     const nuevosErrores = {};
 
@@ -73,8 +67,6 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
       ...prev,
       [name]: value
     }));
-    
-    // Limpiar error del campo cuando el usuario empiece a escribir
     if (errores[name]) {
       setErrores(prev => ({
         ...prev,

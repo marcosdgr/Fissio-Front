@@ -1,5 +1,3 @@
-import React from 'react'
-
 const FiltrosCategorias = ({ busqueda, setBusqueda, filtro, setFiltro }) => {
   return (
     <div className="servicios-filters">

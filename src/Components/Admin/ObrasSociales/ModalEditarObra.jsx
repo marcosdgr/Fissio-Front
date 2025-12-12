@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ModalEditarObra = ({ open, onClose, form, errors = {}, onChange, onSubmit, loading }) => {
   if (!open) return null
   return (

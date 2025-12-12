@@ -13,25 +13,20 @@ const Cobros = () => {
   const [openFormModal, setOpenFormModal] = useState(false);
   const [cobroSeleccionado, setCobroSeleccionado] = useState(null);
 
-  // Estados para filtros y paginación
   const [busquedaDNI, setBusquedaDNI] = useState("");
   const [ordenFecha, setOrdenFecha] = useState("desc");
   const [paginaActual, setPaginaActual] = useState(1);
   const cobrosPorPagina = 10;
 
-  // Estados para los datos filtrados
   const [cobrosFiltrados, setCobrosFiltrados] = useState([]);
   const [cobrosActuales, setCobrosActuales] = useState([]);
   const [totalPaginas, setTotalPaginas] = useState(0);
 
-  // Filtrar y ordenar cobros con useEffect
   useEffect(() => {
     let resultado = (cobros.cobros || []).slice();
 
-    // Filtrar por DNI si hay búsqueda
     if (busquedaDNI.trim()) {
       resultado = resultado.filter(cobro => {
-        // Buscar el paciente por el nombre del cobro
         const paciente = pacientesObj.pacientes.find(p => 
           `${p.NombrePaciente} ${p.ApellidoPaciente}` === cobro.Paciente
         );
@@ -39,7 +34,6 @@ const Cobros = () => {
       });
     }
 
-    // Ordenar por fecha
     resultado.sort((a, b) => {
       const fechaA = new Date(a.FechaCobro);
       const fechaB = new Date(b.FechoCobro);
@@ -49,7 +43,6 @@ const Cobros = () => {
     setCobrosFiltrados(resultado);
   }, [cobros.cobros, busquedaDNI, ordenFecha, pacientesObj.pacientes]);
 
-  // Calcular paginación con useEffect
   useEffect(() => {
     const totalPags = Math.ceil(cobrosFiltrados.length / cobrosPorPagina);
     setTotalPaginas(totalPags);
@@ -61,7 +54,6 @@ const Cobros = () => {
     setCobrosActuales(cobrosParaMostrar);
   }, [cobrosFiltrados, paginaActual, cobrosPorPagina]);
 
-  // Resetear a página 1 cuando cambian los filtros
   const handleBusquedaChange = (valor) => {
     setBusquedaDNI(valor);
     setPaginaActual(1);
@@ -155,7 +147,6 @@ const Cobros = () => {
                 </div>
               ) : (
                 <>
-                  {/* Filtros */}
                   <div className="card-body pb-2">
                     <div className="row g-3 align-items-end">
                       <div className="col-md-4">
@@ -246,8 +237,6 @@ const Cobros = () => {
                           </table>
                         </div>
                       </div>
-
-                      {/* Paginación */}
                       {totalPaginas > 1 && (
                         <div className="card-footer bg-white border-top">
                           <nav>
@@ -261,7 +250,6 @@ const Cobros = () => {
                                   Anterior
                                 </button>
                               </li>
-                              
                               {[...Array(totalPaginas)].map((_, index) => {
                                 const pagina = index + 1;
                                 if (
@@ -287,7 +275,6 @@ const Cobros = () => {
                                 }
                                 return null;
                               })}
-                              
                               <li className={`page-item ${paginaActual === totalPaginas ? 'disabled' : ''}`}>
                                 <button 
                                   className="page-link" 
@@ -309,8 +296,6 @@ const Cobros = () => {
           )}
         </div>
       </div>
-
-      {/* MODAL VER */}
       {openModal && cobroSeleccionado && (
         <div className="custom-modal fade-in">
           <div className="modal-dialog modal-lg modal-dialog-scrollable">
@@ -338,8 +323,6 @@ const Cobros = () => {
           </div>
         </div>
       )}
-
-      {/* MODAL FORMULARIO */}
       {openFormModal && (
         <div className="custom-modal fade-in">
           <div className="modal-dialog modal-xl modal-dialog-scrollable">
@@ -366,7 +349,6 @@ const Cobros = () => {
           </div>
         </div>
       )}
-
       {(openFormModal || openModal) && <div className="modal-backdrop-custom fade-in"></div>}
     </>
   );

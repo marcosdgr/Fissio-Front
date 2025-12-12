@@ -1,5 +1,3 @@
-import React from 'react'
-
 const EstadoBadge = ({ estado }) => {
   const vig = (estado ?? 'Vigente') === 'Vigente'
   return <span className={`badge ${vig ? 'bg-success' : 'bg-warning text-dark'}`}>{estado ?? 'Vigente'}</span>
@@ -59,8 +57,6 @@ const PlanesTable = ({ visible, obrasSociales, openView, openEdit, onToggle }) =
           </div>
         </div>
       </div>
-
-      {/* Mobile cards */}
       <div className="planes-cards">
         {visible.map(plan => (
           <div className="plan-card" key={(plan.idPlanObra ?? plan.id) || Math.random()}>

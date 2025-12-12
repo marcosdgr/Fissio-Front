@@ -38,13 +38,10 @@ const Turnos = () => {
     turno: null
   });
 
-  // Cargar turnos del día
   const cargarTurnos = async (fecha = null) => {
     setIsLoading(true);
     try {
       const response = await getTurnosDelDia(fecha);
-      
-      // Asegurar que todos los arrays existan
       const turnosData = {
         solicitados: response.turnos?.solicitados || [],
         enCurso: response.turnos?.enCurso || [],
@@ -71,18 +68,15 @@ const Turnos = () => {
     }
   };
 
-  // Cargar turnos al montar el componente
   useEffect(() => {
     cargarTurnos();
   }, []);
 
-  // Cambiar fecha de consulta
   const handleFechaChange = (e) => {
     const nuevaFecha = e.target.value;
     cargarTurnos(nuevaFecha);
   };
 
-  // Abrir modal para asignar recursos
   const abrirModalAsignar = (turno) => {
     setModalData({
       isOpen: true,
@@ -90,7 +84,6 @@ const Turnos = () => {
     });
   };
 
-  // Cerrar modal
   const cerrarModal = () => {
     setModalData({
       isOpen: false,
@@ -98,12 +91,10 @@ const Turnos = () => {
     });
   };
 
-  // Callback cuando se asignan recursos exitosamente
   const onAsignacionExitosa = () => {
-    cargarTurnos(fechaConsulta); // ✅ Actualización automática del listado
+    cargarTurnos(fechaConsulta);
   };
 
-  // Abrir modal para finalizar turno
   const abrirModalFinalizar = (turno) => {
     setModalFinalizarData({
       isOpen: true,
@@ -111,7 +102,6 @@ const Turnos = () => {
     });
   };
 
-  // Cerrar modal de finalizar
   const cerrarModalFinalizar = () => {
     setModalFinalizarData({
       isOpen: false,
@@ -119,26 +109,22 @@ const Turnos = () => {
     });
   };
 
-  // Callback cuando se finaliza un turno exitosamente
   const onFinalizacionExitosa = () => {
-    cargarTurnos(fechaConsulta); // ✅ Actualización automática del listado
+    cargarTurnos(fechaConsulta); 
   };
 
-  // Abrir modal para solicitar nuevo turno
   const abrirModalSolicitar = () => {
     setModalSolicitarData({
       isOpen: true
     });
   };
 
-  // Cerrar modal de solicitar turno
   const cerrarModalSolicitar = () => {
     setModalSolicitarData({
       isOpen: false
     });
   };
 
-  // Abrir modal para ver detalles del turno
   const abrirModalDetalles = (turno) => {
     setModalDetallesData({
       isOpen: true,
@@ -146,7 +132,6 @@ const Turnos = () => {
     });
   };
 
-  // Cerrar modal de detalles
   const cerrarModalDetalles = () => {
     setModalDetallesData({
       isOpen: false,
@@ -154,9 +139,8 @@ const Turnos = () => {
     });
   };
 
-  // Callback cuando se solicita un turno exitosamente
   const onSolicitudExitosa = () => {
-    cargarTurnos(fechaConsulta); // ✅ Actualización automática del listado
+    cargarTurnos(fechaConsulta); 
   };
 
   // Función para cancelar un turno
@@ -173,11 +157,9 @@ const Turnos = () => {
         const idTurno = turno.IdTurno || turno.idTurno;
         const resultado = await cancelarTurno(idTurno);
         
-        // Usar información específica de la respuesta del backend
         const mensaje = resultado.message || 'Turno cancelado correctamente';
         showSuccess('Éxito', `${mensaje} - Estado: ${resultado.estadoAnterior} → ${resultado.estadoActual}`);
-        
-        // ✅ Actualización automática del listado después de cancelar
+
         cargarTurnos(fechaConsulta);
       }
     } catch (error) {
@@ -383,7 +365,6 @@ const Turnos = () => {
         </div>
       )}
 
-      {/* Modal para asignar recursos */}
       <AsignarRecursosModal
         turno={modalData.turno}
         isOpen={modalData.isOpen}
@@ -391,7 +372,6 @@ const Turnos = () => {
         onSuccess={onAsignacionExitosa}
       />
 
-      {/* Modal para finalizar turno */}
       <FinalizarTurnoModal
         turnoData={modalFinalizarData.turno}
         isOpen={modalFinalizarData.isOpen}
@@ -399,14 +379,12 @@ const Turnos = () => {
         onFinalizarSuccess={onFinalizacionExitosa}
       />
 
-      {/* Modal para solicitar nuevo turno */}
       <SolicitarTurnoModal
         isOpen={modalSolicitarData.isOpen}
         onClose={cerrarModalSolicitar}
         onSolicitudExitosa={onSolicitudExitosa}
       />
 
-      {/* Modal para ver detalles del turno */}
       <DetallesTurnoModal
         isOpen={modalDetallesData.isOpen}
         onClose={cerrarModalDetalles}
@@ -416,7 +394,7 @@ const Turnos = () => {
   );
 };
 
-// Componente para mostrar cada turno
+
 const TurnoCard = ({ turno, onAsignarRecursos, onFinalizarTurno, onCancelarTurno, onVerDetalles, esSolicitado = false, esEnCurso = false }) => {
   return (
     <div className="border-bottom p-3">
@@ -515,7 +493,7 @@ const TurnoCard = ({ turno, onAsignarRecursos, onFinalizarTurno, onCancelarTurno
         </div>
       )}
 
-      {/* Botón Ver Detalles - disponible para todos los turnos */}
+      {/* Botón Ver Detalles */}
       <div className="mt-2">
         <button
           className="btn btn-sm btn-outline-primary w-100"

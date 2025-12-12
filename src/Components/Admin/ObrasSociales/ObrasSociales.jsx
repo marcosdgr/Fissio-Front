@@ -24,17 +24,13 @@ const ObrasSociales = () => {
   const [errors, setErrors] = useState({})
   const [loadingOp, setLoadingOp] = useState(false)
   
-  // Estados para reemplazar useMemo
   const [counts, setCounts] = useState({ total: 0, act: 0, inac: 0 })
   const [visible, setVisible] = useState([])
 
-  // Cargar obras sociales al montar el componente
   useEffect(() => {
     obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Calcular contadores cuando cambia obrasSociales
   useEffect(() => {
     let total = 0, act = 0, inac = 0
     const list = obrasSociales || []
@@ -46,7 +42,6 @@ const ObrasSociales = () => {
     setCounts({ total, act, inac })
   }, [obrasSociales])
 
-  // Calcular obras visibles cuando cambia obrasSociales, query o filter
   useEffect(() => {
     const q = (query || '').trim().toLowerCase()
     const list = obrasSociales || []
@@ -87,7 +82,6 @@ const ObrasSociales = () => {
   }
 
   const validate = (values, isEdit = false) => {
-    // Reglas solicitadas por el backend y mensajes en español
     const errs = {}
     const NombreObraSocial = (values.NombreObraSocial || '').toString().trim()
     const TelefonoObra = (values.TelefonoObra || '').toString().trim()
@@ -99,23 +93,20 @@ const ObrasSociales = () => {
       if (!NombreObraSocial) errs.NombreObraSocial = 'El nombre es obligatorio'
       if (!TelefonoObra) errs.TelefonoObra = 'El teléfono es obligatorio'
       if (!EmailObra) errs.EmailObra = 'El email es obligatorio'
-      // continue to collect more errors
     }
 
     // 2. Formato email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (EmailObra && !emailRegex.test(EmailObra)) errs.EmailObra = 'El formato del email no es válido'
 
-    // 3. Formato URL si se proporciona (regex provisto)
+    // 3. Formato URL si se proporciona
     if (PaginaWebObra) {
-      // Regex adaptado para evitar escapes problemáticos en las clases del linter
       const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/?[\w .-]*)?$/
       if (!urlRegex.test(PaginaWebObra)) errs.PaginaWebObra = 'El formato de la página web no es válido'
     }
 
-    // 4. Unicidad local (no permitir repetir ningún dato: nombre, teléfono, email, página web)
+    // 4. Unicidad local
     const list = obrasSociales || []
-    // helper to compare ignoring case/trim
     const eq = (a, b) => (a || '').toString().trim().toLowerCase() === (b || '').toString().trim().toLowerCase()
 
     if (NombreObraSocial) {
@@ -189,7 +180,6 @@ const ObrasSociales = () => {
       if (res?.success === false) {
         const errMsg = (res.error || '').toString()
         const lower = errMsg.toLowerCase()
-        // Map backend messages to field errors cuando sea posible
         if (lower.includes('tel') || lower.includes('teléfono')) {
           setErrors({ TelefonoObra: errMsg })
         } else if (lower.includes('email')) {
@@ -208,7 +198,6 @@ const ObrasSociales = () => {
         obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales()
       }
     } catch (err) {
-      // err puede venir del hook con err.response?.data
       const serverMsg = err?.response?.data?.error || err?.response?.data?.message || err?.message || err.toString()
       const lower = (serverMsg || '').toString().toLowerCase()
       if (lower.includes('tel') || lower.includes('teléfono')) setErrors({ TelefonoObra: serverMsg })
@@ -308,7 +297,6 @@ const ObrasSociales = () => {
 
       <ObrasTable visible={visible} onView={openView} onEdit={openEdit} onToggle={onToggle} />
 
-      {/* Planes asociados (se muestra debajo de la tabla de obras) */}
       <div className="mt-4">
         <PlanesObras obrasSocialesProp={obrasSociales} refrescarObras={obtenerTodasLasObrasSociales} />
       </div>

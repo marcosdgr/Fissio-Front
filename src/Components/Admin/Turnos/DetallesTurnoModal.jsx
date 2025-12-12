@@ -14,7 +14,6 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
     const cargarDetalles = async () => {
       setIsLoading(true);
       try {
-        // Manejar diferentes formatos de ID del turno
         const idTurno = turno.IdTurno || turno.idTurno;
         console.log('Cargando detalles para turno ID:', idTurno);
         
@@ -60,7 +59,6 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
   };
 
   const descargarOrdenMedica = (url) => {
-    // Abrir la orden médica en una nueva pestaña
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
@@ -95,7 +93,6 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
               </div>
             ) : detalles ? (
               <div className="row">
-                {/* Información del Paciente */}
                 <div className="col-md-6">
                   <div className="card h-100">
                     <div className="card-header bg-light">
@@ -119,8 +116,6 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                     </div>
                   </div>
                 </div>
-
-                {/* Estado del Turno */}
                 <div className="col-md-6">
                   <div className="card h-100">
                     <div className="card-header bg-light">
@@ -140,8 +135,6 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                     </div>
                   </div>
                 </div>
-
-                {/* Orden Médica */}
                 {detalles.ordenMedica && (
                   <div className="col-12 mt-3">
                     <div className="card">
@@ -181,8 +174,6 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                     </div>
                   </div>
                 )}
-
-                {/* Mensaje cuando no hay orden médica */}
                 {!detalles.ordenMedica && (
                   <div className="col-12 mt-3">
                     <div className="card">

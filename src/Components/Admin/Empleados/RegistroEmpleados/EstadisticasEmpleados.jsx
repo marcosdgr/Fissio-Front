@@ -1,5 +1,3 @@
-import React from 'react'
-
 const EstadisticasEmpleados = ({ total, activos, inactivos, filtro, setFiltro }) => {
   return (
     <div className="row mb-4">

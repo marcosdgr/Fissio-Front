@@ -9,11 +9,9 @@ const PacientesModal = ({
   onSave, 
   onClose 
 }) => {
-  // Validar si el DNI ya existe
   const dniYaExiste = (dni) => {
     const dniLower = dni.toLowerCase().trim()
     return pacientes.some(paciente => {
-      // Si estamos editando, excluir el paciente actual
       if (modalMode === 'edit' && paciente.idPaciente === selectedPaciente?.idPaciente) {
         return false
       }
@@ -37,7 +35,6 @@ const PacientesModal = ({
           <form onSubmit={onSave}>
             <div className="modal-body">
               <div className="row g-3">
-                {/* Sección - Información personal */}
                 <div className="col-12">
                   <h6 className="text-primary border-bottom pb-2 mb-0">
                     <span className="material-symbols-outlined me-1">person</span>
@@ -148,8 +145,6 @@ const PacientesModal = ({
                     placeholder="1234567890"
                   />
                 </div>
-                
-                {/* Sección - Ubicación */}
                 <div className="col-12 mt-3">
                   <h6 className="text-primary border-bottom pb-2 mb-0">
                     <span className="material-symbols-outlined me-1">location_on</span>
@@ -193,8 +188,7 @@ const PacientesModal = ({
                     placeholder="Calle 123, Ciudad"
                   />
                 </div>
-                
-                {/* Sección - Credenciales (solo al crear) */}
+
                 {modalMode === 'create' && (
                   <>
                     <div className="col-12 mt-3">

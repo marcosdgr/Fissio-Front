@@ -1,4 +1,3 @@
-// Modal para ver el comentario completo
 const FeedbackModal = ({ show, comentario, onClose, onPublicar }) => {
   if (!show || !comentario) return null;
 
@@ -34,10 +33,8 @@ const FeedbackModal = ({ show, comentario, onClose, onPublicar }) => {
                 Detalle del Comentario
               </h5>
               <button type="button" className="btn-close" onClick={onClose}></button>
-            </div>
-            
+            </div>       
             <div className="modal-body">
-              {/* Información del paciente */}
               <div className="mb-4">
                 <h6 className="text-muted mb-2">Paciente</h6>
                 <p className="fs-5 fw-bold mb-0">{comentario.NombrePaciente || 'Sin nombre'}</p>
@@ -45,8 +42,6 @@ const FeedbackModal = ({ show, comentario, onClose, onPublicar }) => {
                   {formatearFecha(comentario.FechaComentario)}
                 </small>
               </div>
-
-              {/* Calificación */}
               <div className="mb-4">
                 <h6 className="text-muted mb-2">Calificación</h6>
                 <div className="d-flex align-items-center">
@@ -56,8 +51,6 @@ const FeedbackModal = ({ show, comentario, onClose, onPublicar }) => {
                   <span className="text-muted">({comentario.CalificacionComentario}/5)</span>
                 </div>
               </div>
-
-              {/* Comentario completo */}
               <div className="mb-4">
                 <h6 className="text-muted mb-2">Comentario</h6>
                 <div className="comentario-completo p-3 bg-light rounded">
@@ -66,8 +59,6 @@ const FeedbackModal = ({ show, comentario, onClose, onPublicar }) => {
                   </p>
                 </div>
               </div>
-
-              {/* Estado de publicación */}
               <div className="mb-3">
                 <h6 className="text-muted mb-2">Estado</h6>
                 <div className="d-flex gap-2">
@@ -80,7 +71,6 @@ const FeedbackModal = ({ show, comentario, onClose, onPublicar }) => {
                 </div>
               </div>
             </div>
-            
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" onClick={onClose}>
                 Cerrar

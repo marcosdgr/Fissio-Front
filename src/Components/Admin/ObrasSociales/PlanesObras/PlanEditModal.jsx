@@ -1,5 +1,3 @@
-import React from 'react'
-
 const PlanEditModal = ({ isOpen, onClose, form, handleChange, errors, onEdit, loadingOp, obrasSociales }) => {
   if (!isOpen) return null
   return (

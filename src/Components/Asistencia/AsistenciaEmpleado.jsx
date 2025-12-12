@@ -6,7 +6,6 @@ import "../../Css/Asistencias/AsistenciaEmpleado.css";
 
 const AsistenciaEmpleado = () => {
   const { user, login } = useAuthStore();
-  // El usuario puede estar en user.usuario o directamente en user
   const userData = user?.usuario || user;
   const [idEmpleadoLocal, setIdEmpleadoLocal] = useState(
     userData?.idEmpleado || null
@@ -27,11 +26,10 @@ const AsistenciaEmpleado = () => {
     filtrarPorMes,
   } = useCustomAsistencias(idEmpleadoLocal);
 
-  const [vistaActual, setVistaActual] = useState("horarios"); // 'horarios', 'historial'
+  const [vistaActual, setVistaActual] = useState("horarios");
   const [observaciones, setObservaciones] = useState("");
   const [mostrarObservaciones, setMostrarObservaciones] = useState(false);
 
-  // Si no tiene idEmpleado, buscarlo por idUsuario
   useEffect(() => {
     const buscarIdEmpleado = async () => {
       const userData = user?.usuario || user;
@@ -52,7 +50,6 @@ const AsistenciaEmpleado = () => {
             );
             if (empleado) {
               setIdEmpleadoLocal(empleado.idEmpleado);
-              // Actualizar el store con el idEmpleado
               login({
                 ...user,
                 idEmpleado: empleado.idEmpleado,
@@ -156,8 +153,6 @@ const AsistenciaEmpleado = () => {
       </div>
     );
   }
-
-  // Días de la semana
   const diasSemana = [
     "Lunes",
     "Martes",
@@ -168,11 +163,9 @@ const AsistenciaEmpleado = () => {
     "Domingo",
   ];
 
-  // Obtener el día actual
   const diaActual =
     diasSemana[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
 
-  // Manejar registro de entrada
   const handleRegistrarEntrada = async () => {
     const exito = await registrarEntrada(observaciones);
     if (exito) {
@@ -181,7 +174,6 @@ const AsistenciaEmpleado = () => {
     }
   };
 
-  // Manejar registro de salida
   const handleRegistrarSalida = async () => {
     const exito = await registrarSalida(observaciones);
     if (exito) {
@@ -190,7 +182,6 @@ const AsistenciaEmpleado = () => {
     }
   };
 
-  // Formatear fecha
   const formatearFecha = (fecha) => {
     if (!fecha) return "-";
     const date = new Date(fecha);
@@ -201,13 +192,11 @@ const AsistenciaEmpleado = () => {
     });
   };
 
-  // Formatear hora
   const formatearHora = (hora) => {
     if (!hora) return "-";
     return hora.substring(0, 5);
   };
 
-  // Calcular horas trabajadas
   const calcularHorasTrabajadas = (entrada, salida) => {
     if (!entrada || !salida) return "-";
     const timeEntrada = new Date(`2000-01-01T${entrada}`);
@@ -215,18 +204,12 @@ const AsistenciaEmpleado = () => {
     const diff = (timeSalida - timeEntrada) / (1000 * 60 * 60);
     return `${Math.floor(diff)}h ${Math.round((diff % 1) * 60)}min`;
   };
-
-  // Obtener estadísticas (se usa si quieres mantenerlas en otro lado)
-  // const estadisticas = calcularEstadisticas();
-
-  // Buscar por rango de fechas (mantener la funcionalidad de búsqueda)
   const buscarPorRango = () => {
     if (filtros.fechaInicio && filtros.fechaFin) {
       obtenerAsistenciasPorRango(filtros.fechaInicio, filtros.fechaFin);
     }
   };
 
-  // Meses del año (para filtro por mes)
   const meses = [
     { valor: 1, nombre: "Enero" },
     { valor: 2, nombre: "Febrero" },
@@ -242,14 +225,12 @@ const AsistenciaEmpleado = () => {
     { valor: 12, nombre: "Diciembre" },
   ];
 
-  // Buscar por mes y año
   const buscarPorMes = () => {
     if (filtros.mes && filtros.anio) {
       filtrarPorMes(parseInt(filtros.mes), parseInt(filtros.anio));
     }
   };
 
-  // Limpiar filtros y recargar todas las asistencias
   const limpiarFiltros = () => {
     setFiltros({
       fechaInicio: "",
@@ -260,13 +241,11 @@ const AsistenciaEmpleado = () => {
     obtenerAsistenciasEmpleado();
   };
 
-  // Obtener hora actual
   const horaActual = new Date().toLocaleTimeString("es-AR", {
     hour: "2-digit",
     minute: "2-digit",
   });
 
-  // Debug: ver qué horarios se están recibiendo
   console.log("🔍 Horarios semanales:", horariosSemanales);
   if (horariosSemanales.length > 0) {
     console.log(
@@ -352,7 +331,6 @@ const AsistenciaEmpleado = () => {
               )}
             </div>
           ) : asistenciaActual.HoraSalida ? (
-            // Jornada completada
             <div className="jornada-completada">
               <div className="completada-info">
                 <i className="fas fa-check-circle"></i>
@@ -447,7 +425,6 @@ const AsistenciaEmpleado = () => {
         </div>
       </div>
 
-      {/* Navegación entre vistas */}
       <div className="tabs-container">
         <button
           className={`tab-btn ${vistaActual === "horarios" ? "active" : ""}`}
@@ -548,7 +525,6 @@ const AsistenciaEmpleado = () => {
         </div>
       )}
 
-      {/* Vista de Historial de Asistencias */}
       {vistaActual === "historial" && (
         <div className="historial-card">
           <h2>
@@ -643,9 +619,6 @@ const AsistenciaEmpleado = () => {
               </div>
             </div>
           </div>
-
-          {/* Estadísticas removidas por petición del usuario */}
-
           {/* Tabla de asistencias */}
           <div className="tabla-container">
             {loading ? (

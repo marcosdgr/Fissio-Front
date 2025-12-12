@@ -1,5 +1,3 @@
-import React from 'react'
-
 const StatsCard = ({ title, count, active, onClick }) => (
   <div className={`stats-card clickable ${active ? 'active' : ''}`} onClick={onClick} role="button">
     <div className="card-body">

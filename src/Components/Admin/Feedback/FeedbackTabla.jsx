@@ -1,10 +1,8 @@
 const FeedbackTabla = ({ comentariosFiltrados, loading, onVerComentario }) => {
-  // Función para mostrar estrellas
   const renderEstrellas = (calificacion) => {
     return '★'.repeat(calificacion) + '☆'.repeat(5 - calificacion);
   };
 
-  // Función para formatear fecha
   const formatearFecha = (fecha) => {
     if (!fecha) return '-';
     const date = new Date(fecha);
@@ -17,7 +15,6 @@ const FeedbackTabla = ({ comentariosFiltrados, loading, onVerComentario }) => {
     });
   };
 
-  // Función para obtener color según calificación
   const getCalificacionColor = (calificacion) => {
     if (calificacion >= 4) return 'text-success';
     if (calificacion === 3) return 'text-warning';

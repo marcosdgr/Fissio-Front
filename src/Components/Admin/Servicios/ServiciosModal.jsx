@@ -8,11 +8,9 @@ const ServiciosModal = ({
   onSave, 
   onClose 
 }) => {
-  // Validar si el nombre ya existe (sin considerar mayúsculas/minúsculas)
   const nombreYaExiste = (nombre) => {
     const nombreLower = nombre.toLowerCase().trim()
     return servicios.some(servicio => {
-      // Si estamos editando, excluir el servicio actual
       if (modalMode === 'edit' && servicio.idServicio === selectedServicio?.idServicio) {
         return false
       }

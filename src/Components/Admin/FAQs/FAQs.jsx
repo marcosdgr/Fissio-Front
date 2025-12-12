@@ -27,7 +27,6 @@ const FAQs = () => {
   const [listaFaqs, setListaFaqs] = useState([]);
   const [listaCategorias, setListaCategorias] = useState([]);
 
-  // Sincronizar datos del hook
   useEffect(() => {
     if (faqs?.faqs) {
       const ordenadas = [...faqs.faqs].sort(
@@ -69,7 +68,6 @@ const FAQs = () => {
     setFaqSeleccionada(null);
   };
 
-  // TOGGLE FAQ
   const handleCambiarEstadoFaq = async (idFAQ) => {
     const faq = listaFaqs.find(f => f.idFAQ === idFAQ);
     const nuevoEstado = faq.IsActive ? 0 : 1;
@@ -101,7 +99,6 @@ const FAQs = () => {
     }
   };
 
-  // TOGGLE CATEGORÍA
   const handleCambiarEstadoCat = async (cat) => {
     const nuevoEstado = cat.IsActive ? 0 : 1;
     const accion = cat.IsActive ? "desactivar" : "activar";
@@ -185,7 +182,6 @@ const FAQs = () => {
 
           {!loading && !error && (
             <>
-              {/* TABLA FAQs */}
               <div className="card shadow-sm border-0 mb-4">
                 <div className="card-header bg-white d-flex justify-content-between align-items-center">
                   <h5 className="card-title mb-0">Preguntas Frecuentes</h5>
@@ -259,7 +255,6 @@ const FAQs = () => {
                 )}
               </div>
 
-              {/* CATEGORÍAS */}
               <div className="card shadow-sm border-0">
                 <div className="card-header bg-white">
                   <h5 className="card-title mb-0">Categorías de FAQs</h5>
@@ -345,8 +340,6 @@ const FAQs = () => {
           )}
         </div>
       </div>
-
-      {/* MODAL VER FAQ - SOLO UN BOTÓN X LINDO */}
       {openModal && faqSeleccionada && (
         <div className="custom-modal fade-in">
           <div className="modal-dialog modal-lg modal-dialog-scrollable">
@@ -377,8 +370,6 @@ const FAQs = () => {
           </div>
         </div>
       )}
-
-      {/* MODAL FORMULARIO - SOLO UN BOTÓN X PREMIUM */}
       {openFormModal && (
         <div className="custom-modal fade-in">
           <div className="modal-dialog modal-xl modal-dialog-scrollable">
@@ -413,7 +404,6 @@ const FAQs = () => {
         </div>
       )}
 
-      {/* BACKDROP */}
       {(openFormModal || openModal) && <div className="modal-backdrop-custom fade-in"></div>}
     </>
   );

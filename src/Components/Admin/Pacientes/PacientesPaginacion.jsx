@@ -10,11 +10,9 @@ const PacientesPaginacion = ({
   const paginasVisibles = []
   const maxPaginasVisibles = 5
 
-  // Calcular rango de páginas a mostrar
   let inicio = Math.max(1, paginaActual - Math.floor(maxPaginasVisibles / 2))
   let fin = Math.min(totalPaginas, inicio + maxPaginasVisibles - 1)
 
-  // Ajustar inicio si estamos cerca del final
   if (fin - inicio < maxPaginasVisibles - 1) {
     inicio = Math.max(1, fin - maxPaginasVisibles + 1)
   }
@@ -28,17 +26,14 @@ const PacientesPaginacion = ({
 
   return (
     <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3">
-      {/* Información de registros */}
       <div className="mb-2 mb-md-0">
         <small className="text-muted">
           Mostrando {indiceInicio} a {indiceFin} de {totalRegistros} pacientes
         </small>
       </div>
 
-      {/* Controles de paginación */}
       <nav aria-label="Paginación de pacientes">
         <ul className="pagination pagination-sm mb-0">
-          {/* Botón Anterior */}
           <li className={`page-item ${paginaActual === 1 ? 'disabled' : ''}`}>
             <button 
               className="page-link"
@@ -50,7 +45,6 @@ const PacientesPaginacion = ({
             </button>
           </li>
 
-          {/* Primera página si no está visible */}
           {inicio > 1 && (
             <>
               <li className="page-item">
@@ -66,7 +60,6 @@ const PacientesPaginacion = ({
             </>
           )}
 
-          {/* Páginas visibles */}
           {paginasVisibles.map(pagina => (
             <li key={pagina} className={`page-item ${pagina === paginaActual ? 'active' : ''}`}>
               <button 
@@ -80,7 +73,6 @@ const PacientesPaginacion = ({
             </li>
           ))}
 
-          {/* Última página si no está visible */}
           {fin < totalPaginas && (
             <>
               {fin < totalPaginas - 1 && (
@@ -96,7 +88,6 @@ const PacientesPaginacion = ({
             </>
           )}
 
-          {/* Botón Siguiente */}
           <li className={`page-item ${paginaActual === totalPaginas ? 'disabled' : ''}`}>
             <button 
               className="page-link"

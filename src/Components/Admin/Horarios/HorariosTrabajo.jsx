@@ -151,7 +151,6 @@ const HorariosTrabajo = () => {
                           {listaHorarios.map(h => (
                             <tr key={h.idHorario} className={!h.IsActive ? "horario-inactivo" : ""}>
                               <td className="fw-medium">
-                                {/* mostrar día de la semana y fecha */}
                                 {h.Fecha ? (
                                   <>
                                     <div>{new Date(h.Fecha).toLocaleDateString(undefined, { weekday: 'long' })}</div>
@@ -199,8 +198,6 @@ const HorariosTrabajo = () => {
                   </div>
                 </div>
               </div>
-
-              {/* ASIGNACIONES */}
               <div className="card shadow-sm">
                 <div className="card-header bg-white">
                   <h5 className="mb-0">Asignar Horario a Empleado</h5>
@@ -304,8 +301,6 @@ const HorariosTrabajo = () => {
           )}
         </div>
       </div>
-
-      {/* MODAL FORM - CON BOTÓN X PREMIUM */}
       {openModal && (
         <div className="custom-modal fade-in">
           <div className="modal-dialog modal-lg modal-dialog-scrollable">
@@ -338,7 +333,6 @@ const HorariosTrabajo = () => {
           </div>
         </div>
       )}
-
       {openModal && <div className="modal-backdrop-custom fade-in"></div>}
     </>
   );

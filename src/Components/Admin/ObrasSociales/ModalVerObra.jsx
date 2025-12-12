@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ModalVerObra = ({ open, onClose, obra }) => {
   if (!open || !obra) return null
   return (

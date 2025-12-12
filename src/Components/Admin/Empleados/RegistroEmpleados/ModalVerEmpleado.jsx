@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ModalVerEmpleado = ({ showViewModal, viewEmpleado, onClose }) => {
   if (!showViewModal) return null
   return (

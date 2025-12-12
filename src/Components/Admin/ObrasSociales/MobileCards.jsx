@@ -1,5 +1,3 @@
-import React from 'react'
-
 const MobileCards = ({ visible = [], onView = () => {}, onEdit = () => {}, onToggle = () => {} }) => (
   <div className="obras-cards">
     {visible.map(obra => (

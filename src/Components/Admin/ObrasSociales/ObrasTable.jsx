@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ObrasTable = ({ visible = [], onView = () => {}, onEdit = () => {}, onToggle = () => {} }) => {
   return (
     <div className="servicios-table">
