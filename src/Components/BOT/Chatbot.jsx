@@ -9,7 +9,6 @@ const Chatbot = () => {
   
   const { mensajes, loading, enviarMensaje, reiniciarChat } = useCustomChat();
 
-  // Auto-scroll al último mensaje
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
@@ -47,7 +46,7 @@ const Chatbot = () => {
 
   return (
     <>
-      {/* Botón flotante para abrir/cerrar el chat */}
+
       <button
         className="chat-toggle"
         onClick={toggleChat}
@@ -60,10 +59,10 @@ const Chatbot = () => {
         )}
       </button>
 
-      {/* Ventana del chat */}
+
       {isOpen && (
         <div className="chat-box">
-          {/* Header del chat */}
+
           <div className="chat-header">
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center">
@@ -85,7 +84,6 @@ const Chatbot = () => {
             </div>
           </div>
 
-          {/* Cuerpo del chat - Mensajes */}
           <div className="chat-body" ref={chatBodyRef}>
             {mensajes.length === 0 ? (
               <div className="chat-empty">
@@ -108,8 +106,7 @@ const Chatbot = () => {
                       </div>
                     )}
                   </div>
-                  
-                  {/* Mostrar opciones si las hay */}
+
                   {mensaje.opciones && mensaje.opciones.length > 0 && (
                     <div className="message-options">
                       {mensaje.opciones.map((opcion, idx) => (
@@ -127,8 +124,7 @@ const Chatbot = () => {
                 </div>
               ))
             )}
-            
-            {/* Indicador de escritura */}
+
             {loading && (
               <div className="message bot typing-indicator">
                 <div className="typing-dots">
@@ -139,8 +135,7 @@ const Chatbot = () => {
               </div>
             )}
           </div>
-
-          {/* Input para escribir mensajes */}
+          
           <form className="chat-input" onSubmit={handleSendMessage}>
             <input
               type="text"
