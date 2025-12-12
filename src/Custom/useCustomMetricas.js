@@ -1,4 +1,4 @@
-// src/Custom/useCustomMetricasEnVivo.js
+
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '../Api/api';
@@ -14,7 +14,7 @@ const useCustomMetricas = () => {
 
     if (fecha) {
       if (tipo === 'dia') {
-        fechaParam = fecha; // YYYY-MM-DD
+        fechaParam = fecha; 
       } else if (tipo === 'semana') {
         const [year, week] = fecha.split('-W');
         const d = new Date(parseInt(year), 0, (parseInt(week) - 1) * 7 + 1);
@@ -23,8 +23,6 @@ const useCustomMetricas = () => {
         monday.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
         fechaParam = monday.toISOString().split('T')[0];
       } else if (tipo === 'mes') {
-        // Para mes: formato YYYY-MM -> convertir a YYYY-MM-15 (mitad del mes)
-        // Esto evita problemas de zona horaria donde el backend podría restar un día
         fechaParam = `${fecha}-15`;
       }
     }

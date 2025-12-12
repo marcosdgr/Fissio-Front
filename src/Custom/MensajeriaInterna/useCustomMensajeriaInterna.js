@@ -9,7 +9,6 @@ const api = axios.create({
 	},
 });
 
-// Agregar token dinámicamente desde el store (si existe)
 const getAuthHeaders = () => {
 	try {
 		const user = useAuthStore.getState().user;
@@ -22,7 +21,6 @@ const getAuthHeaders = () => {
 			Authorization: `Bearer ${token || ""}`,
 		};
 	} catch (err) {
-		// Si ocurre un error al leer el store, devolvemos sin headers y lo registramos
 		console.error("❌ Error obteniendo token del store:", err);
 		return {};
 	}
@@ -36,7 +34,6 @@ export const getActiveEmployees = async () => {
 	return response.data;
 };
 
-// idUsuario1 e idUsuario2 (usuarios) para la conversación
 export const getConversation = async (idUsuario1, idUsuario2) => {
 	console.log(`📞 API: Obteniendo conversación entre ${idUsuario1} y ${idUsuario2}...`);
 	const headers = getAuthHeaders();
@@ -45,7 +42,6 @@ export const getConversation = async (idUsuario1, idUsuario2) => {
 	return response.data;
 };
 
-// Enviar mensaje: mensaje (string) y destinatarios (array de idEmpleado)
 export const sendMessage = async (mensaje, destinatarios = []) => {
 	console.log('📞 API: Enviando mensaje...', { mensaje, destinatarios });
 	const headers = getAuthHeaders();
@@ -57,7 +53,6 @@ export const sendMessage = async (mensaje, destinatarios = []) => {
 	return response.data;
 };
 
-// Marcar como leído: idNotificacion, idEmpleadoDestinatario
 export const markAsRead = async (idNotificacion, idEmpleadoDestinatario) => {
 	console.log('📞 API: Marcando como leído...', { idNotificacion, idEmpleadoDestinatario });
 	const headers = getAuthHeaders();

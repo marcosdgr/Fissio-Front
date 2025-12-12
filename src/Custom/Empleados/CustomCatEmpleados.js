@@ -7,7 +7,6 @@ const useCustomCatEmpleados = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  //obtener las categorias
   const obtenerCategorias = async () => {
     try {
       setLoading(true);
@@ -25,11 +24,9 @@ const useCustomCatEmpleados = () => {
     }
   };
 
-  // crear categoria de empleados
 const crearCategoria = async (nuevaCategoria) => {
     try {
       setLoading(true);
-      // mapear los campos a los que espera la tabla: NombreCat, DescripcionCat
       const payload = {
         NombreCat: nuevaCategoria.NombreCategoria ?? nuevaCategoria.NombreCat ?? nuevaCategoria.nombre,
         DescripcionCat: nuevaCategoria.DescripcionCategoria ?? nuevaCategoria.DescripcionCat ?? nuevaCategoria.descripcion
@@ -44,11 +41,9 @@ const crearCategoria = async (nuevaCategoria) => {
     }
   };
 
-  //editar datos de la categoria de empleados
 const editarCategoria = async (idCategoria, datosActualizados) => {
     try {
       setLoading(true);
-      // mapear campos a los esperados por la API / tabla
       const payload = {
         NombreCat: datosActualizados.NombreCategoria ?? datosActualizados.NombreCat ?? datosActualizados.nombre,
         DescripcionCat: datosActualizados.DescripcionCategoria ?? datosActualizados.DescripcionCat ?? datosActualizados.descripcion
@@ -56,7 +51,6 @@ const editarCategoria = async (idCategoria, datosActualizados) => {
       const response = await axios.put(`${BASE_URL}api/empleados/v1/categorias/actualizarCat/${idCategoria}/`, payload);
       setCategorias((prevCategorias) =>
         prevCategorias.map((categoria) =>
-          // normalizar id: puede venir como idCatEmpleado o id
           (categoria.idCatEmpleado ?? categoria.id) === idCategoria ? response.data : categoria
         )
       );
@@ -68,11 +62,9 @@ const editarCategoria = async (idCategoria, datosActualizados) => {
     }
   };
 
-  //borrado lógico de la categoría de empleados
 const cambiarEstadoCategoria = async (idCategoria, nuevoEstado) => {
     try {
       setLoading(true);
-      // la tabla usa IsActive para marcar activo/inactivo
       await axios.put(`${BASE_URL}api/empleados/v1/categorias/cambiaractcat/${idCategoria}/`, { IsActive: nuevoEstado });
       setCategorias((prevCategorias) =>
         prevCategorias.map((categoria) =>
@@ -86,12 +78,10 @@ const cambiarEstadoCategoria = async (idCategoria, nuevoEstado) => {
       setLoading(false);
     }
   };
-  // Cargar las categorías al montar el hook
   useEffect(() => {
     obtenerCategorias();
   }, []);
 
-  // API pública del hook
   return {
     categorias,
     loading,

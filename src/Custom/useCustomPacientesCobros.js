@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../Api/api.js';
@@ -15,7 +16,7 @@ const useCustomPacientesCobros = () => {
       const data = Array.isArray(res.data) ? res.data : (res.data?.pacientes || []);
       setPacientes(data);
       setPacientesObj({ pacientes: data });
-    // eslint-disable-next-line no-unused-vars
+
     } catch (err) {
       setError("Error al cargar pacientes");
       setPacientes([]);

@@ -19,13 +19,11 @@ const getToken = () => {
   }
 };
 
-// Headers con token
 const getHeaders = () => {
   const token = getToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-// === FUNCIONES ===
 export const getActiveEmployees = async () => {
   console.log('API Kine: Obteniendo empleados activos...');
   const response = await api.get("/api/empleados/v1/activos", { headers: getHeaders() });

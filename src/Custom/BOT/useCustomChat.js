@@ -8,7 +8,6 @@ const useCustomChat = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Inicializar conversación automáticamente
   useEffect(() => {
     if (mensajes.length === 0) {
       iniciarConversacionAutomatica();
@@ -16,9 +15,7 @@ const useCustomChat = () => {
 
   }, []);
 
-  // Función para iniciar conversación automáticamente
   const iniciarConversacionAutomatica = async () => {
-    // Generar o recuperar sessionId
     let currentSessionId = sessionId;
     if (!currentSessionId) {
       currentSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -26,7 +23,6 @@ const useCustomChat = () => {
       localStorage.setItem("chatSessionId", currentSessionId);
     }
 
-    // Llamar al backend con "hola" para obtener el mensaje inicial
     setLoading(true);
     try {
       const response = await axios.post(`${BASE_URL}api/chat-web/v1/chat`, {
@@ -36,13 +32,11 @@ const useCustomChat = () => {
 
       const { respuesta, sessionId: nuevaSesion } = response.data;
 
-      // Actualizar sessionId si el backend devuelve uno nuevo
       if (nuevaSesion && nuevaSesion !== currentSessionId) {
         setSessionId(nuevaSesion);
         localStorage.setItem("chatSessionId", nuevaSesion);
       }
 
-      // Agregar mensaje de bienvenida del bot
       const mensajeBot = { 
         sender: "bot", 
         text: respuesta || "¡Hola! Bienvenido a Fissio 👋\n\n¿Cuál es tu nombre?", 
@@ -52,7 +46,7 @@ const useCustomChat = () => {
       setMensajes([mensajeBot]);
     } catch (err) {
       console.error("Error al iniciar conversación:", err);
-      // Mensaje de fallback si el backend falla
+
       setMensajes([{ 
         sender: "bot", 
         text: "¡Hola! Bienvenido a Fissio 👋\n\n¿Cuál es tu nombre?", 
@@ -63,7 +57,7 @@ const useCustomChat = () => {
     }
   };
 
-  // Iniciar conversación con el bot (opcional - solo si el backend tiene este endpoint)
+
   const iniciarConversacion = async () => {
     setLoading(true);
     try {
@@ -71,18 +65,17 @@ const useCustomChat = () => {
       
       const { mensaje, sessionId: nuevaSesion } = response.data;
 
-      // Guardar sessionId
       if (nuevaSesion) {
         setSessionId(nuevaSesion);
         localStorage.setItem("chatSessionId", nuevaSesion);
       }
 
-      // Agregar mensaje de bienvenida del bot
+
       setMensajes([{ sender: "bot", text: mensaje, timestamp: new Date() }]);
     } catch (err) {
       console.error("Error al iniciar conversación:", err);
       setError(err);
-      // Si falla, usar mensaje de bienvenida local
+
       setMensajes([{ 
         sender: "bot", 
         text: "¡Hola! 👋 Soy el asistente virtual de Fissio. ¿En qué puedo ayudarte hoy?", 
@@ -93,11 +86,10 @@ const useCustomChat = () => {
     }
   };
 
-  // Enviar mensaje al backend
   const enviarMensaje = async (mensajeUsuario) => {
     if (!mensajeUsuario.trim()) return;
 
-    // Agregar mensaje del usuario inmediatamente
+
     const mensajeUser = { sender: "usuario", text: mensajeUsuario, timestamp: new Date() };
     setMensajes((prev) => [...prev, mensajeUser]);
 
@@ -105,7 +97,7 @@ const useCustomChat = () => {
     setError(null);
 
     try {
-      // Generar sessionId si no existe
+
       let currentSessionId = sessionId;
       if (!currentSessionId) {
         currentSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -131,16 +123,15 @@ const useCustomChat = () => {
                            (typeof data === 'string' ? data : "Lo siento, no pude procesar tu mensaje.");
       const nuevaSesion = data.sessionId;
 
-      // Actualizar sessionId si cambió o si es nuevo
+
       if (nuevaSesion) {
         setSessionId(nuevaSesion);
         localStorage.setItem("chatSessionId", nuevaSesion);
       }
 
-      // Parsear opciones si la respuesta las contiene (formato numérico)
+
       let opciones = null;
       if (respuestaBot.includes("1️⃣") || respuestaBot.includes("2️⃣")) {
-        // Detectar cuántas opciones hay
         const opcionesEncontradas = [];
         for (let i = 0; i <= 9; i++) {
           const emoji = `${i}️⃣`;
@@ -153,7 +144,6 @@ const useCustomChat = () => {
         }
       }
 
-      // Agregar respuesta del bot
       const mensajeBot = { 
         sender: "bot", 
         text: respuestaBot, 
@@ -180,7 +170,6 @@ const useCustomChat = () => {
     }
   };
 
-  // Limpiar conversación
   const reiniciarChat = () => {
     setMensajes([]);
     setSessionId(null);

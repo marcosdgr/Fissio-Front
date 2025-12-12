@@ -2,13 +2,11 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '../../Api/api';
 
-// Hook que centraliza la lógica de obtener la lista de obras sociales desde el backend.
 const useCustomObrasSociales = () => {
   const [obrasSociales, setObrasSociales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Obtener todas las obras sociales
   const obtenerTodasLasObrasSociales = async () => {
     try {
       setLoading(true);
@@ -24,7 +22,6 @@ const useCustomObrasSociales = () => {
     }
   };
 
-  // Obtener una obra social por su id
   const obtenerObraSocialPorId = async (idObraSocial) => {
     try {
       const response = await axios.get(`${BASE_URL}api/obras-sociales/v1/${idObraSocial}`);
@@ -35,13 +32,11 @@ const useCustomObrasSociales = () => {
     }
   };
 
-  // Crear una nueva obra social y actualizar el listado
   const crearObraSocial = async (nuevaObraSocial) => {
     try {
       setLoading(true);
       setError(null);
       const response = await axios.post(`${BASE_URL}api/obras-sociales/v1/crearObraSocial`, nuevaObraSocial);
-      // Actualiza la lista después de crear una nueva obra social
       if (response?.data) {
         setObrasSociales((prev) => [...prev, response.data]);
         return { success: true, data: response.data };
@@ -55,7 +50,6 @@ const useCustomObrasSociales = () => {
     }
   };
 
-  // Actualizar una obra social existente
   const actualizarObraSocial = async (idObraSocial, datosActualizados) => {
     try {
       setLoading(true);
@@ -74,7 +68,6 @@ const useCustomObrasSociales = () => {
     }
   };
 
-  // Cambiar estado (activar/desactivar) una obra social
   const borradoLogicoObraSocial = async (idObraSocial) => {
     try {
       setLoading(true);
@@ -93,7 +86,6 @@ const useCustomObrasSociales = () => {
     }
   };
 
-  // Obtener solo activas
   const obtenerObrasSocialesActivas = async () => {
     try {
       setLoading(true);
@@ -109,7 +101,6 @@ const useCustomObrasSociales = () => {
     }
   };
 
-  // Obtener solo inactivas
   const obtenerObrasSocialesInactivas = async () => {
     try {
       setLoading(true);
@@ -125,12 +116,10 @@ const useCustomObrasSociales = () => {
     }
   };
 
-  // Cargar todas las obras sociales al montar el hook
   useEffect(() => {
     obtenerTodasLasObrasSociales();
   }, []);
 
-  // API pública del hook
   return {
     obrasSociales,
     loading,
@@ -139,7 +128,7 @@ const useCustomObrasSociales = () => {
     obtenerObraSocialPorId,
     crearObraSocial,
     actualizarObraSocial,
-    borradoLogicoObraSocial, //CAMBIAR EL ESTADO DE ACTIVO A INACTIVO O VICEVERSA
+    borradoLogicoObraSocial,
     obtenerObrasSocialesActivas,
     obtenerObrasSocialesInactivas,
   };

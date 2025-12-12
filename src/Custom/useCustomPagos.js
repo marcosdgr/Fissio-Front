@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '../Api/api.js';
@@ -53,7 +54,6 @@ const useCustomPagos = () => {
     }
   };
 
-  // ELIMINAR PAGO
   const eliminarPago = async (id) => {
     try {
       await axios.delete(`${BASE_URL}api/pagos/v1/${id}`);

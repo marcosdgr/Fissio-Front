@@ -1,7 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../../Api/api.js";
 
-// Configuración de la instancia de axios
 const api = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -9,7 +8,6 @@ const api = axios.create({
     },
 });
 
-//Obtener paciente por id 
 export const obtenerPacientePorId = async (id) => {
     try {
         const response = await api.get(`/api/pacientes/v1/${id}`);
@@ -18,25 +16,21 @@ export const obtenerPacientePorId = async (id) => {
         console.error(`Error al obtener paciente con ID ${id}:`, error);
         throw error;
     }
-}
-// Validaciones para actualizar 
+} 
 const validarDatosPaciente = (pacienteData) => {
   const camposRequeridos = [
     'NombrePaciente', 'ApellidoPaciente', 'DNI', 'FechaNacPaciente',
     'TelefonoPaciente', 'DireccionPaciente', 'Sexo', 'idLocalidad'
   ];
 
-  // Verificar campos requeridos
   for (const campo of camposRequeridos) {
     if (!pacienteData[campo] || pacienteData[campo].toString().trim() === '') {
       throw new Error(`El campo ${campo} es requerido`);
     }
   }
 
-  // Validaciones específicas de Sexo
   const sexoOriginal = pacienteData.Sexo.toString().trim();
   
-  // Normalizar a formato completo que espera el backend
   let sexoNormalizado = sexoOriginal.toUpperCase();
   if (sexoNormalizado === 'M' || sexoNormalizado === 'MASCULINO' || sexoNormalizado.startsWith('M')) {
     sexoNormalizado = 'Masculino';
@@ -46,18 +40,15 @@ const validarDatosPaciente = (pacienteData) => {
     throw new Error('El sexo debe ser M (Masculino) o F (Femenino)');
   }
 
-  // Validar fecha
   const fecha = new Date(pacienteData.FechaNacPaciente);
   if (isNaN(fecha.getTime())) {
     throw new Error('La fecha de nacimiento no tiene un formato válido');
   }
 
-  // Validar DNI (que sea numérico)
   if (!/^\d+$/.test(pacienteData.DNI.toString().trim())) {
     throw new Error('El DNI debe contener solo números');
   }
 
-  // Limpiar y formatear datos
   return {
     ...pacienteData,
     NombrePaciente: pacienteData.NombrePaciente.trim(),
@@ -65,12 +56,11 @@ const validarDatosPaciente = (pacienteData) => {
     DNI: pacienteData.DNI.toString().trim(),
     TelefonoPaciente: pacienteData.TelefonoPaciente.toString().trim(),
     DireccionPaciente: pacienteData.DireccionPaciente.trim(),
-    Sexo: sexoNormalizado, // Será 'Masculino' o 'Femenino' para el backend
+    Sexo: sexoNormalizado, 
     idLocalidad: parseInt(pacienteData.idLocalidad),
     FechaNacPaciente: pacienteData.FechaNacPaciente
   };
 };
-//Actualizar datos del paciente
 export const actualizarPaciente = async (id, pacienteData) => {
     try {
         validarDatosPaciente(pacienteData);
@@ -81,7 +71,6 @@ export const actualizarPaciente = async (id, pacienteData) => {
         throw error;
     }
 }
-//Obtener turnos por paciente a travez de su id
 export const obtenerTurnosPorPaciente = async (id) => {
     try {
         const response = await api.get(`/api/pacientes/v1/${id}/turnos`);
@@ -91,28 +80,22 @@ export const obtenerTurnosPorPaciente = async (id) => {
         throw error;
     }
 }
-//Solicitar nuevo turno (con archivo de orden médica)
 export const solicitarTurno = async (turnoData) => {
     try {
-        // Crear FormData para enviar archivo
         const formData = new FormData();
         
-        // Agregar campos de texto
         formData.append('FechaRequeridaTurno', turnoData.FechaRequeridaTurno);
         formData.append('HorarioRequeridoTurno', turnoData.HorarioRequeridoTurno);
         formData.append('idPaciente', turnoData.idPaciente);
         
-        // Agregar observaciones si existen
         if (turnoData.InformeTurno && turnoData.InformeTurno.trim() !== '') {
             formData.append('InformeTurno', turnoData.InformeTurno);
         }
         
-        // Agregar archivo de orden médica si existe
         if (turnoData.ordenMedicaFile) {
             formData.append('ordenMedica', turnoData.ordenMedicaFile);
         }
 
-        // Configurar headers para multipart/form-data
         const response = await api.post(`/api/turnos/v1/solicitar`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -125,7 +108,6 @@ export const solicitarTurno = async (turnoData) => {
         throw error;
     } 
 }
-// traer el estado, fecha y hora requerida del turno de un paciente
 export const obtenerEstadoTurnoPorPaciente = async (idPaciente) => {
     try {
         const response = await api.get(`/api/pacientes/v1/${idPaciente}/turnos/detalles`);
@@ -135,7 +117,6 @@ export const obtenerEstadoTurnoPorPaciente = async (idPaciente) => {
         throw error;
     }
 }
-// obtener mail del paciente por id
 export const obtenerEmailPacientePorId = async (id) => {
     try {
         const response = await api.get(`/api/pacientes/v1/${id}/mail`);
@@ -146,28 +127,23 @@ export const obtenerEmailPacientePorId = async (id) => {
     }
 }
 
-// Función para que el paciente pueda cancelar un turno
 export const cancelarTurnoPaciente = async (idPaciente, idTurno) => {
     try {
         const response = await api.put(`/api/pacientes/v1/${idPaciente}/turnos/${idTurno}/cancelar`);   
         return response.data;
     } catch (error) {
         console.error(`Error al cancelar turno con ID ${idTurno} del paciente ${idPaciente}:`, error);
-        // Manejar errores específicos del backend
         if (error.response) {
-            // El servidor respondió con un código de estado fuera del rango 2xx
             throw new Error(error.response.data.message || 'Error al cancelar el turno');
         } else if (error.request) {
-            // La petición fue hecha pero no hubo respuesta
             throw new Error('No se pudo conectar con el servidor');
         } else {
-            // Algo pasó al configurar la petición
             throw new Error('Error al procesar la solicitud');
         }
     }
 }
 
-// Obtener todos los comentarios de un paciente por su ID
+
 export const obtenerComentariosPorPaciente = async (idPaciente) => {
     try {
         const response = await api.get(`/api/pacientes/v1/${idPaciente}/comentarios`);

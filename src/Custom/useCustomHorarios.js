@@ -17,7 +17,6 @@ const useCustomHorarios = () => {
         axios.get(`${BASE_URL}api/empleados/v1/activos`)
       ]);
 
-      // Mapear todos los empleados activos
       const empleadosLista = empleadosRes.data.map(e => ({
         idEmpleado: e.idEmpleado,
         NombreCompleto: `${e.NombreEmpleado} ${e.ApellidoEmpleado}`

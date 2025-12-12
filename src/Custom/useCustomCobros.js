@@ -17,18 +17,14 @@ const useCustomCobros = () => {
       console.log("📊 Tipo de respuesta:", typeof res.data);
       console.log("📋 Estructura de datos:", Object.keys(res.data));
       
-      // Manejar diferentes estructuras de respuesta
       let cobrosData = [];
       if (Array.isArray(res.data)) {
-        // Si res.data es directamente un array
         cobrosData = res.data;
         console.log("🔹 Respuesta es array directo con", cobrosData.length, "elementos");
       } else if (res.data.cobros && Array.isArray(res.data.cobros)) {
-        // Si res.data.cobros es el array
         cobrosData = res.data.cobros;
         console.log("🔹 Respuesta tiene propiedad 'cobros' con", cobrosData.length, "elementos");
       } else if (res.data.data && Array.isArray(res.data.data)) {
-        // Si res.data.data es el array
         cobrosData = res.data.data;
         console.log("🔹 Respuesta tiene propiedad 'data' con", cobrosData.length, "elementos");
       }

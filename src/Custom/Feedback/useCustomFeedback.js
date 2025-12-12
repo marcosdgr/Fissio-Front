@@ -7,7 +7,6 @@ const useCustomFeedback = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Obtener todos los comentarios activos
   const obtenerComentariosActivos = async () => {
     setLoading(true);
     try {
@@ -19,13 +18,10 @@ const useCustomFeedback = () => {
       setLoading(false);
     }
   };
-
-  // Crear comentario
   const crearComentario = async (comentarioData) => {
     try {
       setLoading(true);
       const response = await axios.post(`${BASE_URL}api/comentarios/v1/crear`, comentarioData);
-      // Recargar la lista completa después de crear
       await obtenerComentariosActivos();
       return response.data;
     } catch (error) {
@@ -36,12 +32,10 @@ const useCustomFeedback = () => {
     }
   };
 
-  // Actualizar comentario
   const actualizarComentario = async (id, comentarioData) => {
     try {
       setLoading(true);
       const response = await axios.put(`${BASE_URL}api/comentarios/v1/actualizar/${id}`, comentarioData);
-      // Recargar la lista completa después de actualizar
       await obtenerComentariosActivos();
       return response.data;
     } catch (error) {
@@ -52,12 +46,10 @@ const useCustomFeedback = () => {
     }
   };
 
-  // Eliminar comentario (borrado lógico)
   const eliminarComentario = async (id) => {
     try {
       setLoading(true);
       const response = await axios.put(`${BASE_URL}api/comentarios/v1/borrado-logico/${id}`);
-      // Recargar la lista completa después de eliminar
       await obtenerComentariosActivos();
       return response.data;
     } catch (error) {
@@ -68,7 +60,6 @@ const useCustomFeedback = () => {
     }
   };
 
-  // Obtener comentario por ID
   const obtenerComentarioPorId = async (id) => {
     try {
       setLoading(true);
@@ -82,7 +73,6 @@ const useCustomFeedback = () => {
     }
   };
 
-  // Obtener comentarios publicados (para HomePage)
   const obtenerComentariosPublicados = async () => {
     try {
       const response = await axios.get(`${BASE_URL}api/comentarios/v1/publicados`);
@@ -93,7 +83,6 @@ const useCustomFeedback = () => {
     }
   };
 
-  // Publicar comentario (cambiar IsPublicado a 1)
   const publicarComentario = async (id) => {
     try {
       setLoading(true);
@@ -108,7 +97,6 @@ const useCustomFeedback = () => {
     }
   };
 
-  // Despublicar comentario (cambiar IsPublicado a 0)
   const despublicarComentario = async (id) => {
     try {
       setLoading(true);
@@ -123,7 +111,6 @@ const useCustomFeedback = () => {
     }
   };
 
-  // Cargar comentarios al montar el componente
   useEffect(() => {
     obtenerComentariosActivos();
 

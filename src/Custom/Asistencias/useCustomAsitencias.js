@@ -14,7 +14,6 @@ export const useCustomAsistencias = (idEmpleado) => {
         anio: new Date().getFullYear()
     });
 
-    // Obtener horarios semanales del empleado
     const obtenerHorariosSemanales = useCallback(async () => {
         try {
             setLoading(true);
@@ -22,7 +21,6 @@ export const useCustomAsistencias = (idEmpleado) => {
             const data = await response.json();
             
             if (response.ok) {
-                // Filtrar solo los horarios del empleado actual
                 const horariosEmpleado = data.filter(h => h.idEmpleado === parseInt(idEmpleado));
                 setHorariosSemanales(horariosEmpleado);
             } else {
@@ -36,7 +34,6 @@ export const useCustomAsistencias = (idEmpleado) => {
         }
     }, [idEmpleado]);
 
-    // Obtener asistencias del empleado
     const obtenerAsistenciasEmpleado = useCallback(async () => {
         try {
             setLoading(true);
@@ -58,7 +55,6 @@ export const useCustomAsistencias = (idEmpleado) => {
         }
     }, [idEmpleado]);
 
-    // Verificar si ya existe una asistencia activa para hoy
     const verificarAsistenciaHoy = useCallback(async () => {
         try {
             const hoy = new Date().toISOString().split('T')[0];
@@ -66,17 +62,14 @@ export const useCustomAsistencias = (idEmpleado) => {
             const data = await response.json();
             
             if (response.ok && data.length > 0) {
-                // filtrar asistencias de hoy
                 const asistenciasHoy = data.filter(a => a.Fecha.split('T')[0] === hoy);
                 if (asistenciasHoy.length === 0) {
                     setAsistenciaActual(null);
                 } else {
-                    // buscar la última asistencia abierta (sin HoraSalida)
                     const abierta = [...asistenciasHoy].reverse().find(a => !a.HoraSalida || a.HoraSalida === null || a.HoraSalida === '');
                     if (abierta) {
                         setAsistenciaActual(abierta);
                     } else {
-                        // ninguna abierta -> no asistencia actual
                         setAsistenciaActual(null);
                     }
                 }
@@ -88,7 +81,6 @@ export const useCustomAsistencias = (idEmpleado) => {
         }
     }, [idEmpleado]);
 
-    // Registrar entrada (inicio de jornada)
     const registrarEntrada = async (observaciones = '') => {
         if (!idEmpleado) {
             showError('Error', 'No se pudo identificar al empleado');
@@ -97,8 +89,6 @@ export const useCustomAsistencias = (idEmpleado) => {
 
         try {
             showLoading('Registrando entrada...');
-            
-            // Comprobar en el servidor si ya existe una entrada abierta hoy (evita condiciones de carrera con el estado)
             try {
                 const hoy = new Date().toISOString().split('T')[0];
                 const checkRes = await fetch(`${BASE_URL}api/asistencias/v1/empleado/${idEmpleado}`);
@@ -113,7 +103,6 @@ export const useCustomAsistencias = (idEmpleado) => {
                     }
                 }
             } catch (errCheck) {
-                // si falla la comprobación, permitimos continuar y que el backend valide
                 console.error('No se pudo verificar asistencias abiertas antes de crear entrada:', errCheck);
             }
 
@@ -144,7 +133,6 @@ export const useCustomAsistencias = (idEmpleado) => {
             if (response.ok) {
                 showSuccess('¡Entrada registrada!', `Hora: ${hora}`);
                 await obtenerAsistenciasEmpleado();
-                // after creating, set the asistenciaActual to the newly created open record
                 await verificarAsistenciaHoy();
                 return true;
             } else {
@@ -159,9 +147,7 @@ export const useCustomAsistencias = (idEmpleado) => {
         }
     };
 
-    // Registrar salida (fin de jornada)
     const registrarSalida = async (observaciones = '') => {
-        // Si no hay asistenciaActual en el estado, intentar obtener la última abierta desde el servidor
         let asistenciaParaCerrar = asistenciaActual;
         if (!asistenciaParaCerrar) {
             try {
@@ -228,7 +214,6 @@ export const useCustomAsistencias = (idEmpleado) => {
         }
     };
 
-    // Obtener asistencias por rango de fechas
     const obtenerAsistenciasPorRango = async (fechaInicio, fechaFin) => {
         try {
             setLoading(true);
@@ -236,7 +221,6 @@ export const useCustomAsistencias = (idEmpleado) => {
             const data = await response.json();
             
             if (response.ok) {
-                // Filtrar solo las del empleado actual
                 const asistenciasFiltradas = data.filter(a => a.idEmpleado === idEmpleado);
                 setAsistencias(asistenciasFiltradas);
             } else if (response.status === 404) {
@@ -252,14 +236,12 @@ export const useCustomAsistencias = (idEmpleado) => {
         }
     };
 
-    // Filtrar por mes
     const filtrarPorMes = (mes, anio) => {
         const primerDia = new Date(anio, mes - 1, 1).toISOString().split('T')[0];
         const ultimoDia = new Date(anio, mes, 0).toISOString().split('T')[0];
         obtenerAsistenciasPorRango(primerDia, ultimoDia);
     };
 
-    // Calcular estadísticas
     const calcularEstadisticas = () => {
         if (asistencias.length === 0) {
             return {
@@ -299,7 +281,6 @@ export const useCustomAsistencias = (idEmpleado) => {
         };
     };
 
-    // Efecto para cargar datos iniciales
     useEffect(() => {
         if (idEmpleado) {
             obtenerHorariosSemanales();

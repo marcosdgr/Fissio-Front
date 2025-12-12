@@ -8,10 +8,8 @@ const api = axios.create({
   }
 });
 
-// Función auxiliar para combinar asistencias con horarios asignados
 const combinarAsistenciasConHorarios = async (asistencias) => {
   try {
-    // Obtener todas las asignaciones de horarios
     const [horariosRes, asignacionesRes] = await Promise.all([
       api.get('/api/horariosTrabajo/v1/activos'),
       api.get('/api/empleadosHorarios/v1')
@@ -21,34 +19,30 @@ const combinarAsistenciasConHorarios = async (asistencias) => {
     const asignaciones = asignacionesRes.data;
 
 
-    // Mapear días de la semana a números (1=Lunes, 7=Domingo)
     const diasSemana = {
       'Lunes': 1,
       'Martes': 2,
       'Miércoles': 3,
-      'Miercoles': 3, // Por si viene sin acento
+      'Miercoles': 3, 
       'Jueves': 4,
       'Viernes': 5,
       'Sábado': 6,
-      'Sabado': 6, // Por si viene sin acento
+      'Sabado': 6, 
       'Domingo': 7
     };
 
-    // Enriquecer cada asistencia con su horario esperado
     return asistencias.map(asistencia => {
       const fechaAsistencia = new Date(asistencia.Fecha);
-      const diaSemanaNum = fechaAsistencia.getDay(); // 0=Domingo, 1=Lunes...6=Sábado
-      const diaSemanaAjustado = diaSemanaNum === 0 ? 7 : diaSemanaNum; // Convertir 0 a 7
+      const diaSemanaNum = fechaAsistencia.getDay(); 
+      const diaSemanaAjustado = diaSemanaNum === 0 ? 7 : diaSemanaNum; 
 
       console.log(`🔍 Procesando asistencia - Empleado: ${asistencia.idEmpleado}, Fecha: ${asistencia.Fecha}, Día: ${diaSemanaAjustado}`);
 
-      // Buscar TODAS las asignaciones del empleado
       const asignacionesEmpleado = asignaciones.filter(a => a.idEmpleado === asistencia.idEmpleado);
       
       console.log(`   Asignaciones del empleado ${asistencia.idEmpleado}:`, asignacionesEmpleado);
 
       if (asignacionesEmpleado.length > 0) {
-        // Buscar el horario que corresponde al día de la asistencia
         for (const asignacion of asignacionesEmpleado) {
           const horario = horarios.find(h => {
             const diaHorario = diasSemana[h.DiaSemana] || 0;
@@ -76,11 +70,10 @@ const combinarAsistenciasConHorarios = async (asistencias) => {
     });
   } catch (error) {
     console.error('Error al combinar asistencias con horarios:', error);
-    return asistencias; // Devolver asistencias sin horarios si falla
+    return asistencias;
   }
 };
 
-// Obtener todas las asistencias
 export const obtenerAsistencias = async () => {
   try {
     const response = await api.get('/api/asistencias/v1');
@@ -92,7 +85,6 @@ export const obtenerAsistencias = async () => {
   }
 };
 
-// Obtener asistencias por empleado
 export const obtenerAsistenciasPorEmpleado = async (idEmpleado) => {
   try {
     const response = await api.get(`/api/asistencias/v1/empleado/${idEmpleado}`);
@@ -104,7 +96,6 @@ export const obtenerAsistenciasPorEmpleado = async (idEmpleado) => {
   }
 };
 
-// Obtener asistencias por fecha
 export const obtenerAsistenciasPorFecha = async (fecha) => {
   try {
     const response = await api.get(`/api/asistencias/v1/fecha/${fecha}`);
@@ -116,7 +107,6 @@ export const obtenerAsistenciasPorFecha = async (fecha) => {
   }
 };
 
-// Obtener asistencias por rango de fechas
 export const obtenerAsistenciasPorRango = async (fechaInicio, fechaFin) => {
   try {
     const response = await api.get(`/api/asistencias/v1/rangoFechas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
@@ -127,7 +117,6 @@ export const obtenerAsistenciasPorRango = async (fechaInicio, fechaFin) => {
   }
 };
 
-// Obtener empleados activos (para el filtro)
 export const obtenerEmpleadosActivos = async () => {
   try {
     const response = await api.get('/api/empleados/v1/activos');

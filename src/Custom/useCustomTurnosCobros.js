@@ -15,7 +15,6 @@ const useCustomTurnosCobros = () => {
         cobrado: false 
       }));
 
-      // Detectar si tiene cobro
       const cobrosRes = await axios.get(`${BASE_URL}api/cobros/v1`);
       const cobrosIds = new Set(cobrosRes.data.map(c => c.idTurno));
       

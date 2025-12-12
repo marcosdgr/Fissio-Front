@@ -8,13 +8,12 @@ const useCustomTratamientos = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // OBTENER TRATAMIENTOS
   const obtenerTratamientos = async () => {
     try {
       setLoading(true);
       setError(null);
       const res = await axios.get(`${BASE_URL}api/tratamientos/v1`);
-      setTratamientos({ tratamientos: res.data || [] }); // Ajustado por si es array directo
+      setTratamientos({ tratamientos: res.data || [] }); 
     } catch (error) {
       console.error("Error al cargar tratamientos:", error);
       setError("No se pudieron cargar los tratamientos");
@@ -25,7 +24,6 @@ const useCustomTratamientos = () => {
     }
   };
 
-  // AGREGAR TRATAMIENTO
   const agregarTratamiento = async (datos) => {
     try {
       const res = await axios.post(`${BASE_URL}api/tratamientos/v1`, datos);
@@ -44,7 +42,6 @@ const useCustomTratamientos = () => {
     }
   };
 
-  // EDITAR TRATAMIENTO
   const editarTratamiento = async (id, datos) => {
     try {
       const res = await axios.put(`${BASE_URL}api/tratamientos/v1/${id}`, datos);
@@ -65,7 +62,6 @@ const useCustomTratamientos = () => {
     }
   };
 
-  // CAMBIAR ESTADO (ACTIVAR/DESACTIVAR)
   const cambiarEstadoTratamiento = async (id, nuevoEstado) => {
     try {
       await axios.put(`${BASE_URL}api/tratamientos/v1/cambiarEstado/${id}`, {
@@ -95,7 +91,6 @@ const useCustomTratamientos = () => {
     }
   };
 
-  // CARGAR AL INICIAR
   useEffect(() => {
     obtenerTratamientos();
   }, []);
@@ -105,8 +100,8 @@ const useCustomTratamientos = () => {
     loading,
     error,
     obtenerTratamientos,
-    agregarTratamiento,     // NUEVO
-    editarTratamiento,      // NUEVO
+    agregarTratamiento,  
+    editarTratamiento,  
     cambiarEstadoTratamiento
   };
 };

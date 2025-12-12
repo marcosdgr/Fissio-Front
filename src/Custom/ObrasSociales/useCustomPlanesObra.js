@@ -2,14 +2,12 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { BASE_URL } from "../../Api/api";
 
-// Hook que centraliza la lógica de obtener la lista de planes desde el backend.
-// Todas las funciones (obtener todos, obtener por id, crear) están dentro del hook.
+
 const useCustomPlanesObra = () => {
   const [planes, setPlanes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Obtiene todos los planes y actualiza el estado local
   const obtenerTodosLosPlanes = async () => {
     try {
       setLoading(true);
@@ -27,7 +25,6 @@ const useCustomPlanesObra = () => {
     }
   };
 
-  // Obtiene un plan por su id
   const obtenerPlanesPorId = async (idPlanObra) => {
     try {
       const response = await axios.get(
@@ -40,7 +37,6 @@ const useCustomPlanesObra = () => {
     }
   };
 
-  // Crea un nuevo plan y lo agrega al estado local si es exitoso
   const crearPlanObra = async (nuevoPlan) => {
     try {
       setLoading(true);
@@ -87,8 +83,6 @@ const useCustomPlanesObra = () => {
     }
   };
 
-  // traer planes activos
-
   const obtenerPlanesActivos = async () => {
     try {
       setLoading(true);
@@ -123,7 +117,6 @@ const useCustomPlanesObra = () => {
     }
   };
 
-  // Ejecuta la carga inicial y cuando cambie idObraSocial
   useEffect(() => {
     obtenerTodosLosPlanes();
   }, []);
