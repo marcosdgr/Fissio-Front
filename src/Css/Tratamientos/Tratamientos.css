@@ -159,13 +159,13 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* HEADER FISSIO */
+
 .modal-header.bg-primary {
   background: linear-gradient(135deg, #0470BB, #3AB1CF) !important;
   border-bottom: none;
 }
 
-/* MEJORAR MODALES */
+
 .custom-modal .modal-content {
   border-radius: 18px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.25);
@@ -177,7 +177,7 @@
   backdrop-filter: blur(8px);
 }
 
-/* BOTÓN AGREGAR */
+
 .btn-agregar {
   border-radius: 12px;
   padding: 0.6rem 1.4rem;

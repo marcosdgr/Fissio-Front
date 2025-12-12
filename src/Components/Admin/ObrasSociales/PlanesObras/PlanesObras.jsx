@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useCustomPlanesObra from '../../../../Custom/ObrasSociales/useCustomPlanesObra'
 import useCustomObrasSociales from '../../../../Custom/ObrasSociales/useCustomObrasSociales'
 import { showConfirm, showSuccess, showError } from '../../../../Utils/sweetAlerts'
@@ -35,7 +35,7 @@ const PlanesObras = ({ obrasSocialesProp }) => {
 
   useEffect(() => {}, [planes, obrasSociales])
 
-  const visible = useMemo(() => {
+  const getVisiblePlanes = () => {
     const q = (query || '').trim().toLowerCase()
     let list = planes || []
     if (obraFilter) {
@@ -63,7 +63,9 @@ const PlanesObras = ({ obrasSocialesProp }) => {
     }
     if (!q) return list
     return list.filter(p => (p.NombraPlan ?? p.nombre ?? '').toString().toLowerCase().includes(q) || (p.DescripcionPlan ?? '').toString().toLowerCase().includes(q))
-  }, [planes, obraFilter, query, obrasSociales, estadoFilter])
+  }
+
+  const visible = getVisiblePlanes()
 
   const resetForm = () => { setForm({ NombraPlan: '', DescripcionPlan: '', PorcentajeDescuentoPlan: '', idObraSocial: '', EstadoPlan: 'Vigente', IsActive: 1 }); setErrors({}) }
   const handleChange = (field, value) => { setForm(prev => ({ ...prev, [field]: value })); if (errors && errors[field]) setErrors(prev => { const next = { ...prev }; delete next[field]; return next }) }
