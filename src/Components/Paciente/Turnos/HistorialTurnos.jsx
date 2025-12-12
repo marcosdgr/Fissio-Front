@@ -6,7 +6,6 @@ import '../../../Css/Paciente/Perfil/PerfilPaciente.css'
 import '../../../Css/Paciente/Turnos/HistorialTurnos.css'
 
 const HistorialTurnos = () => {
-  // Estados
   const [turnos, setTurnos] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -17,12 +16,10 @@ const HistorialTurnos = () => {
   const [paginaActual, setPaginaActual] = useState(1)
   const turnosPorPagina = 4
 
-  // Obtener datos del paciente desde Zustand
   const { user } = useAuthStore()
   const pacienteInfo = user?.usuario || {}
   const idPaciente = pacienteInfo.idPaciente || user?.idPaciente || user?.usuario?.idPaciente || user?.idUsuario
 
-  // Función para cargar turnos
   const cargarTurnos = async () => {
     if (!idPaciente) {
       setError('No se encontró la información del paciente')
@@ -36,15 +33,13 @@ const HistorialTurnos = () => {
       const data = await obtenerTurnosPorPaciente(idPaciente)
       
       console.log('Turnos obtenidos del backend:', data)
-      
-      // Ordenar turnos por fecha (más recientes primero)
+
       const turnosOrdenados = data.sort((a, b) => {
         return new Date(b.FechaSolicitudTurno) - new Date(a.FechaSolicitudTurno)
       })
       
       setTurnos(turnosOrdenados)
       
-      // Si no hay turnos, mostrar advertencia
       if (turnosOrdenados.length === 0) {
         console.warn('No se encontraron turnos para el paciente. Verifica que el backend use LEFT JOIN en la query de tratamientos.')
       }
@@ -56,24 +51,21 @@ const HistorialTurnos = () => {
     }
   }
 
-  // Cargar turnos al montar el componente
   useEffect(() => {
     cargarTurnos()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idPaciente])
 
-  // Filtrar turnos cuando cambia el filtro
   useEffect(() => {
     if (filtroEstado === 'Todos') {
       setTurnosFiltrados(turnos)
     } else {
       setTurnosFiltrados(turnos.filter(turno => turno.EstadoTurno === filtroEstado))
     }
-    // Reset página al cambiar filtro
+
     setPaginaActual(1)
   }, [filtroEstado, turnos])
 
-  // Función para formatear fecha
   const formatearFecha = (fecha) => {
     if (!fecha) return 'No disponible'
     return new Date(fecha).toLocaleDateString('es-AR', {
@@ -83,7 +75,6 @@ const HistorialTurnos = () => {
     })
   }
 
-  // Función para obtener clase de badge según estado
   const getBadgeClass = (estado) => {
     switch (estado) {
       case 'Confirmado':
@@ -101,15 +92,12 @@ const HistorialTurnos = () => {
     }
   }
 
-  // Función para abrir modal de cancelación
   const handleCancelarClick = (turno) => {
     setTurnoSeleccionado(turno)
     setShowModal(true)
   }
 
-  // Función cuando se cancela un turno exitosamente
   const handleTurnoCancelado = (idTurno) => {
-    // Actualizar el estado del turno en la lista
     setTurnos(prevTurnos => 
       prevTurnos.map(turno => 
         turno.idTurno === idTurno 
@@ -120,21 +108,18 @@ const HistorialTurnos = () => {
     setShowModal(false)
   }
 
-  // Verificar si un turno se puede cancelar
   const puedeCancelar = (estado) => {
     return estado !== 'Finalizado' && estado !== 'Cancelado'
   }
 
-  // Calcular paginación
   const indexUltimoTurno = paginaActual * turnosPorPagina
   const indexPrimerTurno = indexUltimoTurno - turnosPorPagina
   const turnosPaginados = turnosFiltrados.slice(indexPrimerTurno, indexUltimoTurno)
   const totalPaginas = Math.ceil(turnosFiltrados.length / turnosPorPagina)
 
-  // Funciones de paginación
   const irAPagina = (numeroPagina) => {
     setPaginaActual(numeroPagina)
-    // Scroll suave al inicio de la lista
+
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -150,7 +135,6 @@ const HistorialTurnos = () => {
     }
   }
 
-  // Obtener estadísticas de turnos
   const estadisticas = {
     total: turnos.length,
     confirmados: turnos.filter(t => t.EstadoTurno === 'Confirmado').length,
@@ -161,7 +145,7 @@ const HistorialTurnos = () => {
 
   return (
     <div className="perfil-paciente-container">
-      {/* Header */}
+
       <div className="welcome-section fade-in">
         <div className="container-fluid">
           <div className="row align-items-center">
@@ -186,9 +170,7 @@ const HistorialTurnos = () => {
         </div>
       </div>
 
-      {/* Contenido */}
       <div className="container-fluid">
-        {/* Estadísticas */}
         {!loading && !error && turnos.length > 0 && (
           <div className="row g-3 mb-4">
             <div className="col-6 col-md-3">
@@ -237,8 +219,6 @@ const HistorialTurnos = () => {
             </div>
           </div>
         )}
-
-        {/* Filtros */}
         {!loading && !error && turnos.length > 0 && (
           <div className="card mb-4 border-0 shadow-sm">
             <div className="card-body p-3">
@@ -284,7 +264,6 @@ const HistorialTurnos = () => {
           </div>
         )}
 
-        {/* Estados de carga y error */}
         {loading && (
           <div className="text-center py-5">
             <div className="spinner-border text-primary mb-3" role="status">
@@ -309,8 +288,6 @@ const HistorialTurnos = () => {
             </div>
           </div>
         )}
-
-        {/* Lista de turnos */}
         {!loading && !error && turnosFiltrados.length === 0 && turnos.length > 0 && (
           <div className="text-center py-5">
             <span className="material-symbols-outlined text-muted mb-3" style={{ fontSize: '4rem' }}>
@@ -336,7 +313,6 @@ const HistorialTurnos = () => {
             
           </div>
         )}
-
         {!loading && !error && turnosFiltrados.length > 0 && (
           <div className="row g-3">
             {turnosPaginados.map((turno) => (
@@ -364,7 +340,6 @@ const HistorialTurnos = () => {
                       )}
                     </div>
                   </div>
-
                   <div className="turno-card-body">
                     <div className="row g-3">
                       <div className="col-12 col-md-6 col-lg-3">
@@ -421,8 +396,6 @@ const HistorialTurnos = () => {
             ))}
           </div>
         )}
-
-        {/* Paginación */}
         {!loading && !error && turnosFiltrados.length > turnosPorPagina && (
           <div className="row mt-4">
             <div className="col-12">
@@ -446,15 +419,13 @@ const HistorialTurnos = () => {
                       </button>
                     </li>
 
-                    {/* Números de página */}
                     {[...Array(totalPaginas)].map((_, index) => {
                       const numeroPagina = index + 1
-                      // Mostrar solo algunas páginas en mobile
                       if (
-                        totalPaginas <= 5 || // Si hay 5 o menos páginas, mostrar todas
-                        numeroPagina === 1 || // Siempre mostrar primera
-                        numeroPagina === totalPaginas || // Siempre mostrar última
-                        (numeroPagina >= paginaActual - 1 && numeroPagina <= paginaActual + 1) // Mostrar actual y vecinas
+                        totalPaginas <= 5 || 
+                        numeroPagina === 1 || 
+                        numeroPagina === totalPaginas || 
+                        (numeroPagina >= paginaActual - 1 && numeroPagina <= paginaActual + 1) 
                       ) {
                         return (
                           <li key={numeroPagina} className={`page-item ${paginaActual === numeroPagina ? 'active' : ''}`}>
@@ -497,8 +468,6 @@ const HistorialTurnos = () => {
           </div>
         )}
       </div>
-
-      {/* Modal de cancelación */}
       <CancelarTurnoModal
         show={showModal}
         onHide={() => setShowModal(false)}

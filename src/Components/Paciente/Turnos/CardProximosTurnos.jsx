@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 const CardProximosTurnos = ({ turnosDetalles, loading, onClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  // Obtener turnos próximos (Solicitados y Pendientes) con detalles
   const obtenerTurnosProximos = () => {
     if (!turnosDetalles) return []
     return turnosDetalles
@@ -13,11 +12,9 @@ const CardProximosTurnos = ({ turnosDetalles, loading, onClick }) => {
       })
   }
 
-  // Obtener turnos a mostrar
   const turnosProximos = obtenerTurnosProximos()
   const turnoActual = turnosProximos[currentIndex]
 
-  // Navegación del carrusel
   const handlePrevious = (e) => {
     e.stopPropagation()
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : turnosProximos.length - 1))
@@ -34,7 +31,7 @@ const CardProximosTurnos = ({ turnosDetalles, loading, onClick }) => {
     setCurrentIndex(index)
   }
 
-  // Calcular total de turnos próximos
+
   const calcularTurnosProximos = () => {
     if (!turnosDetalles) return 0
     return turnosDetalles.filter(turno => {
@@ -43,7 +40,6 @@ const CardProximosTurnos = ({ turnosDetalles, loading, onClick }) => {
     }).length
   }
 
-  // Formatear fecha de turno
   const formatearFechaTurno = (fecha) => {
     if (!fecha) return 'Sin fecha'
     return new Date(fecha).toLocaleDateString('es-AR', {
@@ -90,7 +86,6 @@ const CardProximosTurnos = ({ turnosDetalles, loading, onClick }) => {
           <span className="material-symbols-outlined">event_available</span>
         </div>
         <h5 className="card-title">Próximos Turnos</h5>
-        
         {/* Lista de próximos turnos - Carrusel */}
         {loading ? (
           <div className="text-center py-3">
@@ -124,12 +119,10 @@ const CardProximosTurnos = ({ turnosDetalles, loading, onClick }) => {
                 </div>
               </div>
             </div>
-
             {/* Controles de navegación - Solo si hay más de 1 turno */}
             {turnosProximos.length > 1 && (
               <div className="mt-2 mt-sm-3">
                 <div className="d-flex align-items-center justify-content-between px-1">
-                  {/* Botón Anterior */}
                   <button
                     className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center p-1"
                     style={{ minWidth: '32px', minHeight: '32px' }}
@@ -138,8 +131,6 @@ const CardProximosTurnos = ({ turnosDetalles, loading, onClick }) => {
                   >
                     <span className="material-symbols-outlined" style={{ fontSize: '1.25rem' }}>chevron_left</span>
                   </button>
-
-                  {/* Indicadores de paginación */}
                   <div className="d-flex gap-1 gap-sm-2 align-items-center flex-wrap justify-content-center">
                     {turnosProximos.map((_, index) => (
                       <button
@@ -153,8 +144,6 @@ const CardProximosTurnos = ({ turnosDetalles, loading, onClick }) => {
                       />
                     ))}
                   </div>
-
-                  {/* Botón Siguiente */}
                   <button
                     className="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center p-1"
                     style={{ minWidth: '32px', minHeight: '32px' }}
@@ -164,8 +153,6 @@ const CardProximosTurnos = ({ turnosDetalles, loading, onClick }) => {
                     <span className="material-symbols-outlined" style={{ fontSize: '1.25rem' }}>chevron_right</span>
                   </button>
                 </div>
-
-                {/* Contador de turnos */}
                 <div className="text-center mt-1 mt-sm-2">
                   <small className="text-muted" style={{ fontSize: 'clamp(0.7rem, 2vw, 0.875rem)' }}>
                     Turno {currentIndex + 1} de {turnosProximos.length}

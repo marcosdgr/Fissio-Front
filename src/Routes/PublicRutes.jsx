@@ -27,7 +27,7 @@ const PublicRoute = ({ children }) => {
     if (permiso === "Administracion") {
       return <Navigate to="/secretaria" replace />;
     }
-    return <Navigate to="/empleado" replace />; // por si en algún momento agregás esta vista
+    return <Navigate to="/empleado" replace />; 
   }
 
   return <Navigate to="/" replace />;

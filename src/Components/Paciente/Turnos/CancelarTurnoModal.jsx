@@ -26,8 +26,6 @@ const CancelarTurnoModal = ({ show, onHide, turno, idPaciente, onTurnoCancelado 
       if (onTurnoCancelado) {
         onTurnoCancelado(turno.idTurno)
       }
-
-      // Cerrar el modal después de un breve delay
       setTimeout(() => {
         onHide()
       }, 1500)
@@ -40,7 +38,6 @@ const CancelarTurnoModal = ({ show, onHide, turno, idPaciente, onTurnoCancelado 
     }
   }
 
-  // Función para formatear fecha
   const formatearFecha = (fecha) => {
     if (!fecha) return 'No disponible'
     return new Date(fecha).toLocaleDateString('es-AR', {
@@ -56,7 +53,6 @@ const CancelarTurnoModal = ({ show, onHide, turno, idPaciente, onTurnoCancelado 
     <div className="modal fade show d-block modal-cancelar-overlay" tabIndex="-1">
       <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-cancelar">
         <div className="modal-content">
-          {/* Header */}
           <div className="modal-header">
             <h5 className="modal-title d-flex align-items-center">
               <span className="material-symbols-outlined me-2">cancel</span>
@@ -71,7 +67,6 @@ const CancelarTurnoModal = ({ show, onHide, turno, idPaciente, onTurnoCancelado 
             ></button>
           </div>
 
-          {/* Body */}
           <div className="modal-body p-3 p-sm-4">
             {error && (
               <div className="alert alert-danger d-flex align-items-center mb-3" role="alert">
@@ -99,7 +94,6 @@ const CancelarTurnoModal = ({ show, onHide, turno, idPaciente, onTurnoCancelado 
               <p className="warning-subtitle mb-0">Esta acción no se puede deshacer</p>
             </div>
 
-            {/* Información del turno */}
             {turno && (
               <div className="turno-info-card">
                 <div className="turno-info-header">
@@ -167,7 +161,6 @@ const CancelarTurnoModal = ({ show, onHide, turno, idPaciente, onTurnoCancelado 
             </div>
           </div>
 
-          {/* Footer */}
           <div className="modal-footer d-flex flex-column flex-sm-row gap-2 p-3">
             <button 
               type="button" 

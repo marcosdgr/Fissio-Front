@@ -11,7 +11,6 @@ import '../../../Css/Paciente/Comentarios/ComentariosPaciente.css'
 import '../../../Css/Feedback/Feedback.css'
 
 const ComentariosDelPaciente = () => {
-  // Estados del formulario de feedback
   const [calificacion, setCalificacion] = useState(0)
   const [calificacionHover, setCalificacionHover] = useState(0)
   const [comentario, setComentario] = useState('')
@@ -20,23 +19,19 @@ const ComentariosDelPaciente = () => {
   const [enviado, setEnviado] = useState(false)
   const [ultimaCalificacion, setUltimaCalificacion] = useState(null)
   
-  // Estados para comentarios
   const [misComentarios, setMisComentarios] = useState([])
   const [loading, setLoading] = useState(true)
   
-  // Estados para paginación
   const [paginaActual, setPaginaActual] = useState(1)
   const comentariosPorPagina = 4
 
-  // Obtener datos del usuario
   const { user } = useAuthStore()
   const userData = user?.usuario || {}
-  // idUsuario es el ID del usuario en la tabla usuarios (para crear comentarios)
+
   const idUsuario = userData.idUsuario
-  // idPaciente es el ID del paciente en la tabla pacientes (para obtener comentarios)
+
   const idPaciente = userData.idPaciente || userData.idUsuario
 
-  // Cargar comentarios del paciente específico
   const cargarComentariosPaciente = async () => {
     if (!idPaciente) return
     
@@ -58,13 +53,12 @@ const ComentariosDelPaciente = () => {
     }
   }
 
-  // Cargar comentarios al montar el componente
   useEffect(() => {
     cargarComentariosPaciente()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idPaciente])
 
-  // Función para enviar el comentario (similar a Feedback.jsx)
+  // Función para enviar el comentario
   const enviarComentario = async (e) => {
     e.preventDefault()
 
@@ -190,7 +184,6 @@ const ComentariosDelPaciente = () => {
 
   return (
     <div className="perfil-paciente-container">
-      {/* Header */}
       <div className="welcome-section fade-in">
         <div className="container-fluid">
           <div className="row align-items-center">
@@ -215,11 +208,10 @@ const ComentariosDelPaciente = () => {
         </div>
       </div>
 
-      {/* Contenido */}
       <div className="container-fluid mt-4">
         <div className="row">
           <div className="col-12">
-            {/* Botón para abrir modal de nuevo comentario */}
+
             <div className="mb-4">
               <button
                 className="btn btn-primary btn-lg d-flex align-items-center"
@@ -230,7 +222,6 @@ const ComentariosDelPaciente = () => {
               </button>
             </div>
 
-            {/* Modal de feedback */}
             {showModal && (
               <div className="modal-overlay" onClick={cerrarModal}>
                 <div className="modal-content-feedback" onClick={(e) => e.stopPropagation()}>
@@ -259,7 +250,6 @@ const ComentariosDelPaciente = () => {
               </div>
             )}
 
-            {/* Lista de comentarios del paciente */}
             <div className="row">
               <div className="col-12">
                 <h3 className="section-title mb-4">
@@ -343,7 +333,6 @@ const ComentariosDelPaciente = () => {
                       ))}
                     </div>
 
-                    {/* Paginación */}
                     {totalPaginas > 1 && (
                       <div className="comentarios-paginacion">
                         <nav aria-label="Paginación de comentarios">
@@ -398,7 +387,6 @@ const ComentariosDelPaciente = () => {
           </div>
         </div>
 
-        {/* Información adicional */}
         <div className="row mt-4 mb-0">
           <div className="col-12">
             <div className="card bg-light border-0 shadow-sm">

@@ -6,7 +6,7 @@ import '../../Css/Login/Login.css';
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const { token } = useParams(); // Obtener el token de la URL
+  const { token } = useParams(); 
 
   const [formData, setFormData] = useState({
     password: '',
@@ -31,7 +31,6 @@ const ResetPassword = () => {
     }
   }, [token, navigate]);
 
-  // Manejo de inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -60,7 +59,6 @@ const ResetPassword = () => {
     return true;
   };
 
-  // Submit del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -79,7 +77,6 @@ const ResetPassword = () => {
         'Tu contraseña ha sido restablecida exitosamente. Ahora puedes iniciar sesión.'
       );
 
-      // Limpiar formulario
       setFormData({
         password: '',
         confirmPassword: ''

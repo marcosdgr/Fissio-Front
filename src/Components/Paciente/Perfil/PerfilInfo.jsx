@@ -4,19 +4,15 @@ import { obtenerPacientePorId } from '../../../Custom/Paciente/CustomPacienteVis
 import '../../../Css/Paciente/Perfil/PerfilPaciente.css'
 
 const PerfilInfo = ({ setActiveTab }) => {
-  // Estados para manejar la información del paciente
   const [pacienteData, setPacienteData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Obtener datos del paciente desde Zustand
   const { user } = useAuthStore()
   
-  // Obtener información del paciente de la estructura del login
   const pacienteInfo = user?.usuario || {}
   const idPaciente = pacienteInfo.idPaciente
 
-  // useEffect para cargar datos del paciente
   useEffect(() => {
     const cargarDatosPaciente = async () => {
       if (!idPaciente) {
@@ -28,7 +24,6 @@ const PerfilInfo = ({ setActiveTab }) => {
         setLoading(true)
         setError(null)
 
-        // Cargar datos completos del paciente
         const datosPaciente = await obtenerPacientePorId(idPaciente)
         setPacienteData(datosPaciente)
 
@@ -43,7 +38,6 @@ const PerfilInfo = ({ setActiveTab }) => {
     cargarDatosPaciente()
   }, [idPaciente])
 
-  // Función para formatear fecha
   const formatearFecha = (fecha) => {
     if (!fecha) return 'No disponible'
     return new Date(fecha).toLocaleDateString('es-AR', {
@@ -53,7 +47,6 @@ const PerfilInfo = ({ setActiveTab }) => {
     })
   }
 
-  // Función para calcular edad
   const calcularEdad = (fechaNacimiento) => {
     if (!fechaNacimiento) return 'No disponible'
     const hoy = new Date()
@@ -66,7 +59,6 @@ const PerfilInfo = ({ setActiveTab }) => {
     return `${edad} años`
   }
 
-  // Mostrar loading
   if (loading) {
     return (
       <div className="perfil-paciente-container">
@@ -82,7 +74,6 @@ const PerfilInfo = ({ setActiveTab }) => {
     )
   }
 
-  // Mostrar error
   if (error) {
     return (
       <div className="perfil-paciente-container">
@@ -96,20 +87,17 @@ const PerfilInfo = ({ setActiveTab }) => {
     )
   }
 
-  // Función para volver al perfil principal
   const handleVolver = () => {
     if (setActiveTab) {
       setActiveTab('perfil')
     }
   }
 
-  // Datos del paciente (priorizar datos del backend)
   const datosCompletos = pacienteData || pacienteInfo
   const nombreCompleto = `${datosCompletos.NombrePaciente || ''} ${datosCompletos.ApellidoPaciente || ''}`.trim()
 
   return (
     <div className="perfil-paciente-container">
-      {/* Botón de volver */}
       <div className="container-fluid mb-4">
         <div className="d-flex align-items-center justify-content-between">
           <button 
@@ -128,7 +116,6 @@ const PerfilInfo = ({ setActiveTab }) => {
           </div>
         </div>
       </div>
-      {/* Header con información principal */}
       <div className="welcome-section fade-in">
         <div className="container-fluid">
           <div className="row align-items-center">
@@ -152,8 +139,6 @@ const PerfilInfo = ({ setActiveTab }) => {
           </div>
         </div>
       </div>
-
-      {/* Información detallada del paciente */}
       <div className="container-fluid mt-4">
         <div className="row">
           <div className="col-12">
@@ -161,9 +146,7 @@ const PerfilInfo = ({ setActiveTab }) => {
               <span className="material-symbols-outlined me-2">badge</span>
               Datos Personales
             </h3>
-            
             <div className="row g-4">
-              {/* Datos básicos */}
               <div className="col-xl-6 col-lg-6 col-md-12">
                 <div className="perfil-nav-card h-100">
                   <div className="card-icon mb-3">
@@ -191,8 +174,6 @@ const PerfilInfo = ({ setActiveTab }) => {
                   </div>
                 </div>
               </div>
-
-              {/* Datos de contacto */}
               <div className="col-xl-6 col-lg-6 col-md-12">
                 <div className="perfil-nav-card h-100">
                   <div className="card-icon mb-3">
@@ -220,8 +201,6 @@ const PerfilInfo = ({ setActiveTab }) => {
                   </div>
                 </div>
               </div>
-
-              {/* Información adicional */}
               <div className="col-xl-6 col-lg-6 col-md-12">
                 <div className="perfil-nav-card h-100">
                   <div className="card-icon mb-3">
@@ -243,13 +222,9 @@ const PerfilInfo = ({ setActiveTab }) => {
                   </div>
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
-
-        {/* Información del sistema */}
         <div className="row mt-4 mb-0">
           <div className="col-12">
             <div className="card bg-light border-0 shadow-sm">

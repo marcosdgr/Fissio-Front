@@ -29,7 +29,6 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Cargar localidades al montar el componente
   useEffect(() => {
     fetchLocalidades();
   }, []);
@@ -49,7 +48,6 @@ const Register = () => {
     }
   };
 
-  // Función para mostrar alertas de error
   const showError = (title, message) => {
     Swal.fire({
       icon: 'error',
@@ -66,7 +64,6 @@ const Register = () => {
       [name]: value
     }));
     
-    // Limpiar error del campo cuando se empieza a escribir
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -78,7 +75,6 @@ const Register = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    // Validaciones básicas
     if (!formData.email) newErrors.email = "El email es requerido";
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email inválido";
     
@@ -104,8 +100,7 @@ const Register = () => {
     if (!formData.localidad) newErrors.localidad = "La localidad es requerida";
 
     setErrors(newErrors);
-    
-    // Si hay errores, mostrar el primero con SweetAlert2
+
     if (Object.keys(newErrors).length > 0) {
       const firstError = Object.values(newErrors)[0];
       showError('Error de validación', firstError);
@@ -125,7 +120,6 @@ const Register = () => {
     setLoading(true);
 
     try {
-      // Formatear datos para envío
       const registroData = {
         MailUsuario: formData.email,
         PasswordUsuario: formData.password,
@@ -139,10 +133,8 @@ const Register = () => {
         idLocalidad: parseInt(formData.localidad)
       };
 
-      // Registrar paciente
       await registerPaciente(registroData);
       
-      // Mostrar éxito y navegar al login
       await Swal.fire({
         icon: 'success',
         title: '¡Registro exitoso!',
@@ -151,19 +143,17 @@ const Register = () => {
         confirmButtonText: 'Ir al Login'
       });
       
-      // Navegar al login
       navigate('/login');
       
     } catch (error) {
       console.error("Error al registrar paciente:", error);
       
-      // Manejo específico de errores según código de estado
       const status = error.response?.status;
       const message = error.response?.data?.message;
       
       switch (status) {
         case 400:
-          // Datos faltantes o inválidos
+
           if (message?.includes('Mail')) {
             showError('Email requerido', 'El email es obligatorio para crear la cuenta');
           } else if (message?.includes('DNI')) {
@@ -176,22 +166,22 @@ const Register = () => {
           break;
           
         case 409:
-          // Usuario ya existe
+
           showError('Usuario ya existe', 'Ya existe una cuenta con este email. Intente con otro email o vaya al login si ya tiene cuenta.');
           break;
           
         case 422:
-          // Error de validación específica
+ 
           showError('Error de validación', message || 'Los datos ingresados no cumplen con los requisitos');
           break;
           
         case 500:
-          // Error del servidor
+
           showError('Error del servidor', 'Ocurrió un problema en el servidor. Intente nuevamente más tarde');
           break;
           
         default:
-          // Error genérico o sin conexión
+
           if (error.code === 'ERR_NETWORK') {
             showError('Error de conexión', 'No se pudo conectar al servidor. Verifique su conexión a internet');
           } else {
@@ -220,8 +210,6 @@ const Register = () => {
             </div>
             <div className="card-body">
               <form onSubmit={handleSubmit} className="row g-3">
-                
-                {/* Sección de Datos de Usuario */}
                 <div className="col-12">
                   <h5 className="text-primary border-bottom pb-2">Datos de Acceso</h5>
                 </div>
@@ -253,7 +241,6 @@ const Register = () => {
                   />
                   {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                 </div>
-
                 <div className="col-md-6">
                   <label htmlFor="confirmPassword" className="form-label">Confirmar Contraseña *</label>
                   <input
@@ -267,8 +254,6 @@ const Register = () => {
                   />
                   {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                 </div>
-
-                {/* Sección de Datos Personales */}
                 <div className="col-12 mt-4">
                   <h5 className="text-primary border-bottom pb-2">Datos Personales</h5>
                 </div>
@@ -287,7 +272,6 @@ const Register = () => {
                   />
                   {errors.dni && <div className="invalid-feedback">{errors.dni}</div>}
                 </div>
-
                 <div className="col-md-4">
                   <label htmlFor="nombre" className="form-label">Nombre *</label>
                   <input
@@ -301,7 +285,6 @@ const Register = () => {
                   />
                   {errors.nombre && <div className="invalid-feedback">{errors.nombre}</div>}
                 </div>
-
                 <div className="col-md-4">
                   <label htmlFor="apellido" className="form-label">Apellido *</label>
                   <input
@@ -345,7 +328,6 @@ const Register = () => {
                   </select>
                   {errors.sexo && <div className="invalid-feedback">{errors.sexo}</div>}
                 </div>
-
                 <div className="col-md-6">
                   <label htmlFor="telefono" className="form-label">Teléfono *</label>
                   <input
@@ -359,7 +341,6 @@ const Register = () => {
                   />
                   {errors.telefono && <div className="invalid-feedback">{errors.telefono}</div>}
                 </div>
-
                 <div className="col-md-6">
                   <label htmlFor="localidad" className="form-label">Localidad *</label>
                   <select
@@ -378,7 +359,6 @@ const Register = () => {
                   </select>
                   {errors.localidad && <div className="invalid-feedback">{errors.localidad}</div>}
                 </div>
-
                 <div className="col-12">
                   <label htmlFor="direccion" className="form-label">Dirección *</label>
                   <input
@@ -392,7 +372,6 @@ const Register = () => {
                   />
                   {errors.direccion && <div className="invalid-feedback">{errors.direccion}</div>}
                 </div>
-
                 <div className="col-12 mt-4">
                   <button 
                     type="submit" 
@@ -412,7 +391,6 @@ const Register = () => {
                     )}
                   </button>
                 </div>
-                
                 <div className="col-12 text-center">
                   <small className="text-muted">* Campos obligatorios</small>
                   <hr className="my-3" />

@@ -6,7 +6,6 @@ import { showConfirm, showSuccess, showError } from '../../Utils/sweetAlerts';
 import '../../Css/Secretaria/ConfiguracionSecretaria.css';
 
 const ConfiguracionSecretaria = () => {
-  // Estados del formulario
   const [formData, setFormData] = useState({
     NombreEmpleado: '',
     ApellidoEmpleado: '',
@@ -17,7 +16,6 @@ const ConfiguracionSecretaria = () => {
     idLocalidad: ''
   });
 
-  // Estados de la aplicación
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -26,11 +24,9 @@ const ConfiguracionSecretaria = () => {
   const [empleadoOriginal, setEmpleadoOriginal] = useState(null);
   const [emailEmpleado, setEmailEmpleado] = useState(null);
 
-  // Obtener datos del empleado desde Zustand
   const { user } = useAuthStore();
   const idEmpleado = user?.idEmpleado || user?.usuario?.idEmpleado;
 
-  // useEffect para cargar datos iniciales
   useEffect(() => {
     const cargarDatos = async () => {
       if (!idEmpleado) {
@@ -43,17 +39,14 @@ const ConfiguracionSecretaria = () => {
         setLoading(true);
         setError(null);
 
-        // Cargar datos del empleado y localidades
         const [datosEmpleado, localidadesData] = await Promise.all([
           obtenerEmpleadoPorId(idEmpleado),
           getLocalidades()
         ]);
 
-        // Guardar datos originales
         setEmpleadoOriginal(datosEmpleado);
         setEmailEmpleado(user?.email || datosEmpleado.email);
 
-        // Llenar formulario con datos actuales
         setFormData({
           NombreEmpleado: datosEmpleado.NombreEmpleado || '',
           ApellidoEmpleado: datosEmpleado.ApellidoEmpleado || '',
@@ -78,7 +71,6 @@ const ConfiguracionSecretaria = () => {
     cargarDatos();
   }, [idEmpleado, user]);
 
-  // Función para manejar cambios en el formulario
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -90,7 +82,6 @@ const ConfiguracionSecretaria = () => {
     if (success) setSuccess(false);
   };
 
-  // Función para validar el formulario
   const validarFormulario = () => {
     const { NombreEmpleado, ApellidoEmpleado, TelefonoEmpleado, DireccionEmpleado, FechaNacEmpleado, idLocalidad } = formData;
 
@@ -106,7 +97,6 @@ const ConfiguracionSecretaria = () => {
     if (fechaNac > hoy) throw new Error('La fecha de nacimiento no puede ser futura');
   };
 
-  // Función para verificar si hay cambios
   const hayChangeios = () => {
     if (!empleadoOriginal) return false;
     
@@ -120,7 +110,6 @@ const ConfiguracionSecretaria = () => {
     );
   };
 
-  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -136,7 +125,6 @@ const ConfiguracionSecretaria = () => {
         return;
       }
 
-      // Mostrar confirmación antes de guardar
       const result = await showConfirm(
         '¿Guardar cambios?',
         'Se actualizarán tus datos personales',
@@ -150,7 +138,6 @@ const ConfiguracionSecretaria = () => {
 
       setSaving(true);
 
-      // Normalizar PermisosEmpleado para que coincida con los valores del backend
       let permisosNormalizados = empleadoOriginal.PermisosEmpleado;
       if (permisosNormalizados) {
         const permisosStr = String(permisosNormalizados).toLowerCase();
@@ -166,15 +153,12 @@ const ConfiguracionSecretaria = () => {
       datosActualizados = {
         ...formData,
         idLocalidad: parseInt(formData.idLocalidad),
-        // Incluir campos obligatorios del backend que no se editan
         DNI: empleadoOriginal.DNI,
         SalarioEmpleado: empleadoOriginal.SalarioEmpleado,
         PermisosEmpleado: permisosNormalizados,
         idCatEmpleado: empleadoOriginal.idCatEmpleado,
         idUsuario: empleadoOriginal.idUsuario
       };
-
-      console.log('📤 Enviando datos al backend:', datosActualizados);
 
       await actualizarEmpleado(idEmpleado, datosActualizados);
 
@@ -186,10 +170,10 @@ const ConfiguracionSecretaria = () => {
       await showSuccess('¡Datos actualizados!', 'Tu información ha sido guardada correctamente');
 
     } catch (err) {
-      console.error('❌ Error al actualizar datos:', err);
-      console.error('📋 Respuesta del servidor:', err.response?.data);
+      console.error('Error al actualizar datos:', err);
+      console.error('Respuesta del servidor:', err.response?.data);
       if (datosActualizados) {
-        console.error('📦 Datos enviados:', datosActualizados);
+        console.error('Datos enviados:', datosActualizados);
       }
       const errorMsg = err.response?.data?.message || err.message || 'Error al actualizar los datos';
       await showError('Error al guardar', errorMsg);
@@ -199,7 +183,6 @@ const ConfiguracionSecretaria = () => {
     }
   };
 
-  // Función para restablecer el formulario
   const handleReset = () => {
     if (!empleadoOriginal) return;
 
@@ -218,7 +201,6 @@ const ConfiguracionSecretaria = () => {
     setSuccess(false);
   };
 
-  // Función para calcular edad
   const calcularEdad = (fechaNacimiento) => {
     if (!fechaNacimiento) return 'No disponible';
     const hoy = new Date();
@@ -240,7 +222,6 @@ const ConfiguracionSecretaria = () => {
 
   return (
     <div className="config-secretaria-container config-fade-in">
-      {/* Header */}
       <div className="config-welcome-section">
         <div className="container-fluid">
           <div className="row align-items-center">
@@ -265,12 +246,10 @@ const ConfiguracionSecretaria = () => {
         </div>
       </div>
 
-      {/* Formulario */}
       <div className="container-fluid mt-4">
         <div className="row justify-content-center">
           <div className="col-xl-8 col-lg-10 col-md-12">
-            
-            {/* Mensajes de estado */}
+
             {success && (
               <div className="config-alert-success d-flex align-items-center" role="alert">
                 <span className="material-symbols-outlined me-2">check_circle</span>
@@ -298,8 +277,7 @@ const ConfiguracionSecretaria = () => {
 
               <form onSubmit={handleSubmit}>
                 <div className="row g-4">
-                  
-                  {/* Nombre */}
+
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="NombreEmpleado" className="config-form-label">
                       <span className="material-symbols-outlined">person</span>
@@ -317,7 +295,6 @@ const ConfiguracionSecretaria = () => {
                     />
                   </div>
 
-                  {/* Apellido */}
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="ApellidoEmpleado" className="config-form-label">
                       <span className="material-symbols-outlined">person</span>
@@ -335,7 +312,6 @@ const ConfiguracionSecretaria = () => {
                     />
                   </div>
 
-                  {/* Teléfono */}
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="TelefonoEmpleado" className="config-form-label">
                       <span className="material-symbols-outlined">phone</span>
@@ -353,7 +329,6 @@ const ConfiguracionSecretaria = () => {
                     />
                   </div>
 
-                  {/* Fecha de Nacimiento */}
                   <div className="col-md-6 config-form-group">
                     <label htmlFor="FechaNacEmpleado" className="config-form-label">
                       <span className="material-symbols-outlined">cake</span>
@@ -377,7 +352,6 @@ const ConfiguracionSecretaria = () => {
                     )}
                   </div>
 
-                  {/* Localidad */}
                   <div className="col-md-12 config-form-group">
                     <label htmlFor="idLocalidad" className="config-form-label">
                       <span className="material-symbols-outlined">location_on</span>
@@ -400,7 +374,6 @@ const ConfiguracionSecretaria = () => {
                     </select>
                   </div>
 
-                  {/* Dirección */}
                   <div className="col-md-12 config-form-group">
                     <label htmlFor="DireccionEmpleado" className="config-form-label">
                       <span className="material-symbols-outlined">home</span>
@@ -418,7 +391,6 @@ const ConfiguracionSecretaria = () => {
                     />
                   </div>
 
-                  {/* Información no editable */}
                   <div className="col-12">
                     <div className="config-readonly-section">
                       <h6 className="config-readonly-title">
@@ -451,7 +423,6 @@ const ConfiguracionSecretaria = () => {
                     </div>
                   </div>
 
-                  {/* Botones */}
                   <div className="col-12">
                     <div className="d-flex gap-3 justify-content-end">
                       <button
@@ -491,7 +462,6 @@ const ConfiguracionSecretaria = () => {
           </div>
         </div>
 
-        {/* Información adicional */}
         <div className="row mt-4 mb-0">
           <div className="col-12">
             <div className="config-info-card">
