@@ -55,6 +55,7 @@ const Login = () => {
         '¡Login exitoso!',
         `Bienvenido ${
           response.usuario?.NombrePaciente ||
+          response.usuario?.NombreEmpleado ||
           response.usuario?.MailUsuario ||
           'a Fissio'
         }`
