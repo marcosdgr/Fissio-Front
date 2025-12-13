@@ -7,6 +7,7 @@ import '../Css/Secretaria/SecretariaPage.css';
 import '../Css/Secretaria/SidebarSecretaria.css';
 import MensajeriaInterna from '../Components/MensajeriaInterna/MensajeriaInterna';
 import Cobros from '../Components/Admin/Cobros/Cobros'
+import Pacientes from '../Components/Admin/Pacientes/Pacientes';
 
 const SecretariaPage = () => {
   const [activeTab, setActiveTab] = useState("turnos");
@@ -14,6 +15,7 @@ const SecretariaPage = () => {
   const { user } = useAuthStore();
 
   const menuItems = [
+    { id: "pacientes", label: "Pacientes", icon: "people" },
     { id: "turnos", label: "Turnos", icon: "event" },
     { id: "mensajes", label: "Mensajes", icon: "mail" },
     { id: "asistencias", label: "Asistencias", icon: "fact_check" },
@@ -104,6 +106,7 @@ const SecretariaPage = () => {
         </div>
 
         <div className="p-4">
+          {activeTab === "pacientes" && <Pacientes />}
           {activeTab === "turnos" && <TurnosSecretaria />}
           {activeTab === "mensajes" && <MensajeriaInterna />}
           {activeTab === "asistencias" && <AsistenciasSecretaria />}
