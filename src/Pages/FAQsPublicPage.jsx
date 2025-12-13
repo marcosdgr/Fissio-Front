@@ -164,13 +164,6 @@ const FAQsPublicPage = () => {
           </div>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer className="public-footer">
-        <div className="container">
-          <p>© 2025 Fissio. Todos los derechos reservados.</p>
-        </div>
-      </footer>
     </>
   );
 };

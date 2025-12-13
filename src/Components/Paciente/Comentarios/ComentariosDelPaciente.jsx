@@ -145,14 +145,7 @@ const ComentariosDelPaciente = () => {
     })
   }
 
-  // Función para obtener clase de badge según estado
-  const getEstadoBadge = (isPublicado) => {
-    return isPublicado ? 'badge bg-success' : 'badge bg-warning text-dark'
-  }
 
-  const getEstadoTexto = (isPublicado) => {
-    return isPublicado ? 'Publicado' : 'En revisión'
-  }
 
   // Función para renderizar estrellas
   const renderEstrellas = (cantidad) => {
@@ -299,9 +292,7 @@ const ComentariosDelPaciente = () => {
                                     <h6 className="mb-0 fw-bold">
                                       {userData.NombrePaciente} {userData.ApellidoPaciente}
                                     </h6>
-                                    <span className={getEstadoBadge(com.IsPublicado)}>
-                                      {getEstadoTexto(com.IsPublicado)}
-                                    </span>
+                                  
                                   </div>
                                   <small className="text-muted d-flex align-items-center mt-1">
                                     <span className="material-symbols-outlined me-1 icon-small">
@@ -318,16 +309,6 @@ const ComentariosDelPaciente = () => {
                             <div className="comentario-card-body-paciente">
                               <p className="comentario-texto-paciente">{com.Comentario}</p>
                             </div>
-                            {!com.IsPublicado && (
-                              <div className="comentario-card-footer-paciente">
-                                <small className="text-muted">
-                                  <span className="material-symbols-outlined me-1 icon-small">
-                                    info
-                                  </span>
-                                  Tu comentario está siendo revisado por nuestro equipo
-                                </small>
-                              </div>
-                            )}
                           </div>
                         </div>
                       ))}
