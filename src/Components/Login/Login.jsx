@@ -51,14 +51,11 @@ const Login = () => {
 
       login(response);
 
+      const nombre = response.usuario?.NombrePaciente || response.usuario?.NombreEmpleado || response.usuario?.MailUsuario || 'a Fissio';
+
       showSuccess(
         '¡Login exitoso!',
-        `Bienvenido ${
-          response.usuario?.NombrePaciente ||
-          response.usuario?.NombreEmpleado ||
-          response.usuario?.MailUsuario ||
-          'a Fissio'
-        }`
+        `Bienvenido ${nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase()}`
       );
 
       const rol = response.usuario?.NombreRol;          
