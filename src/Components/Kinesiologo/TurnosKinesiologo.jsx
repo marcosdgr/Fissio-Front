@@ -222,7 +222,11 @@ const TurnosKinesiologo = () => {
   };
 
   const onFinalizacionExitosa = () => {
-    cargarTurnos(fechaConsulta);
+    // Recargar turnos después de un pequeño delay para asegurar que el backend actualizó
+    console.log('Informe guardado, recargando turnos...');
+    setTimeout(() => {
+      cargarTurnos(fechaConsulta);
+    }, 500);
   };
 
   const abrirModalDetalles = (turno) => {
