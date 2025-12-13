@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { obtenerDetallesTurno } from '../../../Custom/CustomTurnos';
 import Swal from 'sweetalert2';
 
 const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
@@ -7,61 +6,27 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!isOpen || !turno || (!turno.idTurno && !turno.IdTurno)) {
+    if (!isOpen || !turno) {
       return;
     }
 
-    const cargarDetalles = async () => {
-      setIsLoading(true);
-      try {
-        // Manejar diferentes formatos de ID del turno
-        const idTurno = turno.IdTurno || turno.idTurno;
-        console.log('Cargando detalles para turno ID:', idTurno);
-        
-        const response = await obtenerDetallesTurno(idTurno);
-        console.log('Respuesta del servidor:', response);
-        setDetalles(response.turno);
-      } catch (error) {
-        console.error('Error al cargar detalles:', error);
-        const errorMessage = error.response?.data?.message || 
-                            error.response?.data?.error || 
-                            error.message || 
-                            'No se pudieron cargar los detalles del turno';
-        
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al cargar detalles',
-          text: errorMessage,
-          confirmButtonColor: '#0470BB',
-          footer: error.response?.status ? `Código de error: ${error.response.status}` : null
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    cargarDetalles();
+    // Usar directamente los datos del turno que se pasa como prop
+    setIsLoading(true);
+    console.log('DetallesTurnoModal recibió turno:', turno);
+    console.log('Todos los campos del turno:', Object.keys(turno));
+    console.log('ObservacionesFinal:', turno.ObservacionesFinal);
+    console.log('observacionesFinal:', turno.observacionesFinal);
+    console.log('Informe:', turno.Informe);
+    console.log('informe:', turno.informe);
+    setTimeout(() => {
+      setDetalles(turno);
+      setIsLoading(false);
+    }, 100);
   }, [isOpen, turno]);
 
   const formatearFecha = (fecha) => {
     if (!fecha) return 'No especificada';
     return new Date(fecha).toLocaleDateString('es-AR');
-  };
-
-  const getEstadoBadge = (estado) => {
-    const badges = {
-      'Solicitado': 'bg-warning text-dark',
-      'En Curso': 'bg-primary',
-      'Finalizado': 'bg-success',
-      'Cancelado': 'bg-danger',
-      'Pendiente': 'bg-info'
-    };
-    return badges[estado] || 'bg-secondary';
-  };
-
-  const descargarOrdenMedica = (url) => {
-    // Abrir la orden médica en una nueva pestaña
-    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   if (!isOpen) return null;
@@ -108,99 +73,74 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                       <div className="mb-3">
                         <strong>Nombre Completo:</strong>
                         <br />
-                        {detalles.nombre} {detalles.apellido}
+                        {detalles.NombrePaciente} {detalles.ApellidoPaciente || ''}
                       </div>
                       
-                      <div className="mb-3">
-                        <strong>DNI:</strong>
-                        <br />
-                        <span className="badge bg-secondary">{detalles.dni}</span>
-                      </div>
+                      {detalles.DniPaciente && (
+                        <div className="mb-3">
+                          <strong>DNI:</strong>
+                          <br />
+                          <span className="badge bg-secondary">{detalles.DniPaciente}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
 
-                {/* Estado del Turno */}
+                {/* Detalles del Turno */}
                 <div className="col-md-6">
                   <div className="card h-100">
                     <div className="card-header bg-light">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">schedule</span>
-                        Estado del Turno
+                        Detalles del Turno
                       </h6>
                     </div>
                     <div className="card-body">
                       <div className="mb-3">
-                        <strong>Estado Actual:</strong>
+                        <strong>Tratamiento:</strong>
                         <br />
-                        <span className={`badge ${getEstadoBadge(detalles.estado)} mt-1`}>
-                          {detalles.estado}
-                        </span>
+                        {detalles.NombreTratamiento || 'No especificado'}
+                      </div>
+                      <div className="mb-3">
+                        <strong>Fecha:</strong>
+                        <br />
+                        {formatearFecha(detalles.FechaRequeridaTurno)}
+                      </div>
+                      <div className="mb-3">
+                        <strong>Hora:</strong>
+                        <br />
+                        {detalles.HorarioRequeridoTurno || 'No especificada'}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Orden Médica */}
-                {detalles.ordenMedica && (
-                  <div className="col-12 mt-3">
-                    <div className="card">
-                      <div className="card-header bg-light">
-                        <h6 className="mb-0">
-                          <span className="material-symbols-outlined me-1">description</span>
-                          Orden Médica
-                        </h6>
-                      </div>
-                      <div className="card-body">
-                        <div className="row">
-                          <div className="col-md-8">
-                            <div className="mb-2">
-                              <strong>Descripción:</strong>
-                              <br />
-                              {detalles.ordenMedica.descripcion}
-                            </div>
-                            
-                            <div className="mb-2">
-                              <strong>Fecha de Subida:</strong>
-                              <br />
-                              {formatearFecha(detalles.ordenMedica.fechaSubida)}
-                            </div>
-                          </div>
-                          
-                          <div className="col-md-4 text-end">
-                            <button
-                              className="btn btn-outline-primary"
-                              onClick={() => descargarOrdenMedica(detalles.ordenMedica.url)}
-                            >
-                              <span className="material-symbols-outlined me-1">open_in_new</span>
-                              Ver Orden Médica
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                {/* Informe de la Sesión */}
+                <div className="col-12 mt-3">
+                  <div className="card">
+                    <div className="card-header bg-light">
+                      <h6 className="mb-0">
+                        <span className="material-symbols-outlined me-1">note_add</span>
+                        Informe de la Sesión
+                      </h6>
                     </div>
-                  </div>
-                )}
-
-                {/* Mensaje cuando no hay orden médica */}
-                {!detalles.ordenMedica && (
-                  <div className="col-12 mt-3">
-                    <div className="card">
-                      <div className="card-header bg-light">
-                        <h6 className="mb-0">
-                          <span className="material-symbols-outlined me-1">description</span>
-                          Orden Médica
-                        </h6>
-                      </div>
-                      <div className="card-body">
+                    <div className="card-body">
+                      {detalles.InformeTurno || detalles.ObservacionesFinal || detalles.observacionesFinal ? (
+                        <div>
+                          <p className="mb-0 text-dark" style={{ whiteSpace: 'pre-wrap' }}>
+                            {detalles.InformeTurno || detalles.ObservacionesFinal || detalles.observacionesFinal}
+                          </p>
+                        </div>
+                      ) : (
                         <p className="text-muted mb-0">
                           <span className="material-symbols-outlined me-1">info</span>
-                          No se encontró orden médica asociada a este turno.
+                          No hay informe disponible para este turno.
                         </p>
-                      </div>
+                      )}
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             ) : (
               <div className="text-center py-4">

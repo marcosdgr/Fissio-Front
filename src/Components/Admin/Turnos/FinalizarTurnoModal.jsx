@@ -11,12 +11,17 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingTratamientos, setIsLoadingTratamientos] = useState(false);
 
-  // Cargar tratamientos cuando se abre el modal
+  // Cargar informe actual cuando se abre el modal
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && turnoData) {
+      // Llenar el formulario con los datos actuales del turno
+      setFormData({
+        observaciones: turnoData.InformeTurno || turnoData.ObservacionesFinal || turnoData.observacionesFinal || '',
+        tratamientoId: turnoData.idTratamiento || ''
+      });
       cargarTratamientos();
     }
-  }, [isOpen]);
+  }, [isOpen, turnoData]);
 
   const cargarTratamientos = async () => {
     try {
@@ -47,52 +52,35 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
 
     try {
       // Usar el ID correcto según lo que esté disponible
-      const idTurno = turnoData?.IdTurno || turnoData?.idTurno;
+      const idTurno = turnoData?.idTurno || turnoData?.IdTurno;
       
       if (!idTurno) {
         showError('Error', 'No se pudo obtener el ID del turno');
         return;
       }
 
-      // Preparar datos de finalización
-      const finalizacionData = {
+      console.log('ID del turno a actualizar:', idTurno);
+      console.log('Informe a guardar:', formData.observaciones);
+
+      // Preparar datos de actualización del informe
+      const actualizacionData = {
         observacionesFinal: formData.observaciones || "",
         idEmpleado: turnoData.idEmpleado || turnoData.IdEmpleado || null
       };
 
-      // Finalizar el turno
-      await finalizarTurno(idTurno, finalizacionData);
+      console.log('Datos enviados al backend:', actualizacionData);
 
-      // Si se seleccionó un tratamiento, asignarlo al turno
-      if (formData.tratamientoId) {
-        const tratamientoData = {
-          idTurno: idTurno,
-          idTratamiento: parseInt(formData.tratamientoId),
-          observaciones: formData.observaciones || null
-        };
-        
-        try {
-          await asignarTratamientoATurno(tratamientoData);
-          showSuccess('Éxito', 'Turno finalizado y tratamiento asignado correctamente');
-        } catch (tratamientoError) {
-          console.error('Error al asignar tratamiento:', tratamientoError);
-          // Turno se finalizó pero tratamiento falló
-          showSuccess('Turno Finalizado', 'Turno finalizado correctamente, pero hubo un error al asignar el tratamiento');
-        }
-      } else {
-        showSuccess('Éxito', 'Turno finalizado correctamente');
-      }
-      
-      // Resetear formulario
-      setFormData({
-        observaciones: '',
-        tratamientoId: ''
-      });
+      // Actualizar el informe del turno usando finalizarTurno
+      const response = await finalizarTurno(idTurno, actualizacionData);
+      console.log('Respuesta del servidor:', response);
+
+      showSuccess('Éxito', 'Informe actualizado correctamente');
       
       onFinalizarSuccess();
       onClose();
     } catch (error) {
-      console.error('Error al finalizar turno:', error);
+      console.error('Error al actualizar informe:', error);
+      console.error('Detalles del error:', error.response?.data);
       
       // Verificar si es un error específico del backend
       if (error.response?.data?.message) {
@@ -100,7 +88,7 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
       } else if (error.response?.status === 404) {
         showError('Error', 'Endpoint no encontrado. Verifique que el servidor esté funcionando correctamente.');
       } else {
-        showError('Error', 'Error al finalizar el turno. Intente nuevamente.');
+        showError('Error', 'Error al actualizar el informe. Intente nuevamente.');
       }
     } finally {
       setIsLoading(false);
@@ -123,8 +111,8 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
         <div className="modal-content">
           <div className="modal-header" style={{ backgroundColor: '#0470BB', color: 'white' }}>
             <h5 className="modal-title">
-              <span className="material-symbols-outlined me-2">check_circle</span>
-              Finalizar Turno
+              <span className="material-symbols-outlined me-2">edit_note</span>
+              Editar Informe
             </h5>
             <button
               type="button"
@@ -140,9 +128,9 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
                 <div className="alert alert-info d-flex align-items-center">
                   <span className="material-symbols-outlined me-2">info</span>
                   <div>
-                    <strong>Paciente:</strong> {turnoData.NombrePaciente} <br />
-                    <strong>Servicio:</strong> {turnoData.Servicio} <br />
-                    <strong>Horario:</strong> {turnoData.HoraInicio} - {turnoData.HoraFin}
+                    <strong>Paciente:</strong> {turnoData.NombrePaciente} {turnoData.ApellidoPaciente} <br />
+                    <strong>Tratamiento:</strong> {turnoData.NombreTratamiento} <br />
+                    <strong>Horario:</strong> {turnoData.HorarioRequeridoTurno}
                   </div>
                 </div>
               </div>
@@ -151,44 +139,16 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
             <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-12 mb-3">
-                  <label htmlFor="tratamientos" className="form-label">
-                    <span className="material-symbols-outlined me-1">healing</span>
-                    Tratamiento
-                  </label>
-                  <select
-                    className="form-select"
-                    id="tratamientos"
-                    name="tratamientoId"
-                    value={formData.tratamientoId}
-                    onChange={handleInputChange}
-                    disabled={isLoadingTratamientos || isLoading}
-                  >
-                    <option value="">Seleccione un tratamiento</option>
-                    {tratamientos.map(tratamiento => (
-                      <option key={tratamiento.idTratamiento} value={tratamiento.idTratamiento}>
-                        {tratamiento.NombreTratamiento}
-                      </option>
-                    ))}
-                  </select>
-                  {isLoadingTratamientos && (
-                    <div className="form-text text-muted">
-                      <span className="spinner-border spinner-border-sm me-1"></span>
-                      Cargando tratamientos...
-                    </div>
-                  )}
-                </div>
-
-                <div className="col-12 mb-3">
                   <label htmlFor="observaciones" className="form-label">
                     <span className="material-symbols-outlined me-1">note_add</span>
-                    Observaciones Finales de la Sesión
+                    Informe de la Sesión
                   </label>
                   <textarea
                     className="form-control"
                     id="observaciones"
                     name="observaciones"
                     rows="5"
-                    placeholder="Ingrese observaciones finales sobre la sesión realizada..."
+                    placeholder="Ingrese el informe detallado de la sesión realizada..."
                     value={formData.observaciones}
                     onChange={handleInputChange}
                     maxLength="500"
@@ -221,12 +181,12 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
               {isLoading ? (
                 <>
                   <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                  Finalizando...
+                  Guardando...
                 </>
               ) : (
                 <>
-                  <span className="material-symbols-outlined me-1">check_circle</span>
-                  Finalizar Turno
+                  <span className="material-symbols-outlined me-1">save</span>
+                  Guardar Informe
                 </>
               )}
             </button>
