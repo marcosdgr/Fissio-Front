@@ -29,7 +29,7 @@ function AppContent() {
     <div className="d-flex flex-column min-vh-100">
       <Navbar />
 
-      <main className="flex-fill">
+      <main className="flex-fill app-main">
         <Routes>
             {/* 🔓 RUTAS PÚBLICAS */}
             <Route path="/" element={<HomePage />} />

@@ -155,9 +155,9 @@ const ConfiguracionSecretaria = () => {
       if (permisosNormalizados) {
         const permisosStr = String(permisosNormalizados).toLowerCase();
         if (permisosStr.includes('administr')) {
-          permisosNormalizados = 'Administracion';
+          permisosNormalizados = 'Administración';
         } else if (permisosStr.includes('kines')) {
-          permisosNormalizados = 'Kinesiologia';
+          permisosNormalizados = 'Kinesiología';
         } else {
           permisosNormalizados = 'Otros';
         }
