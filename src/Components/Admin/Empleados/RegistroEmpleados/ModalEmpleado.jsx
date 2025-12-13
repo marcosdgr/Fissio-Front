@@ -157,7 +157,7 @@ const ModalEmpleado = ({
                   />
                 </div>
                 <div className="col-md-4 mb-3">
-                  <label className="form-label">Mail (opcional)</label>
+                  <label className="form-label">Mail</label>
                   <input
                     name="MailUsuario"
                     className="form-control"
@@ -168,7 +168,7 @@ const ModalEmpleado = ({
                 {modalMode === "create" && (
                   <div className="col-md-4 mb-3">
                     <label className="form-label">
-                      Password (si crea usuario)
+                      Password
                     </label>
                     <input
                       type="password"

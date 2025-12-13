@@ -94,16 +94,7 @@ const PacientesDetalleModal = ({ showModal, pacienteDetalle, onClose }) => {
                   {pacienteDetalle.MailUsuario || 'No disponible'}
                 </p>
               </div>
-              
-              <div className="col-md-6">
-                <label className="form-label fw-bold text-muted">Contraseña:</label>
-                <div className="bg-light rounded px-3 py-2 d-flex align-items-center">
-                  <span className="text-muted me-2">••••••••</span>
-                  <small className="text-info">
-                    {pacienteDetalle.PasswordTemporal ? '(Temporal: 1234)' : '(Personalizada)'}
-                  </small>
-                </div>
-              </div>
+            
 
               <div className="col-12 mt-4">
                 <h6 className="text-primary border-bottom pb-2 mb-3">
