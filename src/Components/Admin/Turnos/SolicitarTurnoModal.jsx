@@ -14,6 +14,33 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
   const [loadingHorarios, setLoadingHorarios] = useState(false);
   const [errores, setErrores] = useState({});
 
+  // Función para filtrar horarios pasados si la fecha es hoy
+  const filtrarHorariosPasados = (horarios, fecha) => {
+    // Verificar si la fecha seleccionada es hoy
+    const fechaSeleccionada = new Date(fecha + 'T00:00:00');
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    // Si la fecha no es hoy, devolver todos los horarios
+    if (fechaSeleccionada.getTime() !== hoy.getTime()) {
+      return horarios;
+    }
+    
+    // Si es hoy, filtrar los horarios que ya pasaron
+    const ahora = new Date();
+    const horaActual = ahora.getHours();
+    const minutosActuales = ahora.getMinutes();
+    
+    return horarios.filter(h => {
+      const [hora, minutos] = h.value.split(':').map(Number);
+      // Comparar horario: debe ser mayor a la hora actual
+      if (hora > horaActual) return true;
+      if (hora === horaActual && minutos > minutosActuales) return true;
+      return false;
+    });
+  };
+
+  // Función para cargar horarios disponibles
   const cargarHorariosDisponibles = async (fecha) => {
     if (!fecha) {
       setHorariosDisponibles([]);
@@ -23,8 +50,15 @@ const SolicitarTurnoModal = ({ isOpen, onClose, onSolicitudExitosa }) => {
     setLoadingHorarios(true);
     try {
       const response = await getDisponibilidadHorarios(fecha);
-      setHorariosDisponibles(response.horariosDisponibles || []);
-      if (formData.horarioRequerido && !response.horariosDisponibles?.some(h => h.value === formData.horarioRequerido)) {
+      let horarios = response.horariosDisponibles || [];
+      
+      // Filtrar horarios pasados si la fecha es hoy
+      horarios = filtrarHorariosPasados(horarios, fecha);
+      
+      setHorariosDisponibles(horarios);
+      
+      // Limpiar horario seleccionado si ya no está disponible
+      if (formData.horarioRequerido && !horarios.some(h => h.value === formData.horarioRequerido)) {
         setFormData(prev => ({ ...prev, horarioRequerido: '' }));
       }
     } catch (error) {
