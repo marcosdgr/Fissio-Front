@@ -30,6 +30,8 @@ const useCustomCobros = () => {
       }
       
       console.log("✨ Cobros finales:", cobrosData);
+      console.log("📍 IDs de cobros:", cobrosData.map(c => c.idCobro));
+      console.log("🔍 PRIMER COBRO COMPLETO:", cobrosData[0]);
       setCobros({ cobros: cobrosData });
     } catch (err) {
       console.error("❌ ERROR EN useCustomCobros:", err);
@@ -89,6 +91,37 @@ const useCustomCobros = () => {
     }
   };
 
+  const marcarInactivo = async (cobro) => {
+    try {
+      // Convertir fecha ISO a formato MySQL (YYYY-MM-DD HH:MM:SS)
+      const convertirFecha = (fechaISO) => {
+        const fecha = new Date(fechaISO);
+        return fecha.toISOString().slice(0, 19).replace('T', ' ');
+      };
+
+      // Si está inactivo, activarlo. Si está activo, inactivarlo
+      const nuevoEstado = cobro.EstadoCobro === "Inactivo" ? "Activo" : "Inactivo";
+
+      const datosActualizados = {
+        FechaCobro: convertirFecha(cobro.FechaCobro),
+        idTurno: cobro.idTurno,
+        TipoCobro: cobro.TipoCobro || "Paciente",
+        idMedioPago: cobro.idMedioPago,
+        MontoCobro: cobro.MontoCobro,
+        EstadoCobro: nuevoEstado,
+        Descripcion: cobro.Descripcion || ""
+      };
+      
+      const url = `${BASE_URL}api/cobros/v1/${cobro.idCobro}`;
+      const res = await axios.put(url, datosActualizados);
+      await obtenerCobros();
+      return { success: true };
+    } catch (err) {
+      console.error("❌ ERROR AL CAMBIAR ESTADO:", err.response?.data || err.message);
+      return { success: false, error: err.response?.data?.message || err.message || "Error al cambiar estado" };
+    }
+  };
+
   useEffect(() => {
     obtenerCobros();
   }, []);
@@ -100,7 +133,8 @@ const useCustomCobros = () => {
     obtenerCobros,
     agregarCobro,
     editarCobro,
-    eliminarCobro 
+    eliminarCobro,
+    marcarInactivo
   };
 };
 

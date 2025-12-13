@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import "../../../Css/Cobros/Cobros.css";
 
 const Cobros = () => {
-  const { cobros, loading, error, eliminarCobro, obtenerCobros } = useCustomCobros();
+  const { cobros, loading, error, marcarInactivo, obtenerCobros } = useCustomCobros();
   const { pacientesObj } = useCustomPacientesCobros();
 
   const [openModal, setOpenModal] = useState(false);
@@ -93,24 +93,30 @@ const Cobros = () => {
     setCobroSeleccionado(null);
   };
 
-  const handleEliminar = async (cobro) => {
+  const handleCambiarEstado = async (cobro) => {
+    const esInactivo = cobro.EstadoCobro === "Inactivo";
+    const accion = esInactivo ? "activar" : "desactivar";
+    const nuevoEstado = esInactivo ? "ACTIVO" : "INACTIVO";
+
     const result = await Swal.fire({
-      title: "¿Eliminar cobro?",
-      text: `$${cobro.MontoCobro} - ${cobro.Paciente}`,
-      icon: "warning",
+      title: `¿${accion.charAt(0).toUpperCase() + accion.slice(1)} cobro?`,
+      text: `$${cobro.MontoCobro} - ${cobro.Paciente} será ${nuevoEstado}`,
+      icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#dc3545",
-      confirmButtonText: "Sí, eliminar",
+      confirmButtonColor: esInactivo ? "#28a745" : "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: `Sí, ${accion}`,
       cancelButtonText: "Cancelar",
     });
 
     if (result.isConfirmed) {
-      const respuesta = await eliminarCobro(cobro.idCobro);
+      const respuesta = await marcarInactivo(cobro);
       if (respuesta.success) {
-        Swal.fire("Eliminado", "El cobro fue eliminado.", "success");
+        const mensajeEstado = esInactivo ? "activado" : "desactivado";
+        Swal.fire("Éxito", `El cobro fue ${mensajeEstado}.`, "success");
         refrescarLista();
       } else {
-        Swal.fire("Error", respuesta.error || "No se pudo eliminar el cobro", "error");
+        Swal.fire("Error", respuesta.error || "No se pudo cambiar el estado", "error");
       }
     }
   };
@@ -133,7 +139,9 @@ const Cobros = () => {
           {!loading && !error && (
             <div className="card shadow-sm border-0">
               <div className="card-header bg-white d-flex justify-content-between align-items-center">
-                <h5 className="card-title mb-0">Cobros</h5>
+                <div className="d-flex gap-3 align-items-center">
+                  <h5 className="card-title mb-0">Cobros</h5>
+                </div>
                 <button className="btn btn-primary btn-agregar" onClick={abrirModalAgregar}>
                   Registrar Cobro
                 </button>
@@ -191,6 +199,7 @@ const Cobros = () => {
                           <table className="table table-hover align-middle mb-0">
                             <thead className="table-light">
                               <tr>
+                                <th>ID</th>
                                 <th>DNI</th>
                                 <th>Fecha</th>
                                 <th>Paciente</th>
@@ -205,16 +214,23 @@ const Cobros = () => {
                                 const paciente = pacientesObj.pacientes.find(p => 
                                   `${p.NombrePaciente} ${p.ApellidoPaciente}` === cobro.Paciente
                                 );
+                                const esInactivo = cobro.EstadoCobro === "Inactivo";
                                 return (
-                                  <tr key={cobro.idCobro}>
+                                  <tr key={cobro.idCobro} className={esInactivo ? "opacity-50" : ""}>
+                                    <td className="fw-bold text-muted small">{cobro.idCobro}</td>
                                     <td className="fw-bold">{paciente?.DNI || '—'}</td>
                                     <td>{new Date(cobro.FechaCobro).toLocaleDateString("es-AR")}</td>
                                     <td className="fw-bold">{cobro.Paciente}</td>
                                     <td className="text-success fw-bold">${cobro.MontoCobro}</td>
                                     <td>{cobro.MedioPago}</td>
                                     <td>
-                                      <span className={`badge ${cobro.EstadoCobro === "Cobrado" ? "bg-success" : "bg-warning"} rounded-pill px-2`}>
-                                        {cobro.EstadoCobro === "Cobrado" ? "PAGADO" : "PENDIENTE"}
+                                      <span className={`badge ${
+                                        cobro.EstadoCobro === "Inactivo" ? "bg-secondary" :
+                                        cobro.EstadoCobro === "Cobrado" ? "bg-success" : 
+                                        "bg-warning"
+                                      } rounded-pill px-2`}>
+                                        {cobro.EstadoCobro === "Inactivo" ? "INACTIVO" :
+                                         cobro.EstadoCobro === "Cobrado" ? "PAGADO" : "PENDIENTE"}
                                       </span>
                                     </td>
                                     <td className="text-center">
@@ -225,8 +241,12 @@ const Cobros = () => {
                                         <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => abrirModalEditar(cobro)}>
                                           <span className="material-symbols-outlined">edit</span>
                                         </button>
-                                        <button className="btn btn-sm btn-outline-danger" title="Eliminar" onClick={() => handleEliminar(cobro)}>
-                                          <span className="material-symbols-outlined">block</span>
+                                        <button 
+                                          className={`btn btn-sm ${cobro.EstadoCobro === "Inactivo" ? "btn-outline-success" : "btn-outline-danger"}`}
+                                          title={cobro.EstadoCobro === "Inactivo" ? "Activar" : "Desactivar"}
+                                          onClick={() => handleCambiarEstado(cobro)}
+                                        >
+                                          <span className="material-symbols-outlined">{cobro.EstadoCobro === "Inactivo" ? "check_circle" : "block"}</span>
                                         </button>
                                       </div>
                                     </td>

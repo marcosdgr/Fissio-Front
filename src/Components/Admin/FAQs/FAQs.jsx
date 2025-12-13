@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from "react";
 import FormFaqs from "./FormFaqs";
+import FormCategoria from "./FormCategoria";
 import useCustomFaqs from "../../../Custom/useCustomFaqs";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
@@ -20,6 +21,7 @@ const FAQs = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [openFormModal, setOpenFormModal] = useState(false);
+  const [openFormCategoriaModal, setOpenFormCategoriaModal] = useState(false);
   const [faqSeleccionada, setFaqSeleccionada] = useState(null);
   const [nuevaCategoria, setNuevaCategoria] = useState("");
   const [editandoCat, setEditandoCat] = useState(null);
@@ -66,6 +68,14 @@ const FAQs = () => {
   const cerrarModalVer = () => {
     setOpenModal(false);
     setFaqSeleccionada(null);
+  };
+
+  const abrirModalAgregarCategoria = () => {
+    setOpenFormCategoriaModal(true);
+  };
+
+  const cerrarModalFormCategoria = () => {
+    setOpenFormCategoriaModal(false);
   };
 
   const handleCambiarEstadoFaq = async (idFAQ) => {
@@ -133,6 +143,20 @@ const FAQs = () => {
 
   const crearCategoria = async () => {
     if (!nuevaCategoria.trim()) return;
+    
+    const result = await Swal.fire({
+      title: "¿Crear categoría?",
+      text: `Se creará la categoría "${nuevaCategoria}"`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, crear",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#0470BB",
+      cancelButtonColor: "#6c757d",
+    });
+
+    if (!result.isConfirmed) return;
+
     try {
       await axios.post(`${BASE_URL}api/cat-faqs/v1`, { NombreCategoria: nuevaCategoria });
       toast.success("Categoría creada");
@@ -151,6 +175,20 @@ const FAQs = () => {
 
   const guardarEdicion = async (id) => {
     if (!nombreEditado.trim()) return;
+    
+    const result = await Swal.fire({
+      title: "¿Actualizar categoría?",
+      text: `Se guardará como "${nombreEditado}"`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, actualizar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#0470BB",
+      cancelButtonColor: "#6c757d",
+    });
+
+    if (!result.isConfirmed) return;
+
     const res = await editarCategoria(id, { NombreCategoria: nombreEditado });
     if (res.success) {
       toast.success("Categoría actualizada");
@@ -182,6 +220,77 @@ const FAQs = () => {
 
           {!loading && !error && (
             <>
+              <div className="card shadow-sm border-0 mb-4">
+                <div className="card-header bg-white d-flex justify-content-between align-items-center">
+                  <h5 className="card-title mb-0">Categorías de FAQs</h5>
+                  <button className="btn btn-primary btn-agregar" onClick={abrirModalAgregarCategoria}>
+                    Agregar nueva categoría
+                  </button>
+                </div>
+                <div className="card-body">
+                  <div className="table-responsive">
+                    <table className="table table-sm table-hover">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Nombre</th>
+                          <th>Estado</th>
+                          <th>Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {listaCategorias.map((cat) => (
+                          <tr
+                            key={cat.idCatFAQ}
+                            className={!cat.IsActive ? "cat-inactiva" : ""}
+                          >
+                            <td>{cat.idCatFAQ}</td>
+                            <td>
+                              {editandoCat === cat.idCatFAQ ? (
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  value={nombreEditado}
+                                  onChange={(e) => setNombreEditado(e.target.value)}
+                                  onBlur={() => guardarEdicion(cat.idCatFAQ)}
+                                  onKeyDown={(e) => e.key === "Enter" && guardarEdicion(cat.idCatFAQ)}
+                                  autoFocus
+                                />
+                              ) : (
+                                <span className="fw-medium">{cat.NombreCategoria}</span>
+                              )}
+                            </td>
+                            <td>
+                              <span className={`badge ${cat.IsActive ? "badge-activa" : "badge-inactiva"}`}>
+                                {cat.IsActive ? "ACTIVA" : "INACTIVA"}
+                              </span>
+                            </td>
+                            <td>
+                              <div className="d-flex gap-2">
+                                {cat.IsActive ? (
+                                  <>
+                                    <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => iniciarEdicion(cat)}>
+                                      <span className="material-symbols-outlined">edit</span>
+                                    </button>
+                                    <button className="btn btn-sm btn-outline-danger" title="Desactivar" onClick={() => handleCambiarEstadoCat(cat)}>
+                                      <span className="material-symbols-outlined">block</span>
+                                    </button>
+                                  </>
+                                ) : (
+                                  <button className="btn btn-sm btn-outline-success" title="Activar" onClick={() => handleCambiarEstadoCat(cat)}>
+                                    <span className="material-symbols-outlined">check_circle</span>
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
               <div className="card shadow-sm border-0 mb-4">
                 <div className="card-header bg-white d-flex justify-content-between align-items-center">
                   <h5 className="card-title mb-0">Preguntas Frecuentes</h5>
@@ -254,88 +363,6 @@ const FAQs = () => {
                   </div>
                 )}
               </div>
-
-              <div className="card shadow-sm border-0">
-                <div className="card-header bg-white">
-                  <h5 className="card-title mb-0">Categorías de FAQs</h5>
-                </div>
-                <div className="card-body">
-                  <div className="input-group mb-4">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Nueva categoría..."
-                      value={nuevaCategoria}
-                      onChange={(e) => setNuevaCategoria(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && crearCategoria()}
-                    />
-                    <button className="btn btn-primary" onClick={crearCategoria}>
-                      Agregar
-                    </button>
-                  </div>
-
-                  <div className="table-responsive">
-                    <table className="table table-sm table-hover">
-                      <thead>
-                        <tr>
-                          <th>ID</th>
-                          <th>Nombre</th>
-                          <th>Estado</th>
-                          <th>Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {listaCategorias.map((cat) => (
-                          <tr
-                            key={cat.idCatFAQ}
-                            className={!cat.IsActive ? "cat-inactiva" : ""}
-                          >
-                            <td>{cat.idCatFAQ}</td>
-                            <td>
-                              {editandoCat === cat.idCatFAQ ? (
-                                <input
-                                  type="text"
-                                  className="form-control form-control-sm"
-                                  value={nombreEditado}
-                                  onChange={(e) => setNombreEditado(e.target.value)}
-                                  onBlur={() => guardarEdicion(cat.idCatFAQ)}
-                                  onKeyDown={(e) => e.key === "Enter" && guardarEdicion(cat.idCatFAQ)}
-                                  autoFocus
-                                />
-                              ) : (
-                                <span className="fw-medium">{cat.NombreCategoria}</span>
-                              )}
-                            </td>
-                            <td>
-                              <span className={`badge ${cat.IsActive ? "badge-activa" : "badge-inactiva"}`}>
-                                {cat.IsActive ? "ACTIVA" : "INACTIVA"}
-                              </span>
-                            </td>
-                            <td>
-                              <div className="d-flex gap-2">
-                                {cat.IsActive ? (
-                                  <>
-                                    <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => iniciarEdicion(cat)}>
-                                      <span className="material-symbols-outlined">edit</span>
-                                    </button>
-                                    <button className="btn btn-sm btn-outline-danger" title="Desactivar" onClick={() => handleCambiarEstadoCat(cat)}>
-                                      <span className="material-symbols-outlined">block</span>
-                                    </button>
-                                  </>
-                                ) : (
-                                  <button className="btn btn-sm btn-outline-success" title="Activar" onClick={() => handleCambiarEstadoCat(cat)}>
-                                    <span className="material-symbols-outlined">check_circle</span>
-                                  </button>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
             </>
           )}
         </div>
@@ -403,8 +430,39 @@ const FAQs = () => {
           </div>
         </div>
       )}
+      {openFormCategoriaModal && (
+        <div className="custom-modal fade-in">
+          <div className="modal-dialog modal-xl modal-dialog-scrollable">
+            <div className="modal-content">
+              <div className="modal-header bg-primary text-white position-relative">
+                <h1 className="modal-title fs-5 fw-bold">
+                  Agregar Nueva Categoría
+                </h1>
+                <button
+                  type="button"
+                  className="btn-close-modal-x"
+                  onClick={cerrarModalFormCategoria}
+                  aria-label="Cerrar formulario"
+                  title="Cerrar sin guardar"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div className="modal-body p-4">
+                <FormCategoria
+                  onSuccess={() => {
+                    refrescarLista();
+                    cerrarModalFormCategoria();
+                  }}
+                  onClose={cerrarModalFormCategoria}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {(openFormModal || openModal) && <div className="modal-backdrop-custom fade-in"></div>}
+      {(openFormModal || openModal || openFormCategoriaModal) && <div className="modal-backdrop-custom fade-in"></div>}
     </>
   );
 };
