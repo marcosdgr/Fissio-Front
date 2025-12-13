@@ -17,7 +17,6 @@ const Navbar = () => {
   const esPaciente = rol === "Paciente";
   const esEmpleado = rol === "Empleado";
   const esKinesiologo = esEmpleado && permiso === "Kinesiología";
-  const esSecretaria = esEmpleado && permiso === "Administración";
   
   // Paciente: NO ver Mensajes
   // Admin/Empleado: NO ver Solicitud de turno ni Preguntas frecuentes
