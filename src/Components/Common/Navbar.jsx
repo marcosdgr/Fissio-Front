@@ -16,12 +16,15 @@ const Navbar = () => {
   const esAdmin = rol === "Administrador";
   const esPaciente = rol === "Paciente";
   const esEmpleado = rol === "Empleado";
+  const esKinesiologo = esEmpleado && permiso === "Kinesiología";
+  const esSecretaria = esEmpleado && permiso === "Administración";
   
   // Paciente: NO ver Mensajes
   // Admin/Empleado: NO ver Solicitud de turno ni Preguntas frecuentes
   const mostrarMensajes = esAdmin || esEmpleado;
   const mostrarPedirTurno = !esAdmin && !esEmpleado;
   const mostrarFAQs = !esAdmin && !esEmpleado;
+  const mostrarObrasSociales = isLoggedIn && !esKinesiologo; // Todos menos kinesiólogo
 
   // Función para obtener la ruta del panel según el rol
   const obtenerRutaPanel = () => {
@@ -92,6 +95,14 @@ const Navbar = () => {
               <li className="nav-item">
                 <Link className="nav-link" to="/turnos">
                   Pedir turno
+                </Link>
+              </li>
+            )}
+            
+            {mostrarObrasSociales && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/obras-sociales">
+                  Obras Sociales
                 </Link>
               </li>
             )}

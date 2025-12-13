@@ -1,0 +1,93 @@
+.obras-sociales-page {
+  min-height: calc(100vh - 100px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding-top: 80px;
+}
+
+.obra-social-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.obra-social-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.obra-social-card .card-header {
+  background: linear-gradient(135deg, #0470BB 0%, #3AB1CF 100%) !important;
+  padding: 1rem;
+  border: none;
+}
+
+.obra-social-card .card-header h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.obra-social-card .card-body {
+  padding: 1.5rem;
+}
+
+.planes-section {
+  margin-top: 1rem;
+}
+
+.planes-section h6 {
+  color: #0470BB;
+  font-size: 0.95rem;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+}
+
+.obra-social-card .btn-outline-primary {
+  border-color: #0470BB;
+  color: #0470BB;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.obra-social-card .btn-outline-primary:hover {
+  background-color: #0470BB;
+  border-color: #0470BB;
+  color: white;
+  transform: scale(1.02);
+}
+
+.obras-sociales-page h1 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.obras-sociales-page .lead {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .obras-sociales-page {
+    padding-top: 70px;
+  }
+  
+  .obra-social-card .card-header h5 {
+    font-size: 1rem;
+  }
+}

@@ -13,6 +13,7 @@ import LoginPage from "./Pages/LoginPage";
 import ResetPasswordPage from "./Pages/ResetPasswordPage";
 import AsistenciaEmpleado from "./Components/Asistencia/AsistenciaEmpleado.jsx";
 import TurnosWebPage from "./Pages/TurnosWebPage.jsx";
+import ObrasSocialesPage from "./Pages/ObrasSocialesPage.jsx";
 
 
 import PublicRutes from "./Routes/PublicRutes.jsx";
@@ -118,6 +119,16 @@ function AppContent() {
               element={
                 <PrivateRutes roles={["Empleado"]}>
                   <AsistenciaEmpleado />
+                </PrivateRutes>
+              }
+            />
+
+            {/* Obras Sociales - Admin, Paciente y Secretaria (no Kinesiólogo) */}
+            <Route
+              path="/obras-sociales"
+              element={
+                <PrivateRutes roles={["Administrador", "Paciente", "Empleado"]} permisos={["Administración"]}>
+                  <ObrasSocialesPage />
                 </PrivateRutes>
               }
             />
