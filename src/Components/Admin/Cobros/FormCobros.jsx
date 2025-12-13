@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import useCustomCobros from '../../../Custom/useCustomCobros';
 import useCustomPacientesCobros from '../../../Custom/useCustomPacientesCobros';
 import useCustomTurnosCobros from '../../../Custom/useCustomTurnosCobros';
+import useCustomCatPagos from '../../../Custom/useCustomCatPagos';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import "../../../Css/Cobros/FormCobros.css";
 
-const FormCobros = ({ cobro, onSuccess, onClose }) => {
-  const { agregarCobro, editarCobro, cobros, loading: loadingCobros, error: errorCobros, obtenerCobros } = useCustomCobros();
+const FormCobros = ({ cobro, onSuccess }) => {
+  const { agregarCobro, editarCobro, cobros } = useCustomCobros();
   const { pacientesObj } = useCustomPacientesCobros();
   const { turnos } = useCustomTurnosCobros();
+  const { mediosPago } = useCustomCatPagos();
 
   const esEdicion = !!cobro?.idCobro;
 
@@ -35,14 +37,11 @@ const FormCobros = ({ cobro, onSuccess, onClose }) => {
   const [procesando, setProcesando] = useState(false);
   const [errores, setErrores] = useState({});
 
-  // MEDIOS DE PAGO DESDE COBROS
-  const mediosPagoValidos = Array.from(
-    new Map(
-      cobros.cobros
-        .filter(c => c.idMedioPago && c.MedioPago)
-        .map(c => [c.idMedioPago, { id: c.idMedioPago, nombre: c.MedioPago }])
-    ).values()
-  );
+  // MEDIOS DE PAGO DESDE LA BASE DE DATOS
+  const mediosPagoValidos = mediosPago.map(m => ({
+    id: m.idMedioPago,
+    nombre: m.NombreMedio
+  }));
 
   useEffect(() => {
     if (esEdicion && cobro) {
@@ -167,12 +166,22 @@ const FormCobros = ({ cobro, onSuccess, onClose }) => {
       }
 
       if (res.success) {
-        toast.success(esEdicion ? 'Cobro actualizado' : 'Cobro registrado');
-        await obtenerCobros();
+        await Swal.fire({
+          title: "¡Éxito!",
+          text: esEdicion ? 'El cobro fue actualizado correctamente' : 'El cobro fue registrado correctamente',
+          icon: "success",
+          confirmButtonColor: "#28a745",
+          confirmButtonText: "Aceptar"
+        });
         onSuccess();
-        onClose();
       } else {
-        toast.error(res.error || 'Error');
+        await Swal.fire({
+          title: "Error",
+          text: res.error || 'No se pudo completar la operación',
+          icon: "error",
+          confirmButtonColor: "#dc3545",
+          confirmButtonText: "Aceptar"
+        });
       }
     } catch (err) {
       toast.error('Error inesperado');
@@ -264,13 +273,7 @@ const FormCobros = ({ cobro, onSuccess, onClose }) => {
 
         <div className="col-md-6 mb-3">
           <label className="form-label">Medio de Pago</label>
-          {loadingCobros ? (
-            <div className="text-center p-2">
-              <div className="spinner-border spinner-border-sm text-primary" role="status">
-                <span className="visually-hidden">Cargando...</span>
-              </div>
-            </div>
-          ) : mediosPagoValidos.length === 0 ? (
+          {mediosPagoValidos.length === 0 ? (
             <div className="text-muted small p-2">
               No hay medios de pago en cobros registrados
             </div>
@@ -314,7 +317,7 @@ const FormCobros = ({ cobro, onSuccess, onClose }) => {
         <button 
           type="submit" 
           className="btn btn-primary btn-submit" 
-          disabled={procesando || loadingCobros || mediosPagoValidos.length === 0}
+          disabled={procesando || mediosPagoValidos.length === 0}
         >
           {procesando ? <>Procesando...</> : (esEdicion ? 'Actualizar Cobro' : 'Registrar Cobro')}
         </button>
