@@ -6,6 +6,7 @@ import ConfiguracionSecretaria from '../Components/Secretaria/ConfiguracionSecre
 import '../Css/Secretaria/SecretariaPage.css';
 import '../Css/Secretaria/SidebarSecretaria.css';
 import MensajeriaInterna from '../Components/MensajeriaInterna/MensajeriaInterna';
+import Cobros from '../Components/Admin/Cobros/Cobros'
 
 const SecretariaPage = () => {
   const [activeTab, setActiveTab] = useState("turnos");
@@ -16,6 +17,7 @@ const SecretariaPage = () => {
     { id: "turnos", label: "Turnos", icon: "event" },
     { id: "mensajes", label: "Mensajes", icon: "mail" },
     { id: "asistencias", label: "Asistencias", icon: "fact_check" },
+    { id:"cobros", label: "Cobros", icon: "payment" },
     { id: "config", label: "Configuración", icon: "settings" }
   ];
 
@@ -105,6 +107,7 @@ const SecretariaPage = () => {
           {activeTab === "turnos" && <TurnosSecretaria />}
           {activeTab === "mensajes" && <MensajeriaInterna />}
           {activeTab === "asistencias" && <AsistenciasSecretaria />}
+          {activeTab === "cobros" && <Cobros />}
           {activeTab === "config" && <ConfiguracionSecretaria />}
         </div>
       </div>
