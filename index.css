@@ -1,9 +1,13 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    overflow-x: hidden;
+html {
     overflow-y: scroll;
+    width: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0 !important;
+    width: 100%;
+    overflow-x: hidden !important;
 }
 
 #root {
@@ -11,17 +15,18 @@ html, body {
     display: block;
 }
 
-/* Prevenir el desplazamiento horizontal cuando se abre SweetAlert */
-body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown),
-body.swal2-height-auto {
+/* Bloquear completamente el padding que SweetAlert agrega */
+body.swal2-shown,
+body.swal2-height-auto,
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     padding-right: 0 !important;
-    overflow: hidden !important;
-}
-
-html.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
-    overflow-y: scroll !important;
+    overflow-y: auto !important;
 }
 
 .swal2-container {
     padding-right: 0 !important;
+}
+
+.swal2-popup {
+    margin: auto !important;
 }
