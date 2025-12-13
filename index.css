@@ -2,9 +2,26 @@ html, body {
     margin: 0;
     padding: 0;
     width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 #root {
     width: 100%;
-    display: block;   /* solo para asegurarlo */
+    display: block;
+}
+
+/* Prevenir el desplazamiento horizontal cuando se abre SweetAlert */
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown),
+body.swal2-height-auto {
+    padding-right: 0 !important;
+    overflow: hidden !important;
+}
+
+html.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
+    overflow-y: scroll !important;
+}
+
+.swal2-container {
+    padding-right: 0 !important;
 }
