@@ -20,9 +20,10 @@ const ObrasTable = ({ visible = [], onView = () => {}, onEdit = () => {}, onTogg
                   const nombre = obra.NombreObraSocial ?? obra.Nombre ?? obra.nombre ?? ''
                   const telefono = obra.TelefonoObra ?? obra.telefono ?? ''
                   const email = obra.EmailObra ?? obra.email ?? ''
-                  const estadoReal = obra.EstadoObra ?? obra.estado ?? (obra.IsActive ? 'Activa' : 'Suspendida')
-                  const badgeClass = estadoReal === 'Activa' ? 'bg-success' : 'bg-warning text-dark'
-                  const isActive = obra.IsActive !== undefined ? Boolean(obra.IsActive) : (estadoReal && estadoReal.toLowerCase().includes('act'))
+                  // Determinar si está activa primero
+                  const isActive = obra.IsActive === 1 || obra.IsActive === true || obra.IsActive === '1'
+                  const estadoReal = isActive ? 'Activa' : 'Suspendida'
+                  const badgeClass = isActive ? 'bg-success' : 'bg-warning text-dark'
                   return (
                     <tr key={id || Math.random()}>
                       <td className="fw-medium">{nombre}</td>

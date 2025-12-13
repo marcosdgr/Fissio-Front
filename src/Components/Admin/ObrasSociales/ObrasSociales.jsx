@@ -253,7 +253,7 @@ const ObrasSociales = () => {
       if (res?.success === false) showError('Error', res.error || 'No se pudo cambiar el estado')
       else {
         showSuccess('Listo', `Obra ${action}da correctamente`)
-        obtenerTodasLasObrasSociales && obtenerTodasLasObrasSociales()
+        await obtenerTodasLasObrasSociales()
       }
     } catch (err) { showError('Error', err.message || 'Error inesperado') }
     finally { setLoadingOp(false) }
