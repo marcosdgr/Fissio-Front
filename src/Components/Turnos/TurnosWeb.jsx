@@ -87,6 +87,32 @@ const TurnosWeb = () => {
     }
   };
 
+  // Función para filtrar horarios pasados si la fecha es hoy
+  const filtrarHorariosPasados = (horarios, fecha) => {
+    // Verificar si la fecha seleccionada es hoy
+    const fechaSeleccionada = new Date(fecha + 'T00:00:00');
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    // Si la fecha no es hoy, devolver todos los horarios
+    if (fechaSeleccionada.getTime() !== hoy.getTime()) {
+      return horarios;
+    }
+    
+    // Si es hoy, filtrar los horarios que ya pasaron
+    const ahora = new Date();
+    const horaActual = ahora.getHours();
+    const minutosActuales = ahora.getMinutes();
+    
+    return horarios.filter(h => {
+      const [hora, minutos] = h.value.split(':').map(Number);
+      // Comparar horario: debe ser mayor a la hora actual
+      if (hora > horaActual) return true;
+      if (hora === horaActual && minutos > minutosActuales) return true;
+      return false;
+    });
+  };
+
   // Cargar horarios disponibles para una fecha
   const cargarHorariosDisponibles = async (fecha) => {
     setIsLoadingHorarios(true);
@@ -97,6 +123,8 @@ const TurnosWeb = () => {
       let horarios = [];
       if (response.horariosDisponibles && Array.isArray(response.horariosDisponibles)) {
         horarios = response.horariosDisponibles.filter(h => h.value && h.label);
+        // Filtrar horarios pasados si la fecha es hoy
+        horarios = filtrarHorariosPasados(horarios, fecha);
       }
       
       setHorariosDisponibles(horarios);

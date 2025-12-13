@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '../../../Store/useAuthStore'
 import { solicitarTurno } from '../../../Custom/Paciente/CustomPacienteVista'
-import { showSuccess } from '../../../Utils/sweetAlerts'
+import { getDisponibilidadHorarios } from '../../../Custom/CustomTurnos'
+import { showSuccess, showError } from '../../../Utils/sweetAlerts'
 import '../../../Css/Paciente/Perfil/PerfilPaciente.css'
 import '../../../Css/Paciente/Turnos/AgendarTurno.css'
 
@@ -19,11 +20,82 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
   const [ordenMedicaFile, setOrdenMedicaFile] = useState(null)
   const [ordenMedicaPreview, setOrdenMedicaPreview] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
+  const [horariosDisponibles, setHorariosDisponibles] = useState([])
+  const [isLoadingHorarios, setIsLoadingHorarios] = useState(false)
 
   // Obtener datos del paciente desde Zustand
   const { user } = useAuthStore()
   const pacienteInfo = user?.usuario || {}
   const idPaciente = pacienteInfo.idPaciente
+
+  // Cargar horarios disponibles cuando cambia la fecha
+  useEffect(() => {
+    if (formData.FechaRequeridaTurno) {
+      cargarHorariosDisponibles(formData.FechaRequeridaTurno)
+    } else {
+      setHorariosDisponibles([])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.FechaRequeridaTurno])
+
+  // Función para filtrar horarios pasados si la fecha es hoy
+  const filtrarHorariosPasados = (horarios, fecha) => {
+    // Verificar si la fecha seleccionada es hoy
+    const fechaSeleccionada = new Date(fecha + 'T00:00:00')
+    const hoy = new Date()
+    hoy.setHours(0, 0, 0, 0)
+    
+    // Si la fecha no es hoy, devolver todos los horarios
+    if (fechaSeleccionada.getTime() !== hoy.getTime()) {
+      return horarios
+    }
+    
+    // Si es hoy, filtrar los horarios que ya pasaron
+    const ahora = new Date()
+    const horaActual = ahora.getHours()
+    const minutosActuales = ahora.getMinutes()
+    
+    return horarios.filter(h => {
+      const [hora, minutos] = h.value.split(':').map(Number)
+      // Comparar horario: debe ser mayor a la hora actual
+      if (hora > horaActual) return true
+      if (hora === horaActual && minutos > minutosActuales) return true
+      return false
+    })
+  }
+
+  // Función para cargar horarios disponibles
+  const cargarHorariosDisponibles = async (fecha) => {
+    setIsLoadingHorarios(true)
+    try {
+      const response = await getDisponibilidadHorarios(fecha)
+      
+      // El backend devuelve horariosDisponibles como array de objetos {value, label, horario, cupoMaximo, disponibles}
+      let horarios = []
+      if (response.horariosDisponibles && Array.isArray(response.horariosDisponibles)) {
+        horarios = response.horariosDisponibles.filter(h => h.value && h.label)
+        // Filtrar horarios pasados si la fecha es hoy
+        horarios = filtrarHorariosPasados(horarios, fecha)
+      }
+      
+      setHorariosDisponibles(horarios)
+      
+      // Limpiar horario seleccionado si ya no está disponible
+      if (formData.HorarioRequeridoTurno && 
+          !horarios.find(h => h.value === formData.HorarioRequeridoTurno)) {
+        setFormData(prev => ({
+          ...prev,
+          HorarioRequeridoTurno: ''
+        }))
+      }
+    } catch (err) {
+      console.error('Error al cargar horarios:', err)
+      showError('Error', 'No se pudieron cargar los horarios disponibles')
+      setHorariosDisponibles([])
+    } finally {
+      setIsLoadingHorarios(false)
+    }
+  }
 
   // Funciones para manejar drag and drop
   const handleDragEnter = (e) => {
@@ -118,19 +190,21 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
       throw new Error('El horario del turno es requerido')
     }
 
-    // Validar que la fecha no sea en el pasado (anterior a hoy)
+    // Validar que la fecha no sea en el pasado
     const fechaSeleccionada = new Date(FechaRequeridaTurno + 'T00:00:00')
     const hoy = new Date()
     hoy.setHours(0, 0, 0, 0)
     
     if (fechaSeleccionada < hoy) {
-      throw new Error('No puede agendar un turno en una fecha pasada')
+      throw new Error('No puede agendar un turno en fechas pasadas')
     }
 
-    // Validar horario de atención (ejemplo: 8:00 a 18:00)
-    const [hora] = HorarioRequeridoTurno.split(':').map(Number)
-    if (hora < 8 || hora > 18) {
-      throw new Error('El horario debe estar entre 08:00 y 18:00')
+    // Validar que el horario seleccionado esté en los horarios disponibles
+    if (horariosDisponibles.length > 0) {
+      const horarioValido = horariosDisponibles.find(h => h.value === HorarioRequeridoTurno)
+      if (!horarioValido) {
+        throw new Error('El horario seleccionado ya no está disponible. Por favor, seleccione otro.')
+      }
     }
   }
 
@@ -194,20 +268,6 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
   const getFechaMinima = () => {
     const hoy = new Date()
     return hoy.toISOString().split('T')[0]
-  }
-
-  // Función para generar opciones de horarios
-  const generarHorarios = () => {
-    const horarios = []
-    for (let hora = 8; hora <= 18; hora++) {
-      for (let minutos of [0, 30]) {
-        if (hora === 18 && minutos === 30) break // No permitir 18:30
-        const horaStr = hora.toString().padStart(2, '0')
-        const minStr = minutos.toString().padStart(2, '0')
-        horarios.push(`${horaStr}:${minStr}`)
-      }
-    }
-    return horarios
   }
 
   return (
@@ -351,7 +411,7 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                     />
                     <div className="form-text">
                       <span className="material-symbols-outlined icon-info">info</span>
-                      Selecciona una fecha a partir de mañana
+                      Selecciona la fecha del turno (desde hoy)
                     </div>
                   </div>
 
@@ -367,18 +427,33 @@ const AgendarTurnoForm = ({ setActiveTab }) => {
                       className="form-select"
                       value={formData.HorarioRequeridoTurno}
                       onChange={handleInputChange}
+                      disabled={!formData.FechaRequeridaTurno || isLoadingHorarios || loading}
                       required
                     >
-                      <option value="">Selecciona un horario</option>
-                      {generarHorarios().map(horario => (
-                        <option key={horario} value={horario}>
-                          {horario}
+                      <option value="">
+                        {!formData.FechaRequeridaTurno
+                          ? 'Primero selecciona una fecha'
+                          : isLoadingHorarios
+                          ? 'Cargando horarios...'
+                          : horariosDisponibles.length === 0
+                          ? 'No hay horarios disponibles'
+                          : 'Selecciona un horario'}
+                      </option>
+                      {horariosDisponibles.map(horario => (
+                        <option key={horario.value} value={horario.value}>
+                          {horario.label}
                         </option>
                       ))}
                     </select>
                     <div className="form-text">
                       <span className="material-symbols-outlined icon-info">info</span>
-                      Horarios disponibles de 08:00 a 18:00
+                      {isLoadingHorarios
+                        ? 'Consultando disponibilidad...'
+                        : horariosDisponibles.length > 0
+                        ? `${horariosDisponibles.length} horario${horariosDisponibles.length !== 1 ? 's' : ''} disponible${horariosDisponibles.length !== 1 ? 's' : ''}`
+                        : formData.FechaRequeridaTurno
+                        ? 'No hay horarios disponibles para esta fecha'
+                        : 'Solo se muestran horarios disponibles (máximo 5 turnos por hora)'}
                     </div>
                   </div>
 
