@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import useCustomEmpleados from '../../../../Custom/Empleados/CustomEmpleados'
 import useCustomCatEmpleados from '../../../../Custom/Empleados/CustomCatEmpleados'
