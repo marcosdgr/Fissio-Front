@@ -72,7 +72,16 @@ const FormCobros = ({ cobro, onSuccess }) => {
     .slice(0, 6);
 
   const turnosDelPaciente = turnos.turnos
-    .filter(t => t.idPaciente == pacienteSeleccionado?.idPaciente)
+    .filter(t => {
+      if (t.idPaciente != pacienteSeleccionado?.idPaciente) return false;
+      
+      // Si estamos editando, permitir el turno actual
+      if (esEdicion && t.idTurno == cobro?.idTurno) return true;
+      
+      // Filtrar turnos que ya tienen un cobro registrado
+      const tieneCobro = cobros.cobros.some(c => c.idTurno == t.idTurno);
+      return !tieneCobro;
+    })
     .map(t => ({
       ...t,
       label: `${new Date(t.FechaRequeridaTurno).toLocaleDateString('es-AR')} - ${t.HorarioRequeridoTurno?.slice(0,5)} - ${t.NombreTratamiento || 'Turno'}`
@@ -251,6 +260,11 @@ const FormCobros = ({ cobro, onSuccess }) => {
                 </li>
               ))}
             </ul>
+          )}
+          {mostrarTurnos && turnosDelPaciente.length === 0 && pacienteSeleccionado && (
+            <div className="position-absolute w-100 mt-1 p-2 bg-light border rounded text-center text-muted small">
+              No hay turnos pendientes de cobro para este paciente
+            </div>
           )}
         </div>
       </div>
