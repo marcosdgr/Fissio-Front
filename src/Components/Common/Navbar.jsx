@@ -23,7 +23,7 @@ const Navbar = () => {
   const mostrarMensajes = esAdmin || esEmpleado;
   const mostrarPedirTurno = !esAdmin && !esEmpleado;
   const mostrarFAQs = !esAdmin && !esEmpleado;
-  const mostrarObrasSociales = isLoggedIn && !esKinesiologo; // Todos menos kinesiólogo
+  const mostrarObrasSociales = !esKinesiologo; 
 
   // Función para obtener la ruta del panel según el rol
   const obtenerRutaPanel = () => {
