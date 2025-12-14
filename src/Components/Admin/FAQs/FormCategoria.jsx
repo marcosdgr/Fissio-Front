@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
-import axios from 'axios';
-import { BASE_URL } from '../../../Api/api';
+import useCustomFaqs from '../../../Custom/useCustomFaqs';
+import { showSuccess } from '../../../Utils/sweetAlerts';
 import "../../../Css/Faqs/FormFaqs.css";
 
-const FormCategoria = ({ onSuccess}) => {
+const FormCategoria = ({ categoria, onSuccess }) => {
+  const { crearCategoria, editarCategoria } = useCustomFaqs();
   const [nombreCategoria, setNombreCategoria] = useState('');
   const [procesando, setProcesando] = useState(false);
+
+  useEffect(() => {
+    if (categoria) {
+      setNombreCategoria(categoria.NombreCategoria || '');
+    } else {
+      setNombreCategoria('');
+    }
+  }, [categoria]);
 
   const handleChange = (e) => {
     setNombreCategoria(e.target.value);
@@ -31,12 +40,13 @@ const FormCategoria = ({ onSuccess}) => {
     setProcesando(true);
 
     try {
+      const accion = categoria ? "actualizar" : "crear";
       const result = await Swal.fire({
-        title: "¿Crear categoría?",
-        text: `Se creará la categoría "${nombreCategoria}"`,
+        title: `¿${accion.charAt(0).toUpperCase() + accion.slice(1)} categoría?`,
+        text: `Se ${accion}á la categoría "${nombreCategoria}"`,
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "Sí, crear",
+        confirmButtonText: `Sí, ${accion}`,
         cancelButtonText: "Cancelar",
         confirmButtonColor: "#0470BB",
         cancelButtonColor: "#6c757d",
@@ -47,13 +57,31 @@ const FormCategoria = ({ onSuccess}) => {
         return;
       }
 
-      await axios.post(`${BASE_URL}api/cat-faqs/v1`, { NombreCategoria: nombreCategoria });
-      toast.success("Categoría creada correctamente");
+      if (categoria) {
+        // Editar categoría existente
+        const res = await editarCategoria(categoria.idCatFAQ, { NombreCategoria: nombreCategoria });
+        if (!res.success) {
+          toast.error(res.error || 'Error al actualizar la categoría');
+          setProcesando(false);
+          return;
+        }
+        await showSuccess('¡Categoría actualizada!', `La categoría ha sido actualizada correctamente`);
+      } else {
+        // Crear nueva categoría
+        const res = await crearCategoria({ NombreCategoria: nombreCategoria });
+        if (!res.success) {
+          toast.error(res.error || 'Error al crear la categoría');
+          setProcesando(false);
+          return;
+        }
+        await showSuccess('¡Categoría creada!', `La categoría "${nombreCategoria}" ha sido agregada correctamente`);
+      }
+      
       setNombreCategoria('');
       onSuccess();
     } catch (err) {
       console.error('Error en handleSubmit:', err);
-      toast.error('Error al crear la categoría');
+      toast.error(`Error al ${categoria ? 'actualizar' : 'crear'} la categoría`);
     } finally {
       setProcesando(false);
     }
@@ -62,7 +90,7 @@ const FormCategoria = ({ onSuccess}) => {
   return (
     <div className="form-faqs-container">
       <h4 className="form-title mb-4 text-center">
-        Nueva Categoría
+        {categoria ? 'Editar Categoría' : 'Nueva Categoría'}
       </h4>
 
       <form onSubmit={handleSubmit} className="form-faqs">
@@ -91,10 +119,10 @@ const FormCategoria = ({ onSuccess}) => {
             {procesando ? (
               <>
                 <span className="spinner-border spinner-border-sm me-2"></span>
-                Guardando...
+                {categoria ? 'Actualizando...' : 'Guardando...'}
               </>
             ) : (
-              'Crear Categoría'
+              `${categoria ? 'Actualizar' : 'Crear'} Categoría`
             )}
           </button>
         </div>

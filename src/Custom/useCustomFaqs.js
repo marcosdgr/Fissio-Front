@@ -12,13 +12,13 @@ const useCustomFaqs = () => {
       setLoading(true);
       setError(null);
       const [faqsRes, catsRes] = await Promise.all([
-        axios.get(`${BASE_URL}api/faqs/v1`),
-        axios.get(`${BASE_URL}api/cat-faqs/v1`)
+        axios.get(`${BASE_URL}api/faqs/v1?includeInactive=true`),
+        axios.get(`${BASE_URL}api/cat-faqs/v1?includeInactive=true`)
       ]);
       setFaqs({ faqs: faqsRes.data, categorias: catsRes.data });
     } catch (err) {
       console.error("Error al cargar datos:", err);
-      setError(err.response?.data?.message || "Error de conexión");
+      setError(err.response?.data?.message || "Error de conexiÃ³n");
       setFaqs({ faqs: [], categorias: [] });
     } finally {
       setLoading(false);
@@ -27,11 +27,10 @@ const useCustomFaqs = () => {
 
   const agregarFaq = async (data) => {
     try {
-      console.log('Datos enviados a agregarFaq:', data);
       const res = await axios.post(`${BASE_URL}api/faqs/v1/`, data);
       return { success: true, data: res.data.data };
     } catch (err) {
-      console.error('Error completo al agregar FAQ:', err.response?.data);
+      console.error('Error al agregar FAQ:', err);
       return { success: false, error: err.response?.data?.errores?.[0]?.msg || err.response?.data?.message || "Error al agregar" };
     }
   };
@@ -45,12 +44,12 @@ const useCustomFaqs = () => {
     }
   };
 
-  const eliminarFaq = async (id) => {
+  const eliminarFaq = async (id, isActive = 0) => {
     try {
-      await axios.put(`${BASE_URL}api/faqs/v1/cambiarEstado/${id}`, { IsActive: 0 });
+      await axios.put(`${BASE_URL}api/faqs/v1/cambiarEstado/${id}`, { IsActive: isActive });
       return { success: true };
     } catch (err) {
-      return { success: false, error: err.response?.data?.message || "Error al desactivar" };
+      return { success: false, error: err.response?.data?.message || "Error al cambiar estado" };
     }
   };
 
@@ -63,12 +62,12 @@ const useCustomFaqs = () => {
     }
   };
 
-  const desactivarCategoria = async (id) => {
+  const desactivarCategoria = async (id, isActive = 0) => {
     try {
-      await axios.put(`${BASE_URL}api/cat-faqs/v1/${id}`, { IsActive: 0 });
+      await axios.put(`${BASE_URL}api/cat-faqs/v1/${id}`, { IsActive: isActive });
       return { success: true };
     } catch (err) {
-      return { success: false, error: err.response?.data?.message || "Error al desactivar" };
+      return { success: false, error: err.response?.data?.message || "Error al cambiar estado" };
     }
   };
 

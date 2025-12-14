@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useCustomFaqs from '../../../Custom/useCustomFaqs';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
+import { showSuccess } from '../../../Utils/sweetAlerts';
 import "../../../Css/Faqs/FormFaqs.css";
 
 const FormFaqs = ({ faq, categorias, onSuccess}) => {
@@ -75,7 +76,7 @@ const FormFaqs = ({ faq, categorias, onSuccess}) => {
 
         const res = await editarFaq(faq.idFAQ, nuevaFaq);
         if (res.success) {
-          toast.success('FAQ editada correctamente');
+          await showSuccess('¡FAQ actualizada!', 'Los cambios se han guardado correctamente');
           onSuccess();
         } else {
           toast.error(res.error);
@@ -97,7 +98,7 @@ const FormFaqs = ({ faq, categorias, onSuccess}) => {
 
         const res = await agregarFaq(nuevaFaq);
         if (res.success) {
-          toast.success('FAQ agregada correctamente');
+          await showSuccess('¡FAQ creada!', 'La nueva pregunta frecuente ha sido agregada correctamente');
           onSuccess();
         } else {
           toast.error(res.error);
