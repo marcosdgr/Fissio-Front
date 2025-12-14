@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useCustomObrasSocialesPublic from '../Custom/useCustomObrasSocialesPublic';
 import '../Css/ObrasSociales/ObrasSocialesPage.css';
 
 const ObrasSocialesPage = () => {
   const { obrasSociales, loading, error } = useCustomObrasSocialesPublic();
+  const [busqueda, setBusqueda] = useState('');
+
+  // Filtrar obras sociales por nombre
+  const obrasFiltradas = obrasSociales.filter((obra) =>
+    obra.NombreObraSocial.toLowerCase().includes(busqueda.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -42,14 +48,49 @@ const ObrasSocialesPage = () => {
           </p>
         </div>
 
-        {obrasSociales.length === 0 ? (
+        {/* Barra de búsqueda */}
+        <div className="row mb-4">
+          <div className="col-md-6 mx-auto">
+            <div className="input-group">
+              <span className="input-group-text bg-primary text-white">
+                <i className="fas fa-search"></i>
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Buscar obra social por nombre..."
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+              />
+              {busqueda && (
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() => setBusqueda('')}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              )}
+            </div>
+            {busqueda && (
+              <small className="text-muted d-block mt-2">
+                {obrasFiltradas.length} resultado{obrasFiltradas.length !== 1 ? 's' : ''} encontrado{obrasFiltradas.length !== 1 ? 's' : ''}
+              </small>
+            )}
+          </div>
+        </div>
+
+        {obrasFiltradas.length === 0 ? (
           <div className="alert alert-info text-center" role="alert">
             <i className="fas fa-info-circle me-2"></i>
-            No hay obras sociales disponibles en este momento
+            {busqueda 
+              ? `No se encontraron obras sociales con el nombre "${busqueda}"`
+              : 'No hay obras sociales disponibles en este momento'
+            }
           </div>
         ) : (
           <div className="row g-4">
-            {obrasSociales.map((obra) => (
+            {obrasFiltradas.map((obra) => (
               <div key={obra.idObraSocial} className="col-md-6 col-lg-4">
                 <div className="card h-100 shadow-sm obra-social-card">
                   <div className="card-header bg-primary text-white">

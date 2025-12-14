@@ -76,7 +76,7 @@ const cambiarEstadoEmpleado = async (idEmpleado, nuevoEstado) => {
  };
 };
 
-export default useCustomEmpleados;
+
 
 export const obtenerEmpleadoPorId = async (idEmpleado) => {
   try {
@@ -97,3 +97,4 @@ export const actualizarEmpleado = async (idEmpleado, datosActualizados) => {
     throw error;
   }
 };
+export default useCustomEmpleados;
