@@ -4,7 +4,6 @@ import FormCategoria from "./FormCategoria";
 import useCustomFaqs from "../../../Custom/useCustomFaqs";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
-import { BASE_URL } from "../../../Api/api";
 import "../../../Css/Faqs/FAQs.css";
 
 const FAQs = () => {
@@ -14,16 +13,14 @@ const FAQs = () => {
     error,
     obtenerFaqs,
     eliminarFaq,
-    editarCategoria,
     desactivarCategoria,
   } = useCustomFaqs();
 
   const [openModal, setOpenModal] = useState(false);
   const [openFormModal, setOpenFormModal] = useState(false);
   const [openFormCategoriaModal, setOpenFormCategoriaModal] = useState(false);
+  const [categoriaSeleccionada, setCategoriasSeleccionada] = useState(null);
   const [faqSeleccionada, setFaqSeleccionada] = useState(null);
-  const [editandoCat, setEditandoCat] = useState(null);
-  const [nombreEditado, setNombreEditado] = useState("");
   const [listaFaqs, setListaFaqs] = useState([]);
   const [listaCategorias, setListaCategorias] = useState([]);
 
@@ -69,17 +66,33 @@ const FAQs = () => {
   };
 
   const abrirModalAgregarCategoria = () => {
+    setCategoriasSeleccionada(null);
+    setOpenFormCategoriaModal(true);
+  };
+
+  const abrirModalEditarCategoria = (categoria) => {
+    setCategoriasSeleccionada(categoria);
     setOpenFormCategoriaModal(true);
   };
 
   const cerrarModalFormCategoria = () => {
     setOpenFormCategoriaModal(false);
+    setCategoriasSeleccionada(null);
   };
 
   const handleCambiarEstadoFaq = async (idFAQ) => {
     const faq = listaFaqs.find(f => f.idFAQ === idFAQ);
     const nuevoEstado = faq.IsActive ? 0 : 1;
     const accion = faq.IsActive ? "desactivar" : "activar";
+
+    // Si intenta activar, verificar que la categoría esté activa
+    if (nuevoEstado === 1) {
+      const categoriaFaq = listaCategorias.find(c => c.idCatFAQ === faq.idCatFAQ);
+      if (categoriaFaq && !categoriaFaq.IsActive) {
+        toast.error("No puedes activar una FAQ cuya categoría está desactivada. Activa primero la categoría.");
+        return;
+      }
+    }
 
     const result = await Swal.fire({
       title: `¿${accion.charAt(0).toUpperCase() + accion.slice(1)} FAQ?`,
@@ -93,7 +106,7 @@ const FAQs = () => {
     });
 
     if (result.isConfirmed) {
-      const res = await eliminarFaq(idFAQ);
+      const res = await eliminarFaq(idFAQ, nuevoEstado);
       if (res.success) {
         setListaFaqs(prev =>
           prev.map(f =>
@@ -110,10 +123,13 @@ const FAQs = () => {
   const handleCambiarEstadoCat = async (cat) => {
     const nuevoEstado = cat.IsActive ? 0 : 1;
     const accion = cat.IsActive ? "desactivar" : "activar";
+    const faqsEnCategoria = listaFaqs.filter(f => f.idCatFAQ === cat.idCatFAQ && f.IsActive);
 
     const result = await Swal.fire({
       title: `¿${accion.charAt(0).toUpperCase() + accion.slice(1)} categoría?`,
-      text: `"${cat.NombreCategoria}" será ${nuevoEstado ? "activada" : "desactivada"}.`,
+      text: nuevoEstado === 0 && faqsEnCategoria.length > 0
+        ? `"${cat.NombreCategoria}" y sus ${faqsEnCategoria.length} pregunta(s) frecuente(s) será(n) desactivada(s).`
+        : `"${cat.NombreCategoria}" será ${nuevoEstado ? "activada" : "desactivada"}.`,
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: nuevoEstado ? "#28a745" : "#dc3545",
@@ -123,7 +139,7 @@ const FAQs = () => {
     });
 
     if (result.isConfirmed) {
-      const res = await desactivarCategoria(cat.idCatFAQ);
+      const res = await desactivarCategoria(cat.idCatFAQ, nuevoEstado);
       if (res.success) {
         setListaCategorias(prev =>
           prev.map(c =>
@@ -132,42 +148,22 @@ const FAQs = () => {
               : c
           )
         );
+        
+        // Si se está desactivando, desactivar todas las FAQs de esa categoría
+        if (nuevoEstado === 0) {
+          setListaFaqs(prev =>
+            prev.map(f =>
+              f.idCatFAQ === cat.idCatFAQ
+                ? { ...f, IsActive: 0 }
+                : f
+            )
+          );
+        }
+        
         toast.success(`Categoría ${nuevoEstado ? "activada" : "desactivada"}`);
       } else {
         toast.error("Error al cambiar estado");
       }
-    }
-  };
-
-
-  const iniciarEdicion = (cat) => {
-    setEditandoCat(cat.idCatFAQ);
-    setNombreEditado(cat.NombreCategoria);
-  };
-
-  const guardarEdicion = async (id) => {
-    if (!nombreEditado.trim()) return;
-    
-    const result = await Swal.fire({
-      title: "¿Actualizar categoría?",
-      text: `Se guardará como "${nombreEditado}"`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Sí, actualizar",
-      cancelButtonText: "Cancelar",
-      confirmButtonColor: "#0470BB",
-      cancelButtonColor: "#6c757d",
-    });
-
-    if (!result.isConfirmed) return;
-
-    const res = await editarCategoria(id, { NombreCategoria: nombreEditado });
-    if (res.success) {
-      toast.success("Categoría actualizada");
-      setEditandoCat(null);
-      refrescarLista();
-    } else {
-      toast.error(res.error);
     }
   };
 
@@ -218,19 +214,7 @@ const FAQs = () => {
                           >
                             <td>{cat.idCatFAQ}</td>
                             <td>
-                              {editandoCat === cat.idCatFAQ ? (
-                                <input
-                                  type="text"
-                                  className="form-control form-control-sm"
-                                  value={nombreEditado}
-                                  onChange={(e) => setNombreEditado(e.target.value)}
-                                  onBlur={() => guardarEdicion(cat.idCatFAQ)}
-                                  onKeyDown={(e) => e.key === "Enter" && guardarEdicion(cat.idCatFAQ)}
-                                  autoFocus
-                                />
-                              ) : (
-                                <span className="fw-medium">{cat.NombreCategoria}</span>
-                              )}
+                              <span className="fw-medium">{cat.NombreCategoria}</span>
                             </td>
                             <td>
                               <span className={`badge ${cat.IsActive ? "badge-activa" : "badge-inactiva"}`}>
@@ -241,7 +225,7 @@ const FAQs = () => {
                               <div className="d-flex gap-2">
                                 {cat.IsActive ? (
                                   <>
-                                    <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => iniciarEdicion(cat)}>
+                                    <button className="btn btn-sm btn-outline-primary" title="Editar" onClick={() => abrirModalEditarCategoria(cat)}>
                                       <span className="material-symbols-outlined">edit</span>
                                     </button>
                                     <button className="btn btn-sm btn-outline-danger" title="Desactivar" onClick={() => handleCambiarEstadoCat(cat)}>
@@ -320,8 +304,9 @@ const FAQs = () => {
                                   </button>
                                   <button
                                     className={`btn btn-sm ${faq.IsActive ? "btn-outline-danger" : "btn-outline-success"}`}
-                                    title={faq.IsActive ? "Desactivar" : "Activar"}
+                                    title={faq.IsActive ? "Desactivar" : !listaCategorias.find(c => c.idCatFAQ === faq.idCatFAQ)?.IsActive ? "No puedes activar (categoría desactivada)" : "Activar"}
                                     onClick={() => handleCambiarEstadoFaq(faq.idFAQ)}
+                                    disabled={!faq.IsActive && !listaCategorias.find(c => c.idCatFAQ === faq.idCatFAQ)?.IsActive}
                                   >
                                     <span className="material-symbols-outlined">{faq.IsActive ? "block" : "check_circle"}</span>
                                   </button>
@@ -390,7 +375,7 @@ const FAQs = () => {
               <div className="modal-body p-4">
                 <FormFaqs
                   faq={faqSeleccionada}
-                  categorias={listaCategorias.filter(c => c.IsActive)}
+                  categorias={faqSeleccionada ? listaCategorias : listaCategorias.filter(c => c.IsActive)}
                   onSuccess={() => {
                     refrescarLista();
                     cerrarModalForm();
@@ -408,7 +393,7 @@ const FAQs = () => {
             <div className="modal-content">
               <div className="modal-header bg-primary text-white position-relative">
                 <h1 className="modal-title fs-5 fw-bold">
-                  Agregar Nueva Categoría
+                  {categoriaSeleccionada ? "Editar Categoría" : "Agregar Nueva Categoría"}
                 </h1>
                 <button
                   type="button"
@@ -422,11 +407,11 @@ const FAQs = () => {
               </div>
               <div className="modal-body p-4">
                 <FormCategoria
+                  categoria={categoriaSeleccionada}
                   onSuccess={() => {
                     refrescarLista();
                     cerrarModalFormCategoria();
                   }}
-                  onClose={cerrarModalFormCategoria}
                 />
               </div>
             </div>

@@ -8,6 +8,11 @@ const api = axios.create({
   },
 });
 
+export const obtenerTodosServicios = async () => {
+    const response = await api.get("/api/servicios/v1/servicios/todos");
+    return response.data;
+};
+
 export const obtenerServicios = async () => {
     const response = await api.get("/api/servicios/v1/servicios");
     return response.data;

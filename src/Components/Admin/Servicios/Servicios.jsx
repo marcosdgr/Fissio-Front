@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {obtenerServicios, crearServicio, actualizarServicio, cambiarEstadoServicio} from '../../../Custom/CustomServicios'
+import {obtenerTodosServicios, crearServicio, actualizarServicio, cambiarEstadoServicio} from '../../../Custom/CustomServicios'
 import Swal from 'sweetalert2'
 import '../../../Css/Admin/Servicios/Servicios.css'
 import ServiciosHeader from './ServiciosHeader'
@@ -24,7 +24,7 @@ const Servicios = () => {
   const fetchServicios = async () => {
     try {
       setLoading(true)
-      const data = await obtenerServicios()
+      const data = await obtenerTodosServicios()
       setServicios(data)
     } catch (error) {
       console.error('Error al cargar servicios:', error)

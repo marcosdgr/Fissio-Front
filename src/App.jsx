@@ -36,6 +36,7 @@ function AppContent() {
             <Route path="/" element={<HomePage />} />
             <Route path="/faqs" element={<FAQsPublicPage />} />
             <Route path="/turnos" element={<TurnosWebPage />} />
+            <Route path="/obras-sociales" element={<ObrasSocialesPage />} />
 
             {/*Login y Register → públicas, pero redirigen si ya está logueado */}
             <Route
@@ -122,18 +123,6 @@ function AppContent() {
                 </PrivateRutes>
               }
             />
-
-            {/* Obras Sociales - Admin, Paciente y Secretaria (no Kinesiólogo) */}
-            <Route
-              path="/obras-sociales"
-              element={
-                <PrivateRutes roles={["Administrador", "Paciente", "Empleado"]} permisos={["Administración"]}>
-                  <ObrasSocialesPage />
-                </PrivateRutes>
-              }
-            />
-
-            {/* 404 */}
             <Route path="*" element={<div>404 - Página no encontrada</div>} />
           </Routes>
         </main>
