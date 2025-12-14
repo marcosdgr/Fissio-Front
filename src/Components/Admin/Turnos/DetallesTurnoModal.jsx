@@ -15,13 +15,9 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
       setIsLoading(true);
       try {
         const idTurno = turno.IdTurno || turno.idTurno;
-        console.log('Cargando detalles para turno ID:', idTurno);
-        
         const response = await obtenerDetallesTurno(idTurno);
-        console.log('Respuesta del servidor:', response);
         setDetalles(response.turno);
       } catch (error) {
-        console.error('Error al cargar detalles:', error);
         const errorMessage = error.response?.data?.message || 
                             error.response?.data?.error || 
                             error.message || 
@@ -241,6 +237,86 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                     </div>
                   </div>
                 )}
+
+                {/* Tratamiento Asignado */}
+                <div className="col-12 mt-3">
+                  <div className="card">
+                    <div className="card-header bg-light">
+                      <h6 className="mb-0">
+                        <span className="material-symbols-outlined me-1">healing</span>
+                        Tratamiento Asignado
+                      </h6>
+                    </div>
+                    <div className="card-body">
+                      {detalles.tratamiento ? (
+                        <div>
+                          <div className="mb-2">
+                            <strong>Nombre:</strong>
+                            <br />
+                            <span className="badge bg-info text-dark mt-1">
+                              {detalles.tratamiento.nombre}
+                            </span>
+                          </div>
+                          
+                          {detalles.tratamiento.descripcion && (
+                            <div>
+                              <strong>Descripción:</strong>
+                              <br />
+                              <div className="alert alert-light mb-0 mt-1">
+                                {detalles.tratamiento.descripcion}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-muted mb-0">
+                          <span className="material-symbols-outlined me-1" style={{ fontSize: '1rem', verticalAlign: 'middle' }}>info</span>
+                          No se ha asignado un tratamiento a este turno.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Servicio Asignado */}
+                <div className="col-12 mt-3">
+                  <div className="card">
+                    <div className="card-header bg-light">
+                      <h6 className="mb-0">
+                        <span className="material-symbols-outlined me-1">medical_services</span>
+                        Servicio Asignado
+                      </h6>
+                    </div>
+                    <div className="card-body">
+                      {detalles.servicio ? (
+                        <div>
+                          <div className="mb-2">
+                            <strong>Nombre:</strong>
+                            <br />
+                            <span className="badge bg-success mt-1">
+                              {detalles.servicio.nombre}
+                            </span>
+                          </div>
+                          
+                          {detalles.servicio.descripcion && (
+                            <div>
+                              <strong>Descripción:</strong>
+                              <br />
+                              <div className="alert alert-light mb-0 mt-1">
+                                {detalles.servicio.descripcion}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-muted mb-0">
+                          <span className="material-symbols-outlined me-1" style={{ fontSize: '1rem', verticalAlign: 'middle' }}>info</span>
+                          No se ha asignado un servicio a este turno.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="text-center py-4">
