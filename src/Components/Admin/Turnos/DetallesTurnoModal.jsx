@@ -135,6 +135,55 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                     </div>
                   </div>
                 </div>
+                
+                {/* Observaciones de Secretaría */}
+                <div className="col-12 mt-3">
+                  <div className="card">
+                    <div className="card-header bg-light">
+                      <h6 className="mb-0">
+                        <span className="material-symbols-outlined me-1">assignment</span>
+                        Observaciones de Secretaría
+                      </h6>
+                    </div>
+                    <div className="card-body">
+                      {detalles.observacionesSecretaria ? (
+                        <div className="alert alert-secondary mb-0">
+                          {detalles.observacionesSecretaria}
+                        </div>
+                      ) : (
+                        <p className="text-muted mb-0">
+                          <span className="material-symbols-outlined me-1" style={{ fontSize: '1rem', verticalAlign: 'middle' }}>info</span>
+                          La secretaría no agregó observaciones.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Observaciones Finales del Kinesiólogo */}
+                <div className="col-12 mt-3">
+                  <div className="card">
+                    <div className="card-header bg-light">
+                      <h6 className="mb-0">
+                        <span className="material-symbols-outlined me-1">note_add</span>
+                        Observaciones Finales (Kinesiólogo)
+                      </h6>
+                    </div>
+                    <div className="card-body">
+                      {detalles.ObservacionesFinal ? (
+                        <div className="alert alert-info mb-0">
+                          {detalles.ObservacionesFinal}
+                        </div>
+                      ) : (
+                        <p className="text-muted mb-0">
+                          <span className="material-symbols-outlined me-1" style={{ fontSize: '1rem', verticalAlign: 'middle' }}>info</span>
+                          El turno aún no ha sido finalizado por el kinesiólogo.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
                 {detalles.ordenMedica && (
                   <div className="col-12 mt-3">
                     <div className="card">

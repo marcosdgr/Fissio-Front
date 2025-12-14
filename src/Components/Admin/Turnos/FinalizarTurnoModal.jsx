@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { finalizarTurno, obtenerTratamientos, asignarTratamientoATurno } from '../../../Custom/CustomTurnos';
+import { finalizarTurno, obtenerTratamientos } from '../../../Custom/CustomTurnos';
 import { showSuccess, showError } from '../../../Utils/sweetAlerts';
 
 const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess }) => {
@@ -50,28 +50,16 @@ const FinalizarTurnoModal = ({ isOpen, onClose, turnoData, onFinalizarSuccess })
         showError('Error', 'No se pudo obtener el ID del turno');
         return;
       }
+      
       const finalizacionData = {
         observacionesFinal: formData.observaciones || "",
-        idEmpleado: turnoData.idEmpleado || turnoData.IdEmpleado || null
+        idEmpleado: turnoData.idEmpleado || turnoData.IdEmpleado || null,
+        idTratamiento: formData.tratamientoId ? parseInt(formData.tratamientoId) : null
       };
+      
       await finalizarTurno(idTurno, finalizacionData);
-      if (formData.tratamientoId) {
-        const tratamientoData = {
-          idTurno: idTurno,
-          idTratamiento: parseInt(formData.tratamientoId),
-          observaciones: formData.observaciones || null
-        };
-        
-        try {
-          await asignarTratamientoATurno(tratamientoData);
-          showSuccess('Éxito', 'Turno finalizado y tratamiento asignado correctamente');
-        } catch (tratamientoError) {
-          console.error('Error al asignar tratamiento:', tratamientoError);
-          showSuccess('Turno Finalizado', 'Turno finalizado correctamente, pero hubo un error al asignar el tratamiento');
-        }
-      } else {
-        showSuccess('Éxito', 'Turno finalizado correctamente');
-      }
+      showSuccess('Éxito', 'Turno finalizado correctamente');
+      
       setFormData({
         observaciones: '',
         tratamientoId: ''
