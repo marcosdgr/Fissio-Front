@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import "../../../Css/Faqs/FormFaqs.css";
 
-const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
+const FormFaqs = ({ faq, categorias, onSuccess}) => {
   const { agregarFaq, editarFaq } = useCustomFaqs();
 
   const [nuevaFaq, setNuevaFaq] = useState({
@@ -32,8 +32,29 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
     setNuevaFaq({ ...nuevaFaq, [name]: value });
   };
 
+  const validarFormulario = () => {
+    if (nuevaFaq.Pregunta.trim().length < 10) {
+      toast.error("La pregunta debe tener mínimo 10 caracteres");
+      return false;
+    }
+    if (nuevaFaq.Respuesta.trim().length < 10) {
+      toast.error("La respuesta debe tener mínimo 10 caracteres");
+      return false;
+    }
+    if (!nuevaFaq.idCatFAQ) {
+      toast.error("Debes seleccionar una categoría");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validarFormulario()) {
+      return;
+    }
+
     setProcesando(true);
 
     try {
@@ -60,6 +81,20 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
           toast.error(res.error);
         }
       } else {
+        const result = await Swal.fire({
+          title: "¿Crear nueva FAQ?",
+          text: "Se agregará una nueva pregunta frecuente",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Sí, crear",
+          cancelButtonText: "Cancelar"
+        });
+
+        if (!result.isConfirmed) {
+          setProcesando(false);
+          return;
+        }
+
         const res = await agregarFaq(nuevaFaq);
         if (res.success) {
           toast.success('FAQ agregada correctamente');
@@ -89,11 +124,14 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
             name="Pregunta"
             value={nuevaFaq.Pregunta}
             onChange={handleChange}
-            className="form-control"
+            className={`form-control ${nuevaFaq.Pregunta.trim().length < 10 && nuevaFaq.Pregunta.length > 0 ? 'is-invalid' : ''}`}
             placeholder="Ej: ¿Cuánto dura una sesión?"
             required
             disabled={procesando}
           />
+          <small className={nuevaFaq.Pregunta.trim().length < 10 ? 'text-danger' : 'text-muted'}>
+            {nuevaFaq.Pregunta.length}/10 caracteres mínimo
+          </small>
         </div>
 
         <div className="mb-3">
@@ -102,12 +140,15 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
             name="Respuesta"
             value={nuevaFaq.Respuesta}
             onChange={handleChange}
-            className="form-control"
+            className={`form-control ${nuevaFaq.Respuesta.trim().length < 10 && nuevaFaq.Respuesta.length > 0 ? 'is-invalid' : ''}`}
             rows="6"
             placeholder="Escribe una respuesta clara y completa..."
             required
             disabled={procesando}
           />
+          <small className={nuevaFaq.Respuesta.trim().length < 10 ? 'text-danger' : 'text-muted'}>
+            {nuevaFaq.Respuesta.length}/10 caracteres mínimo
+          </small>
         </div>
 
         <div className="mb-3">
@@ -135,7 +176,13 @@ const FormFaqs = ({ faq, categorias, onSuccess, onClose }) => {
           <button
             type="submit"
             className="btn btn-primary btn-lg btn-submit"
-            disabled={procesando || categorias.length === 0}
+            disabled={
+              procesando || 
+              categorias.length === 0 || 
+              nuevaFaq.Pregunta.trim().length < 10 || 
+              nuevaFaq.Respuesta.trim().length < 10 ||
+              !nuevaFaq.idCatFAQ
+            }
           >
             {procesando ? (
               <>
