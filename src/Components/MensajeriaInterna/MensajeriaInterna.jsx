@@ -164,7 +164,7 @@ const MensajeriaInterna = () => {
       // destinatarios son idEmpleado
       const destinatarios = [selectedEmpleado.idEmpleado];
       
-      const response = await mensajesApi.sendMessage(mensaje.trim(), destinatarios);
+      await mensajesApi.sendMessage(mensaje.trim(), destinatarios);
       
       setMensaje('');
 
