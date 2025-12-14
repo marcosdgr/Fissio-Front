@@ -11,10 +11,10 @@ const KinesiologoPage = () => {
   const [activeTab, setActiveTab] = useState("mensajes");
 
   const menuItems = [
-    { id: "mensajes", label: "Mensajes", icon: "mail" },
+    { id: "perfil", label: "Mi Perfil", icon: "person" },
     { id: "turnos", label: "Mis Turnos", icon: "event" },
     { id: "asistencia", label: "Mi Asistencia", icon: "access_time" },
-    { id: "perfil", label: "Mi Perfil", icon: "person" },
+    { id: "mensajes", label: "Mensajes", icon: "mail" },
     { id: "perfilInfo", label: "Info Personal", icon: "badge" },
   ];
 
@@ -50,10 +50,10 @@ const KinesiologoPage = () => {
           </h4>
         </div>
         <div className="p-4">
-          {activeTab === "mensajes" && <MensajeriaInterna />}
+          {activeTab === "perfil" && <PerfilKinesiologo setActiveTab={setActiveTab} />}
           {activeTab === "turnos" && <TurnosKinesiologo />}
           {activeTab === "asistencia" && <AsistenciaEmpleado />}
-          {activeTab === "perfil" && <PerfilKinesiologo setActiveTab={setActiveTab} />}
+          {activeTab === "mensajes" && <MensajeriaInterna />}
           {activeTab === "perfilInfo" && <PerfilInfoKinesiologo setActiveTab={setActiveTab} />}
         </div>
       </div>
