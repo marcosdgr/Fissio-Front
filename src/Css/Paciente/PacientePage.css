@@ -220,7 +220,7 @@ main > * {
   .paciente-header {
     margin: 0;
     border-radius: 0;
-    padding: 1rem 1rem 1rem 4.5rem !important;
+    padding: 1rem !important;
     position: relative;
     display: flex;
     align-items: center;
@@ -239,15 +239,31 @@ main > * {
   .p-4 {
     padding: 1rem !important;
   }
+  
+  /* Asegurar que el botón hamburguesa esté abajo */
+  .mobile-menu-btn {
+    position: fixed !important;
+    bottom: 1.25rem !important;
+    top: auto !important;
+    left: 1rem !important;
+  }
 }
 
 @media (max-width: 576px) {
   .paciente-header {
-    padding: 0.75rem 0.5rem 0.75rem 4rem !important;
+    padding: 0.75rem !important;
   }
   
   .paciente-header h4 {
     font-size: 1rem;
+  }
+  
+  /* Asegurar posición del botón en móviles pequeños */
+  .mobile-menu-btn {
+    position: fixed !important;
+    bottom: 1rem !important;
+    top: auto !important;
+    left: 0.75rem !important;
   }
 }
 
