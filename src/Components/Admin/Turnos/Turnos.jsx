@@ -5,6 +5,7 @@ import AsignarRecursosModal from './AsignarRecursosModal';
 import FinalizarTurnoModal from './FinalizarTurnoModal';
 import SolicitarTurnoModal from './SolicitarTurnoModal';
 import DetallesTurnoModal from './DetallesTurnoModal';
+import '../../../Css/Admin/Turnos.css';
 
 const Turnos = () => {
   const [turnos, setTurnos] = useState({
@@ -207,7 +208,7 @@ const Turnos = () => {
 
       {/* Resumen */}
       <div className="row mb-4">
-        <div className="col-md-2">
+        <div className="col-6 col-sm-4 col-md-2">
           <div className="card text-center border-primary">
             <div className="card-body">
               <h5 className="card-title text-primary">{resumen.total}</h5>
@@ -215,7 +216,7 @@ const Turnos = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-2">
+        <div className="col-6 col-sm-4 col-md-2">
           <div className="card text-center border-warning">
             <div className="card-body">
               <h5 className="card-title text-warning">{resumen.solicitados}</h5>
@@ -223,7 +224,7 @@ const Turnos = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-2">
+        <div className="col-6 col-sm-4 col-md-2">
           <div className="card text-center border-info">
             <div className="card-body">
               <h5 className="card-title text-info">{resumen.enCurso}</h5>
@@ -231,7 +232,7 @@ const Turnos = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-2">
+        <div className="col-6 col-sm-4 col-md-2">
           <div className="card text-center border-success">
             <div className="card-body">
               <h5 className="card-title text-success">{resumen.finalizados}</h5>
@@ -239,7 +240,7 @@ const Turnos = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-2">
+        <div className="col-6 col-sm-4 col-md-2">
           <div className="card text-center border-danger">
             <div className="card-body">
               <h5 className="card-title text-danger">{resumen.cancelados || 0}</h5>
@@ -258,7 +259,7 @@ const Turnos = () => {
       ) : (
         <div className="row">
           {/* Turnos Solicitados */}
-          <div className="col-lg-3 mb-4">
+          <div className="col-12 col-md-6 col-lg-3 mb-4">
             <div className="card">
               <div className="card-header bg-warning text-white">
                 <h5 className="mb-0">
@@ -286,7 +287,7 @@ const Turnos = () => {
           </div>
 
           {/* Turnos En Curso */}
-          <div className="col-lg-3 mb-4">
+          <div className="col-12 col-md-6 col-lg-3 mb-4">
             <div className="card">
               <div className="card-header bg-info text-white">
                 <h5 className="mb-0">
@@ -314,7 +315,7 @@ const Turnos = () => {
           </div>
 
           {/* Turnos Finalizados */}
-          <div className="col-lg-3 mb-4">
+          <div className="col-12 col-md-6 col-lg-3 mb-4">
             <div className="card">
               <div className="card-header bg-success text-white">
                 <h5 className="mb-0">
@@ -339,7 +340,7 @@ const Turnos = () => {
           </div>
 
           {/* Turnos Cancelados */}
-          <div className="col-lg-3 mb-4">
+          <div className="col-12 col-md-6 col-lg-3 mb-4">
             <div className="card">
               <div className="card-header bg-danger text-white">
                 <h5 className="mb-0">

@@ -1,0 +1,109 @@
+/* Estilos para el módulo de Turnos - Responsive */
+
+/* Ajustes para las cards de turnos en móviles */
+@media (max-width: 767px) {
+  /* Reducir padding en cards para aprovechar el espacio */
+  .card-body {
+    padding: 0.75rem !important;
+  }
+
+  /* Ajustar tamaño de texto en headers de cards */
+  .card-header h5 {
+    font-size: 1rem !important;
+  }
+
+  /* Ajustar iconos en headers */
+  .card-header .material-symbols-outlined {
+    font-size: 20px !important;
+  }
+
+  /* Mejorar legibilidad de texto pequeño en TurnoCard */
+  .border-bottom.p-3 {
+    padding: 0.75rem !important;
+  }
+
+  .border-bottom.p-3 h6 {
+    font-size: 0.95rem !important;
+  }
+
+  .border-bottom.p-3 .small,
+  .border-bottom.p-3 small {
+    font-size: 0.8rem !important;
+  }
+
+  /* Asegurar que los botones se vean bien */
+  .border-bottom.p-3 .btn-sm {
+    font-size: 0.75rem !important;
+    padding: 0.375rem 0.5rem !important;
+  }
+
+  .border-bottom.p-3 .btn-sm .material-symbols-outlined {
+    font-size: 14px !important;
+  }
+
+  /* Ajustar las cards del resumen */
+  .card.text-center .card-body {
+    padding: 0.75rem 0.5rem !important;
+  }
+
+  .card.text-center .card-title {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .card.text-center .card-text {
+    font-size: 0.8rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Reducir márgenes entre columnas en móvil */
+  .row {
+    margin-left: -0.5rem !important;
+    margin-right: -0.5rem !important;
+  }
+
+  .row > [class*='col-'] {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+  /* En tablets, dos columnas se ven bien */
+  .card-body {
+    padding: 1rem !important;
+  }
+
+  .card-header h5 {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* Ajustes para scroll horizontal si es necesario */
+@media (max-width: 576px) {
+  /* Prevenir que el contenido se salga */
+  .card {
+    overflow: hidden;
+  }
+
+  /* Ajustar spacing en cards de resumen */
+  .card.text-center.border-primary,
+  .card.text-center.border-warning,
+  .card.text-center.border-info,
+  .card.text-center.border-success,
+  .card.text-center.border-danger {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Mejorar visualización de la fila de botones en TurnoCard */
+  .border-bottom.p-3 .row.g-1 {
+    gap: 0.25rem !important;
+  }
+
+  /* Reducir padding vertical en las cards para mostrar más contenido */
+  .card-body.p-0 {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+}
