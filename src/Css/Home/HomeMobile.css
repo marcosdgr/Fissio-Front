@@ -44,13 +44,10 @@
 
   /* Cards de testimonios */
   .testimonios-container,
-  .testimonios-carousel,
-  .testimonio-card,
-  .testimonio-card-inner {
+  .testimonios-carousel {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    position: relative !important;
     width: 100% !important;
     max-width: 100% !important;
   }
@@ -60,6 +57,17 @@
     padding: 0 !important;
   }
 
+  /* Por defecto todas las cards ocultas */
+  .testimonio-card {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Solo la activa visible */
   .testimonio-card.active {
     display: block !important;
     visibility: visible !important;
@@ -70,9 +78,16 @@
     position: relative !important;
   }
   
+  .testimonio-card-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
   .testimonio-card.prev,
   .testimonio-card.next {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
   }
 
   /* Ajustes de padding */

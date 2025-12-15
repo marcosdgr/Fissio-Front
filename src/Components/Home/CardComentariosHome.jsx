@@ -113,8 +113,8 @@ const CardComentariosHome = () => {
 
   return (
     <div className="testimonios-container">
-      <div className="row justify-content-center">
-        <div className="col-12 col-lg-10">
+      <div className="row justify-content-center mx-0">
+        <div className="col-12 col-lg-10 px-0 px-lg-3">
           <div className="testimonios-carousel">
             <div className="testimonio-card-container">
               {testimonios.map((testimonio, index) => {

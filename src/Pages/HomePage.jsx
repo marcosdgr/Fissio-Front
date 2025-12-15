@@ -30,9 +30,9 @@ const HomePage = () => {
 
       {/* Sección de Comentarios/Testimonios */}
       <section className="comentarios-section py-5">
-        <div className="container">
-          <div className="row">
-            <div className="col-12 text-center mb-4">
+        <div className="container-fluid px-0">
+          <div className="row mx-0">
+            <div className="col-12 text-center mb-4 px-3">
               <h2 className="section-title">Lo que dicen nuestros pacientes</h2>
               <p className="section-subtitle">Testimonios reales de personas que confiaron en nosotros</p>
             </div>

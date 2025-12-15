@@ -316,6 +316,7 @@
   visibility: visible !important;
   opacity: 1 !important;
   min-height: 320px !important;
+  padding: 0 !important;
 }
 
 .testimonios-carousel {
@@ -342,6 +343,23 @@
   transform: translateX(100px) scale(0.9);
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .testimonio-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    opacity: 0 !important;
+    display: none !important;
+  }
+  
+  .testimonio-card.active {
+    display: block !important;
+    opacity: 1 !important;
+  }
 }
 
 .testimonio-card.active {
@@ -683,6 +701,28 @@
     visibility: visible !important;
     opacity: 1 !important;
   }
+  
+  .testimonios-container .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .testimonios-container .col-12 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  .testimonios-carousel {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+  
+  .testimonio-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
 
   #fissioCarousel {
     height: 45vh;
@@ -799,21 +839,48 @@
     padding-bottom: 20px;
   }
   
+  .comentarios-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  .comentarios-section .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: 100% !important;
+  }
+  
   .testimonio-card {
     width: 100% !important;
     max-width: 100% !important;
     left: 0 !important;
     right: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    opacity: 0 !important;
+    display: none !important;
   }
   
   .testimonio-card.active {
     width: 100% !important;
     max-width: 100% !important;
+    transform: none !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
   }
   
   .testimonio-card-inner {
     width: 100% !important;
     max-width: 100% !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .testimonio-card-inner .card {
+    width: 100% !important;
+    border-radius: 0 !important;
   }
   
   .testimonio-card.prev,
@@ -822,7 +889,15 @@
   }
   
   .testimonios-controls {
-    display: none;
+    display: flex !important;
+    padding: 0 10px;
+  }
+  
+  .control-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   }
   
   .testimonios-indicators {
@@ -830,7 +905,7 @@
   }
   
   .testimonio-card-inner .card-body {
-    padding: 1.25rem;
+    padding: 1.5rem 1rem;
   }
 
   .quote-icon {
