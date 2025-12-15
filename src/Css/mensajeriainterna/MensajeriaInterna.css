@@ -811,24 +811,110 @@
 }
 
 /* Responsive */
+@media (max-width: 992px) {
+  .mensajeria-container {
+    margin: 60px 1rem 1rem 1rem;
+  }
+  
+  .mensajeria-sidebar {
+    width: 280px;
+  }
+}
+
 @media (max-width: 768px) {
   .mensajeria-container {
     flex-direction: column;
-    height: 90vh;
+    height: auto;
+    min-height: 85vh;
+    margin: 1rem 0.5rem;
   }
   
   .mensajeria-sidebar {
     width: 100%;
-    max-height: 40%;
+    max-height: 300px;
     border-right: none;
-    border-bottom: 1px solid #e1e6eb;
+    border-bottom: 2px solid #e1e6eb;
+    flex-shrink: 0;
+  }
+  
+  .empleados-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .mensajeria-main {
+    flex: 1;
+    min-height: 500px;
+  }
+  
+  /* Headers */
+  .conversation-header {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
+  
+  .header-left {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .header-name {
+    font-size: 14px;
+  }
+  
+  .btn-back-inbox {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  /* Messages area */
+  .messages-area {
+    padding: 12px;
+    height: calc(100vh - 400px);
+    min-height: 300px;
   }
   
   .message-bubble {
     max-width: 85%;
+    font-size: 14px;
   }
   
+  .message-time {
+    font-size: 10px;
+  }
+  
+  /* Composer - CRÍTICO PARA MÓVILES */
+  .composer {
+    padding: 12px;
+    gap: 8px;
+    flex-direction: row;
+    align-items: flex-end;
+    min-height: 70px;
+  }
+  
+  .composer-textarea {
+    font-size: 14px;
+    padding: 10px 12px;
+    min-height: 45px;
+    max-height: 120px;
+    flex: 1;
+  }
+  
+  .btn-send {
+    padding: 10px 16px;
+    font-size: 14px;
+    min-width: 80px;
+    height: 45px;
+    flex-shrink: 0;
+  }
+  
+  .send-icon {
+    font-size: 18px;
+  }
+  
+  /* Inbox */
   .inbox-header {
+    padding: 16px;
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
@@ -838,28 +924,307 @@
     font-size: 20px;
   }
   
-  .inbox-message-card {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  .inbox-content {
+    padding: 12px;
   }
   
-  .inbox-card-content {
-    align-items: center;
+  .inbox-message-card {
+    padding: 16px;
   }
   
   .inbox-card-header,
   .inbox-card-footer {
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 8px;
   }
   
-  .btn-back-inbox {
-    font-size: 12px;
-    padding: 6px 12px;
+  /* Sidebar */
+  .sidebar-header {
+    padding: 16px 12px;
+  }
+  
+  .sidebar-title {
+    font-size: 16px;
+  }
+  
+  .search-box {
+    margin: 12px;
+  }
+  
+  .empleado-item {
+    padding: 12px;
+  }
+  
+  .empleado-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .empleado-name {
+    font-size: 14px;
+  }
+  
+  .empleado-mail {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 576px) {
+  .mensajeria-container {
+    margin: 0.5rem 0;
+    border-radius: 8px;
+  }
+  
+  .mensajeria-sidebar {
+    max-height: 250px;
+  }
+  
+  .sidebar-header {
+    padding: 12px 8px;
+  }
+  
+  .sidebar-title {
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  
+  .badge-count {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+  
+  .search-box {
+    margin: 8px;
+  }
+  
+  .search-input {
+    font-size: 13px;
+    padding: 8px 8px 8px 32px;
+  }
+  
+  .empleado-item {
+    padding: 10px 8px;
+  }
+  
+  .empleado-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+  
+  .empleado-name {
+    font-size: 13px;
+  }
+  
+  .empleado-mail {
+    font-size: 10px;
+  }
+  
+  .unread-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+  
+  /* Conversation header */
+  .conversation-header {
+    padding: 10px 12px;
   }
   
   .header-left {
-    gap: 8px;
+    gap: 6px;
+  }
+  
+  .header-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .header-name {
+    font-size: 13px;
+  }
+  
+  .btn-back-inbox {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+  
+  .icon-button {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+  
+  /* Messages */
+  .messages-area {
+    padding: 8px;
+    height: calc(100vh - 420px);
+    min-height: 250px;
+  }
+  
+  .message-bubble {
+    max-width: 90%;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+  
+  .message-time {
+    font-size: 9px;
+  }
+  
+  .message-status {
+    font-size: 10px;
+  }
+  
+  .badge-new {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+  
+  /* Composer - OPTIMIZADO PARA MÓVILES PEQUEÑOS */
+  .composer {
+    padding: 10px 8px;
+    gap: 6px;
+    min-height: 60px;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid #e1e6eb;
+  }
+  
+  .composer-textarea {
+    font-size: 13px;
+    padding: 8px 10px;
+    min-height: 40px;
+    max-height: 100px;
+    flex: 1;
+    border-radius: 20px;
+  }
+  
+  .btn-send {
+    padding: 8px 12px;
+    font-size: 13px;
+    min-width: 70px;
+    height: 40px;
+    border-radius: 20px;
+  }
+  
+  .send-icon {
+    font-size: 16px;
+  }
+  
+  /* Empty states */
+  .empty-state,
+  .loading-state {
+    padding: 20px;
+  }
+  
+  .empty-icon {
+    font-size: 40px;
+  }
+  
+  .empty-state p,
+  .loading-state p {
+    font-size: 14px;
+  }
+  
+  /* Inbox */
+  .inbox-header {
+    padding: 12px;
+  }
+  
+  .inbox-title {
+    font-size: 18px;
+  }
+  
+  .inbox-count {
+    font-size: 12px;
+  }
+  
+  .inbox-content {
+    padding: 12px 8px;
+  }
+  
+  .inbox-message-card {
+    padding: 12px;
+  }
+  
+  .inbox-card-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .inbox-card-name {
+    font-size: 13px;
+  }
+  
+  .inbox-card-time {
+    font-size: 11px;
+  }
+  
+  .inbox-card-message {
+    font-size: 13px;
+  }
+  
+  .inbox-card-mail {
+    font-size: 11px;
+  }
+  
+  .inbox-card-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+  
+  .inbox-empty {
+    padding: 30px 20px;
+  }
+  
+  .inbox-empty h4 {
+    font-size: 16px;
+  }
+  
+  .inbox-empty p {
+    font-size: 13px;
+  }
+}
+
+/* Fix para asegurar que el composer sea clickeable en móviles */
+@media (max-width: 768px) {
+  .composer {
+    position: relative;
+    z-index: 10;
+  }
+  
+  .composer-textarea,
+  .btn-send {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .composer-textarea:focus {
+    outline: 2px solid var(--fissio-cyan);
+    outline-offset: 2px;
+  }
+  
+  .btn-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .btn-send:not(:disabled):active {
+    transform: scale(0.95);
+  }
+}
+
+/* Mejorar scrolling en móviles */
+@media (max-width: 768px) {
+  .empleados-list,
+  .messages-area,
+  .inbox-content {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 }

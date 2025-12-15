@@ -3,12 +3,12 @@ import MensajeriaInterna from '../Components/MensajeriaInterna/MensajeriaInterna
 import PerfilKinesiologo from '../Components/Kinesiologo/PerfilKinesiologo';
 import PerfilInfoKinesiologo from '../Components/Kinesiologo/PerfilInfoKinesiologo';
 import TurnosKinesiologo from '../Components/Kinesiologo/TurnosKinesiologo';
-
-import '../Css/Kinesiologo/KinesiologoPage.css';
 import AsistenciaEmpleado from '../Components/Asistencia/AsistenciaEmpleado';
+import '../Css/Kinesiologo/KinesiologoPage.css';
 
 const KinesiologoPage = () => {
   const [activeTab, setActiveTab] = useState("mensajes");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const menuItems = [
     { id: "perfil", label: "Mi Perfil", icon: "person" },
@@ -19,9 +19,17 @@ const KinesiologoPage = () => {
   ];
 
   return (
-    <div className="d-flex kinesiologo-container">
+    <div className={`d-flex kinesiologo-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
+      {/* Overlay para móvil */}
+      {sidebarOpen && (
+        <div 
+          className="sidebar-overlay show" 
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="kinesiologo-sidebar">
+      <div className={`kinesiologo-sidebar ${sidebarOpen ? 'show' : ''}`}>
         <div className="p-3 sidebar-header">
           <h5 className="mb-0 fw-bold text-white">
             <span className="material-symbols-outlined me-2">health_and_safety</span>
@@ -33,7 +41,10 @@ const KinesiologoPage = () => {
             <button
               key={item.id}
               className={`nav-link sidebar-nav-item ${activeTab === item.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => {
+                setActiveTab(item.id);
+                setSidebarOpen(false);
+              }}
             >
               <span className="material-symbols-outlined me-3">{item.icon}</span>
               <span>{item.label}</span>
@@ -45,6 +56,15 @@ const KinesiologoPage = () => {
       {/* Contenido */}
       <div className="flex-grow-1 kinesiologo-main-content">
         <div className="kinesiologo-header p-4">
+          <button 
+            className="mobile-menu-btn"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-label="Toggle sidebar"
+          >
+            <span className="material-symbols-outlined">
+              {sidebarOpen ? 'close' : 'menu'}
+            </span>
+          </button>
           <h4 className="mb-0 fw-bold">
             {menuItems.find(m => m.id === activeTab)?.label || "Panel"}
           </h4>
