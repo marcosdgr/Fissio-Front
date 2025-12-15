@@ -52,6 +52,21 @@ const Navbar = () => {
     }
   };
 
+  // Función para cerrar el navbar en mobile
+  const closeNavbar = () => {
+    const navbarCollapse = document.getElementById('fissioNavbar');
+    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+      const bsCollapse = window.bootstrap?.Collapse?.getInstance(navbarCollapse);
+      if (bsCollapse) {
+        bsCollapse.hide();
+      } else {
+        // Si no hay instancia, crear una y cerrar
+        const collapse = new window.bootstrap.Collapse(navbarCollapse, { toggle: false });
+        collapse.hide();
+      }
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light site-navbar fixed-top">
       <div className="container">
@@ -77,14 +92,14 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="fissioNavbar">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
             <li className="nav-item">
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/" onClick={closeNavbar}>
                 Inicio
               </Link>
             </li>
           
             {mostrarFAQs && (
               <li className="nav-item">
-                <Link className="nav-link" to="/faqs">
+                <Link className="nav-link" to="/faqs" onClick={closeNavbar}>
                   Preguntas frecuentes
                 </Link>
               </li>
@@ -92,7 +107,7 @@ const Navbar = () => {
           
             {mostrarPedirTurno && (
               <li className="nav-item">
-                <Link className="nav-link" to="/turnos">
+                <Link className="nav-link" to="/turnos" onClick={closeNavbar}>
                   Pedir turno
                 </Link>
               </li>
@@ -100,7 +115,7 @@ const Navbar = () => {
             
             {mostrarObrasSociales && (
               <li className="nav-item">
-                <Link className="nav-link" to="/obras-sociales">
+                <Link className="nav-link" to="/obras-sociales" onClick={closeNavbar}>
                   Obras Sociales
                 </Link>
               </li>
@@ -108,7 +123,7 @@ const Navbar = () => {
             
             {mostrarMensajes && (
               <li className="nav-item">
-                <Link className="nav-link" to="/mensajes">
+                <Link className="nav-link" to="/mensajes" onClick={closeNavbar}>
                   Mensajes
                 </Link>
               </li>
@@ -120,6 +135,7 @@ const Navbar = () => {
                   className="nav-link" 
                   to={obtenerRutaPanel()}
                   title="Ir a mi panel"
+                  onClick={closeNavbar}
                 >
                   <span className="material-symbols-outlined">person</span>
                 </Link>
@@ -130,7 +146,7 @@ const Navbar = () => {
               <li className="nav-item">
                 <button
                   className="nav-link btn btn-link text-decoration-none"
-                  onClick={handleLogout}
+                  onClick={() => { handleLogout(); closeNavbar(); }}
                   style={{ border: "none", background: "transparent" }}
                 >
                   Logout
@@ -138,7 +154,7 @@ const Navbar = () => {
               </li>
             ) : (
               <li className="nav-item">
-                <Link className="nav-link" to="/Login">
+                <Link className="nav-link" to="/Login" onClick={closeNavbar}>
                   Login
                 </Link>
               </li>
