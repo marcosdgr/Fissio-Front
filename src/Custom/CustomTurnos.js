@@ -84,3 +84,8 @@ export const asignarTratamientoATurno = async (turnoTratamientoData) => {
   const response = await api.post("/api/turno-tratamientos/v1/asignar", turnoTratamientoData);
   return response.data;
 };
+
+export const turnosKinesiologoDelDia = async (idEmpleado) => {
+  const response = await api.get(`/api/turnos/v1/turnos-kinesiologo/${idEmpleado}`);
+  return response.data;
+}
