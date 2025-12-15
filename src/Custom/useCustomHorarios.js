@@ -12,7 +12,7 @@ const useCustomHorarios = () => {
       setLoading(true);
       setError(null);
       const [horariosRes, asignacionesRes, empleadosRes] = await Promise.all([
-        axios.get(`${BASE_URL}api/horariosTrabajo/v1/activos`),
+        axios.get(`${BASE_URL}api/horariosTrabajo/v1`),
         axios.get(`${BASE_URL}api/empleadosHorarios/v1`),
         axios.get(`${BASE_URL}api/empleados/v1/activos`)
       ]);
@@ -55,7 +55,7 @@ const useCustomHorarios = () => {
 
   const desactivarHorario = async (id) => {
     try {
-      await axios.put(`${BASE_URL}api/horariosTrabajo/v1/borradoLogico/${id}`);
+      await axios.put(`${BASE_URL}api/horariosTrabajo/v1/desactivar/${id}`);
       return { success: true };
     } catch (err) {
       return { success: false, error: err.response?.data?.error || "Error al desactivar" };
@@ -64,7 +64,7 @@ const useCustomHorarios = () => {
 
   const reactivarHorario = async (id) => {
     try {
-      await axios.put(`${BASE_URL}api/horariosTrabajo/v1/reactivar/${id}`);
+      await axios.put(`${BASE_URL}api/horariosTrabajo/v1/activar/${id}`);
       return { success: true };
     } catch (err) {
       return { success: false, error: err.response?.data?.error || "Error al reactivar" };

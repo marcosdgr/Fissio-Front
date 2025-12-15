@@ -46,7 +46,7 @@ const HorariosTrabajo = () => {
   const handleCambiarEstado = async (idHorario) => {
     const horario = listaHorarios.find(h => h.idHorario === idHorario);
     const nuevoEstado = horario.IsActive ? 0 : 1;
-    const accion = horario.IsActive ? "desactivar" : "reactivar";
+    const accion = horario.IsActive ? "desactivar" : "activar";
 
     const result = await Swal.fire({
       title: `¿${accion.charAt(0).toUpperCase() + accion.slice(1)} horario?`,
@@ -150,7 +150,7 @@ const HorariosTrabajo = () => {
                         <tbody>
                           {listaHorarios.map(h => (
                             <tr key={h.idHorario} className={!h.IsActive ? "horario-inactivo" : ""}>
-                              <td className="fw-medium">
+                              <td className="fw-medium" data-label="Día">
                                 {h.Fecha ? (
                                   <>
                                     <div>{new Date(h.Fecha).toLocaleDateString(undefined, { weekday: 'long' })}</div>
@@ -160,15 +160,15 @@ const HorariosTrabajo = () => {
                                   <>{h.DiaSemana}<div className="text-muted small">-</div></>
                                 )}
                               </td>
-                              <td>{h.HoraEntradaEsperada}</td>
-                              <td>{h.HoraSalidaEsperada}</td>
-                              <td>{h.DescripcionHorario || "-"}</td>
-                              <td>
+                              <td data-label="Entrada">{h.HoraEntradaEsperada}</td>
+                              <td data-label="Salida">{h.HoraSalidaEsperada}</td>
+                              <td data-label="Descripción">{h.DescripcionHorario || "-"}</td>
+                              <td data-label="Estado">
                                 <span className={`badge ${h.IsActive ? 'bg-success' : 'bg-danger'}`}>
                                   {h.IsActive ? 'ACTIVO' : 'INACTIVO'}
                                 </span>
                               </td>
-                              <td>
+                              <td data-label="Acciones">
                                 <div className="d-flex gap-2">
                                   <button
                                     className="btn btn-sm btn-outline-primary"
