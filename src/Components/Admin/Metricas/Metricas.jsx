@@ -16,7 +16,7 @@ const MetricasEnVivo = () => {
   };
 
   const labelFecha = metrica?.TipoRango === 'dia' && metrica?.FechaBalance
-    ? new Date(metrica.FechaBalance).toLocaleDateString('es-AR')
+    ? new Date(metrica.FechaBalance + 'T00:00:00').toLocaleDateString('es-AR')
     : metrica?.FechaBalance || 'CARGANDO...';
 
   const labelPeriodo = metrica?.TipoRango
@@ -110,27 +110,27 @@ const MetricasEnVivo = () => {
       <div className="card-body">
         <div className="row g-4 mb-4">
           <div className="col-md-3">
-            <div className="p-4 bg-success text-white rounded text-center">
+            <div className="metric-card bg-success text-white">
               <h5>GANANCIA NETA</h5>
               <h2>${metrica.BalanceDelDia.toFixed(2)}</h2>
             </div>
           </div>
           <div className="col-md-3">
-            <div className="p-4 bg-info text-white rounded text-center">
+            <div className="metric-card bg-info text-white">
               <h5>EMPLEADO TOP</h5>
               <h4>{metrica.EmpleadoTopHoras}</h4>
               <small>{metrica.HorasEmpleadoTop.toFixed(1)}h</small>
             </div>
           </div>
           <div className="col-md-3">
-            <div className="p-4 bg-primary text-white rounded text-center">
+            <div className="metric-card bg-primary text-white">
               <h5>SERVICIO ESTRELLA</h5>
               <h4>{metrica.ServicioMasUtilizado}</h4>
               <small>{metrica.VecesServicioTop} veces</small>
             </div>
           </div>
           <div className="col-md-3">
-            <div className="p-4 bg-warning text-dark rounded text-center">
+            <div className="metric-card bg-warning text-dark">
               <h5>TURNOS</h5>
               <h2>{metrica.TurnosAtendidos}</h2>
               <small>de {metrica.TurnosProgramados}</small>
