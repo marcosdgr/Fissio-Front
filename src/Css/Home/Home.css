@@ -10,6 +10,7 @@
 /* SECCIONES GENERALES */
 .home-page {
   overflow-x: hidden;
+  width: 100%;
 }
 
 .section-title {
@@ -27,11 +28,39 @@
 
 .servicios-section {
   background-color: #f8f9fa;
+  width: 100% !important;
+  min-height: auto !important;
+  padding: 3rem 0 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.servicios-section .container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  display: block !important;
 }
 
 .comentarios-section {
   background: linear-gradient(135deg, #3AB1CF 0%, #0470BB 100%);
   color: white;
+  width: 100% !important;
+  min-height: auto !important;
+  padding: 3rem 0 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.comentarios-section .container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  display: block !important;
 }
 
 .comentarios-section .section-title {
@@ -158,6 +187,21 @@
   opacity: 1;
 }
 
+/* CARDS DE SERVICIOS - BASE */
+.servicios-section .row {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
+.servicios-section .row > [class*='col-'] {
+  padding-left: 12px;
+  padding-right: 12px;
+  display: block !important;
+  visibility: visible !important;
+}
 
 .servicio-card {
   border: none;
@@ -165,6 +209,12 @@
   transition: all 0.3s ease;
   overflow: hidden;
   background: white;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 200px !important;
 }
 
 .servicio-card:hover {
@@ -173,8 +223,15 @@
   border: #6B6B6B 3px solid;
 }
 
+.servicio-card .card-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
 .servicio-icon-container {
   margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 .servicio-icon {
@@ -200,12 +257,14 @@
   color: #0470BB;
   font-weight: 600;
   font-size: 1.25rem;
+  word-wrap: break-word;
 }
 
 .servicio-descripcion {
   color: #6B6B6B;
   font-size: 0.95rem;
   line-height: 1.6;
+  word-wrap: break-word;
 }
 
 .servicio-precio {
@@ -226,23 +285,44 @@
 
 .servicio-caracteristicas {
   padding-left: 0;
+  width: 100%;
+}
+
+.servicio-caracteristicas li {
+  word-wrap: break-word;
 }
 
 .caracteristica-check {
   color: #3AB1CF;
   font-weight: bold;
   font-size: 1rem;
+  flex-shrink: 0;
 }
 
+/* CARDS DE COMENTARIOS - BASE */
+.comentarios-section .row {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
 
 .testimonios-container {
   position: relative;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 320px !important;
 }
 
 .testimonios-carousel {
   position: relative;
   overflow: hidden;
   height: 320px;
+  width: 100%;
 }
 
 .testimonio-card-container {
@@ -288,6 +368,8 @@
   border-radius: 20px;
   border: none;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 100%;
 }
 
 .testimonio-card-inner .card-body {
@@ -296,6 +378,8 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .quote-icon {
@@ -410,6 +494,45 @@
 
 
 @media (max-width: 768px) {
+  .home-page {
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .servicios-section,
+  .comentarios-section {
+    padding: 2.5rem 0 !important;
+    width: 100% !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 200px !important;
+  }
+
+  .servicios-section .container,
+  .comentarios-section .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    display: block !important;
+  }
+
+  .servicios-section .row,
+  .comentarios-section .row {
+    width: 100% !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+  }
+
+  .servicios-section .row > div,
+  .comentarios-section .row > div {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
   #fissioCarousel {
     height: 50vh;
     min-height: 350px;
@@ -434,20 +557,69 @@
   
   .section-title {
     font-size: 2rem;
+    padding: 0 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    padding: 0 1rem;
   }
   
+  /* Servicios Cards */
+  .servicio-card {
+    margin-bottom: 1rem;
+  }
+
+  .servicio-card .card-body {
+    padding: 1.5rem;
+  }
+
+  .servicio-icon-container {
+    margin-bottom: 1rem;
+  }
+
   .servicio-icon {
     width: 60px;
     height: 60px;
     font-size: 1.5rem;
   }
+
+  .servicio-titulo {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .servicio-descripcion {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .servicio-caracteristicas li {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Forzar visibilidad de columnas Bootstrap */
+  .col-12,
+  .col-md-6,
+  .col-lg-4 {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
   
+  /* Testimonios */
   .testimonios-carousel {
-    height: 300px;
+    height: auto;
+    min-height: 320px;
   }
   
   .testimonio-card {
     width: 95%;
+    position: relative;
   }
   
   .testimonios-controls {
@@ -462,6 +634,56 @@
 }
 
 @media (max-width: 576px) {
+  .home-page {
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .servicios-section,
+  .comentarios-section {
+    padding: 2rem 0 !important;
+    width: 100% !important;
+    display: block !important;
+    visibility: visible !important;
+    min-height: auto !important;
+    opacity: 1 !important;
+  }
+
+  .servicios-section .container,
+  .comentarios-section .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    display: block !important;
+  }
+
+  .servicios-section .row,
+  .comentarios-section .row {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+  }
+
+  .servicios-section .row > div,
+  .comentarios-section .row > div {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .servicio-card,
+  .testimonio-card,
+  .testimonios-container {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
   #fissioCarousel {
     height: 45vh;
     min-height: 300px;
@@ -493,33 +715,93 @@
   }
   
   .section-title {
-    font-size: 1.8rem;
+    font-size: 1.75rem;
+    padding: 0 1rem;
+    margin-bottom: 0.75rem;
   }
   
   .section-subtitle {
-    font-size: 1rem;
-  }
-  
-  .servicio-card {
+    font-size: 0.95rem;
+    padding: 0 1rem;
     margin-bottom: 1.5rem;
   }
   
+  /* Servicios Cards - Mobile */
+  .servicio-card {
+    margin-bottom: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .servicio-card .card-body {
+    padding: 1.25rem;
+  }
+
+  .servicio-icon-container {
+    margin-bottom: 0.75rem;
+  }
+
   .servicio-icon {
     width: 55px;
     height: 55px;
     font-size: 1.4rem;
   }
-  
+
   .servicio-titulo {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .servicio-descripcion {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .servicio-caracteristicas {
+    margin-bottom: 0.5rem;
+  }
+
+  .servicio-caracteristicas li {
+    font-size: 0.8rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .caracteristica-check {
+    font-size: 0.9rem;
+  }
+
+  /* Forzar visibilidad de columnas Bootstrap en móviles pequeños */
+  .col-12,
+  .col-md-6,
+  .col-lg-4,
+  .col-lg-10 {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    min-height: 50px !important;
+  }
+
+  .servicio-card,
+  .card {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 200px !important;
   }
   
+  /* Testimonios - Mobile */
   .testimonios-carousel {
-    height: 280px;
+    height: auto;
+    min-height: 300px;
+    padding-bottom: 20px;
   }
   
   .testimonio-card {
     width: 100%;
+    max-width: 100%;
   }
   
   .testimonio-card.prev,
@@ -535,21 +817,79 @@
     bottom: -40px;
   }
   
-  .testimonio-texto {
-    font-size: 1rem;
-  }
-  
-  .autor-avatar img {
-    width: 45px;
-    height: 45px;
-  }
-  
   .testimonio-card-inner .card-body {
     padding: 1.25rem;
+  }
+
+  .quote-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .testimonio-texto {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .testimonio-rating {
+    margin: 0.5rem 0;
+  }
+
+  .star-filled,
+  .star-empty {
+    font-size: 1rem;
+  }
+
+  .autor-nombre {
+    font-size: 0.9rem;
+  }
+
+  .autor-detalles,
+  .testimonio-fecha {
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 375px) {
+  .home-page {
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .servicios-section,
+  .comentarios-section {
+    padding: 1.5rem 0 !important;
+    width: 100% !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .servicios-section .container,
+  .comentarios-section .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    display: block !important;
+  }
+
+  .servicios-section .row,
+  .comentarios-section .row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+  }
+
+  .servicios-section .row > div,
+  .comentarios-section .row > div {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+  }
+
   .carousel-title {
     font-size: 1.7rem;
   }
@@ -563,17 +903,45 @@
   }
   
   .section-title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
+    padding: 0 0.75rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.9rem;
+    padding: 0 0.75rem;
   }
   
+  /* Servicios Cards - Very Small Screens */
+  .servicio-card .card-body {
+    padding: 1rem;
+  }
+
   .servicio-icon {
     width: 50px;
     height: 50px;
     font-size: 1.3rem;
   }
+
+  .servicio-titulo {
+    font-size: 1rem;
+  }
+
+  .servicio-descripcion {
+    font-size: 0.8rem;
+  }
+
+  .servicio-caracteristicas li {
+    font-size: 0.75rem;
+  }
+
+  .caracteristica-check {
+    font-size: 0.85rem;
+  }
   
+  /* Testimonios - Very Small Screens */
   .testimonios-carousel {
-    height: 260px;
+    min-height: 280px;
   }
   
   .testimonio-card-inner {
@@ -586,11 +954,31 @@
   
   .quote-icon {
     font-size: 1.3rem;
+    margin-bottom: 0.5rem;
   }
   
   .testimonio-texto {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .testimonio-rating {
+    margin: 0.4rem 0;
+  }
+
+  .star-filled,
+  .star-empty {
+    font-size: 0.95rem;
+  }
+
+  .autor-nombre {
+    font-size: 0.85rem;
+  }
+
+  .autor-detalles,
+  .testimonio-fecha {
+    font-size: 0.7rem;
   }
 }
 

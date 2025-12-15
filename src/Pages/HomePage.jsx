@@ -5,6 +5,7 @@ import CardComentariosHome from "../Components/Home/CardComentariosHome";
 import TurnoHome from "../Components/Home/TurnoHome";
 import Chatbot from "../Components/BOT/Chatbot.jsx";
 import "../Css/Home/Home.css";
+import "../Css/Home/HomeMobile.css";
 
 const HomePage = () => {
   return (

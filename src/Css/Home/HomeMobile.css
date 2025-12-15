@@ -1,0 +1,99 @@
+
+/* Móviles y tablets */
+@media screen and (max-width: 768px) {
+  /* Secciones principales */
+  .home-page,
+  .servicios-section,
+  .comentarios-section,
+  .servicios-section .container,
+  .comentarios-section .container,
+  .servicios-section .row,
+  .comentarios-section .row {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Todas las columnas Bootstrap */
+  .col-12,
+  .col-md-6,
+  .col-lg-4,
+  .col-lg-10,
+  div[class*='col-'] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    min-height: 50px !important;
+  }
+
+  /* Cards de servicios */
+  .servicio-card,
+  .card,
+  .card-body {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    min-height: 200px !important;
+  }
+
+  /* Cards de testimonios */
+  .testimonios-container,
+  .testimonios-carousel,
+  .testimonio-card,
+  .testimonio-card-inner {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+  }
+
+  .testimonio-card.active {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Ajustes de padding */
+  .servicios-section,
+  .comentarios-section {
+    padding: 2rem 15px !important;
+    min-height: 300px !important;
+  }
+}
+
+/* Solo móviles */
+@media screen and (max-width: 576px) {
+  .servicios-section,
+  .comentarios-section {
+    padding: 1.5rem 10px !important;
+  }
+
+  .servicio-card {
+    margin-bottom: 1rem !important;
+  }
+
+  .col-12,
+  div[class*='col-'] {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media screen and (max-width: 375px) {
+  .servicios-section,
+  .comentarios-section {
+    padding: 1rem 10px !important;
+  }
+
+  .servicio-card .card-body {
+    padding: 1rem !important;
+  }
+}
