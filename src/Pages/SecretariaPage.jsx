@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../Store/useAuthStore';
 import Turnos from '../Components/Admin/Turnos/Turnos';
-import AsistenciasSecretaria from '../Components/Secretaria/AsistenciasSecretaria';
+import AsistenciaEmpleado from '../Components/Asistencia/AsistenciaEmpleado';
 import ConfiguracionSecretaria from '../Components/Secretaria/ConfiguracionSecretaria';
 import '../Css/Secretaria/SecretariaPage.css';
 import '../Css/Secretaria/SidebarSecretaria.css';
@@ -109,7 +109,7 @@ const SecretariaPage = () => {
           {activeTab === "pacientes" && <Pacientes />}
           {activeTab === "turnos" && <Turnos />}
           {activeTab === "mensajes" && <MensajeriaInterna />}
-          {activeTab === "asistencias" && <AsistenciasSecretaria />}
+          {activeTab === "asistencias" && <AsistenciaEmpleado />}
           {activeTab === "cobros" && <Cobros />}
           {activeTab === "config" && <ConfiguracionSecretaria />}
         </div>
