@@ -12,7 +12,8 @@ const MensajeriaInterna = () => {
   const [loading, setLoading] = useState(false);
   const [unreadCounts, setUnreadCounts] = useState({}); 
   const [vistaActual, setVistaActual] = useState('inbox'); 
-  const [mensajesNoLeidos, setMensajesNoLeidos] = useState([]); 
+  const [mensajesNoLeidos, setMensajesNoLeidos] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(''); 
 
   const authUser = useAuthStore(state => state.user);
   const mensajesApi = useCustomMensajeria;
@@ -185,19 +186,32 @@ const MensajeriaInterna = () => {
         <div className="sidebar-header">
           <h5 className="sidebar-title">
             <span className="icon-inbox">📬</span>
-            Mensajería Interna
+            Chat Fissio
           </h5>
           <span className="badge-count">{empleados.length} empleados</span>
         </div>
         
         <div className="search-box">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="Buscar empleado..." className="search-input" />
+          <input 
+            type="text" 
+            placeholder="Buscar empleado..." 
+            className="search-input" 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
 
         <ul className="empleados-list">
           {empleados
             .filter(emp => emp.idEmpleado !== empleadoActual?.idEmpleado)
+            .filter(emp => {
+              if (!searchTerm) return true;
+              const searchLower = searchTerm.toLowerCase();
+              const nombreCompleto = `${emp.NombreEmpleado} ${emp.ApellidoEmpleado}`.toLowerCase();
+              const email = emp.MailUsuario?.toLowerCase() || '';
+              return nombreCompleto.includes(searchLower) || email.includes(searchLower);
+            })
             .map(emp => {
               const isSelected = selectedEmpleado?.idEmpleado === emp.idEmpleado;
               const unreadCount = unreadCounts[emp.idEmpleado] || 0;
