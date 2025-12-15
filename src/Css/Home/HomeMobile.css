@@ -51,6 +51,13 @@
     visibility: visible !important;
     opacity: 1 !important;
     position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .testimonio-card-container {
+    width: 100% !important;
+    padding: 0 !important;
   }
 
   .testimonio-card.active {
@@ -58,6 +65,14 @@
     visibility: visible !important;
     opacity: 1 !important;
     transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: relative !important;
+  }
+  
+  .testimonio-card.prev,
+  .testimonio-card.next {
+    display: none !important;
   }
 
   /* Ajustes de padding */

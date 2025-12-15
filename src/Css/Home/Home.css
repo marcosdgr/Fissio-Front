@@ -800,13 +800,25 @@
   }
   
   .testimonio-card {
-    width: 100%;
-    max-width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+  
+  .testimonio-card.active {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .testimonio-card-inner {
+    width: 100% !important;
+    max-width: 100% !important;
   }
   
   .testimonio-card.prev,
   .testimonio-card.next {
-    display: none;
+    display: none !important;
   }
   
   .testimonios-controls {

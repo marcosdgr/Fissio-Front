@@ -4,6 +4,7 @@ import { getTurnosDelDia } from '../../Custom/CustomTurnos';
 import { showError } from '../../Utils/sweetAlerts';
 import FinalizarTurnoModal from '../Admin/Turnos/FinalizarTurnoModal';
 import DetallesTurnoModal from '../Admin/Turnos/DetallesTurnoModal';
+import '../../Css/Admin/Turnos.css';
 
 const TurnosKinesiologo = () => {
   const [turnos, setTurnos] = useState({

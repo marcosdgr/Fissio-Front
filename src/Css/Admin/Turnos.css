@@ -1,23 +1,180 @@
 /* Estilos para el módulo de Turnos - Responsive */
 
-/* Ajustes para las cards de turnos en móviles */
-@media (max-width: 767px) {
-  /* Reducir padding en cards para aprovechar el espacio */
+/* Estilos base para tarjetas de turnos */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+/* Responsive para tablets grandes */
+@media (max-width: 1200px) {
+  .container-fluid .col-lg-4 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+  .card-body {
+    padding: 1rem !important;
+  }
+
+  .card-header h5 {
+    font-size: 1.1rem !important;
+  }
+  
+  .btn-group .btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 13px;
+  }
+  
+  .card-body h3 {
+    font-size: 1.8rem !important;
+  }
+}
+
+/* Ajustes para móviles - 768px y menos */
+@media (max-width: 768px) {
+  /* Header principal con controles */
+  .container-fluid > .row.mb-4:first-child .card-body {
+    padding: 1rem !important;
+  }
+  
+  .container-fluid > .row.mb-4:first-child .row.align-items-center {
+    gap: 1rem;
+  }
+  
+  .container-fluid > .row.mb-4:first-child .col-md-4,
+  .container-fluid > .row.mb-4:first-child .col-md-8 {
+    width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  /* Título centrado */
+  .container-fluid > .row.mb-4:first-child h5 {
+    text-align: center;
+    font-size: 1.1rem !important;
+  }
+  
+  /* Controles centrados y en columna */
+  .d-flex.justify-content-end {
+    justify-content: center !important;
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+  
+  .btn-group {
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+  
+  .btn-group .btn {
+    flex: 1;
+    font-size: 13px;
+  }
+  
+  /* Selector de fecha */
+  .d-flex.align-items-center.gap-2 {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .form-control-sm {
+    max-width: 100% !important;
+    flex: 1;
+    min-width: 150px;
+  }
+  
+  /* Cards de resumen - 2 por fila */
+  .container-fluid > .row.mb-4:nth-child(2) .col-md-3 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    margin-bottom: 0.75rem;
+    padding: 0 0.5rem;
+  }
+  
+  .card.text-center .card-body {
+    padding: 0.75rem !important;
+  }
+  
+  .card-body h3 {
+    font-size: 1.5rem !important;
+  }
+  
+  .card-body p {
+    font-size: 13px !important;
+    margin-bottom: 0 !important;
+  }
+  
+  /* Títulos de sección */
+  h5.mb-3 {
+    font-size: 1rem !important;
+    padding: 0 0.5rem;
+  }
+  
+  .badge {
+    font-size: 0.75rem !important;
+  }
+  
+  /* Tarjetas de turnos - ancho completo */
+  .col-md-6,
+  .col-lg-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+  
+  .card-header h6 {
+    font-size: 14px !important;
+  }
+  
   .card-body {
     padding: 0.75rem !important;
   }
-
-  /* Ajustar tamaño de texto en headers de cards */
-  .card-header h5 {
-    font-size: 1rem !important;
+  
+  .card-body p {
+    font-size: 13px !important;
+    margin-bottom: 0.5rem !important;
   }
-
-  /* Ajustar iconos en headers */
-  .card-header .material-symbols-outlined {
-    font-size: 20px !important;
+  
+  .material-symbols-outlined {
+    font-size: 16px !important;
   }
-
-  /* Mejorar legibilidad de texto pequeño en TurnoCard */
+  
+  /* Botones de acción en columna */
+  .card-footer .d-flex {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+  
+  .card-footer .btn {
+    width: 100%;
+  }
+  
+  .card-footer .btn-sm {
+    font-size: 13px !important;
+    padding: 0.5rem !important;
+  }
+  
+  /* Spinner */
+  .spinner-border {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+  
+  /* Alert */
+  .alert {
+    font-size: 13px !important;
+    margin: 0 0.5rem;
+  }
+  
+  /* Reducir padding en cards para aprovechar el espacio */
   .border-bottom.p-3 {
     padding: 0.75rem !important;
   }
@@ -31,7 +188,6 @@
     font-size: 0.8rem !important;
   }
 
-  /* Asegurar que los botones se vean bien */
   .border-bottom.p-3 .btn-sm {
     font-size: 0.75rem !important;
     padding: 0.375rem 0.5rem !important;
@@ -40,22 +196,7 @@
   .border-bottom.p-3 .btn-sm .material-symbols-outlined {
     font-size: 14px !important;
   }
-
-  /* Ajustar las cards del resumen */
-  .card.text-center .card-body {
-    padding: 0.75rem 0.5rem !important;
-  }
-
-  .card.text-center .card-title {
-    font-size: 1.25rem !important;
-    margin-bottom: 0.25rem !important;
-  }
-
-  .card.text-center .card-text {
-    font-size: 0.8rem !important;
-    margin-bottom: 0 !important;
-  }
-
+  
   /* Reducir márgenes entre columnas en móvil */
   .row {
     margin-left: -0.5rem !important;
@@ -68,20 +209,133 @@
   }
 }
 
-/* Ajustes para tablets */
-@media (min-width: 768px) and (max-width: 991px) {
-  /* En tablets, dos columnas se ven bien */
-  .card-body {
-    padding: 1rem !important;
-  }
-
-  .card-header h5 {
-    font-size: 1.1rem !important;
-  }
-}
-
-/* Ajustes para scroll horizontal si es necesario */
+/* Ajustes para móviles pequeños - 576px y menos */
 @media (max-width: 576px) {
+  /* Header más compacto */
+  .container-fluid > .row.mb-4:first-child .card-body {
+    padding: 0.75rem !important;
+  }
+  
+  .container-fluid > .row.mb-4:first-child h5 {
+    font-size: 1rem !important;
+  }
+  
+  .material-symbols-outlined.me-2 {
+    font-size: 18px !important;
+  }
+  
+  /* Botones de vista más pequeños */
+  .btn-group .btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 12px;
+  }
+  
+  /* Labels y inputs */
+  label.mb-0.small {
+    font-size: 11px !important;
+  }
+  
+  .form-control-sm {
+    font-size: 12px !important;
+    padding: 0.35rem 0.5rem !important;
+    min-width: 120px;
+  }
+  
+  /* Cards de resumen más compactos */
+  .container-fluid > .row.mb-4:nth-child(2) .col-md-3 {
+    padding: 0 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card.text-center .card-body {
+    padding: 0.75rem 0.5rem !important;
+  }
+  
+  .card-body h3 {
+    font-size: 1.3rem !important;
+  }
+  
+  .card-body p {
+    font-size: 11px !important;
+  }
+  
+  /* Títulos de sección */
+  h5.mb-3 {
+    font-size: 0.9rem !important;
+    padding: 0 0.25rem;
+  }
+  
+  .badge.me-2 {
+    font-size: 0.7rem !important;
+    padding: 0.25rem 0.4rem;
+  }
+  
+  /* Tarjetas de turnos */
+  .col-md-6.col-lg-4.mb-3 {
+    padding: 0 0.25rem;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .card-header {
+    padding: 0.5rem 0.75rem !important;
+  }
+  
+  .card-header h6 {
+    font-size: 12px !important;
+  }
+  
+  .card-header .material-symbols-outlined {
+    font-size: 16px !important;
+  }
+  
+  .card-body {
+    padding: 0.75rem !important;
+  }
+  
+  .card-body p {
+    font-size: 11px !important;
+    margin-bottom: 0.4rem !important;
+  }
+  
+  .card-body .material-symbols-outlined {
+    font-size: 14px !important;
+  }
+  
+  .card-footer {
+    padding: 0.5rem 0.75rem !important;
+  }
+  
+  .card-footer .btn-sm {
+    font-size: 11px !important;
+    padding: 0.4rem 0.5rem !important;
+  }
+  
+  .card-footer .material-symbols-outlined {
+    font-size: 14px !important;
+  }
+  
+  /* Spinner más pequeño */
+  .spinner-border {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+  
+  .py-5 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+  
+  /* Alert más compacto */
+  .alert {
+    font-size: 12px !important;
+    padding: 0.5rem !important;
+    margin: 0 0.25rem;
+  }
+  
+  .alert .material-symbols-outlined {
+    font-size: 16px !important;
+  }
+  
   /* Prevenir que el contenido se salga */
   .card {
     overflow: hidden;
@@ -107,3 +361,57 @@
     overflow-y: auto;
   }
 }
+
+/* Mejoras visuales generales */
+.card {
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.card-header {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+.card-footer {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Bordes de estado mejorados */
+.border-warning {
+  border-left: 4px solid #ffc107 !important;
+}
+
+.border-primary {
+  border-left: 4px solid #0470BB !important;
+}
+
+.border-success {
+  border-left: 4px solid #28a745 !important;
+}
+
+.border-danger {
+  border-left: 4px solid #dc3545 !important;
+}
+
+.border-secondary {
+  border-left: 4px solid #6c757d !important;
+}
+
+/* Animación de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
