@@ -24,7 +24,7 @@ const SecretariaPage = () => {
   ];
 
   return (
-    <div className="d-flex secretaria-container">
+    <div className={`d-flex secretaria-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
       {/* Overlay para móvil */}
       {sidebarOpen && (
         <div 

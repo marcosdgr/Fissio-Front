@@ -17,6 +17,16 @@ import "../Css/Admin/AdminPage.css";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("metricas");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    setSidebarOpen(false);
+  };
 
   const menuItems = [
     { id: "metricas", label: "Métricas", icon: "trending_up" },
@@ -36,8 +46,27 @@ const AdminPage = () => {
 
   return (
     <div className="admin-container">
+      {/* Overlay para cerrar sidebar en móvil */}
+      {sidebarOpen && (
+        <div 
+          className="sidebar-overlay" 
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
+
+      {/* Botón hamburguesa para móviles */}
+      <button 
+        className="sidebar-toggle-mobile" 
+        onClick={toggleSidebar}
+        aria-label="Toggle sidebar"
+      >
+        <span className="material-symbols-outlined">
+          {sidebarOpen ? 'close' : 'menu'}
+        </span>
+      </button>
+
       {/* Sidebar */}
-      <div className="text-white admin-sidebar position-fixed">
+      <div className={`text-white admin-sidebar position-fixed ${sidebarOpen ? 'open' : ''}`}>
         <div className="p-3 sidebar-header d-flex align-items-center justify-content-between">
           <h5 className="mb-0 fw-bold text-white d-flex align-items-center">
             Panel Administrador
@@ -50,9 +79,9 @@ const AdminPage = () => {
               key={item.id}
               className={`nav-link text-start rounded mb-2 p-3 d-flex align-items-center sidebar-nav-item
                 ${activeTab === item.id ? "active" : ""}`}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => handleTabChange(item.id)}
             >
-              <span className="material-symbols-outlined me-3 fs-4">{item.icon}</span>
+              <span className="material-symbols-outlined me-3 fs-4 sidebar-icon">{item.icon}</span>
               <span className="fw-medium sidebar-text">{item.label}</span>
             </button>
           ))}

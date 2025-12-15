@@ -54,7 +54,7 @@ const PacientePage = () => {
   ];
 
   return (
-    <div className="d-flex paciente-container">
+    <div className={`d-flex paciente-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
       {/* Overlay para móvil */}
       {sidebarOpen && (
         <div 
