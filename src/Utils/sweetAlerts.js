@@ -6,6 +6,7 @@ const baseConfig = {
   cancelButtonColor: '#6c757d',
   background: '#ffffff',
   color: '#333333',
+  scrollbarPadding: false,
   customClass: {
     popup: 'fissio-swal-popup',
     title: 'fissio-swal-title',
@@ -20,7 +21,7 @@ export const showSuccess = (title, text = '') => {
     icon: 'success',
     title: title,
     text: text,
-    timer: 4000,
+    timer: 3200,
     timerProgressBar: true,
     showConfirmButton: false
   });
