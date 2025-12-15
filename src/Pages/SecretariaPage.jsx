@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../Store/useAuthStore';
-import TurnosSecretaria from '../Components/Secretaria/TurnosSecretaria';
+import Turnos from '../Components/Admin/Turnos/Turnos';
 import AsistenciasSecretaria from '../Components/Secretaria/AsistenciasSecretaria';
 import ConfiguracionSecretaria from '../Components/Secretaria/ConfiguracionSecretaria';
 import '../Css/Secretaria/SecretariaPage.css';
@@ -107,7 +107,7 @@ const SecretariaPage = () => {
 
         <div className="p-4">
           {activeTab === "pacientes" && <Pacientes />}
-          {activeTab === "turnos" && <TurnosSecretaria />}
+          {activeTab === "turnos" && <Turnos />}
           {activeTab === "mensajes" && <MensajeriaInterna />}
           {activeTab === "asistencias" && <AsistenciasSecretaria />}
           {activeTab === "cobros" && <Cobros />}
