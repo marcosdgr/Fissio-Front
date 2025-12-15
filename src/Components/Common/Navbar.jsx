@@ -19,8 +19,9 @@ const Navbar = () => {
   const esKinesiologo = esEmpleado && permiso === "Kinesiología";
   
   // Paciente: NO ver Mensajes
-  // Admin/Empleado: NO ver Solicitud de turno ni Preguntas frecuentes
-  const mostrarMensajes = esAdmin || esEmpleado;
+  // Admin: NO ver Solicitud de turno, Preguntas frecuentes ni Mensajes
+  // Empleado: ver Mensajes
+  const mostrarMensajes = esEmpleado;
   const mostrarPedirTurno = !esAdmin && !esEmpleado;
   const mostrarFAQs = !esAdmin && !esEmpleado;
   const mostrarObrasSociales = !esKinesiologo; 
