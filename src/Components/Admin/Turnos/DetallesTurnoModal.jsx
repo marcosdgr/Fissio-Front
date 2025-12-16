@@ -91,7 +91,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
               <div className="row">
                 <div className="col-md-6">
                   <div className="card h-100">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">person</span>
                         Información del Paciente
@@ -114,7 +114,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 </div>
                 <div className="col-md-6">
                   <div className="card h-100">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">schedule</span>
                         Estado del Turno
@@ -135,7 +135,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {/* Observaciones de Secretaría */}
                 <div className="col-12 mt-3">
                   <div className="card">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">assignment</span>
                         Observaciones de Secretaría
@@ -143,7 +143,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                     </div>
                     <div className="card-body">
                       {detalles.observacionesSecretaria ? (
-                        <div className="alert alert-secondary mb-0">
+                        <div className="alert alert-info mb-0">
                           {detalles.observacionesSecretaria}
                         </div>
                       ) : (
@@ -159,7 +159,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {/* Observaciones Finales del Kinesiólogo */}
                 <div className="col-12 mt-3">
                   <div className="card">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">note_add</span>
                         Observaciones Finales (Kinesiólogo)
@@ -183,13 +183,13 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {detalles.ordenMedica && (
                   <div className="col-12 mt-3">
                     <div className="card">
-                      <div className="card-header bg-light">
-                        <h6 className="mb-0">
+                      <div className="card-header bg-primary">
+                        <h6 className="mb-0" >
                           <span className="material-symbols-outlined me-1">description</span>
                           Orden Médica
                         </h6>
                       </div>
-                      <div className="card-body">
+                      <div className="card-body alert alert-info">
                         <div className="row">
                           <div className="col-md-8">
                             <div className="mb-2">
@@ -222,8 +222,8 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {!detalles.ordenMedica && (
                   <div className="col-12 mt-3">
                     <div className="card">
-                      <div className="card-header bg-light">
-                        <h6 className="mb-0">
+                      <div className="card-header bg-primary">
+                        <h6 className="mb-0" >
                           <span className="material-symbols-outlined me-1">description</span>
                           Orden Médica
                         </h6>
@@ -241,7 +241,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {/* Tratamiento Asignado */}
                 <div className="col-12 mt-3">
                   <div className="card">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">healing</span>
                         Tratamiento Asignado
@@ -253,7 +253,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                           <div className="mb-2">
                             <strong>Nombre:</strong>
                             <br />
-                            <span className="badge bg-info text-dark mt-1">
+                            <span className="badge bg-success text-dark mt-1">
                               {detalles.tratamiento.nombre}
                             </span>
                           </div>
@@ -262,7 +262,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                             <div>
                               <strong>Descripción:</strong>
                               <br />
-                              <div className="alert alert-light mb-0 mt-1">
+                              <div className="alert alert-info mb-0 mt-1">
                                 {detalles.tratamiento.descripcion}
                               </div>
                             </div>
@@ -281,7 +281,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {/* Servicio Asignado */}
                 <div className="col-12 mt-3">
                   <div className="card">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">medical_services</span>
                         Servicio Asignado
@@ -293,7 +293,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                           <div className="mb-2">
                             <strong>Nombre:</strong>
                             <br />
-                            <span className="badge bg-success mt-1">
+                            <span className="badge bg-success text-dark mt-1">
                               {detalles.servicio.nombre}
                             </span>
                           </div>
@@ -302,7 +302,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                             <div>
                               <strong>Descripción:</strong>
                               <br />
-                              <div className="alert alert-light mb-0 mt-1">
+                              <div className="alert alert-info mb-0 mt-1">
                                 {detalles.servicio.descripcion}
                               </div>
                             </div>
