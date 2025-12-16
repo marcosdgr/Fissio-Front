@@ -91,7 +91,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
               <div className="row">
                 <div className="col-md-6">
                   <div className="card h-100">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">person</span>
                         Información del Paciente
@@ -114,7 +114,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 </div>
                 <div className="col-md-6">
                   <div className="card h-100">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">schedule</span>
                         Estado del Turno
@@ -135,7 +135,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {/* Observaciones de Secretaría */}
                 <div className="col-12 mt-3">
                   <div className="card">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">assignment</span>
                         Observaciones de Secretaría
@@ -159,7 +159,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {/* Observaciones Finales del Kinesiólogo */}
                 <div className="col-12 mt-3">
                   <div className="card">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">note_add</span>
                         Observaciones Finales (Kinesiólogo)
@@ -183,7 +183,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {detalles.ordenMedica && (
                   <div className="col-12 mt-3">
                     <div className="card">
-                      <div className="card-header bg-light">
+                      <div className="card-header bg-primary">
                         <h6 className="mb-0">
                           <span className="material-symbols-outlined me-1">description</span>
                           Orden Médica
@@ -222,7 +222,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {!detalles.ordenMedica && (
                   <div className="col-12 mt-3">
                     <div className="card">
-                      <div className="card-header bg-light">
+                      <div className="card-header bg-primary">
                         <h6 className="mb-0">
                           <span className="material-symbols-outlined me-1">description</span>
                           Orden Médica
@@ -241,7 +241,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {/* Tratamiento Asignado */}
                 <div className="col-12 mt-3">
                   <div className="card">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">healing</span>
                         Tratamiento Asignado
@@ -281,7 +281,7 @@ const DetallesTurnoModal = ({ isOpen, onClose, turno }) => {
                 {/* Servicio Asignado */}
                 <div className="col-12 mt-3">
                   <div className="card">
-                    <div className="card-header bg-light">
+                    <div className="card-header bg-primary">
                       <h6 className="mb-0">
                         <span className="material-symbols-outlined me-1">medical_services</span>
                         Servicio Asignado
