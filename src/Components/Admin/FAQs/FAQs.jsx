@@ -190,7 +190,7 @@ const FAQs = () => {
             <>
               <div className="card shadow-sm border-0 mb-4">
                 <div className="card-header bg-white d-flex justify-content-between align-items-center">
-                  <h5 className="card-title mb-0">Categorías de FAQs</h5>
+                  <h5 className="card-title mb-0 ">Categorías de FAQs</h5>
                   <button className="btn btn-primary btn-agregar" onClick={abrirModalAgregarCategoria}>
                     Agregar nueva categoría
                   </button>
