@@ -133,7 +133,7 @@ const Cobros = () => {
           {!loading && !error && (
             <div className="card shadow-sm border-0">
               <div className="card-header bg-white d-flex justify-content-between align-items-center">
-                <h5 className="card-title mb-0">Cobros</h5>
+                <h5 className="card-title mb-0 ">Cobros</h5>
                 <button className="btn btn-primary btn-agregar" onClick={abrirModalAgregar}>
                   Registrar Cobro
                 </button>
