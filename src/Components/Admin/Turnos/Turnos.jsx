@@ -21,7 +21,16 @@ const Turnos = () => {
     finalizados: 0,
     cancelados: 0
   });
-  const [fechaConsulta, setFechaConsulta] = useState('');
+  // Inicializar con la fecha actual en formato YYYY-MM-DD
+  const obtenerFechaHoy = () => {
+    const hoy = new Date();
+    const year = hoy.getFullYear();
+    const month = String(hoy.getMonth() + 1).padStart(2, '0');
+    const day = String(hoy.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
+  const [fechaConsulta, setFechaConsulta] = useState(obtenerFechaHoy());
   const [isLoading, setIsLoading] = useState(true);
   const [modalData, setModalData] = useState({
     isOpen: false,
@@ -42,7 +51,8 @@ const Turnos = () => {
   const cargarTurnos = async (fecha = null) => {
     setIsLoading(true);
     try {
-      const response = await getTurnosDelDia(fecha);
+      const fechaParaConsultar = fecha || fechaConsulta;
+      const response = await getTurnosDelDia(fechaParaConsultar);
       const turnosData = {
         solicitados: response.turnos?.solicitados || [],
         enCurso: response.turnos?.enCurso || [],
@@ -60,7 +70,10 @@ const Turnos = () => {
       
       setTurnos(turnosData);
       setResumen(resumenData);
-      setFechaConsulta(response.fechaConsulta);
+      // Solo actualizamos fechaConsulta si cambiamos de fecha explícitamente
+      if (fecha) {
+        setFechaConsulta(fecha);
+      }
     } catch (error) {
       console.error('Error al cargar turnos:', error);
       showError('Error', 'No se pudieron cargar los turnos del día');
