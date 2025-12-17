@@ -47,6 +47,10 @@
   align-items: center;
 }
 
+.card-header .card-title {
+  color: #0470BB !important;
+}
+
 .custom-modal {
   position: fixed;
   top: 0;
