@@ -62,6 +62,15 @@ const useCustomFaqs = () => {
     }
   };
 
+  const crearCategoria = async (data) => {
+    try {
+      const res = await axios.post(`${BASE_URL}api/cat-faqs/v1/`, data);
+      return { success: true, data: res.data?.data ?? res.data };
+    } catch (err) {
+      return { success: false, error: err.response?.data?.errores?.[0]?.msg || err.response?.data?.message || "Error al crear" };
+    }
+  };
+
   const desactivarCategoria = async (id, isActive = 0) => {
     try {
       await axios.put(`${BASE_URL}api/cat-faqs/v1/${id}`, { IsActive: isActive });
@@ -83,6 +92,7 @@ const useCustomFaqs = () => {
     agregarFaq,
     editarFaq,
     eliminarFaq,
+    crearCategoria,
     editarCategoria,
     desactivarCategoria
   };
